@@ -4,7 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mesh | Newsletter</title>
-    <meta name="description" content="Insights, release notes, and updates from the Mesh engineering team." />
+    <meta
+      name="description"
+      content="Latest Mesh product updates, benchmark notes, and release progress in one running feed."
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -38,85 +41,117 @@
       </div>
     </header>
 
-    <main class="newsletter-page">
-      <section class="newsletter-hero reveal" data-stagger="1">
-        <p class="kicker">Mesh Transmission</p>
-        <h1>
-          Product updates that<br />
-          <span class="cycle-line"><span class="word-cycle" data-words="ship context|show proof|stay practical" aria-live="polite">ship context</span></span>
+    <main id="top">
+      <section class="hero">
+        <p class="kicker reveal" data-stagger="1">Mesh Transmission</p>
+        <h1 class="reveal" data-stagger="2">
+          Latest notes from<br />
+          <span class="cycle-line"><span class="word-cycle" data-words="engine releases|benchmark runs|product rollout" aria-live="polite">engine releases</span></span>
         </h1>
-        <p class="lede">
-          This page tracks what changed in Mesh, why it matters, and which benchmarks moved.
+        <p class="lede reveal" data-stagger="3">
+          A running feed of what shipped, what improved, and what we are validating next across IDE, MCP, and API.
         </p>
+
+        <div class="hero-metrics reveal" data-stagger="4">
+          <span><b>2x</b> updates per month</span>
+          <span><b>31%</b> faster cold-start in v0.8</span>
+          <span><b>14+</b> models benchmarked</span>
+          <span><b>100%</b> NIAH recall target held</span>
+        </div>
       </section>
 
-      <section class="newsletter-layout">
-        <article class="newsletter-feature reveal" data-stagger="2">
-          <span class="news-date">22 April 2026</span>
-          <h2>Engine v0.8 reduced cold-start context build time by 31%</h2>
-          <p>
-            We shipped a new capsule prefetch path that prioritizes symbol hotspots before full dependency fan-out.
-            In internal tests on medium repositories this lowered first usable response time from 3.9s to 2.7s.
-          </p>
-          <ul>
-            <li>Lower bootstrap latency for IDE assistant sessions</li>
-            <li>More stable retrieval quality on long multi-hop tasks</li>
-            <li>Smaller context payloads for API consumers</li>
-          </ul>
+      <section class="products-river newsletter-feed">
+        <article class="product-row reveal" data-stagger="1">
+          <p class="row-index">22 APR</p>
+          <div>
+            <h3>Engine v0.8 Reduced Cold-Start by 31%</h3>
+            <p>
+              We shipped a new capsule prefetch path that prioritizes symbol hotspots before full dependency fan-out.
+              Internal runs on medium repositories reduced first usable response from 3.9s to 2.7s.
+            </p>
+            <p class="row-meta">Scope: Engine Core · Impact: Faster first response · Status: Live in preview</p>
+          </div>
         </article>
 
-        <div class="newsletter-side">
-          <article class="news-entry reveal" data-stagger="3">
-            <span class="news-date">15 April 2026</span>
-            <h3>API private preview opened</h3>
-            <p>Early teams now call context capsules directly in CI automations.</p>
+        <article class="product-row reveal" data-stagger="2">
+          <p class="row-index">15 APR</p>
+          <div>
+            <h3>API Private Preview Opened</h3>
+            <p>
+              Selected teams now call Mesh capsules directly from backend automations, improving traceability while
+              reducing context payload size.
+            </p>
+            <p class="row-meta">Scope: API · Impact: Lower payload + better trace logs · Status: Private preview</p>
+          </div>
+        </article>
+
+        <article class="product-row reveal" data-stagger="3">
+          <p class="row-index">04 APR</p>
+          <div>
+            <h3>Benchmark Suite Expanded to Multi-Hop Refactor Tasks</h3>
+            <p>
+              We added chain-refactor scenarios over larger repository graphs to stress retrieval quality under fixed
+              prompt budgets.
+            </p>
+            <p class="row-meta">Scope: Benchmarks · Impact: Stronger regression coverage · Status: Active</p>
+          </div>
+        </article>
+
+        <article class="product-row reveal" data-stagger="4">
+          <p class="row-index">26 MAR</p>
+          <div>
+            <h3>MCP + Terminal Context Merged</h3>
+            <p>
+              Terminal traces can now feed the same context graph used by IDE and API flows, reducing handoff friction
+              during debugging cycles.
+            </p>
+            <p class="row-meta">Scope: MCP · Impact: Better continuity in debugging · Status: Live</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="evidence-runway">
+        <div class="evidence-head reveal" data-stagger="0">
+          <p class="kicker">What We Track</p>
+          <h2>Release quality before release volume.</h2>
+        </div>
+
+        <div class="metric-lines">
+          <article class="metric-line reveal" data-stagger="1">
+            <p>Cold-start Context Build</p>
+            <div class="line-track"><span style="--w:69%"></span></div>
+            <strong>2.7s</strong>
           </article>
 
-          <article class="news-entry reveal" data-stagger="4">
-            <span class="news-date">04 April 2026</span>
-            <h3>Benchmark suite expanded</h3>
-            <p>Added chain-refactor scenarios across larger repo graphs.</p>
+          <article class="metric-line reveal" data-stagger="2">
+            <p>Needle Recall Gate</p>
+            <div class="line-track"><span style="--w:100%"></span></div>
+            <strong>100%</strong>
           </article>
 
-          <article class="news-entry reveal" data-stagger="5">
-            <span class="news-date">26 March 2026</span>
-            <h3>MCP + terminal context merge</h3>
-            <p>Terminal traces now feed the same context model used by IDE/API.</p>
+          <article class="metric-line reveal" data-stagger="3">
+            <p>Context Payload Savings</p>
+            <div class="line-track"><span style="--w:80%"></span></div>
+            <strong>80%</strong>
           </article>
         </div>
       </section>
 
-      <section class="newsletter-archive reveal" data-stagger="6">
-        <h2>Recent Notes</h2>
-        <article>
-          <span>12 March 2026</span>
-          <p>IDE beta wave shipped improved symbol jump precision and compact review context.</p>
-        </article>
-        <article>
-          <span>27 February 2026</span>
-          <p>Capsule serializer update reduced transfer size on repeated reads in active sessions.</p>
-        </article>
-        <article>
-          <span>09 February 2026</span>
-          <p>NIAH-style regression pack added as release gate for retrieval quality changes.</p>
-        </article>
-      </section>
-
-      <section id="newsletter-signup" class="waitlist-band reveal" data-stagger="7">
+      <section id="newsletter-signup" class="waitlist-band reveal" data-stagger="0">
         <div>
           <p class="kicker">Register Your Interest</p>
           <h3>Get launch updates and docs drops first.</h3>
         </div>
         <form class="waitlist-form email-capture" action="/api/subscribe" method="POST">
           <label for="newsletter-email" class="sr-only">Email</label>
-          <input id="newsletter-email" type="email" name="email" placeholder="you@company.com" required />
+          <input id="newsletter-email" name="email" type="email" placeholder="you@company.com" required />
           <button type="submit">Join Waitlist</button>
         </form>
         <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
       </section>
     </main>
 
-    <footer class="footer reveal" data-stagger="8">
+    <footer class="footer reveal" data-stagger="0">
       <p>© <span id="year">2026</span> Mesh Technologies GmbH</p>
       <div>
         <a href="./imprint.html">Imprint</a>

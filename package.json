@@ -2,7 +2,9 @@
   "name": "mesh-marketing",
   "version": "1.0.0",
   "description": "Mesh Marketing Website",
-  "dependencies": {},
+  "dependencies": {
+    "@vercel/blob": "^2.3.3"
+  },
   "engines": {
     "node": ">=18.x"
   }
