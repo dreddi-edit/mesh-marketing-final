@@ -3,10 +3,12 @@
    3 phases: Graph (0-0.35) -> Capsules (0.32-0.70) -> Source (0.66-1.0)
    ============================================================================ */
 
+document.documentElement.classList.add('js-motion');
+
 const yearEl = document.getElementById('year');
 if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
-const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const prefersReducedMotion = false;
 
 /* ---------- Hero word cycle ---------- */
 const wordCycle = document.querySelector('.word-cycle');
@@ -330,18 +332,26 @@ revealEls.forEach((el) => {
 });
 
 if (!prefersReducedMotion) {
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.14 }
-  );
-  revealEls.forEach((el) => observer.observe(el));
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.14 }
+    );
+    revealEls.forEach((el) => observer.observe(el));
+  } else {
+    revealEls.forEach((el) => el.classList.add('is-visible'));
+  }
+
+  window.setTimeout(() => {
+    revealEls.forEach((el) => el.classList.add('is-visible'));
+  }, 1200);
 } else {
   revealEls.forEach((el) => el.classList.add('is-visible'));
 }

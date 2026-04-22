@@ -52,7 +52,7 @@ waitlistForms.forEach((form) => {
   const message = container ? container.querySelector('.form-message') : null;
   if (!message) return;
 
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const formData = new FormData(form);
     const email = String(formData.get('email') || '').trim();
@@ -60,8 +60,23 @@ waitlistForms.forEach((form) => {
       message.textContent = 'Please enter a valid email address.';
       return;
     }
-    message.textContent = `Perfect. ${email} is registered.`;
-    form.reset();
+
+    message.textContent = 'Submitting...';
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const payload = await response.json();
+      if (!response.ok || !payload.ok) {
+        throw new Error(payload.message || 'Subscription failed.');
+      }
+      message.textContent = payload.message || `Perfect. ${email} is registered.`;
+      form.reset();
+    } catch (error) {
+      message.textContent = error instanceof Error ? error.message : 'Subscription failed.';
+    }
   });
 });
 

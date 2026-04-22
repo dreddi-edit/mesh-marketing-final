@@ -70,45 +70,47 @@
 
       <section class="newsletter-stream">
         <article class="news-entry reveal" data-stagger="2">
-          <span class="news-date">18 April 2026</span>
-          <h2>The Next Frontier: Building the Mesh API</h2>
+          <span class="news-date">21 April 2026</span>
+          <h2>Mesh API Private Preview Opened</h2>
           <p>
-            We are preparing a dedicated API surface that streams deterministic workspace graph context to external agents
-            without forcing full-file prompt stuffing.
+            First private users now call context capsules directly from backend automations. Early runs reduced context payload
+            size while keeping full dependency traceability in logs.
           </p>
         </article>
 
         <article class="news-entry reveal" data-stagger="3">
-          <span class="news-date">02 March 2026</span>
-          <h2>Why We Abandoned Standard Context Windows</h2>
+          <span class="news-date">05 April 2026</span>
+          <h2>Benchmark Suite Expanded to Multi-Hop Tasks</h2>
           <p>
-            Our multi-model tests confirmed that structural compression achieves dramatically better recall than raw sequential
-            file packing on larger repositories.
+            We added chained refactor scenarios across large repos. Structural capsules kept retrieval quality stable even
+            when file counts increased and prompt budgets stayed fixed.
           </p>
         </article>
 
         <article class="news-entry reveal" data-stagger="4">
-          <span class="news-date">10 February 2026</span>
-          <h2>Mesh MCP: Connecting Local Tools to Global Compute</h2>
+          <span class="news-date">24 March 2026</span>
+          <h2>MCP Tooling Rollout: Context + Terminal in One Loop</h2>
           <p>
-            MCP now integrates natively so local terminals, databases, and running services can be queried through one shared
-            context model.
+            Local MCP sessions can now carry terminal traces into the same context graph used by IDE and API flows, which
+            removes handoffs and improves debugging continuity.
           </p>
         </article>
 
         <article class="news-entry reveal" data-stagger="5">
-          <span class="news-date">15 January 2026</span>
-          <h2>Announcing the Mesh IDE Beta</h2>
+          <span class="news-date">10 March 2026</span>
+          <h2>IDE Beta Wave 3: Faster Symbol Jump and Review Context</h2>
           <p>
-            The beta release introduced zero-latency indexing and semantic graph projection for day-to-day code navigation and
-            AI-assisted execution.
+            The latest beta focused on practical speed: better jump accuracy, tighter review context packs, and improved
+            side-by-side diff assistance for long files.
           </p>
         </article>
       </section>
 
-      <section id="newsletter-signup" class="newsletter-cta reveal" data-stagger="6">
-        <h2>Join the Waitlist</h2>
-        <p>Get launch updates and early access announcements first.</p>
+      <section id="newsletter-signup" class="waitlist-band reveal" data-stagger="6">
+        <div>
+          <p class="kicker">Register Your Interest</p>
+          <h3>Get launch updates and docs drops first.</h3>
+        </div>
         <form class="waitlist-form email-capture" action="/api/subscribe" method="POST">
           <label for="newsletter-email" class="sr-only">Email</label>
           <input id="newsletter-email" type="email" name="email" placeholder="you@company.com" required />
