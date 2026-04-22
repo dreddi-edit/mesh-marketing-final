@@ -674,51 +674,49 @@ h1 {
 }
 
 .newsletter-hero h1 {
-  font-size: clamp(2.3rem, 6vw, 4.9rem);
+  font-size: clamp(2.3rem, 5.4vw, 4.2rem);
   line-height: 0.9;
 }
 
-.newsletter-highlights {
-  margin-top: 20px;
+.newsletter-layout {
+  margin-top: 18px;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.newsletter-kpi {
-  background: rgba(255, 255, 255, 0.65);
-  border: 1px solid rgba(13, 127, 141, 0.12);
-  border-radius: 14px;
-  padding: 16px;
-}
-
-.newsletter-kpi p {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.76rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #567378;
-}
-
-.newsletter-kpi strong {
-  display: block;
-  margin-top: 6px;
-  font-size: clamp(1.2rem, 2.2vw, 1.7rem);
-  color: #0a3a45;
-}
-
-.newsletter-kpi span {
-  display: block;
-  margin-top: 6px;
-  font-size: 0.88rem;
-  color: #5c767b;
-}
-
-.newsletter-stream {
-  margin-top: 20px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.2fr 0.8fr;
   gap: 14px;
+}
+
+.newsletter-feature {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(13, 127, 141, 0.14);
+  border-radius: 16px;
+  padding: clamp(20px, 3vw, 28px);
+  box-shadow: 0 10px 28px rgba(10, 86, 96, 0.07);
+}
+
+.newsletter-feature h2 {
+  margin-top: 8px;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  line-height: 1.16;
+  color: #0d6f79;
+}
+
+.newsletter-feature p {
+  margin-top: 12px;
+  color: #2f4044;
+  line-height: 1.62;
+}
+
+.newsletter-feature ul {
+  margin-top: 16px;
+  padding-left: 18px;
+  color: #355056;
+  display: grid;
+  gap: 8px;
+}
+
+.newsletter-side {
+  display: grid;
+  gap: 12px;
 }
 
 .news-entry {
@@ -726,7 +724,7 @@ h1 {
   background: rgba(255, 255, 255, 0.68);
   border: 1px solid rgba(13, 127, 141, 0.14);
   border-radius: 14px;
-  padding: 22px;
+  padding: 18px;
   box-shadow: 0 8px 24px rgba(10, 86, 96, 0.06);
 }
 
@@ -738,36 +736,49 @@ h1 {
   display: block;
 }
 
-.news-entry h2 {
-  font-size: clamp(1.25rem, 2.2vw, 1.62rem);
-  line-height: 1.15;
+.news-entry h3 {
+  font-size: clamp(1.05rem, 1.9vw, 1.28rem);
+  line-height: 1.25;
   color: #0d6f79;
 }
 
 .news-entry p {
-  margin-top: 10px;
+  margin-top: 8px;
   color: #2f4044;
-  line-height: 1.55;
+  line-height: 1.45;
 }
 
-.newsletter-cta {
-  margin-top: 30px;
+.newsletter-archive {
+  margin-top: 14px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(13, 127, 141, 0.12);
   border-radius: 14px;
-  text-align: left;
-  padding: clamp(22px, 3vw, 32px);
-  background: #0a262e;
-  color: #e8f7fa;
+  padding: 18px;
 }
 
-.newsletter-cta h2 {
-  font-size: clamp(1.7rem, 3.4vw, 2.3rem);
-  margin-bottom: 10px;
-  color: #1aa4b7;
+.newsletter-archive h2 {
+  font-size: 1.3rem;
+  color: #0a3a45;
 }
 
-.newsletter-cta p {
-  color: #a1b8bc;
-  margin-bottom: 20px;
+.newsletter-archive article {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(13, 127, 141, 0.1);
+}
+
+.newsletter-archive span {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #5c767c;
+}
+
+.newsletter-archive article p {
+  margin-top: 8px;
+  color: #2f4448;
+  line-height: 1.45;
 }
 
 .email-capture {
@@ -795,8 +806,7 @@ h1 {
     flex-direction: column;
   }
 
-  .newsletter-highlights,
-  .newsletter-stream {
+  .newsletter-layout {
     grid-template-columns: 1fr;
   }
 

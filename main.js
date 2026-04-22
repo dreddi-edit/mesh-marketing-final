@@ -3,10 +3,13 @@ document.documentElement.classList.add('js-motion');
 const yearEl = document.getElementById('year');
 if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
-const words = ['IDE', 'MCP', 'API'];
 const wordCycle = document.querySelector('.word-cycle');
 let wordIndex = 0;
 if (wordCycle) {
+  const wordsAttr = wordCycle.getAttribute('data-words');
+  const words = wordsAttr
+    ? wordsAttr.split('|').map((entry) => entry.trim()).filter(Boolean)
+    : ['IDE', 'MCP', 'API'];
   setInterval(() => {
     wordIndex = (wordIndex + 1) % words.length;
     wordCycle.textContent = words[wordIndex];

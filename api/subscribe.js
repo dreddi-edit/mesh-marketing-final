@@ -9,10 +9,11 @@ export default function handler(req, res) {
     return res.status(400).json({ ok: false, message: 'Please enter a valid email address.' });
   }
 
-  // Placeholder integration:
-  // In production, persist to a DB/CRM (e.g. Postgres, HubSpot, Mailchimp, Resend audience).
+  // Temporary behavior:
+  // Request is received and logged. Persistent waitlist storage is not wired yet.
+  console.log(`[waitlist] ${new Date().toISOString()} ${email}`);
   return res.status(200).json({
     ok: true,
-    message: `Thanks, ${email} was added to the waitlist.`
+    message: `Thanks, ${email}. Your signup request was received.`
   });
 }

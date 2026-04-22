@@ -42,71 +42,67 @@
       <section class="newsletter-hero reveal" data-stagger="1">
         <p class="kicker">Mesh Transmission</p>
         <h1>
-          Real progress,<br/>
-          <span class="cycle-line"><span class="word-cycle" aria-live="polite">not vanity updates</span></span>
+          Product updates that<br />
+          <span class="cycle-line"><span class="word-cycle" data-words="ship context|show proof|stay practical" aria-live="polite">ship context</span></span>
         </h1>
         <p class="lede">
-          Every issue contains benchmark movement, engine changes, and practical rollout details you can actually use.
+          This page tracks what changed in Mesh, why it matters, and which benchmarks moved.
         </p>
       </section>
 
-      <section class="newsletter-highlights">
-        <article class="newsletter-kpi reveal" data-stagger="2">
-          <p>Avg Read Time</p>
-          <strong>2.8 min</strong>
-          <span>Dense and tactical</span>
+      <section class="newsletter-layout">
+        <article class="newsletter-feature reveal" data-stagger="2">
+          <span class="news-date">22 April 2026</span>
+          <h2>Engine v0.8 reduced cold-start context build time by 31%</h2>
+          <p>
+            We shipped a new capsule prefetch path that prioritizes symbol hotspots before full dependency fan-out.
+            In internal tests on medium repositories this lowered first usable response time from 3.9s to 2.7s.
+          </p>
+          <ul>
+            <li>Lower bootstrap latency for IDE assistant sessions</li>
+            <li>More stable retrieval quality on long multi-hop tasks</li>
+            <li>Smaller context payloads for API consumers</li>
+          </ul>
         </article>
-        <article class="newsletter-kpi reveal" data-stagger="3">
-          <p>Publish Cadence</p>
-          <strong>2x / month</strong>
-          <span>No spam waves</span>
+
+        <div class="newsletter-side">
+          <article class="news-entry reveal" data-stagger="3">
+            <span class="news-date">15 April 2026</span>
+            <h3>API private preview opened</h3>
+            <p>Early teams now call context capsules directly in CI automations.</p>
+          </article>
+
+          <article class="news-entry reveal" data-stagger="4">
+            <span class="news-date">04 April 2026</span>
+            <h3>Benchmark suite expanded</h3>
+            <p>Added chain-refactor scenarios across larger repo graphs.</p>
+          </article>
+
+          <article class="news-entry reveal" data-stagger="5">
+            <span class="news-date">26 March 2026</span>
+            <h3>MCP + terminal context merge</h3>
+            <p>Terminal traces now feed the same context model used by IDE/API.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="newsletter-archive reveal" data-stagger="6">
+        <h2>Recent Notes</h2>
+        <article>
+          <span>12 March 2026</span>
+          <p>IDE beta wave shipped improved symbol jump precision and compact review context.</p>
         </article>
-        <article class="newsletter-kpi reveal" data-stagger="4">
-          <p>Coverage Focus</p>
-          <strong>Engine + Product</strong>
-          <span>One stream, full context</span>
+        <article>
+          <span>27 February 2026</span>
+          <p>Capsule serializer update reduced transfer size on repeated reads in active sessions.</p>
+        </article>
+        <article>
+          <span>09 February 2026</span>
+          <p>NIAH-style regression pack added as release gate for retrieval quality changes.</p>
         </article>
       </section>
 
-      <section class="newsletter-stream">
-        <article class="news-entry reveal" data-stagger="2">
-          <span class="news-date">21 April 2026</span>
-          <h2>Mesh API Private Preview Opened</h2>
-          <p>
-            First private users now call context capsules directly from backend automations. Early runs reduced context payload
-            size while keeping full dependency traceability in logs.
-          </p>
-        </article>
-
-        <article class="news-entry reveal" data-stagger="3">
-          <span class="news-date">05 April 2026</span>
-          <h2>Benchmark Suite Expanded to Multi-Hop Tasks</h2>
-          <p>
-            We added chained refactor scenarios across large repos. Structural capsules kept retrieval quality stable even
-            when file counts increased and prompt budgets stayed fixed.
-          </p>
-        </article>
-
-        <article class="news-entry reveal" data-stagger="4">
-          <span class="news-date">24 March 2026</span>
-          <h2>MCP Tooling Rollout: Context + Terminal in One Loop</h2>
-          <p>
-            Local MCP sessions can now carry terminal traces into the same context graph used by IDE and API flows, which
-            removes handoffs and improves debugging continuity.
-          </p>
-        </article>
-
-        <article class="news-entry reveal" data-stagger="5">
-          <span class="news-date">10 March 2026</span>
-          <h2>IDE Beta Wave 3: Faster Symbol Jump and Review Context</h2>
-          <p>
-            The latest beta focused on practical speed: better jump accuracy, tighter review context packs, and improved
-            side-by-side diff assistance for long files.
-          </p>
-        </article>
-      </section>
-
-      <section id="newsletter-signup" class="waitlist-band reveal" data-stagger="6">
+      <section id="newsletter-signup" class="waitlist-band reveal" data-stagger="7">
         <div>
           <p class="kicker">Register Your Interest</p>
           <h3>Get launch updates and docs drops first.</h3>
@@ -120,7 +116,7 @@
       </section>
     </main>
 
-    <footer class="footer reveal" data-stagger="7">
+    <footer class="footer reveal" data-stagger="8">
       <p>© <span id="year">2026</span> Mesh Technologies GmbH</p>
       <div>
         <a href="./imprint.html">Imprint</a>
