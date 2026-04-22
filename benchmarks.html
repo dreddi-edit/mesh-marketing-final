@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mesh Benchmarks | Performance Data</title>
+    <meta
+      name="description"
+      content="We benchmark Mesh against raw context windows using real-world LLMs. See how our capsule engine achieves 5x token reduction and 100% recall."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./benchmarks.css" />
+  </head>
+  <body class="benchmarks-body">
+    <div class="scroll-progress" aria-hidden="true"><span></span></div>
+    <div class="cursor-dot" aria-hidden="true"></div>
+    <div class="cursor-beam" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="topbar reveal" data-stagger="0">
+      <div class="topbar-inner">
+        <div class="masthead">
+          <a class="brand" href="./index.html">
+            <img src="./assets/brand/lockup-color.svg" alt="Mesh" class="nav-logo" />
+          </a>
+        </div>
+        <nav>
+          <a href="./products.html">Products</a>
+          <a href="./engine.html">Engine</a>
+          <a href="./benchmarks.html">Benchmarks</a>
+          <a href="./newsletter.html">Newsletter</a>
+        </nav>
+        <div class="head-cta-wrap">
+          <a class="top-newsletter" href="#newsletter-signup">Waitlist</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="top" class="benchmarks-page">
+      <section class="benchmarks-hero reveal" data-stagger="1">
+        <p class="kicker">Performance Data</p>
+        <h1 class="reveal" data-stagger="2" style="min-height: 2.1em;">
+          Capsule compression<br/>
+          <span class="cycle-line" style="white-space: nowrap;"><span class="word-cycle" aria-live="polite">vs raw context</span></span>
+        </h1>
+        <p class="lede reveal" data-stagger="3">
+          We benchmarked Mesh against standard raw context windows across 14+ frontier models including <strong>Claude 4.6 Opus/Sonnet and ChatGPT 4.5</strong>, alongside powerful local models like <strong>Llama and Gemma</strong>. The results are decisive: 5x fewer tokens, 100% recall.
+        </p>
+      </section>
+
+      <section class="benchmark-cards">
+        <div class="bench-kpi reveal" data-stagger="1">
+          <div class="b-head">NIAH Needle Recall</div>
+          <div class="b-val">100%</div>
+          <div class="b-desc">Mesh (Ultra Capsules)</div>
+        </div>
+        <div class="bench-kpi reveal" data-stagger="2">
+          <div class="b-head">Budget Saturation</div>
+          <div class="b-val">4.5k <span style="font-size: 0.5em;">vs 24k</span></div>
+          <div class="b-desc">Tokens for full coverage</div>
+        </div>
+        <div class="bench-kpi reveal" data-stagger="3">
+          <div class="b-head">Multi-Hop Chain</div>
+          <div class="b-val">12/12</div>
+          <div class="b-desc">Completeness vs 3/12 raw</div>
+        </div>
+      </section>
+
+      <!-- The main animated chart container -->
+      <section class="animated-chart-section reveal" data-stagger="4">
+        <div class="chart-wrapper">
+          <div class="chart-header">
+            <h3>LLM NIAH &mdash; Relevant Context Recall</h3>
+            <p>Highlights from Claude 4.6 Opus & ChatGPT 4.5. Can the model see the files it needs without blowing the budget?</p>
+          </div>
+          
+          <div class="chart-canvas">
+            <div class="bar-group">
+              <div class="bar-label">Mesh Workflow</div>
+              <div class="bar-track">
+                <div class="bar-fill mesh-fill streams-bg" style="width: 0%;" data-target="100">
+                  <span class="b-txt">100% PASS (5/5)</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="bar-group">
+              <div class="bar-label">Raw Source</div>
+              <div class="bar-track">
+                <div class="bar-fill raw-fill streams-bg" style="width: 0%;" data-target="40">
+                  <span class="b-txt">40% PASS (2/5)</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="chart-footer-note">Lower raw coverage &rarr; model guesses instead of reads because the needle file was pushed beyond the context window by irrelevant token noise.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="animated-chart-section alt-chart reveal" data-stagger="5">
+        <div class="chart-wrapper">
+          <div class="chart-header">
+            <h3>Budget Saturation (Tokens required to grasp 200 files)</h3>
+            <p>Tested across 14+ distinct model architectures. A smaller footprint allows room for the actual prompt generation.</p>
+          </div>
+          <!-- Live moving graph background element -->
+          <svg class="moving-wave-graph" viewBox="0 0 800 100" preserveAspectRatio="none" aria-hidden="true">
+             <path class="wave-path path-raw" d="M0,80 Q50,90 100,50 T200,60 T300,20 T400,70 T500,40 T600,80 T700,50 T800,90" fill="none" stroke-width="2" />
+             <path class="wave-path path-mesh" d="M0,95 Q50,97 100,90 T200,92 T300,88 T400,95 T500,91 T600,94 T700,89 T800,96" fill="none" stroke-width="2" />
+          </svg>
+          
+          <div class="chart-canvas saturation-canvas">
+            <div class="sat-bar mesh-sat">
+               <div class="sat-core" data-target-height="18"></div>
+               <span class="sat-label">Mesh (4,500T)</span>
+            </div>
+            <div class="sat-bar raw-sat">
+               <div class="sat-core" data-target-height="95"></div>
+               <span class="sat-label">Raw (24,000T)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="animated-chart-section reveal" data-stagger="6">
+        <div class="chart-wrapper">
+          <div class="chart-header">
+            <h3>LLM Hallucination Rate (NOTFOUND Accuracy)</h3>
+            <p>How often does the model invent files or hallucinate variables when the answer is not in the workspace? (Tested across 4 models)</p>
+          </div>
+          
+          <div class="chart-canvas">
+            <div class="bar-group">
+              <div class="bar-label">Mesh Workflow</div>
+              <div class="bar-track">
+                <div class="bar-fill mesh-fill" style="width: 0%;" data-target="0">
+                  <span class="b-txt" style="color: var(--ink-soft); position: absolute; margin-left: 35px;">0% (Zero Hallucinations)</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="bar-group">
+              <div class="bar-label">Raw Source</div>
+              <div class="bar-track">
+                <div class="bar-fill raw-fill streams-bg-danger" style="width: 0%;" data-target="68">
+                  <span class="b-txt">68% Hallucination Rate</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="chart-footer-note">Without Mesh, models hallucinated answers nearly 7 out of 10 times in a 200-file workspace because the context was too overwhelming.</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="newsletter-signup" class="waitlist-band reveal" data-stagger="0">
+        <div>
+          <p class="kicker">Register Your Interest</p>
+          <h3>Get launch updates and docs drops first.</h3>
+        </div>
+        <form class="waitlist-form email-capture" action="/api/subscribe" method="POST">
+          <label for="email" class="sr-only">Email</label>
+          <input id="email" name="email" type="email" placeholder="you@company.com" required />
+          <button type="submit">Join Waitlist</button>
+        </form>
+        <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
+      </section>
+    </main>
+
+    <footer class="footer reveal" data-stagger="0">
+      <p>© <span id="year">2026</span> Mesh Technologies GmbH</p>
+      <div>
+        <a href="./imprint.html">Imprint</a>
+        <a href="./privacy.html">Privacy</a>
+      </div>
+    </footer>
+
+    <script src="./main.js"></script>
+    <script>
+      const yearEl = document.getElementById('year');
+      if(yearEl) yearEl.textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>

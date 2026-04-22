@@ -1,0 +1,354 @@
+.benchmarks-body {
+  --bg: #e5f1f4;
+  --bg-2: #ecf5f8;
+  --ink: #0c1f26;
+  --ink-soft: #355360;
+  --line: rgba(16, 90, 108, 0.18);
+  --accent-hot: #0d7f8d;
+  --accent-sky: #42a9b9;
+  font-family: Outfit, sans-serif;
+  background: radial-gradient(circle at 10% 20%, rgba(74, 172, 196, 0.28) 0%, transparent 40%),
+              linear-gradient(180deg, #e5f1f4 0%, #e2eff3 45%, #e9f5f7 100%);
+  color: var(--ink);
+}
+
+.benchmarks-body .grain {
+  opacity: 0.04;
+}
+
+.benchmarks-hero {
+  width: min(1240px, 94vw);
+  margin-inline: auto;
+  padding-top: clamp(64px, 10vw, 126px);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.benchmarks-hero h1 {
+  max-width: 14ch;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  margin-top: 16px;
+  animation: fadeUp 0.8s ease-out forwards;
+}
+
+.benchmarks-hero .cycle-line {
+  display: block;
+  color: #0e7585;
+}
+
+.benchmark-cards {
+  width: min(1240px, 94vw);
+  margin: clamp(30px, 5vw, 50px) auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.bench-kpi {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--line);
+  padding: 32px;
+  border-radius: 20px;
+  text-align: left;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.bench-kpi::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #0d7f8d, #42a9b9);
+  opacity: 0.5;
+}
+
+.bench-kpi:hover {
+  transform: translateY(-4px);
+}
+
+.b-head {
+  font-size: 1.1rem;
+  color: var(--ink-soft);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.b-val {
+  font-size: clamp(3rem, 5vw, 4.2rem);
+  font-weight: 700;
+  color: var(--accent-hot);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.b-desc {
+  font-size: 1.1rem;
+  color: #2f6e7d;
+  font-weight: 400;
+}
+
+/* Charts */
+.animated-chart-section {
+  width: min(1000px, 94vw);
+  margin: clamp(30px, 5vw, 50px) auto;
+}
+
+.chart-wrapper {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: clamp(28px, 4vw, 44px);
+  box-shadow: 0 14px 40px rgba(20, 79, 95, 0.06);
+}
+
+.chart-header h3 {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.chart-header p {
+  color: var(--ink-soft);
+  font-size: 1.2rem;
+  margin-bottom: 40px;
+}
+
+/* Horizontal Bar chart */
+.bar-group {
+  margin-bottom: 24px;
+}
+
+.bar-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.95rem;
+  color: #1a4f5f;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.bar-track {
+  width: 100%;
+  height: 48px;
+  background: rgba(19, 114, 134, 0.08);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.02);
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  transition: width 1.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(13, 127, 141, 0.2);
+}
+
+.mesh-fill {
+  background: linear-gradient(90deg, #107284, #1aa4b7);
+  width: 0%; /* JS will animate */
+}
+
+.raw-fill {
+  background: linear-gradient(90deg, #819ea2, #a1b8bc);
+  width: 0%;
+}
+
+.b-txt {
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  font-family: Outfit, sans-serif;
+  font-size: 1.1rem;
+}
+
+.chart-footer-note {
+  margin-top: 32px;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  max-width: 600px;
+  line-height: 1.5;
+  border-left: 3px solid var(--accent-hot);
+  padding-left: 16px;
+}
+
+/* Vertical Saturation Chart */
+.alt-chart .chart-wrapper {
+  background: #0f1c21;
+  color: #fff;
+  border-color: #233940;
+}
+.alt-chart .chart-header h3 { color: #fff; }
+.alt-chart .chart-header p { color: #819ea2; }
+
+.saturation-canvas {
+  height: 380px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: clamp(40px, 8vw, 120px);
+  padding-bottom: 40px;
+  position: relative;
+  border-bottom: 2px solid rgba(255,255,255,0.1);
+}
+
+/* Y axis lines */
+.saturation-canvas::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 20%;
+  height: 1px;
+  background: rgba(255,255,255,0.05);
+  pointer-events: none;
+}
+.saturation-canvas::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 60%;
+  height: 1px;
+  background: rgba(255,255,255,0.05);
+  pointer-events: none;
+}
+
+.sat-bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  width: clamp(80px, 15vw, 140px);
+  height: 100%;
+}
+
+.sat-core {
+  width: 100%;
+  border-radius: 8px 8px 0 0;
+  height: 0%; /* JS will animate */
+  transition: height 2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.mesh-sat .sat-core {
+  background: linear-gradient(180deg, #1aa4b7, #0d7f8d);
+  box-shadow: 0 0 20px rgba(26, 164, 183, 0.3);
+}
+
+.raw-sat .sat-core {
+  background: linear-gradient(180deg, #ff6b6b, #d93838);
+  box-shadow: 0 0 20px rgba(255, 107, 107, 0.2);
+}
+
+.sat-label {
+  margin-top: 16px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.95rem;
+  color: #c4d7db;
+  white-space: nowrap;
+}
+
+/* Make the charts feel "alive" — floating animation & infinite moving background */
+.bar-fill {
+  background-size: 200% 100%;
+}
+.mesh-fill {
+  background-image: linear-gradient(90deg, #107284 0%, #1aa4b7 25%, #107284 50%, #107284 100%);
+  animation: gradientFlow 3s linear infinite;
+}
+.raw-fill {
+  background-image: linear-gradient(90deg, #819ea2 0%, #a1b8bc 25%, #819ea2 50%, #819ea2 100%);
+  animation: gradientFlow 4s linear infinite;
+}
+
+.alt-chart .raw-sat .sat-core {
+  background-image: linear-gradient(180deg, #ff6b6b 0%, #d93838 30%, #a12b2b 70%, #ff6b6b 100%);
+  background-size: 100% 200%;
+  animation: gradientFlowY 4s linear infinite;
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 100% 0; }
+  100% { background-position: 0 0; }
+}
+@keyframes gradientFlowY {
+  0% { background-position: 0 100%; }
+  100% { background-position: 0 0; }
+}
+
+/* Background live telemetry wave chart inside the vertical bar section */
+.moving-wave-graph {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: 0;
+}
+.moving-wave-graph .wave-path {
+  stroke-dasharray: 100 100;
+  animation: dashMove 12s linear infinite;
+}
+.moving-wave-graph .path-raw {
+  stroke: #ff6b6b;
+}
+.moving-wave-graph .path-mesh {
+  stroke: #1aa4b7;
+  stroke-dasharray: 200 150;
+  animation: dashMove 8s linear infinite reverse;
+}
+@keyframes dashMove {
+  to { stroke-dashoffset: 1000; }
+}
+
+/* Float the KPI cards subtly individually */
+.bench-kpi:nth-child(1) { animation: subtleFloat 6s ease-in-out infinite 0s; }
+.bench-kpi:nth-child(2) { animation: subtleFloat 7s ease-in-out infinite 1s; }
+.bench-kpi:nth-child(3) { animation: subtleFloat 6.5s ease-in-out infinite 2s; }
+@keyframes subtleFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+.bench-kpi:hover {
+  animation-play-state: paused;
+}
+
+/* Data streaming overlays on horizontal bars */
+.streams-bg {
+  position: relative;
+  overflow: hidden;
+}
+.streams-bg-danger {
+  position: relative;
+  overflow: hidden;
+  background-image: linear-gradient(90deg, #ff6b6b 0%, #d93838 25%, #ff6b6b 50%, #ff6b6b 100%) !important;
+  animation: gradientFlow 4s linear infinite !important;
+  background-size: 200% 100% !important;
+}
+
+.streams-bg::after, .streams-bg-danger::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: linear-gradient(135deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.1) 75%, transparent 75%, transparent);
+  background-size: 24px 24px;
+  animation: streamFlow 1.2s linear infinite;
+  opacity: 0.4;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+@keyframes streamFlow {
+  0% { background-position: 0 0; }
+  100% { background-position: 24px 24px; }
+}
+

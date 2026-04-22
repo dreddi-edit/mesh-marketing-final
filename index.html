@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mesh | IDE + MCP + API</title>
+    <meta
+      name="description"
+      content="Mesh combines IDE, MCP, and API on one structural context engine with measured performance."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="scroll-progress" aria-hidden="true"><span></span></div>
+    <div class="cursor-dot" aria-hidden="true"></div>
+    <div class="cursor-beam" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="topbar reveal" data-stagger="0">
+      <div class="topbar-inner">
+        <div class="masthead">
+          <a class="brand" href="./index.html">
+            <img src="./assets/brand/lockup-color.svg" alt="Mesh" class="nav-logo" />
+          </a>
+        </div>
+        <nav>
+          <a href="./products.html">Products</a>
+          <a href="./engine.html">Engine</a>
+          <a href="./benchmarks.html">Benchmarks</a>
+          <a href="./newsletter.html">Newsletter</a>
+        </nav>
+        <div class="head-cta-wrap">
+          <a class="top-newsletter" href="#newsletter-signup">Waitlist</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <p class="kicker reveal" data-stagger="1">General Landing</p>
+        <h1 class="reveal" data-stagger="2">
+          Build with
+          <span class="cycle-line"><span class="word-cycle" aria-live="polite">IDE</span></span>
+        </h1>
+        <p class="lede reveal" data-stagger="3">
+          Mesh is one product family with three equal surfaces powered by one structural context engine.
+        </p>
+
+        <div class="hero-metrics reveal" data-stagger="4">
+          <span><b data-count="80">80%</b> capsule compression</span>
+          <span><b data-count="3.6">3.6x</b> repo context fit</span>
+          <span><b data-count="100">100%</b> NIAH pass</span>
+          <span><b data-count="84.7">84.7%</b> targeted read savings</span>
+        </div>
+      </section>
+
+      <section id="engine" class="engine-story">
+        <aside class="story-sticky reveal" data-stagger="0">
+          <p class="kicker">Core Engine</p>
+          <h2>Less prompt stuffing.<br/>More exact context.</h2>
+          <p>
+            Mesh compresses repository structure first, then resolves exact source only when needed.
+          </p>
+        </aside>
+
+        <div class="story-flow">
+          <article class="flow-item reveal" data-stagger="1">
+            <p class="step">Step 01</p>
+            <h3>Ingest and map</h3>
+            <p>Tree-sitter parsing builds deterministic symbols, call-sites, and query indices across the repo.</p>
+          </article>
+
+          <article class="flow-item reveal" data-stagger="2">
+            <p class="step">Step 02</p>
+            <h3>Capsule compression</h3>
+            <p>Files are converted into structural capsules so models can see more code at the same token budget.</p>
+          </article>
+
+          <article class="flow-item reveal" data-stagger="3">
+            <p class="step">Step 03</p>
+            <h3>Targeted read resolve</h3>
+            <p>When exact bytes are required, Mesh serves precise source ranges instead of re-sending whole files.</p>
+          </article>
+
+          <article class="flow-item reveal" data-stagger="4">
+            <p class="step">Step 04</p>
+            <h3>Model-ready delivery</h3>
+            <p>Context is delivered through IDE, MCP, or API with shared semantics and predictable budgets.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="products" class="products-river">
+        <article class="product-row reveal tilt" data-depth="0.85" data-stagger="0">
+          <p class="row-index">01</p>
+          <div>
+            <h3>IDE</h3>
+            <p>Browser runtime with editor, terminal, AI chat, review context, and voice-assisted coding loop.</p>
+            <p class="row-meta">Monaco + PTY terminal · Capsule-first context · On-demand source reads</p>
+          </div>
+        </article>
+
+        <article class="product-row reveal tilt" data-depth="1.0" data-stagger="1">
+          <p class="row-index">02</p>
+          <div>
+            <h3>MCP</h3>
+            <p>Standalone MCP surface exposing the same context engine for external agents and local workflows.</p>
+            <p class="row-meta">stdio + streamable HTTP · Search + status tools · Shared core runtime</p>
+          </div>
+        </article>
+
+        <article class="product-row reveal tilt" data-depth="0.95" data-stagger="2">
+          <p class="row-index">03</p>
+          <div>
+            <h3>API</h3>
+            <p>Programmable integration surface for automations, product features, and backend orchestration.</p>
+            <p class="row-meta">Deterministic primitives · Agent-ready integration · Production-focused flows</p>
+          </div>
+        </article>
+      </section>
+
+      <section id="evidence" class="evidence-runway">
+        <div class="evidence-head reveal" data-stagger="0">
+          <p class="kicker">Docs / Benchmarks</p>
+          <h2>Measured, not marketed.</h2>
+        </div>
+
+        <div class="metric-lines">
+          <article class="metric-line reveal" data-stagger="1">
+            <p>Compression Ratio</p>
+            <div class="line-track"><span style="--w:80%"></span></div>
+            <strong>80%</strong>
+          </article>
+
+          <article class="metric-line reveal" data-stagger="2">
+            <p>NIAH Recall</p>
+            <div class="line-track"><span style="--w:100%"></span></div>
+            <strong>100%</strong>
+          </article>
+
+          <article class="metric-line reveal" data-stagger="3">
+            <p>Hallucination Probe FPs</p>
+            <div class="line-track"><span style="--w:2%"></span></div>
+            <strong>0%</strong>
+          </article>
+
+          <article class="metric-line reveal" data-stagger="4">
+            <p>MCP Compatibility</p>
+            <div class="line-track"><span style="--w:100%"></span></div>
+            <strong>100%</strong>
+          </article>
+        </div>
+
+        <div class="evidence-links reveal" data-stagger="5">
+          <a href="#">Architecture Notes</a>
+          <a href="#">Benchmark Methodology</a>
+          <a href="#">MCP Integration Docs</a>
+          <a href="#">Performance Reports</a>
+        </div>
+      </section>
+
+      <section id="newsletter-signup" class="waitlist-band reveal" data-stagger="0">
+        <div>
+          <p class="kicker">Register Your Interest</p>
+          <h3>Get launch updates and docs drops first.</h3>
+        </div>
+        <form class="waitlist-form email-capture" action="/api/subscribe" method="POST">
+          <label for="email" class="sr-only">Email</label>
+          <input id="email" name="email" type="email" placeholder="you@company.com" required />
+          <button type="submit">Join Waitlist</button>
+        </form>
+        <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
+      </section>
+    </main>
+
+    <footer class="footer reveal" data-stagger="0">
+      <p>© <span id="year">2026</span> Mesh Technologies GmbH</p>
+      <div>
+        <a href="./imprint.html">Imprint</a>
+        <a href="./privacy.html">Privacy</a>
+      </div>
+    </footer>
+
+    <script src="./main.js"></script>
+    <script>
+      const yearEl = document.getElementById('year');
+      if(yearEl) yearEl.textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>

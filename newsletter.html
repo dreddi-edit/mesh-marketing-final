@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mesh | Newsletter</title>
+    <meta name="description" content="Insights, release notes, and updates from the Mesh engineering team." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="scroll-progress" aria-hidden="true"><span></span></div>
+    <div class="cursor-dot" aria-hidden="true"></div>
+    <div class="cursor-beam" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="topbar reveal" data-stagger="0">
+      <div class="topbar-inner">
+        <div class="masthead">
+          <a class="brand" href="./index.html">
+            <img src="./assets/brand/lockup-color.svg" alt="Mesh" class="nav-logo" />
+          </a>
+        </div>
+        <nav>
+          <a href="./products.html">Products</a>
+          <a href="./engine.html">Engine</a>
+          <a href="./benchmarks.html">Benchmarks</a>
+          <a href="./newsletter.html" aria-current="page">Newsletter</a>
+        </nav>
+        <div class="head-cta-wrap">
+          <a class="top-newsletter" href="#newsletter-signup">Waitlist</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="newsletter-page">
+      <section class="newsletter-hero reveal" data-stagger="1">
+        <p class="kicker">Mesh Transmission</p>
+        <h1>
+          Real progress,<br/>
+          <span class="cycle-line"><span class="word-cycle" aria-live="polite">not vanity updates</span></span>
+        </h1>
+        <p class="lede">
+          Every issue contains benchmark movement, engine changes, and practical rollout details you can actually use.
+        </p>
+      </section>
+
+      <section class="newsletter-highlights">
+        <article class="newsletter-kpi reveal" data-stagger="2">
+          <p>Avg Read Time</p>
+          <strong>2.8 min</strong>
+          <span>Dense and tactical</span>
+        </article>
+        <article class="newsletter-kpi reveal" data-stagger="3">
+          <p>Publish Cadence</p>
+          <strong>2x / month</strong>
+          <span>No spam waves</span>
+        </article>
+        <article class="newsletter-kpi reveal" data-stagger="4">
+          <p>Coverage Focus</p>
+          <strong>Engine + Product</strong>
+          <span>One stream, full context</span>
+        </article>
+      </section>
+
+      <section class="newsletter-stream">
+        <article class="news-entry reveal" data-stagger="2">
+          <span class="news-date">18 April 2026</span>
+          <h2>The Next Frontier: Building the Mesh API</h2>
+          <p>
+            We are preparing a dedicated API surface that streams deterministic workspace graph context to external agents
+            without forcing full-file prompt stuffing.
+          </p>
+        </article>
+
+        <article class="news-entry reveal" data-stagger="3">
+          <span class="news-date">02 March 2026</span>
+          <h2>Why We Abandoned Standard Context Windows</h2>
+          <p>
+            Our multi-model tests confirmed that structural compression achieves dramatically better recall than raw sequential
+            file packing on larger repositories.
+          </p>
+        </article>
+
+        <article class="news-entry reveal" data-stagger="4">
+          <span class="news-date">10 February 2026</span>
+          <h2>Mesh MCP: Connecting Local Tools to Global Compute</h2>
+          <p>
+            MCP now integrates natively so local terminals, databases, and running services can be queried through one shared
+            context model.
+          </p>
+        </article>
+
+        <article class="news-entry reveal" data-stagger="5">
+          <span class="news-date">15 January 2026</span>
+          <h2>Announcing the Mesh IDE Beta</h2>
+          <p>
+            The beta release introduced zero-latency indexing and semantic graph projection for day-to-day code navigation and
+            AI-assisted execution.
+          </p>
+        </article>
+      </section>
+
+      <section id="newsletter-signup" class="newsletter-cta reveal" data-stagger="6">
+        <h2>Join the Waitlist</h2>
+        <p>Get launch updates and early access announcements first.</p>
+        <form class="waitlist-form email-capture" action="/api/subscribe" method="POST">
+          <label for="newsletter-email" class="sr-only">Email</label>
+          <input id="newsletter-email" type="email" name="email" placeholder="you@company.com" required />
+          <button type="submit">Join Waitlist</button>
+        </form>
+        <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
+      </section>
+    </main>
+
+    <footer class="footer reveal" data-stagger="7">
+      <p>© <span id="year">2026</span> Mesh Technologies GmbH</p>
+      <div>
+        <a href="./imprint.html">Imprint</a>
+        <a href="./privacy.html">Privacy</a>
+      </div>
+    </footer>
+
+    <script src="./main.js"></script>
+  </body>
+</html>

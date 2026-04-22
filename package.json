@@ -1,0 +1,9 @@
+{
+  "name": "mesh-marketing",
+  "version": "1.0.0",
+  "description": "Mesh Marketing Website",
+  "dependencies": {},
+  "engines": {
+    "node": ">=18.x"
+  }
+}

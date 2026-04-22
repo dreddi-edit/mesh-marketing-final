@@ -1,0 +1,303 @@
+.products-body {
+  --bg: #e7f2f5;
+  --bg-2: #edf6f8;
+  --ink: #0c1f26;
+  --ink-soft: #355360;
+  --line: rgba(16, 90, 108, 0.22);
+  --accent-hot: #0d7f8d;
+  --accent-sky: #43afc0;
+  font-family: Outfit, sans-serif;
+  background: radial-gradient(circle at 80% -10%, rgba(74, 172, 196, 0.28) 0%, transparent 36%),
+              radial-gradient(circle at 0% 30%, rgba(105, 203, 222, 0.14) 0%, transparent 42%),
+              linear-gradient(180deg, #eaf5f7 0%, #e4f0f4 45%, #eaf6f8 100%);
+  color: var(--ink);
+}
+
+.products-body .grain {
+  opacity: 0.03;
+}
+
+.products-body .topbar {
+  border-color: rgba(16, 112, 132, 0.22);
+  background: linear-gradient(180deg, rgba(231, 246, 250, 0.9), rgba(226, 241, 246, 0.86));
+  box-shadow: 0 10px 28px rgba(20, 79, 95, 0.1);
+}
+
+.products-hero {
+  width: min(1240px, 94vw);
+  margin-inline: auto;
+  padding-top: clamp(54px, 8vw, 106px);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.products-hero h1 {
+  max-width: 14ch;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  margin-top: 16px;
+}
+
+.products-hero h1 .cycle-line {
+  display: block;
+  color: #0e7585;
+  text-shadow: 0 4px 14px rgba(26, 113, 129, 0.24);
+}
+
+.products-hero .lede {
+  max-width: 64ch;
+  margin-top: 24px;
+}
+
+.products-grid {
+  width: min(1240px, 94vw);
+  margin: clamp(40px, 6vw, 70px) auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(40px, 6vw, 70px);
+}
+
+.product-card {
+  display: flex;
+  align-items: center;
+  gap: clamp(24px, 4vw, 48px);
+  background: transparent;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+  position: relative;
+  z-index: 10;
+}
+
+.product-card:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+.card-body {
+  flex: 1;
+  padding: clamp(24px, 5vw, 64px);
+  background: linear-gradient(160deg, rgba(245, 252, 255, 0.8), rgba(223, 241, 247, 0.8));
+  border: 1px solid rgba(22, 113, 131, 0.16);
+  border-radius: 24px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 14px 28px rgba(20, 79, 95, 0.05);
+  position: relative;
+  z-index: 2;
+}
+
+.product-card:nth-child(odd) .card-body {
+  margin-right: -40px;
+}
+
+.product-card:nth-child(even) .card-body {
+  margin-left: -40px;
+}
+
+.card-head h2 {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  letter-spacing: -0.03em;
+  color: #124c5b;
+}
+
+.card-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.product-badge {
+  font-family: Outfit, sans-serif;
+  font-size: 1.4rem;
+  font-weight: 300;
+  color: var(--accent-hot);
+  opacity: 0.6;
+}
+
+.product-desc {
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
+  line-height: 1.5;
+  color: #2f6e7d;
+  margin-top: 16px;
+}
+
+.feature-tags {
+  margin-top: 32px;
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.feature-tags li {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #124c5b;
+  background: rgba(67, 175, 192, 0.12);
+  border: 1px solid rgba(67, 175, 192, 0.15);
+  padding: 4px 12px;
+  border-radius: 6px;
+}
+
+.card-visual {
+  flex: 1.2;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+
+.product-card:hover .card-visual {
+  transform: translateY(-8px) scale(1.02);
+}
+
+.mock-browser, .mock-terminal, .mock-api {
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  border-radius: 16px;
+  border: 1px solid rgba(19, 95, 111, 0.34);
+  background: linear-gradient(180deg, rgba(11, 39, 49, 0.96), rgba(10, 34, 44, 0.98));
+  box-shadow: 0 20px 34px rgba(9, 43, 54, 0.32), inset 0 1px 0 rgba(140, 196, 209, 0.16);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.mock-top {
+  height: 32px;
+  border-bottom: 1px solid rgba(140, 196, 209, 0.12);
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.mock-top span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(140, 196, 209, 0.2);
+}
+
+.mock-split {
+  display: flex;
+  flex: 1;
+}
+
+.mock-sidebar {
+  width: 35%;
+  border-right: 1px solid rgba(140, 196, 209, 0.12);
+  padding: 16px;
+}
+
+.skeleton-line {
+  height: 10px;
+  background: rgba(140, 196, 209, 0.1);
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.mock-editor pre, .mock-terminal pre, .mock-api pre {
+  margin: 0;
+  padding: 16px;
+  font-family: "JetBrains Mono", "SF Mono", monospace;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: #d5ecf2;
+}
+
+.tok-key { color: #66c7ff; }
+.tok-fn { color: #8ce09a; }
+.tok-str { color: #f4d48d; }
+.log-info { color: #6694a2; }
+.prompt { color: #8ce09a; }
+
+@keyframes subtleFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(0.4deg); }
+}
+@keyframes subtleFloatAlt {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(-0.5deg); }
+}
+
+.mock-browser { animation: subtleFloat 8s ease-in-out infinite; }
+.mock-terminal { animation: subtleFloatAlt 9s ease-in-out infinite 1s; }
+.mock-api { animation: subtleFloat 7s ease-in-out infinite 2s; }
+
+@media (max-width: 900px) {
+  .product-card, .product-card:nth-child(even) {
+    flex-direction: column;
+    gap: 0;
+  }
+  .product-card:nth-child(odd) .card-body,
+  .product-card:nth-child(even) .card-body {
+    margin: -40px 12px 0;
+  }
+  .card-visual {
+    width: 100%;
+  }
+}
+
+/* Additional polish for free form UI */
+.card-visual::after {
+  content: "";
+  position: absolute;
+  inset: -20px;
+  background: radial-gradient(circle at 50% 50%, rgba(13, 127, 141, 0.15) 0%, transparent 60%);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.5s;
+  pointer-events: none;
+}
+
+.product-card:hover .card-visual::after {
+  opacity: 1;
+}
+
+.products-hero h1 {
+  animation: fadeUp 0.8s ease-out forwards;
+}
+
+.product-card .card-body {
+  transition: box-shadow 0.4s, border-color 0.4s;
+}
+
+.product-card:hover .card-body {
+  box-shadow: 0 18px 40px rgba(20, 79, 95, 0.1);
+  border-color: rgba(22, 113, 131, 0.28);
+}
+
+/* Pulse animation for skeleton loaders */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton-line {
+  background: linear-gradient(90deg, rgba(140, 196, 209, 0.08) 25%, rgba(140, 196, 209, 0.16) 50%, rgba(140, 196, 209, 0.08) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2.5s infinite linear;
+}
+
+/* Typing cursor animation */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.cursor {
+  animation: blink 1s step-end infinite;
+  color: #66c7ff;
+}
+
+/* Additional subtle animation for the API visual */
+@keyframes apiPulse {
+  0%, 100% { border-color: rgba(19, 95, 111, 0.34); box-shadow: 0 20px 34px rgba(9, 43, 54, 0.32); }
+  50% { border-color: rgba(140, 196, 209, 0.4); box-shadow: 0 20px 45px rgba(22, 113, 131, 0.35); }
+}
+.mock-api {
+  animation: subtleFloat 7s ease-in-out infinite 2s, apiPulse 4s ease-in-out infinite;
+}
