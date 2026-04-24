@@ -3,8 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mesh — The Full-Stack AI Agent</title>
+  <title>Mesh - Full-Stack AI Agent for Code Context</title>
+  <meta name="description" content="Mesh is a code-context engine and terminal AI agent for CLI, IDE, MCP, and Gateway API workflows. Give models structured workspace context instead of raw token noise.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://try-mesh.com/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#00d4e8">
+  <meta property="og:site_name" content="Mesh">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Mesh - Full-Stack AI Agent for Code Context">
+  <meta property="og:description" content="Terminal CLI, IDE, MCP server, and Gateway API powered by one code-context engine.">
+  <meta property="og:url" content="https://try-mesh.com/">
+  <meta property="og:image" content="https://try-mesh.com/assets/brand/og-image.svg">
+  <meta property="og:image:type" content="image/svg+xml">
+  <meta property="og:image:alt" content="Mesh - code context for AI agents">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mesh - Full-Stack AI Agent for Code Context">
+  <meta name="twitter:description" content="Code context for AI agents: CLI, IDE, MCP, and Gateway API.">
+  <meta name="twitter:image" content="https://try-mesh.com/assets/brand/og-image.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,800;1,900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Mesh",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "macOS, Linux, Windows",
+    "url": "https://try-mesh.com/",
+    "description": "Mesh is a code-context engine and terminal AI agent for CLI, IDE, MCP, and Gateway API workflows.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "sameAs": [
+      "https://github.com/dreddi-edit/homebrew-mesh",
+      "https://www.npmjs.com/package/@edgarelmo/mesh-agent-cli"
+    ]
+  }
+  </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -411,11 +453,11 @@
 <canvas id="mesh-canvas"></canvas>
 
 <nav>
-  <a class="nav-logo" href="index.html"><img src="assets/brand/lockup-color.svg" alt="Mesh"></a>
+  <a class="nav-logo" href="/"><img src="assets/brand/lockup-color.svg" alt="Mesh"></a>
   <div class="nav-right">
-    <a href="features.html">Features</a>
-    <a href="quickstart.html">Quickstart</a>
-    <a href="benchmarks.html">Benchmarks</a>
+    <a href="/features">Features</a>
+    <a href="/quickstart">Quickstart</a>
+    <a href="/benchmarks">Benchmarks</a>
     <a onclick="openModal(true)" class="nav-waitlist">Waitlist</a>
   </div>
 </nav>
@@ -432,7 +474,7 @@
     <span>npm i -g @edgarelmo/mesh-agent-cli</span>
     <span class="copy-hint" id="copyHint">click to copy</span>
   </div>
-  <a href="mesh-animation.html" style="margin-top:12px;font-family:var(--mono);font-size:12px;color:oklch(1 0 0/0.28);text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='var(--cyan)'" onmouseout="this.style.color='oklch(1 0 0/0.28)'">▶ Watch animation →</a>
+  <a href="/animation" style="margin-top:12px;font-family:var(--mono);font-size:12px;color:oklch(1 0 0/0.28);text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='var(--cyan)'" onmouseout="this.style.color='oklch(1 0 0/0.28)'">▶ Watch animation →</a>
   <div class="scroll-cue">
     <span class="scroll-cue-label">scroll</span>
     <div class="scroll-bar"></div>
@@ -445,7 +487,7 @@
       <div class="ha-kicker">Watch Mesh Work</div>
       <div class="ha-copy">A short walkthrough of the CLI, compression engine, recall gains, and the four product surfaces.</div>
     </div>
-    <iframe class="ha-frame" src="mesh-animation.html" title="Mesh product walkthrough" loading="lazy"></iframe>
+    <iframe class="ha-frame" src="/animation" title="Mesh product walkthrough" loading="lazy"></iframe>
   </div>
 </section>
 
@@ -459,7 +501,7 @@
 
   <div class="ss-grid">
 
-    <a class="surface-card" data-i="0" href="quickstart.html">
+    <a class="surface-card" data-i="0" href="/quickstart">
       <div class="sc-head">
         <span class="sc-num">01</span>
         <span class="sc-badge">Terminal</span>
@@ -479,7 +521,7 @@
       <span class="sc-cta">Install now →</span>
     </a>
 
-    <a class="surface-card" data-i="1" href="features.html">
+    <a class="surface-card" data-i="1" href="/features">
       <div class="sc-head">
         <span class="sc-num">02</span>
         <span class="sc-badge">Browser IDE</span>
@@ -518,7 +560,7 @@
       <span class="sc-cta">Explore IDE →</span>
     </a>
 
-    <a class="surface-card" data-i="2" href="features.html">
+    <a class="surface-card" data-i="2" href="/features">
       <div class="sc-head">
         <span class="sc-num">03</span>
         <span class="sc-badge">MCP For Agents</span>
@@ -543,7 +585,7 @@
       <span class="sc-cta">MCP docs →</span>
     </a>
 
-    <a class="surface-card" data-i="3" href="quickstart.html">
+    <a class="surface-card" data-i="3" href="/quickstart">
       <div class="sc-head">
         <span class="sc-num">04</span>
         <span class="sc-badge">Gateway API</span>
@@ -580,17 +622,17 @@
   <div class="cards-eyebrow">Explore</div>
   <div class="cards-title">Go<br>deeper.</div>
   <div class="cards-grid">
-    <a class="s-card" href="features.html" data-n="01">
+    <a class="s-card" href="/features" data-n="01">
       <div class="sc-title">Features</div>
       <p class="sc-desc">Capsule compression, voice, MCP server, BYOK, session capsules. Everything under the hood.</p>
       <div class="sc-arrow">↗</div>
     </a>
-    <a class="s-card" href="quickstart.html" data-n="02">
+    <a class="s-card" href="/quickstart" data-n="02">
       <div class="sc-title">Quickstart</div>
       <p class="sc-desc">One npm command. Up and running in 30 seconds. Voice setup included.</p>
       <div class="sc-arrow">↗</div>
     </a>
-    <a class="s-card" href="benchmarks.html" data-n="03">
+    <a class="s-card" href="/benchmarks" data-n="03">
       <div class="sc-title">Benchmarks</div>
       <p class="sc-desc">100% NIAH recall. 5× token efficiency. 0% hallucination. Real LLM benchmark data.</p>
       <div class="sc-arrow">↗</div>
@@ -599,7 +641,7 @@
 </div>
 
 <footer>
-  <a class="f-logo" href="index.html"><img src="assets/brand/lockup-color.svg" alt="Mesh"></a>
+  <a class="f-logo" href="/"><img src="assets/brand/lockup-color.svg" alt="Mesh"></a>
   <div class="f-links">
     <a href="https://docs.try-mesh.com">Docs</a>
     <a href="https://github.com/dreddi-edit/homebrew-mesh.git">GitHub</a>
