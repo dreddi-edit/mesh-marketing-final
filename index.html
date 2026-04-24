@@ -487,7 +487,7 @@
       <div class="ha-kicker">Watch Mesh Work</div>
       <div class="ha-copy">A short walkthrough of the CLI, compression engine, recall gains, and the four product surfaces.</div>
     </div>
-    <iframe class="ha-frame" src="/mesh-animation.html" title="Mesh product walkthrough" loading="lazy"></iframe>
+    <iframe class="ha-frame" src="/animation" title="Mesh product walkthrough" loading="lazy"></iframe>
   </div>
 </section>
 
@@ -687,13 +687,13 @@ function raf() {
       const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
       const d = Math.hypot(dx, dy);
       if (d < LINK) {
-        const a = (1 - d / LINK) * 0.3;
-        ctx.strokeStyle = `oklch(0.45 0.09 198 / ${a})`;
+        const a = Math.round((1 - d / LINK) * 0.3 * 255);
+        ctx.strokeStyle = `rgba(0,180,200,${(1 - d / LINK) * 0.3})`;
         ctx.lineWidth = 0.7;
         ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y); ctx.stroke();
       }
     }
-    ctx.fillStyle = 'oklch(0.74 0.14 200 / 0.55)';
+    ctx.fillStyle = 'rgba(0,212,232,0.55)';
     ctx.beginPath(); ctx.arc(pts[i].x, pts[i].y, 1.8, 0, Math.PI*2); ctx.fill();
   }
   requestAnimationFrame(raf);
