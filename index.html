@@ -446,39 +446,60 @@
       </div>
       <div class="sc-word">The IDE.</div>
       <div class="sc-mt">
-        <div class="sc-mt-bar"><span class="d r"></span><span class="d y"></span><span class="d g"></span><span class="t">try-mesh.com</span></div>
-        <div class="sc-mt-body">
-          <div class="td">// browser @ try-mesh.com</div>
-          <div><span class="ts">✓ </span><span class="tw">Indexed (247 files, 1.2s)</span></div>
-          <div><span class="td">Ultra capsule: </span><span class="ts">1.9% of raw</span></div>
-          <div>&nbsp;</div>
-          <div><span class="tc">chat » </span><span class="tw">why is session dropping?</span></div>
-          <div class="td">→ src/session/store.ts:44</div>
+        <div class="sc-mt-bar"><span class="d r"></span><span class="d y"></span><span class="d g"></span><span class="t">mesh workspace - billing-api</span></div>
+        <div class="sc-mt-body" style="display:grid;grid-template-columns:88px 1fr;gap:14px;align-items:start">
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:10px;color:oklch(1 0 0 / 0.32)">
+            <div style="color:var(--cyan)">EXPLORER</div>
+            <div>src/</div>
+            <div style="padding-left:10px">auth.ts</div>
+            <div style="padding-left:10px;color:var(--white)">session.ts</div>
+            <div style="padding-left:10px">billing.ts</div>
+            <div style="padding-left:10px">dashboard.tsx</div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;gap:10px;font-size:10px;color:oklch(1 0 0 / 0.24);margin-bottom:10px">
+              <span>session.ts</span>
+              <span style="color:var(--cyan)">247 files indexed</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px;font-size:11px;line-height:1.6">
+              <div><span class="to">12</span> <span class="tc">export async function</span> <span class="tw">refreshSession</span><span class="td">(ctx)</span> <span class="tc">{</span></div>
+              <div><span class="to">13</span> &nbsp; <span class="td">const</span> <span class="tw">token</span> <span class="tc">=</span> <span class="tw">await</span> <span class="tw">ctx</span>.<span class="tw">cookies</span>.<span class="tw">get</span><span class="tc">(</span><span class="ts">'mesh.sid'</span><span class="tc">)</span></div>
+              <div><span class="to">14</span> &nbsp; <span class="tw">if</span> <span class="tc">(</span><span class="tw">isExpired</span><span class="tc">(</span><span class="tw">token</span><span class="tc">))</span> <span class="tw">return</span> <span class="tw">redirect</span><span class="tc">(</span><span class="ts">'/login'</span><span class="tc">)</span></div>
+              <div><span class="to">15</span> &nbsp; <span class="tw">return</span> <span class="tw">resumeWorkspace</span><span class="tc">(</span><span class="tw">ctx</span><span class="tc">)</span></div>
+              <div><span class="to">16</span> <span class="tc">}</span></div>
+            </div>
+            <div style="margin-top:12px;padding:8px 10px;border-radius:8px;background:oklch(1 0 0 / 0.04);border:1px solid oklch(1 0 0 / 0.08);font-size:10px;line-height:1.5">
+              <span class="tc">Mesh</span> <span class="td">- capsule context attached - suggested fix ready</span>
+            </div>
+          </div>
         </div>
       </div>
-      <p class="sc-desc">Full dev environment in your browser. <strong>Monaco + PTY + AI chat</strong>, all backed by capsule compression.</p>
+      <p class="sc-desc">A real browser IDE, not a terminal wrapper. <strong>Monaco editor, file tree, AI sidepanel</strong>, and shared Mesh context.</p>
       <span class="sc-cta">Explore IDE →</span>
     </a>
 
     <a class="surface-card" data-i="2" href="features.html">
       <div class="sc-head">
         <span class="sc-num">03</span>
-        <span class="sc-badge">MCP Server</span>
+        <span class="sc-badge">MCP For Agents</span>
       </div>
-      <div class="sc-word">Any Agent.</div>
+      <div class="sc-word">Agent Native.</div>
       <div class="sc-mt">
-        <div class="sc-mt-bar"><span class="d r"></span><span class="d y"></span><span class="d g"></span><span class="t">claude-code + mesh</span></div>
+        <div class="sc-mt-bar"><span class="d r"></span><span class="d y"></span><span class="d g"></span><span class="t">claude code + mesh mcp</span></div>
         <div class="sc-mt-body">
-          <div class="td">// Claude Code — MCP</div>
-          <div><span class="tc">mesh_search</span> <span class="tw">"session expiry"</span></div>
+          <div class="td">// Codex / Claude Code using Mesh tools</div>
+          <div><span class="tp">claude » </span><span class="tw">investigate the session timeout bug</span></div>
+          <div>&nbsp;</div>
+          <div><span class="tc">tool</span> <span class="tw">mesh_search("session expiry")</span></div>
           <div class="ts">  → src/session/store.ts:44</div>
           <div class="ts">  → src/auth/middleware.ts:88</div>
           <div>&nbsp;</div>
-          <div><span class="tc">mesh_open_targeted</span> <span class="tw">handleExpiry</span></div>
-          <div><span class="ts">  → 54T</span> <span class="td">(98% saved)</span></div>
+          <div><span class="tc">tool</span> <span class="tw">mesh_open_targeted("handleExpiry")</span></div>
+          <div><span class="ts">  → 54T excerpt</span> <span class="td">(98% saved)</span></div>
+          <div class="td">→ agent patches only the relevant span</div>
         </div>
       </div>
-      <p class="sc-desc">Expose Mesh to <strong>Claude Code, Cursor, Windsurf</strong> — or any MCP client. Your workspace, queryable.</p>
+      <p class="sc-desc">Mesh plugs into <strong>Claude Code, Codex, Cursor, Windsurf</strong> and gives them structural workspace access through MCP.</p>
       <span class="sc-cta">MCP docs →</span>
     </a>
 
@@ -487,19 +508,27 @@
         <span class="sc-num">04</span>
         <span class="sc-badge">Gateway API</span>
       </div>
-      <div class="sc-word">Your Stack.</div>
+      <div class="sc-word">The API.</div>
       <div class="sc-mt">
         <div class="sc-mt-bar"><span class="d r"></span><span class="d y"></span><span class="d g"></span><span class="t">api.try-mesh.com</span></div>
-        <div class="sc-mt-body">
-          <div class="td">// POST /agent</div>
-          <div><span class="tc">{</span></div>
-          <div>&nbsp;<span class="tw">"task"</span>: <span class="ts">"review PR #204"</span><span class="tc">,</span></div>
-          <div>&nbsp;<span class="tw">"workspace"</span>: <span class="ts">"org/api"</span></div>
-          <div><span class="tc">}</span></div>
-          <div class="td">← 200 OK · 1.4s · 1,204T</div>
+        <div class="sc-mt-body" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div style="padding:10px;border-radius:8px;background:oklch(1 0 0 / 0.03);border:1px solid oklch(1 0 0 / 0.06)">
+            <div class="td" style="margin-bottom:8px">REQUEST · POST /agent</div>
+            <div><span class="tw">task</span>: <span class="ts">"review PR #204"</span></div>
+            <div><span class="tw">workspace</span>: <span class="ts">"org/api"</span></div>
+            <div><span class="tw">tools</span>: <span class="ts">["github"]</span></div>
+            <div><span class="tw">model</span>: <span class="ts">"claude-sonnet-4-6"</span></div>
+          </div>
+          <div style="padding:10px;border-radius:8px;background:oklch(0.74 0.1 50 / 0.05);border:1px solid oklch(0.78 0.1 50 / 0.18)">
+            <div class="to" style="margin-bottom:8px">RESPONSE · 200 OK</div>
+            <div><span class="tw">result</span>: <span class="ts">"2 files need changes"</span></div>
+            <div><span class="tw">tokens_used</span>: <span class="ts">1204</span></div>
+            <div><span class="tw">tokens_saved</span>: <span class="ts">8621</span></div>
+            <div><span class="tw">sources</span>: <span class="ts">2 spans</span></div>
+          </div>
         </div>
       </div>
-      <p class="sc-desc">Full Mesh agent loop in a <strong>single REST endpoint</strong>. Run tasks, recover spans. Ship in hours.</p>
+      <p class="sc-desc">Embed the full Mesh agent loop into your own product through a <strong>single REST endpoint</strong> with structured inputs and outputs.</p>
       <span class="sc-cta">API docs →</span>
     </a>
 
