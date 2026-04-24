@@ -3,608 +3,1251 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mesh — Benchmarks</title>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,800;1,900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <title>Mesh - Benchmarks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,800;1,900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --petrol: oklch(0.38 0.09 198);
-      --cyan:   oklch(0.74 0.14 200);
-      --dark:   oklch(0.08 0.04 200);
-      --white:  oklch(0.99 0.004 195);
-      --off:    oklch(0.96 0.006 195);
-      --muted:  oklch(0.55 0.05 200);
+      --bg: oklch(0.078 0.038 200);
+      --bg-deep: oklch(0.046 0.032 204);
+      --panel: oklch(0.105 0.045 200);
+      --panel-2: oklch(0.132 0.052 199);
+      --line: oklch(1 0 0 / 0.08);
+      --line-strong: oklch(0.74 0.14 200 / 0.30);
+      --ink: oklch(0.985 0.004 195);
+      --muted: oklch(0.74 0.028 198 / 0.62);
+      --dim: oklch(0.74 0.026 198 / 0.38);
+      --cyan: oklch(0.74 0.14 200);
+      --cyan-soft: oklch(0.74 0.14 200 / 0.12);
+      --green: oklch(0.75 0.12 145);
+      --amber: oklch(0.78 0.10 58);
+      --red: oklch(0.68 0.13 25);
       --mono: 'Geist Mono', monospace;
       --display: 'Barlow Condensed', sans-serif;
-      --sans: 'DM Sans', system-ui, sans-serif;
+      --sans: 'DM Sans', sans-serif;
     }
-    html { scroll-behavior: smooth; }
-    body { background: var(--dark); color: var(--white); font-family: var(--sans); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
+    html { scroll-behavior: smooth; }
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 16% 8%, oklch(0.74 0.14 200 / 0.13), transparent 34rem),
+        radial-gradient(circle at 86% 16%, oklch(0.38 0.09 198 / 0.22), transparent 32rem),
+        linear-gradient(180deg, var(--bg), var(--bg-deep) 58%, var(--bg));
+      color: var(--ink);
+      font-family: var(--sans);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -2;
+      background-image:
+        linear-gradient(oklch(1 0 0 / 0.032) 1px, transparent 1px),
+        linear-gradient(90deg, oklch(1 0 0 / 0.028) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: linear-gradient(to bottom, black 0%, transparent 78%);
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.18;
+      background:
+        repeating-linear-gradient(0deg, transparent 0 9px, oklch(0.74 0.14 200 / 0.05) 10px),
+        radial-gradient(circle at 50% 0%, oklch(0.74 0.14 200 / 0.16), transparent 40rem);
+      mix-blend-mode: screen;
+    }
+
+    a { color: inherit; }
+    code { color: var(--cyan); font-family: var(--mono); }
+    .cyan { color: var(--cyan); }
+
+    .site-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       padding: 22px 56px;
-      background: oklch(0.08 0.04 200 / 0.92);
+      background: oklch(0.078 0.038 200 / 0.88);
       backdrop-filter: blur(20px);
-      border-bottom: 1px solid oklch(1 0 0 / 0.05);
+      border-bottom: 1px solid var(--line);
     }
     .nav-logo { display: inline-flex; align-items: center; text-decoration: none; }
     .nav-logo img { display: block; width: auto; height: 25px; }
-    .nav-right { display: flex; gap: 6px; }
-    .nav-right a { font-size: 13px; color: oklch(1 0 0 / 0.38); text-decoration: none; padding: 6px 14px; border-radius: 6px; border: 1px solid transparent; transition: all 0.2s; }
-    .nav-right a:hover { color: var(--white); border-color: oklch(1 0 0 / 0.12); }
-    .nav-active { color: var(--white) !important; }
-    .nav-cta { background: oklch(0.74 0.14 200 / 0.1) !important; border-color: oklch(0.74 0.14 200 / 0.25) !important; color: var(--cyan) !important; }
-    .nav-waitlist { background: oklch(0.74 0.14 200 / 0.12) !important; border-color: oklch(0.74 0.14 200 / 0.28) !important; color: var(--cyan) !important; cursor: pointer; }
-    .nav-waitlist:hover { background: oklch(0.74 0.14 200 / 0.22) !important; }
-    .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 200; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.25s; backdrop-filter: blur(8px); }
-    .modal-bg.open { opacity: 1; pointer-events: auto; }
-    .modal { background: oklch(0.11 0.05 200); border: 1px solid oklch(1 0 0 / 0.1); border-radius: 20px; padding: 48px 52px; max-width: 500px; width: 90%; position: relative; }
-    .modal h3 { font-family: var(--display); font-style: italic; font-weight: 900; font-size: 56px; line-height: 0.9; letter-spacing: -0.03em; color: var(--white); margin-bottom: 16px; }
-    .modal p { font-size: 16px; color: oklch(1 0 0 / 0.42); line-height: 1.6; margin-bottom: 28px; }
-    .modal input { width: 100%; padding: 14px 18px; border-radius: 10px; background: oklch(1 0 0 / 0.06); border: 1px solid oklch(1 0 0 / 0.12); color: var(--white); font-size: 15px; font-family: var(--sans); outline: none; transition: border-color 0.2s; }
-    .modal input:focus { border-color: oklch(0.74 0.14 200 / 0.5); }
-    .modal input::placeholder { color: oklch(1 0 0 / 0.25); }
-    .modal-btn { margin-top: 12px; width: 100%; padding: 14px; border-radius: 10px; background: var(--cyan); color: oklch(0.08 0.04 200); font-size: 15px; font-weight: 700; border: none; cursor: pointer; font-family: var(--sans); transition: background 0.2s; }
-    .modal-btn:hover { background: oklch(0.82 0.14 200); }
-    .modal-close { position: absolute; top: 18px; right: 22px; background: none; border: none; color: oklch(1 0 0 / 0.35); font-size: 22px; cursor: pointer; line-height: 1; }
-    .modal-close:hover { color: var(--white); }
-
-    /* ── HERO ── */
-    .bench-hero {
-      min-height: 100vh;
-      display: flex; flex-direction: column; justify-content: flex-end;
-      padding: 0 80px 72px; position: relative; overflow: hidden;
+    .nav-right { display: flex; gap: 6px; align-items: center; }
+    .nav-right a {
+      font-size: 13px;
+      color: oklch(1 0 0 / 0.42);
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
     }
-    .bh-glow {
-      position: absolute; top: 5%; left: 50%; transform: translateX(-50%);
-      width: 900px; height: 600px;
-      background: radial-gradient(ellipse, oklch(0.74 0.14 200 / 0.06) 0%, transparent 65%);
+    .nav-right a:hover { color: var(--ink); border-color: oklch(1 0 0 / 0.12); }
+    .nav-active { color: var(--ink) !important; }
+    .nav-waitlist {
+      background: var(--cyan-soft) !important;
+      border-color: var(--line-strong) !important;
+      color: var(--cyan) !important;
+      cursor: pointer;
+    }
+
+    .page-shell {
+      width: min(1180px, calc(100% - 64px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      min-height: 100vh;
+      padding-top: 128px;
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(360px, 0.85fr);
+      gap: 70px;
+      align-items: center;
+      position: relative;
+    }
+    .hero::after {
+      content: "BENCH";
+      position: absolute;
+      left: -82px;
+      bottom: 58px;
+      font-family: var(--display);
+      font-size: 170px;
+      font-style: italic;
+      font-weight: 900;
+      line-height: 1;
+      color: oklch(1 0 0 / 0.024);
       pointer-events: none;
     }
-    /* animated number behind */
-    .hero-bg-num {
-      position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%, -55%);
-      font-family: var(--display); font-style: italic; font-weight: 900;
-      font-size: clamp(220px, 38vw, 580px);
-      line-height: 1; letter-spacing: -0.04em;
-      color: oklch(1 0 0 / 0.03);
-      pointer-events: none; user-select: none; white-space: nowrap;
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 22px;
+      color: var(--cyan);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
-    .bh-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--cyan); margin-bottom: 20px; position: relative; z-index: 1; }
-    .bh-title {
-      font-family: var(--display); font-style: italic; font-weight: 900;
-      font-size: clamp(72px, 13vw, 190px);
-      line-height: 0.88; letter-spacing: -0.03em; color: var(--white);
-      position: relative; z-index: 1;
+    .eyebrow::before {
+      content: "";
+      width: 26px;
+      height: 1px;
+      background: var(--cyan);
     }
-    .bh-title span { color: var(--cyan); }
-    .bh-sub {
-      margin-top: 24px; max-width: 580px;
-      font-size: 17px; font-weight: 300; color: oklch(1 0 0 / 0.42); line-height: 1.65;
-      position: relative; z-index: 1;
+    h1 {
+      max-width: 780px;
+      font-family: var(--display);
+      font-size: 118px;
+      font-style: italic;
+      font-weight: 900;
+      line-height: 0.88;
     }
-    .bh-sub strong { color: oklch(1 0 0 / 0.78); font-weight: 400; }
+    .hero-copy {
+      margin-top: 30px;
+      max-width: 620px;
+      color: var(--muted);
+      font-size: 18px;
+      font-weight: 300;
+      line-height: 1.72;
+    }
+    .hero-copy strong { color: var(--ink); font-weight: 500; }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 34px;
+    }
+    .primary-btn, .secondary-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 18px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .primary-btn { background: var(--cyan); color: var(--bg-deep); }
+    .secondary-btn { background: oklch(1 0 0 / 0.035); border-color: var(--line); color: var(--ink); }
+    .primary-btn:hover, .secondary-btn:hover { transform: translateY(-2px); }
+    .secondary-btn:hover { border-color: var(--line-strong); }
 
-    /* ── STATS GRID ── */
-    .stats-row {
-      display: grid; grid-template-columns: repeat(4, 1fr);
-      border-top: 1px solid oklch(1 0 0 / 0.07);
-      position: relative; z-index: 1;
+    .observatory {
+      position: relative;
+      min-height: 520px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 44%, oklch(0.74 0.14 200 / 0.17), transparent 16rem),
+        linear-gradient(180deg, oklch(0.13 0.052 200 / 0.95), oklch(0.052 0.034 204 / 0.95));
+      box-shadow: 0 34px 110px oklch(0 0 0 / 0.28);
     }
-    .stat-cell {
-      padding: 44px 40px; border-right: 1px solid oklch(1 0 0 / 0.07);
-      opacity: 0; transform: translateY(20px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
+    .obs-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 44px;
+      padding: 0 16px;
+      border-bottom: 1px solid var(--line);
+      color: var(--dim);
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
     }
-    .stat-cell:last-child { border-right: none; }
-    .stat-cell.vis { opacity: 1; transform: none; }
-    .stat-n {
-      font-family: var(--display); font-style: italic; font-weight: 900;
-      font-size: clamp(52px, 7vw, 90px);
-      line-height: 0.9; letter-spacing: -0.04em; color: var(--white);
-      display: flex; align-items: flex-start; gap: 3px;
+    .obs-live {
+      display: inline-flex;
+      gap: 7px;
+      align-items: center;
+      color: var(--green);
     }
-    .stat-n sup { font-size: 0.38em; margin-top: 10px; color: var(--cyan); }
-    .stat-label { margin-top: 12px; font-size: 13px; color: oklch(1 0 0 / 0.38); line-height: 1.5; }
-    .stat-badge { display: inline-block; margin-top: 10px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cyan); background: oklch(0.74 0.14 200 / 0.1); padding: 3px 8px; border-radius: 4px; }
+    .obs-live::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 16px var(--green);
+    }
+    .orbit {
+      position: absolute;
+      left: 50%;
+      top: 54%;
+      width: 340px;
+      height: 340px;
+      transform: translate(-50%, -50%);
+      border: 1px solid oklch(0.74 0.14 200 / 0.22);
+      border-radius: 50%;
+      animation: rotateOrbit 20s linear infinite;
+    }
+    .orbit::before, .orbit::after {
+      content: "";
+      position: absolute;
+      inset: 48px;
+      border: 1px solid oklch(1 0 0 / 0.08);
+      border-radius: 50%;
+    }
+    .orbit::after { inset: 104px; border-color: oklch(0.74 0.14 200 / 0.18); }
+    .needle {
+      position: absolute;
+      right: 54px;
+      top: 72px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 20px var(--cyan), 0 0 70px oklch(0.74 0.14 200 / 0.8);
+    }
+    .scanline {
+      position: absolute;
+      left: 50%;
+      top: 54%;
+      width: 2px;
+      height: 245px;
+      transform-origin: top center;
+      background: linear-gradient(to bottom, var(--cyan), transparent);
+      animation: sweep 5.2s linear infinite;
+      opacity: 0.8;
+    }
+    .hero-score {
+      position: absolute;
+      inset: auto 26px 26px 26px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .hero-metric {
+      min-height: 118px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: oklch(0.048 0.034 204 / 0.68);
+      backdrop-filter: blur(10px);
+    }
+    .hero-metric strong {
+      display: block;
+      font-family: var(--display);
+      font-size: 50px;
+      font-style: italic;
+      font-weight: 900;
+      line-height: 0.9;
+      color: var(--cyan);
+    }
+    .hero-metric span {
+      display: block;
+      margin-top: 8px;
+      color: var(--dim);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .model-cloud {
+      position: absolute;
+      left: 24px;
+      top: 66px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .model-chip {
+      width: max-content;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: oklch(0.048 0.034 204 / 0.72);
+      color: oklch(1 0 0 / 0.62);
+      font-family: var(--mono);
+      font-size: 10px;
+      backdrop-filter: blur(10px);
+      animation: drift 5s ease-in-out infinite;
+    }
+    .model-chip:nth-child(2) { margin-left: 34px; animation-delay: 0.7s; }
+    .model-chip:nth-child(3) { margin-left: 10px; animation-delay: 1.4s; }
+    .model-chip:nth-child(4) { margin-left: 52px; animation-delay: 2.1s; }
+    .model-chip:nth-child(5) { margin-left: 20px; animation-delay: 2.8s; }
 
-    /* ── SECTION SHELL ── */
-    .bench-section { padding: 100px 80px; border-top: 1px solid oklch(1 0 0 / 0.06); }
-    .bench-section.alt { background: oklch(0.11 0.045 200); }
-    .bs-header { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: end; margin-bottom: 56px; }
-    .bs-title { font-family: var(--display); font-style: italic; font-weight: 900; font-size: clamp(44px, 6vw, 84px); line-height: 0.9; letter-spacing: -0.03em; color: var(--white); }
-    .bs-desc { font-size: 15px; color: oklch(1 0 0 / 0.42); line-height: 1.7; font-weight: 300; }
-    .bs-desc strong { color: oklch(1 0 0 / 0.78); font-weight: 400; }
-    .bs-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cyan); margin-bottom: 14px; }
-
-    /* ── DUAL BAR CHART ── */
-    .dual-chart { display: flex; flex-direction: column; gap: 0; }
-    .dc-row {
-      display: grid; grid-template-columns: 200px 1fr;
-      gap: 20px; padding: 22px 0;
-      border-bottom: 1px solid oklch(1 0 0 / 0.05);
-      opacity: 0; transform: translateX(-12px);
-      transition: opacity 0.55s ease, transform 0.55s ease;
+    .proof-strip {
+      width: min(1180px, calc(100% - 64px));
+      margin: -18px auto 0;
+      position: relative;
+      z-index: 5;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+      background: oklch(0.07 0.036 204 / 0.86);
+      backdrop-filter: blur(16px);
     }
-    .dc-row:first-child { border-top: 1px solid oklch(1 0 0 / 0.05); }
-    .dc-row.vis { opacity: 1; transform: none; }
-    .dc-label { font-family: var(--mono); font-size: 12px; color: oklch(1 0 0 / 0.35); display: flex; flex-direction: column; gap: 6px; justify-content: center; }
-    .dc-label .l-main { font-size: 13px; color: var(--white); }
-    .dc-bars { display: flex; flex-direction: column; gap: 6px; }
-    .dc-bar-row { display: flex; align-items: center; gap: 10px; }
-    .dc-track { flex: 1; height: 10px; border-radius: 5px; background: oklch(1 0 0 / 0.05); overflow: hidden; }
-    .dc-fill { height: 100%; border-radius: 5px; width: 0; transition: width 1.5s cubic-bezier(0.16,1,0.3,1); }
-    .dc-fill.mesh { background: linear-gradient(90deg, var(--petrol), var(--cyan)); }
-    .dc-fill.raw  { background: oklch(1 0 0 / 0.12); }
-    .dc-val { font-family: var(--mono); font-size: 12px; width: 52px; text-align: right; }
-    .dc-val.mesh { color: var(--cyan); }
-    .dc-val.raw  { color: oklch(1 0 0 / 0.28); }
-    .dc-tag { font-size: 10px; font-family: var(--mono); }
-    .dc-tag.mesh { color: oklch(0.74 0.14 200 / 0.6); }
-    .dc-tag.raw  { color: oklch(1 0 0 / 0.2); }
-
-    /* ── BUDGET VIZ ── */
-    .budget-viz {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
-      margin-top: 0;
+    .proof-cell {
+      min-height: 172px;
+      padding: 28px;
+      border-right: 1px solid var(--line);
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
     }
-    .bv-card {
-      border: 1px solid oklch(1 0 0 / 0.08); border-radius: 14px;
-      padding: 36px 32px; position: relative; overflow: hidden;
+    .proof-cell:last-child { border-right: 0; }
+    .proof-cell.visible { opacity: 1; transform: none; }
+    .proof-number {
+      display: flex;
+      align-items: flex-start;
+      gap: 3px;
+      font-family: var(--display);
+      font-size: 72px;
+      font-style: italic;
+      font-weight: 900;
+      line-height: 0.9;
     }
-    .bv-card.mesh { border-color: oklch(0.74 0.14 200 / 0.3); }
-    .bv-card.mesh::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, var(--petrol), var(--cyan));
+    .proof-number sup {
+      margin-top: 9px;
+      color: var(--cyan);
+      font-size: 0.38em;
     }
-    .bv-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(1 0 0 / 0.28); margin-bottom: 16px; }
-    .bv-num {
-      font-family: var(--display); font-style: italic; font-weight: 900;
-      font-size: clamp(56px, 7vw, 96px);
-      line-height: 0.9; letter-spacing: -0.04em;
+    .proof-label { margin-top: 12px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .proof-badge {
+      display: inline-flex;
+      margin-top: 12px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: var(--cyan-soft);
+      color: var(--cyan);
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
     }
-    .bv-card.mesh .bv-num { color: var(--cyan); }
-    .bv-card.raw  .bv-num { color: oklch(1 0 0 / 0.28); }
-    .bv-unit { font-size: 0.4em; vertical-align: super; }
-    .bv-desc { margin-top: 16px; font-size: 14px; color: oklch(1 0 0 / 0.38); line-height: 1.6; }
-    .bv-desc strong { color: oklch(1 0 0 / 0.72); font-weight: 400; }
 
-    /* bar representing token fill */
-    .bv-bar-wrap { margin-top: 20px; }
-    .bv-bar-track { height: 8px; border-radius: 4px; background: oklch(1 0 0 / 0.06); overflow: hidden; }
-    .bv-bar-fill { height: 100%; border-radius: 4px; width: 0; transition: width 1.5s cubic-bezier(0.16,1,0.3,1); }
-    .bv-card.mesh .bv-bar-fill { background: linear-gradient(90deg, var(--petrol), var(--cyan)); }
-    .bv-card.raw  .bv-bar-fill { background: oklch(1 0 0 / 0.18); }
-    .bv-bar-label { margin-top: 8px; font-family: var(--mono); font-size: 11px; color: oklch(1 0 0 / 0.22); }
-
-    /* ── COMPRESSION TABLE ── */
-    .comp-table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 13px; }
-    .comp-table th { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: oklch(1 0 0 / 0.3); font-weight: 500; padding: 12px 16px; border-bottom: 1px solid oklch(1 0 0 / 0.08); text-align: left; }
-    .comp-table td { padding: 14px 16px; border-bottom: 1px solid oklch(1 0 0 / 0.05); color: oklch(1 0 0 / 0.55); }
-    .comp-table td:first-child { color: var(--white); }
-    .comp-table td.highlight { color: var(--cyan); font-weight: 500; }
-    .comp-table tr:hover td { background: oklch(1 0 0 / 0.02); }
-
-    /* inline mini-bar */
-    .mini-bar { display: inline-flex; align-items: center; gap: 8px; }
-    .mini-track { width: 80px; height: 6px; border-radius: 3px; background: oklch(1 0 0 / 0.08); overflow: hidden; }
-    .mini-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--petrol), var(--cyan)); }
-
-    /* ── SCORECARD ── */
-    .scorecard {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
-      border-radius: 14px; overflow: hidden;
+    .bench-section {
+      width: min(1180px, calc(100% - 64px));
+      margin: 30px auto 0;
+      padding: 64px 0;
     }
-    .sc-item {
-      background: oklch(0.11 0.045 200);
-      padding: 32px 28px;
-      opacity: 0; transform: translateY(16px);
-      transition: opacity 0.55s ease, transform 0.55s ease;
+    .section-grid {
+      display: grid;
+      grid-template-columns: 0.75fr 1.25fr;
+      gap: 58px;
+      align-items: center;
     }
-    .sc-item.vis { opacity: 1; transform: none; }
-    .sc-item-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: oklch(1 0 0 / 0.28); margin-bottom: 10px; }
-    .sc-item-val { font-family: var(--display); font-style: italic; font-weight: 900; font-size: 42px; line-height: 0.9; letter-spacing: -0.03em; color: var(--white); }
-    .sc-item-val.good { color: var(--cyan); }
-    .sc-item-sub { margin-top: 8px; font-size: 13px; color: oklch(1 0 0 / 0.3); }
-
-    /* ── METHOD ── */
-    .method-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
-    .method-block { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
-    .method-block.vis { opacity: 1; transform: none; }
-    .method-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cyan); margin-bottom: 14px; }
-    .method-title { font-family: var(--display); font-weight: 800; font-size: 32px; letter-spacing: -0.02em; color: var(--white); margin-bottom: 14px; }
-    .method-text { font-size: 15px; color: oklch(1 0 0 / 0.42); line-height: 1.75; font-weight: 300; }
-    .method-text strong { color: oklch(1 0 0 / 0.75); font-weight: 400; }
-    .method-note { margin-top: 16px; font-family: var(--mono); font-size: 11px; color: oklch(1 0 0 / 0.22); line-height: 1.7; }
-
-    /* ── CTA ── */
-    .cta-strip {
-      margin: 0 80px 80px; padding: 48px 56px;
-      background: oklch(0.12 0.05 200);
-      border: 1px solid oklch(1 0 0 / 0.07);
-      border-radius: 16px;
-      display: flex; align-items: center; justify-content: space-between; gap: 32px;
+    .section-kicker {
+      margin-bottom: 16px;
+      color: var(--cyan);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
-    .cta-text h3 { font-family: var(--display); font-style: italic; font-weight: 900; font-size: 52px; line-height: 0.9; letter-spacing: -0.03em; color: var(--white); }
-    .cta-text p { margin-top: 10px; font-size: 15px; color: oklch(1 0 0 / 0.4); }
-    .cta-btn { display: flex; align-items: center; gap: 10px; background: var(--white); color: var(--dark); padding: 14px 26px; border-radius: 10px; font-family: var(--mono); font-size: 14px; font-weight: 500; cursor: pointer; white-space: nowrap; transition: background 0.2s, transform 0.15s; border: none; }
-    .cta-btn:hover { background: var(--cyan); transform: translateY(-1px); }
-    .cta-btn .p { color: var(--petrol); }
+    h2 {
+      font-family: var(--display);
+      font-size: 74px;
+      font-style: italic;
+      font-weight: 900;
+      line-height: 0.92;
+    }
+    .section-copy {
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 1.75;
+    }
+    .section-copy strong { color: var(--ink); font-weight: 500; }
+    .section-note {
+      margin-top: 18px;
+      color: var(--dim);
+      font-family: var(--mono);
+      font-size: 11px;
+      line-height: 1.7;
+    }
 
-    footer { background: oklch(0.06 0.04 200); padding: 44px 80px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid oklch(1 0 0 / 0.05); }
+    .lab-card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: oklch(0.10 0.042 200 / 0.76);
+      overflow: hidden;
+      box-shadow: 0 28px 90px oklch(0 0 0 / 0.16);
+    }
+    .lab-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 42px;
+      padding: 0 15px;
+      border-bottom: 1px solid var(--line);
+      color: var(--dim);
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: oklch(1 0 0 / 0.025);
+    }
+
+    .needle-visual {
+      display: grid;
+      grid-template-columns: 0.92fr 1.08fr;
+      min-height: 420px;
+    }
+    .haystack {
+      position: relative;
+      border-right: 1px solid var(--line);
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 58% 40%, oklch(0.74 0.14 200 / 0.10), transparent 15rem),
+        oklch(0.046 0.034 204 / 0.88);
+    }
+    .hay-dot {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: oklch(1 0 0 / 0.16);
+    }
+    .hay-dot.needle-dot {
+      width: 10px;
+      height: 10px;
+      background: var(--cyan);
+      box-shadow: 0 0 22px var(--cyan);
+      animation: pulseNeedle 1.7s ease-in-out infinite;
+    }
+    .search-beam {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(112deg, transparent 0 42%, oklch(0.74 0.14 200 / 0.16) 48%, transparent 58%);
+      animation: beamSweep 4.8s ease-in-out infinite;
+    }
+    .chart-stack {
+      padding: 24px;
+      display: grid;
+      gap: 16px;
+      align-content: center;
+    }
+    .chart-row {
+      opacity: 0;
+      transform: translateX(16px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .chart-row.visible { opacity: 1; transform: none; }
+    .chart-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 9px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 11px;
+    }
+    .bar-pair { display: grid; gap: 6px; }
+    .bar-line {
+      display: grid;
+      grid-template-columns: 44px 1fr 54px;
+      align-items: center;
+      gap: 8px;
+      color: var(--dim);
+      font-family: var(--mono);
+      font-size: 10px;
+    }
+    .track {
+      height: 9px;
+      border-radius: 999px;
+      background: oklch(1 0 0 / 0.06);
+      overflow: hidden;
+    }
+    .fill {
+      height: 100%;
+      width: 0;
+      border-radius: 999px;
+      transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .fill.mesh { background: linear-gradient(90deg, oklch(0.38 0.09 198), var(--cyan)); }
+    .fill.raw { background: oklch(1 0 0 / 0.16); }
+    .bar-line.mesh { color: var(--cyan); }
+
+    .budget-panel {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .budget-card {
+      min-height: 360px;
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: oklch(0.10 0.042 200 / 0.72);
+      position: relative;
+      overflow: hidden;
+    }
+    .budget-card.mesh { border-color: var(--line-strong); }
+    .budget-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: var(--fill, 0%);
+      background: linear-gradient(180deg, transparent, oklch(0.74 0.14 200 / 0.16));
+      transition: height 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .budget-label {
+      position: relative;
+      color: var(--dim);
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 18px;
+    }
+    .budget-number {
+      position: relative;
+      font-family: var(--display);
+      font-size: 82px;
+      font-style: italic;
+      font-weight: 900;
+      line-height: 0.9;
+    }
+    .budget-card.mesh .budget-number { color: var(--cyan); }
+    .budget-copy {
+      position: relative;
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .budget-track {
+      position: relative;
+      margin-top: 28px;
+      height: 8px;
+      border-radius: 999px;
+      background: oklch(1 0 0 / 0.07);
+      overflow: hidden;
+    }
+    .budget-track span {
+      display: block;
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, oklch(0.38 0.09 198), var(--cyan));
+      transition: width 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .budget-card.raw .budget-track span { background: oklch(1 0 0 / 0.18); }
+
+    .atlas {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+    .capsule-picture {
+      min-height: 500px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background:
+        radial-gradient(circle at 50% 44%, oklch(0.74 0.14 200 / 0.16), transparent 13rem),
+        oklch(0.046 0.034 204 / 0.86);
+      position: relative;
+      overflow: hidden;
+    }
+    .capsule-core {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 170px;
+      height: 170px;
+      transform: translate(-50%, -50%);
+      border: 1px solid var(--line-strong);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--cyan);
+      font-family: var(--display);
+      font-size: 56px;
+      font-style: italic;
+      font-weight: 900;
+      background: oklch(0.06 0.035 204 / 0.86);
+      box-shadow: 0 0 80px oklch(0.74 0.14 200 / 0.14);
+    }
+    .capsule-ring {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      border: 1px solid oklch(0.74 0.14 200 / 0.16);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      animation: rotateOrbit 28s linear infinite;
+    }
+    .capsule-ring.r1 { width: 270px; height: 270px; }
+    .capsule-ring.r2 { width: 390px; height: 390px; animation-direction: reverse; }
+    .capsule-node {
+      position: absolute;
+      width: 98px;
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: oklch(0.08 0.038 200 / 0.82);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+      line-height: 1.35;
+    }
+    .capsule-node strong { color: var(--cyan); font-weight: 600; }
+    .capsule-node.n1 { left: 44px; top: 72px; }
+    .capsule-node.n2 { right: 42px; top: 116px; }
+    .capsule-node.n3 { left: 70px; bottom: 108px; }
+    .capsule-node.n4 { right: 72px; bottom: 74px; }
+    .compression-table {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+      background: oklch(0.10 0.042 200 / 0.72);
+    }
+    .table-row {
+      display: grid;
+      grid-template-columns: 0.7fr 0.55fr 0.75fr 0.82fr 0.95fr;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+    .table-row:last-child { border-bottom: 0; }
+    .table-row.header {
+      color: var(--dim);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: oklch(1 0 0 / 0.026);
+    }
+    .table-cell { padding: 13px 14px; }
+    .table-row:not(.header) .table-cell:first-child { color: var(--ink); }
+    .table-highlight { color: var(--cyan); }
+    .mini-track {
+      height: 7px;
+      border-radius: 999px;
+      background: oklch(1 0 0 / 0.07);
+      overflow: hidden;
+    }
+    .mini-track span {
+      display: block;
+      width: var(--w);
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, oklch(0.38 0.09 198), var(--cyan));
+    }
+
+    .score-wall {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .score-card {
+      min-height: 190px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: oklch(0.10 0.042 200 / 0.74);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .score-card.visible { opacity: 1; transform: none; }
+    .score-card.large { grid-column: span 2; min-height: 250px; }
+    .score-label {
+      color: var(--dim);
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      line-height: 1.45;
+    }
+    .score-value {
+      margin-top: 16px;
+      font-family: var(--display);
+      font-size: 78px;
+      font-style: italic;
+      font-weight: 900;
+      line-height: 0.88;
+    }
+    .score-card.large .score-value { font-size: 122px; color: var(--cyan); }
+    .score-sub {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .model-list {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-top: 18px;
+    }
+    .model-pill {
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: oklch(1 0 0 / 0.026);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+      text-align: center;
+    }
+
+    .method-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .method-card {
+      padding: 32px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: oklch(0.10 0.042 200 / 0.72);
+    }
+    .method-card h3 {
+      margin-bottom: 14px;
+      font-family: var(--display);
+      font-size: 36px;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .method-card p {
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 300;
+      line-height: 1.7;
+    }
+    .method-card strong { color: var(--ink); font-weight: 500; }
+
+    .closing-cta {
+      width: min(1180px, calc(100% - 64px));
+      margin: 28px auto 88px;
+      padding: 52px 58px;
+      border: 1px solid var(--line-strong);
+      border-radius: 10px;
+      background:
+        radial-gradient(circle at 78% 40%, oklch(0.74 0.14 200 / 0.18), transparent 28rem),
+        oklch(0.105 0.045 200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 34px;
+    }
+    .closing-cta h2 { font-size: 58px; max-width: 640px; }
+    .closing-cta p { margin-top: 14px; color: var(--muted); line-height: 1.65; max-width: 620px; }
+    .install-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 46px;
+      padding: 0 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: oklch(1 0 0 / 0.04);
+      color: var(--ink);
+      cursor: pointer;
+      font-family: var(--mono);
+      font-size: 13px;
+      white-space: nowrap;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .install-btn:hover { transform: translateY(-2px); border-color: var(--line-strong); }
+    .install-btn .prompt { color: var(--cyan); }
+
+    footer {
+      background: oklch(0.045 0.032 204);
+      padding: 44px 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--line);
+    }
     .f-logo { display: inline-flex; align-items: center; text-decoration: none; }
     .f-logo img { display: block; width: auto; height: 22px; }
     .f-links { display: flex; gap: 24px; }
-    .f-links a { font-size: 13px; color: oklch(1 0 0/0.22); text-decoration: none; transition: color 0.2s; }
-    .f-links a:hover { color: oklch(1 0 0/0.6); }
-    .f-copy { font-family: var(--mono); font-size: 11px; color: oklch(1 0 0/0.16); }
+    .f-links a { color: oklch(1 0 0 / 0.26); font-size: 13px; text-decoration: none; transition: color 0.2s; }
+    .f-links a:hover { color: oklch(1 0 0 / 0.66); }
+    .f-copy { color: oklch(1 0 0 / 0.18); font-family: var(--mono); font-size: 11px; }
+
+    .modal-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.75);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+      backdrop-filter: blur(8px);
+    }
+    .modal-bg.open { opacity: 1; pointer-events: auto; }
+    .modal {
+      position: relative;
+      width: 90%;
+      max-width: 500px;
+      padding: 48px 52px;
+      border: 1px solid oklch(1 0 0 / 0.1);
+      border-radius: 16px;
+      background: var(--panel);
+    }
+    .modal h3 {
+      margin-bottom: 16px;
+      color: var(--ink);
+      font-family: var(--display);
+      font-size: 52px;
+      font-style: italic;
+      font-weight: 900;
+      line-height: 0.92;
+    }
+    .modal p { margin-bottom: 28px; color: var(--muted); font-size: 16px; line-height: 1.6; }
+    .modal input {
+      width: 100%;
+      padding: 14px 18px;
+      border: 1px solid oklch(1 0 0 / 0.12);
+      border-radius: 10px;
+      outline: none;
+      background: oklch(1 0 0 / 0.06);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 15px;
+      transition: border-color 0.2s;
+    }
+    .modal input:focus { border-color: oklch(0.74 0.14 200 / 0.5); }
+    .modal input::placeholder { color: oklch(1 0 0 / 0.25); }
+    .modal-btn {
+      width: 100%;
+      margin-top: 12px;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      background: var(--cyan);
+      color: var(--bg);
+      cursor: pointer;
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 700;
+      transition: background 0.2s, opacity 0.2s;
+    }
+    .modal-btn:hover { background: oklch(0.82 0.14 200); }
+    .modal-btn:disabled { cursor: wait; opacity: 0.65; }
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      border: none;
+      background: none;
+      color: oklch(1 0 0 / 0.35);
+      cursor: pointer;
+      font-size: 22px;
+      transition: color 0.2s;
+    }
+    .modal-close:hover { color: var(--ink); }
+
+    @keyframes rotateOrbit {
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+    @keyframes sweep {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes drift {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(8px, -6px, 0); }
+    }
+    @keyframes beamSweep {
+      0%, 100% { transform: translateX(-65%); opacity: 0.1; }
+      50% { transform: translateX(65%); opacity: 0.9; }
+    }
+    @keyframes pulseNeedle {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.55); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
+
+    @media (max-width: 1020px) {
+      .site-nav { padding: 18px 24px; }
+      .nav-right { gap: 2px; }
+      .nav-right a { padding: 6px 9px; }
+      .page-shell, .proof-strip, .bench-section, .closing-cta { width: min(100% - 32px, 760px); }
+      .hero, .section-grid, .needle-visual, .budget-panel, .atlas, .method-grid, .closing-cta {
+        grid-template-columns: 1fr;
+      }
+      .hero { min-height: auto; padding-top: 126px; padding-bottom: 54px; }
+      .hero::after { display: none; }
+      h1 { font-size: 76px; }
+      h2 { font-size: 58px; }
+      .observatory { min-height: 480px; }
+      .proof-strip { grid-template-columns: repeat(2, 1fr); margin-top: 0; }
+      .proof-cell:nth-child(2) { border-right: 0; }
+      .proof-cell:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+      .haystack { min-height: 300px; border-right: 0; border-bottom: 1px solid var(--line); }
+      .score-wall { grid-template-columns: repeat(2, 1fr); }
+      .model-list { grid-template-columns: repeat(3, 1fr); }
+      footer { padding: 38px 24px; gap: 26px; flex-wrap: wrap; }
+    }
+
+    @media (max-width: 640px) {
+      .site-nav { position: absolute; align-items: flex-start; flex-direction: column; gap: 18px; }
+      .nav-right { flex-wrap: wrap; }
+      .page-shell, .proof-strip, .bench-section, .closing-cta { width: calc(100% - 28px); }
+      .hero { padding-top: 178px; }
+      h1 { font-size: 56px; }
+      h2 { font-size: 46px; }
+      .hero-copy { font-size: 16px; }
+      .observatory { min-height: 530px; }
+      .orbit { width: 270px; height: 270px; }
+      .hero-score, .proof-strip, .score-wall, .model-list { grid-template-columns: 1fr; }
+      .proof-cell { border-right: 0; border-bottom: 1px solid var(--line); }
+      .proof-cell:last-child { border-bottom: 0; }
+      .bench-section { padding: 44px 0; }
+      .needle-visual { min-height: auto; }
+      .chart-stack, .budget-card, .method-card { padding: 22px; }
+      .table-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+      }
+      .table-row.header { display: none; }
+      .table-cell { border-bottom: 1px solid oklch(1 0 0 / 0.04); }
+      .table-cell:nth-child(1)::before { content: "Type: "; color: var(--dim); }
+      .table-cell:nth-child(2)::before { content: "Size: "; color: var(--dim); }
+      .table-cell:nth-child(3)::before { content: "Raw: "; color: var(--dim); }
+      .table-cell:nth-child(4)::before { content: "Capsule: "; color: var(--dim); }
+      .table-cell:nth-child(5)::before { content: "Savings: "; color: var(--dim); }
+      .score-card.large { grid-column: span 1; }
+      .score-card.large .score-value, .score-value { font-size: 72px; }
+      .closing-cta { padding: 34px 24px; display: grid; }
+      .install-btn { white-space: normal; justify-content: flex-start; }
+      .modal { padding: 38px 28px; }
+      .f-links { flex-wrap: wrap; gap: 14px; }
+    }
   </style>
 </head>
 <body>
 
-<!-- WAITLIST MODAL -->
-<div class="modal-bg" id="modalBg" onclick="if(event.target===this)openModal(false)">
+<div class="modal-bg" id="modalBg" onclick="closeModal(event)">
   <div class="modal">
-    <button class="modal-close" onclick="openModal(false)">×</button>
+    <button class="modal-close" onclick="closeModal()">x</button>
     <h3>Join the<br>waitlist.</h3>
     <p>Get early access and launch updates. No spam, ever.</p>
-    <input type="email" id="wlEmail" placeholder="you@company.com" />
-    <button class="modal-btn" onclick="submitWaitlist()">Get early access →</button>
+    <input type="email" id="wlEmail" placeholder="you@company.com">
+    <button class="modal-btn" onclick="submitWaitlist()">Get early access -></button>
     <p id="wlMsg" style="margin-top:12px;font-size:13px;color:var(--cyan);text-align:center;min-height:18px"></p>
   </div>
 </div>
 
-<nav>
+<nav class="site-nav">
   <a class="nav-logo" href="index.html"><img src="assets/brand/lockup-color.svg" alt="Mesh"></a>
   <div class="nav-right">
     <a href="features.html">Features</a>
     <a href="quickstart.html">Quickstart</a>
     <a href="benchmarks.html" class="nav-active">Benchmarks</a>
-    <a onclick="openModal(true)" class="nav-waitlist">Waitlist</a>
+    <a onclick="openModal()" class="nav-waitlist">Waitlist</a>
   </div>
 </nav>
 
-<!-- HERO -->
-<div class="bench-hero">
-  <div class="bh-glow"></div>
-  <div class="hero-bg-num">3.9×</div>
-  <div class="bh-eyebrow">Benchmarks — last run 2026-04-20</div>
-  <h1 class="bh-title">Real data.<br><span>Real LLMs.</span></h1>
-  <p class="bh-sub">Mesh is benchmarked across <strong>14+ frontier and local models</strong> on real-world AI tasks. Not token counts. Not synthetic prompts. Task success.</p>
-</div>
-
-<!-- STATS -->
-<div class="stats-row" id="statsRow">
-  <div class="stat-cell">
-    <div class="stat-n"><span class="count" data-t="39" data-dec="true">0</span><sup>×</sup></div>
-    <div class="stat-label">more files per token budget</div>
-    <div class="stat-badge">context gain</div>
-  </div>
-  <div class="stat-cell" style="transition-delay:0.1s">
-    <div class="stat-n"><span class="count" data-t="100">0</span><sup>%</sup></div>
-    <div class="stat-label">NIAH recall — standard difficulty</div>
-    <div class="stat-badge">vs 40% raw</div>
-  </div>
-  <div class="stat-cell" style="transition-delay:0.2s">
-    <div class="stat-n"><span class="count" data-t="5">0</span><sup>×</sup></div>
-    <div class="stat-label">fewer tokens for full coverage</div>
-    <div class="stat-badge">4,500T vs 24,000T</div>
-  </div>
-  <div class="stat-cell" style="transition-delay:0.3s">
-    <div class="stat-n"><span class="count" data-t="0">0</span><sup>%</sup></div>
-    <div class="stat-label">hallucination rate across 4 models</div>
-    <div class="stat-badge">zero invented answers</div>
-  </div>
-</div>
-
-<!-- A1: NIAH -->
-<div class="bench-section" id="niahSection">
-  <div class="bs-header">
+<main>
+  <section class="page-shell hero">
     <div>
-      <div class="bs-eyebrow">A1 — Needle in a Haystack</div>
-      <div class="bs-title">Can the model find<br>the right file?</div>
-    </div>
-    <p class="bs-desc">A planted constant (<code style="font-family:var(--mono);font-size:13px;color:var(--cyan)">SESSION_SECRET</code>) is hidden in one of 10–120 files. Same token budget. Mesh fits more files — raw runs out before the needle is reached. <strong>Tested on Sonnet, Opus, GPT-OSS-20B, Gemma 3 4B, Llama 3.3 70B.</strong></p>
-  </div>
-  <div class="dual-chart" id="niahChart">
-    <div class="dc-row">
-      <div class="dc-label"><span class="l-main">Standard difficulty</span><span>6,000T budget · 5 configs</span></div>
-      <div class="dc-bars">
-        <div class="dc-bar-row">
-          <span class="dc-tag mesh">Mesh</span>
-          <div class="dc-track"><div class="dc-fill mesh" data-w="100"></div></div>
-          <span class="dc-val mesh">100%</span>
-        </div>
-        <div class="dc-bar-row">
-          <span class="dc-tag raw">Raw</span>
-          <div class="dc-track"><div class="dc-fill raw" data-w="40"></div></div>
-          <span class="dc-val raw">40%</span>
-        </div>
+      <div class="eyebrow">Benchmarks - last run 2026-04-20</div>
+      <h1>Proof beats<br><span class="cyan">prompt vibes.</span></h1>
+      <p class="hero-copy">Mesh is benchmarked on real code-agent tasks: needle finding, multi-hop reasoning, edit precision, hallucination refusal, compression ratio, and targeted reads. <strong>Same token budgets. Same prompts. Real inference calls where it matters.</strong></p>
+      <div class="hero-actions">
+        <a class="primary-btn" href="#needle">See the results</a>
+        <button class="secondary-btn" onclick="copyInstall()">Copy install command</button>
       </div>
     </div>
-    <div class="dc-row" style="transition-delay:0.1s">
-      <div class="dc-label"><span class="l-main">Hard difficulty</span><span>8,000T budget · 5 configs</span></div>
-      <div class="dc-bars">
-        <div class="dc-bar-row">
-          <span class="dc-tag mesh">Mesh</span>
-          <div class="dc-track"><div class="dc-fill mesh" data-w="80"></div></div>
-          <span class="dc-val mesh">80%</span>
-        </div>
-        <div class="dc-bar-row">
-          <span class="dc-tag raw">Raw</span>
-          <div class="dc-track"><div class="dc-fill raw" data-w="20"></div></div>
-          <span class="dc-val raw">20%</span>
-        </div>
-      </div>
-    </div>
-    <div class="dc-row" style="transition-delay:0.2s">
-      <div class="dc-label"><span class="l-main">Multi-Hop chains</span><span>cross-file reasoning · 12 tasks</span></div>
-      <div class="dc-bars">
-        <div class="dc-bar-row">
-          <span class="dc-tag mesh">Mesh</span>
-          <div class="dc-track"><div class="dc-fill mesh" data-w="100"></div></div>
-          <span class="dc-val mesh">100%</span>
-        </div>
-        <div class="dc-bar-row">
-          <span class="dc-tag raw">Raw</span>
-          <div class="dc-track"><div class="dc-fill raw" data-w="25"></div></div>
-          <span class="dc-val raw">25%</span>
-        </div>
-      </div>
-    </div>
-    <div class="dc-row" style="transition-delay:0.3s">
-      <div class="dc-label"><span class="l-main">Edit precision</span><span>exact file + value targeting</span></div>
-      <div class="dc-bars">
-        <div class="dc-bar-row">
-          <span class="dc-tag mesh">Mesh</span>
-          <div class="dc-track"><div class="dc-fill mesh" data-w="100"></div></div>
-          <span class="dc-val mesh">100%</span>
-        </div>
-        <div class="dc-bar-row">
-          <span class="dc-tag raw">Raw</span>
-          <div class="dc-track"><div class="dc-fill raw" data-w="83"></div></div>
-          <span class="dc-val raw">83%</span>
-        </div>
-      </div>
-    </div>
-    <div class="dc-row" style="transition-delay:0.4s">
-      <div class="dc-label"><span class="l-main">Hallucination rate</span><span>absent-needle accuracy · 4 models</span></div>
-      <div class="dc-bars">
-        <div class="dc-bar-row">
-          <span class="dc-tag mesh">Mesh</span>
-          <div class="dc-track"><div class="dc-fill mesh" data-w="0.5"></div></div>
-          <span class="dc-val mesh">0%</span>
-        </div>
-        <div class="dc-bar-row">
-          <span class="dc-tag raw">Raw</span>
-          <div class="dc-track"><div class="dc-fill raw" data-w="15"></div></div>
-          <span class="dc-val raw">12–18%</span>
-        </div>
-      </div>
-    </div>
-  </div>
-  <p style="margin-top:28px;font-family:var(--mono);font-size:11px;color:oklch(1 0 0/0.2);line-height:1.8">
-    * Standard: Sonnet 4.6, GPT-OSS-20B, Gemma 3 4B — 10/20/40/80/120 file configs.<br>
-    * Hard: Opus, GPT-OSS-20B, Gemma 3 4B, Llama 3.3 70B — 20/50/100/180/260 file configs.
-  </p>
-</div>
 
-<!-- A3: BUDGET SATURATION -->
-<div class="bench-section alt" id="budgetSection">
-  <div class="bs-header">
+    <aside class="observatory" aria-label="Animated benchmark observatory">
+      <div class="obs-top"><span>mesh/benchmark-observatory</span><span class="obs-live">verified</span></div>
+      <div class="model-cloud">
+        <div class="model-chip">claude-sonnet-4-6</div>
+        <div class="model-chip">claude-opus-4-6</div>
+        <div class="model-chip">gpt-oss-20b</div>
+        <div class="model-chip">gemma-3-4b</div>
+        <div class="model-chip">llama-3.3-70b</div>
+      </div>
+      <div class="orbit" aria-hidden="true"></div>
+      <div class="scanline" aria-hidden="true"></div>
+      <div class="needle" aria-hidden="true"></div>
+      <div class="hero-score">
+        <div class="hero-metric"><strong>3.9x</strong><span>more files per token budget</span></div>
+        <div class="hero-metric"><strong>0%</strong><span>hallucination rate across tested models</span></div>
+        <div class="hero-metric"><strong>100%</strong><span>standard NIAH recall</span></div>
+        <div class="hero-metric"><strong>5x</strong><span>less budget for full coverage</span></div>
+      </div>
+    </aside>
+  </section>
+
+  <section class="proof-strip" id="proofStrip" aria-label="Benchmark summary">
+    <div class="proof-cell">
+      <div class="proof-number"><span class="count" data-target="39" data-decimal="true">0</span><sup>x</sup></div>
+      <div class="proof-label">more files per token budget through capsule compression.</div>
+      <div class="proof-badge">context gain</div>
+    </div>
+    <div class="proof-cell">
+      <div class="proof-number"><span class="count" data-target="100">0</span><sup>%</sup></div>
+      <div class="proof-label">NIAH recall on standard difficulty across tested configs.</div>
+      <div class="proof-badge">vs 40% raw</div>
+    </div>
+    <div class="proof-cell">
+      <div class="proof-number"><span class="count" data-target="5">0</span><sup>x</sup></div>
+      <div class="proof-label">fewer tokens for full 80-file coverage.</div>
+      <div class="proof-badge">4,500T vs 24,000T</div>
+    </div>
+    <div class="proof-cell">
+      <div class="proof-number"><span class="count" data-target="0">0</span><sup>%</sup></div>
+      <div class="proof-label">hallucination rate on absent-needle tests.</div>
+      <div class="proof-badge">zero invented answers</div>
+    </div>
+  </section>
+
+  <section class="bench-section" id="needle">
+    <div class="section-grid">
+      <div>
+        <div class="section-kicker">A1 - Needle in a Haystack</div>
+        <h2>Can the model find the right file?</h2>
+        <p class="section-copy">A planted constant, <code>SESSION_SECRET</code>, is hidden in one of 10 to 120 files. Raw context runs out before the needle appears. Mesh keeps the full map in budget, then recovers exact spans when the model needs source.</p>
+        <p class="section-note">Tested on Sonnet, Opus, GPT-OSS-20B, Gemma 3 4B, and Llama 3.3 70B. Same task, same token budget, same prompt.</p>
+      </div>
+      <div class="lab-card">
+        <div class="lab-top"><span>needle field</span><span>Mesh vs raw</span></div>
+        <div class="needle-visual">
+          <div class="haystack" id="haystack" aria-label="Animated haystack of files">
+            <div class="search-beam"></div>
+          </div>
+          <div class="chart-stack" id="needleChart">
+            <div class="chart-row">
+              <div class="chart-title"><span>Standard difficulty</span><span>6,000T</span></div>
+              <div class="bar-pair">
+                <div class="bar-line mesh"><span>Mesh</span><div class="track"><div class="fill mesh" data-width="100"></div></div><span>100%</span></div>
+                <div class="bar-line"><span>Raw</span><div class="track"><div class="fill raw" data-width="40"></div></div><span>40%</span></div>
+              </div>
+            </div>
+            <div class="chart-row">
+              <div class="chart-title"><span>Hard difficulty</span><span>8,000T</span></div>
+              <div class="bar-pair">
+                <div class="bar-line mesh"><span>Mesh</span><div class="track"><div class="fill mesh" data-width="80"></div></div><span>80%</span></div>
+                <div class="bar-line"><span>Raw</span><div class="track"><div class="fill raw" data-width="20"></div></div><span>20%</span></div>
+              </div>
+            </div>
+            <div class="chart-row">
+              <div class="chart-title"><span>Multi-hop chains</span><span>12 tasks</span></div>
+              <div class="bar-pair">
+                <div class="bar-line mesh"><span>Mesh</span><div class="track"><div class="fill mesh" data-width="100"></div></div><span>100%</span></div>
+                <div class="bar-line"><span>Raw</span><div class="track"><div class="fill raw" data-width="25"></div></div><span>25%</span></div>
+              </div>
+            </div>
+            <div class="chart-row">
+              <div class="chart-title"><span>Edit precision</span><span>exact file + value</span></div>
+              <div class="bar-pair">
+                <div class="bar-line mesh"><span>Mesh</span><div class="track"><div class="fill mesh" data-width="100"></div></div><span>100%</span></div>
+                <div class="bar-line"><span>Raw</span><div class="track"><div class="fill raw" data-width="83"></div></div><span>83%</span></div>
+              </div>
+            </div>
+            <div class="chart-row">
+              <div class="chart-title"><span>Absent needle refusal</span><span>4 models</span></div>
+              <div class="bar-pair">
+                <div class="bar-line mesh"><span>Mesh</span><div class="track"><div class="fill mesh" data-width="1"></div></div><span>0%</span></div>
+                <div class="bar-line"><span>Raw</span><div class="track"><div class="fill raw" data-width="15"></div></div><span>12-18%</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bench-section" id="budget">
+    <div class="section-grid">
+      <div>
+        <div class="section-kicker">A3 - Budget Saturation</div>
+        <h2>Full coverage at a fraction of the budget.</h2>
+        <p class="section-copy">Fixed 80-file workspace. Mesh saturates the whole workspace at <strong>4,500 tokens</strong>. Raw source requires <strong>24,000 tokens</strong> before it finally reaches the same file coverage.</p>
+      </div>
+      <div class="budget-panel" id="budgetPanel">
+        <div class="budget-card mesh" data-fill="19">
+          <div class="budget-label">Mesh capsules</div>
+          <div class="budget-number"><span class="budget-count" data-target="4500">0</span>T</div>
+          <p class="budget-copy">Ultra capsules compress 80 files to 3,347 tokens. Needle and multi-hop pass with 80/80 files in context.</p>
+          <div class="budget-track"><span data-width="19"></span></div>
+        </div>
+        <div class="budget-card raw" data-fill="100">
+          <div class="budget-label">Raw source</div>
+          <div class="budget-number"><span class="budget-count" data-target="24000">0</span>T</div>
+          <p class="budget-copy">Raw source exhausts smaller budgets around 22 files. It needs the full 24,000T equivalent to cover all 80.</p>
+          <div class="budget-track"><span data-width="100"></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bench-section" id="compression">
+    <div class="section-kicker">B1 - Capsule Compression Ratio</div>
+    <div class="atlas">
+      <div>
+        <h2>Tokens the AI actually sees.</h2>
+        <p class="section-copy">Ultra-tier capsules preserve names, signatures, exports, imports, and recoverable source locations. The average compression result is <strong>25.5% of raw source</strong>, which produces the 3.9x file coverage gain.</p>
+        <div class="capsule-picture" aria-label="Capsule compression illustration">
+          <div class="capsule-ring r1"></div>
+          <div class="capsule-ring r2"></div>
+          <div class="capsule-core">25.5%</div>
+          <div class="capsule-node n1"><strong>exports</strong><br>symbols</div>
+          <div class="capsule-node n2"><strong>imports</strong><br>edges</div>
+          <div class="capsule-node n3"><strong>calls</strong><br>chains</div>
+          <div class="capsule-node n4"><strong>spans</strong><br>exact</div>
+        </div>
+      </div>
+      <div class="compression-table">
+        <div class="table-row header">
+          <div class="table-cell">File type</div>
+          <div class="table-cell">Size</div>
+          <div class="table-cell">Raw tokens</div>
+          <div class="table-cell">Ultra capsule</div>
+          <div class="table-cell">Savings</div>
+        </div>
+        <div class="table-row"><div class="table-cell">Code</div><div class="table-cell">Large</div><div class="table-cell">2,881</div><div class="table-cell table-highlight">1.9%</div><div class="table-cell"><div class="mini-track" style="--w:98%"><span></span></div></div></div>
+        <div class="table-row"><div class="table-cell">Code</div><div class="table-cell">XL</div><div class="table-cell">7,694</div><div class="table-cell table-highlight">0.7%</div><div class="table-cell"><div class="mini-track" style="--w:99%"><span></span></div></div></div>
+        <div class="table-row"><div class="table-cell">Code</div><div class="table-cell">XXL</div><div class="table-cell">19,394</div><div class="table-cell table-highlight">0.3%</div><div class="table-cell"><div class="mini-track" style="--w:100%"><span></span></div></div></div>
+        <div class="table-row"><div class="table-cell">Config</div><div class="table-cell">Large</div><div class="table-cell">1,439</div><div class="table-cell table-highlight">1.8%</div><div class="table-cell"><div class="mini-track" style="--w:98%"><span></span></div></div></div>
+        <div class="table-row"><div class="table-cell">SQL</div><div class="table-cell">Large</div><div class="table-cell">2,487</div><div class="table-cell table-highlight">1.7%</div><div class="table-cell"><div class="mini-track" style="--w:98%"><span></span></div></div></div>
+        <div class="table-row"><div class="table-cell">Markup</div><div class="table-cell">Large</div><div class="table-cell">2,059</div><div class="table-cell table-highlight">1.1%</div><div class="table-cell"><div class="mini-track" style="--w:99%"><span></span></div></div></div>
+        <div class="table-row"><div class="table-cell">Docs</div><div class="table-cell">Large</div><div class="table-cell">2,607</div><div class="table-cell table-highlight">0.9%</div><div class="table-cell"><div class="mini-track" style="--w:99%"><span></span></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bench-section" id="scorecard">
+    <div class="section-kicker">Full scorecard - 12 benchmarks</div>
+    <div class="score-wall">
+      <div class="score-card large">
+        <div class="score-label">NIAH recall - standard difficulty</div>
+        <div class="score-value">100%</div>
+        <div class="score-sub">5/5 configs across Sonnet, GPT-OSS-20B, and Gemma 3 4B. Raw baseline: 40%.</div>
+      </div>
+      <div class="score-card large">
+        <div class="score-label">Multi-hop cross-file reasoning</div>
+        <div class="score-value">100%</div>
+        <div class="score-sub">12/12 chains resolved using compressed workspace structure. Raw baseline: 25%.</div>
+      </div>
+      <div class="score-card">
+        <div class="score-label">Budget saturation</div>
+        <div class="score-value">5x</div>
+        <div class="score-sub">4,500T vs 24,000T.</div>
+      </div>
+      <div class="score-card">
+        <div class="score-label">Hallucination rate</div>
+        <div class="score-value cyan">0%</div>
+        <div class="score-sub">Absent needle accuracy across 4 models.</div>
+      </div>
+      <div class="score-card">
+        <div class="score-label">Edit precision</div>
+        <div class="score-value">100%</div>
+        <div class="score-sub">12/12 exact file and value targets.</div>
+      </div>
+      <div class="score-card">
+        <div class="score-label">Targeted read recall</div>
+        <div class="score-value">84.7%</div>
+        <div class="score-sub">Token savings with exact source recovery.</div>
+      </div>
+    </div>
+    <div class="model-list" aria-label="Models tested">
+      <div class="model-pill">claude-sonnet-4-6</div>
+      <div class="model-pill">claude-opus-4-6</div>
+      <div class="model-pill">gpt-oss-20b</div>
+      <div class="model-pill">gemma-3-4b</div>
+      <div class="model-pill">llama-3.3-70b</div>
+    </div>
+  </section>
+
+  <section class="bench-section" id="methodology">
+    <div class="section-kicker">Methodology</div>
+    <div class="method-grid">
+      <div class="method-card">
+        <h3>Part A - live LLM evals</h3>
+        <p>Needle, hard needle, multi-hop, edit precision, and hallucination checks are <strong>real inference calls</strong> through AWS Bedrock. Same prompt, same token budget, Mesh vs raw side-by-side.</p>
+        <p class="section-note">Run: 2026-04-20. Models: Sonnet 4.6, Opus 4.6, GPT-OSS-20B, Gemma 3 4B, Llama 3.3 70B.</p>
+      </div>
+      <div class="method-card">
+        <h3>Part B - deterministic pipeline</h3>
+        <p>Compression ratios, symbol extraction, capsule determinism, targeted reads, and file-role classification are <strong>deterministic CI benchmarks</strong>. No LLM calls, no retries, reproducible outputs.</p>
+        <p class="section-note">Source: <code>benchmarks/run-all-benchmarks.js</code>. Stack: Node.js 22+, Tree-sitter, Brotli-9, zstd-chunked transport.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing-cta">
     <div>
-      <div class="bs-eyebrow">A3 — Budget Saturation</div>
-      <div class="bs-title">How much is<br>full coverage?</div>
+      <div class="section-kicker">Reproduce the loop</div>
+      <h2>Run Mesh on your own codebase.</h2>
+      <p>Install the CLI, index a workspace, and compare what your model can do with structured context instead of raw token floods.</p>
     </div>
-    <p class="bs-desc">Fixed 80-file workspace. How many tokens does each approach need to read <em>every file</em> and pass NIAH + multi-hop? Mesh saturates at <strong>4,500T</strong>. Raw needs <strong>24,000T</strong> — 5× more budget for the same result.</p>
-  </div>
-  <div class="budget-viz" id="budgetViz">
-    <div class="bv-card mesh">
-      <div class="bv-label">Mesh — capsule compression</div>
-      <div class="bv-num"><span class="bcount" data-t="4500">0</span><span class="bv-unit">T</span></div>
-      <p class="bv-desc">Ultra capsules compress 80 files to <strong>3,347 tokens</strong>. Needle + multi-hop pass at this budget. 80/80 files in context.</p>
-      <div class="bv-bar-wrap">
-        <div class="bv-bar-track"><div class="bv-bar-fill" data-w="19"></div></div>
-        <div class="bv-bar-label">of 24,000T equivalent budget</div>
-      </div>
-    </div>
-    <div class="bv-card raw">
-      <div class="bv-label">Raw source — no compression</div>
-      <div class="bv-num"><span class="bcount" data-t="24000">0</span><span class="bv-unit">T</span></div>
-      <p class="bv-desc">Raw source exhausts budget at <strong>~22 files</strong>. The needle at file 60 is never reached until 24,000T — when raw finally covers all 80 files.</p>
-      <div class="bv-bar-wrap">
-        <div class="bv-bar-track"><div class="bv-bar-fill" data-w="100"></div></div>
-        <div class="bv-bar-label">full budget required</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- B1: COMPRESSION TABLE -->
-<div class="bench-section" id="compressionSection">
-  <div class="bs-header">
-    <div>
-      <div class="bs-eyebrow">B1 — Capsule Compression Ratio</div>
-      <div class="bs-title">Tokens the AI<br>actually sees.</div>
-    </div>
-    <p class="bs-desc">Ultra-tier capsules across file types and sizes. The AI sees <strong>function names, signatures, and exports</strong> — not raw source. For large codebases, this is a 50–100× reduction. <strong>Overall average: 25.5% of raw → 3.9× more files per budget.</strong></p>
-  </div>
-  <table class="comp-table">
-    <thead>
-      <tr>
-        <th>File type</th>
-        <th>Size</th>
-        <th>Raw tokens</th>
-        <th>Ultra capsule</th>
-        <th>Token savings</th>
-        <th>Gain</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>Code</td><td>Large</td><td>2,881</td><td class="highlight">1.9%</td><td>2,825 saved</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:98%"></div></div>98%</div></td></tr>
-      <tr><td>Code</td><td>XL</td><td>7,694</td><td class="highlight">0.7%</td><td>7,639 saved</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:99%"></div></div>99%</div></td></tr>
-      <tr><td>Code</td><td>XXL</td><td>19,394</td><td class="highlight">0.3%</td><td>19,338 saved</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:100%"></div></div>99.7%</div></td></tr>
-      <tr><td>Config</td><td>Large</td><td>1,439</td><td class="highlight">1.8%</td><td>1,413 saved</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:98%"></div></div>98%</div></td></tr>
-      <tr><td>SQL</td><td>Large</td><td>2,487</td><td class="highlight">1.7%</td><td>2,444 saved</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:98%"></div></div>98%</div></td></tr>
-      <tr><td>Markup</td><td>Large</td><td>2,059</td><td class="highlight">1.1%</td><td>2,037 saved</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:99%"></div></div>99%</div></td></tr>
-      <tr><td>Docs</td><td>Large</td><td>2,607</td><td class="highlight">0.9%</td><td>2,583 saved</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:99%"></div></div>99%</div></td></tr>
-    </tbody>
-  </table>
-  <p style="margin-top:20px;font-family:var(--mono);font-size:11px;color:oklch(1 0 0/0.2)">* Small files (&lt;150 tokens) are passed verbatim — capsule headers would exceed savings.</p>
-</div>
-
-<!-- SCORECARD -->
-<div class="bench-section alt" id="scorecardSection">
-  <div class="bs-eyebrow" style="margin-bottom:48px">Full scorecard — 12 benchmarks</div>
-
-  <!-- Big editorial layout -->
-  <div style="display:flex;flex-direction:column;gap:0">
-
-    <!-- Row 1: two giant numbers -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid oklch(1 0 0/0.07)">
-      <div class="sc-item" style="padding:52px 48px;border-right:1px solid oklch(1 0 0/0.07)">
-        <div class="sc-item-label">NIAH recall — standard · Sonnet / GPT / Gemma</div>
-        <div style="display:flex;align-items:flex-end;gap:16px;margin-top:12px">
-          <div style="font-family:var(--display);font-style:italic;font-weight:900;font-size:clamp(80px,10vw,140px);line-height:0.85;letter-spacing:-0.04em;color:var(--cyan)">100<span style="font-size:0.45em;color:var(--cyan)">%</span></div>
-          <div style="padding-bottom:16px">
-            <div style="font-family:var(--mono);font-size:13px;color:oklch(1 0 0/0.25)">vs raw</div>
-            <div style="font-family:var(--display);font-style:italic;font-weight:900;font-size:36px;color:oklch(1 0 0/0.18);line-height:1">40%</div>
-          </div>
-        </div>
-        <div style="margin-top:8px;font-family:var(--mono);font-size:11px;color:oklch(1 0 0/0.22)">5/5 configs · 3 models · standard difficulty</div>
-      </div>
-      <div class="sc-item" style="padding:52px 48px">
-        <div class="sc-item-label">Multi-hop cross-file reasoning · 3 chain types</div>
-        <div style="display:flex;align-items:flex-end;gap:16px;margin-top:12px">
-          <div style="font-family:var(--display);font-style:italic;font-weight:900;font-size:clamp(80px,10vw,140px);line-height:0.85;letter-spacing:-0.04em;color:var(--cyan)">100<span style="font-size:0.45em;color:var(--cyan)">%</span></div>
-          <div style="padding-bottom:16px">
-            <div style="font-family:var(--mono);font-size:13px;color:oklch(1 0 0/0.25)">vs raw</div>
-            <div style="font-family:var(--display);font-style:italic;font-weight:900;font-size:36px;color:oklch(1 0 0/0.18);line-height:1">25%</div>
-          </div>
-        </div>
-        <div style="margin-top:8px;font-family:var(--mono);font-size:11px;color:oklch(1 0 0/0.22)">12/12 chains · Sonnet / GPT-OSS / Gemma</div>
-      </div>
-    </div>
-
-    <!-- Row 2: four medium stats -->
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid oklch(1 0 0/0.07)">
-      <div class="sc-item" style="padding:36px 36px;border-right:1px solid oklch(1 0 0/0.07)">
-        <div class="sc-item-label" style="margin-bottom:10px">Budget saturation</div>
-        <div style="font-family:var(--display);font-style:italic;font-weight:900;font-size:64px;line-height:0.9;letter-spacing:-0.04em;color:var(--white)">5<span style="font-size:0.4em;color:var(--cyan)">×</span></div>
-        <div style="margin-top:8px;font-family:var(--mono);font-size:11px;color:oklch(1 0 0/0.22)">4,500T vs 24,000T</div>
-      </div>
-      <div class="sc-item" style="padding:36px 36px;border-right:1px solid oklch(1 0 0/0.07)">
-        <div class="sc-item-label" style="margin-bottom:10px">Hallucination rate</div>
-        <div style="font-family:var(--display);font-style:italic;font-weight:900;font-size:64px;line-height:0.9;letter-spacing:-0.04em;color:var(--cyan)">0<span style="font-size:0.4em">%</span></div>
-        <div style="margin-top:8px;font-family:var(--mono);font-size:11px;color:oklch(1 0 0/0.22)">4 models · all configs</div>
-      </div>
-      <div class="sc-item" style="padding:36px 36px;border-right:1px solid oklch(1 0 0/0.07)">
-        <div class="sc-item-label" style="margin-bottom:10px">Edit precision</div>
-        <div style="font-family:var(--display);font-style:italic;font-weight:900;font-size:64px;line-height:0.9;letter-spacing:-0.04em;color:var(--white)">100<span style="font-size:0.4em;color:var(--cyan)">%</span></div>
-        <div style="margin-top:8px;font-family:var(--mono);font-size:11px;color:oklch(1 0 0/0.22)">12/12 vs 10/12 raw</div>
-      </div>
-      <div class="sc-item" style="padding:36px 36px">
-        <div class="sc-item-label" style="margin-bottom:10px">Compression ratio</div>
-        <div style="font-family:var(--display);font-style:italic;font-weight:900;font-size:64px;line-height:0.9;letter-spacing:-0.04em;color:var(--white)">25.5<span style="font-size:0.4em;color:var(--cyan)">%</span></div>
-        <div style="margin-top:8px;font-family:var(--mono);font-size:11px;color:oklch(1 0 0/0.22)">3.9× more files/budget</div>
-      </div>
-    </div>
-
-    <!-- Row 3: pipeline benchmarks as a clean list -->
-    <div style="display:grid;grid-template-columns:1fr 1fr">
-      <div style="padding:40px 48px;border-right:1px solid oklch(1 0 0/0.07)">
-        <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:oklch(1 0 0/0.25);margin-bottom:24px">Pipeline Benchmarks — deterministic</div>
-        <div style="display:flex;flex-direction:column;gap:0">
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid oklch(1 0 0/0.05)">
-            <span style="font-size:15px;color:oklch(1 0 0/0.55)">Symbol extraction F1</span>
-            <span style="font-family:var(--mono);font-size:14px;color:var(--cyan)">100%</span>
-          </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid oklch(1 0 0/0.05)">
-            <span style="font-size:15px;color:oklch(1 0 0/0.55)">Capsule determinism</span>
-            <span style="font-family:var(--mono);font-size:14px;color:var(--cyan)">90/90 stable</span>
-          </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid oklch(1 0 0/0.05)">
-            <span style="font-size:15px;color:oklch(1 0 0/0.55)">Targeted read recall</span>
-            <span style="font-family:var(--mono);font-size:14px;color:var(--cyan)">100% · 84.7% savings</span>
-          </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid oklch(1 0 0/0.05)">
-            <span style="font-size:15px;color:oklch(1 0 0/0.55)">File role classification</span>
-            <span style="font-family:var(--mono);font-size:14px;color:var(--cyan)">35/35</span>
-          </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0">
-            <span style="font-size:15px;color:oklch(1 0 0/0.55)">NIAH pipeline — all tiers</span>
-            <span style="font-family:var(--mono);font-size:14px;color:var(--cyan)">100%</span>
-          </div>
-        </div>
-      </div>
-      <div style="padding:40px 48px">
-        <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:oklch(1 0 0/0.25);margin-bottom:24px">Models tested</div>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:9px;background:oklch(1 0 0/0.03);border:1px solid oklch(1 0 0/0.07)">
-            <div style="width:7px;height:7px;border-radius:50%;background:var(--cyan)"></div>
-            <span style="font-family:var(--mono);font-size:13px;color:var(--white);flex:1">claude-sonnet-4-6</span>
-            <span style="font-size:12px;color:oklch(1 0 0/0.28)">standard + hard</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:9px;background:oklch(1 0 0/0.03);border:1px solid oklch(1 0 0/0.07)">
-            <div style="width:7px;height:7px;border-radius:50%;background:var(--cyan)"></div>
-            <span style="font-family:var(--mono);font-size:13px;color:var(--white);flex:1">claude-opus-4-6</span>
-            <span style="font-size:12px;color:oklch(1 0 0/0.28)">hard · 8,000T</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:9px;background:oklch(1 0 0/0.03);border:1px solid oklch(1 0 0/0.07)">
-            <div style="width:7px;height:7px;border-radius:50%;background:oklch(0.75 0.12 145)"></div>
-            <span style="font-family:var(--mono);font-size:13px;color:var(--white);flex:1">gpt-oss-20b</span>
-            <span style="font-size:12px;color:oklch(1 0 0/0.28)">standard + hard</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:9px;background:oklch(1 0 0/0.03);border:1px solid oklch(1 0 0/0.07)">
-            <div style="width:7px;height:7px;border-radius:50%;background:oklch(0.75 0.12 145)"></div>
-            <span style="font-family:var(--mono);font-size:13px;color:var(--white);flex:1">gemma-3-4b</span>
-            <span style="font-size:12px;color:oklch(1 0 0/0.28)">standard + hard</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:9px;background:oklch(1 0 0/0.03);border:1px solid oklch(1 0 0/0.07)">
-            <div style="width:7px;height:7px;border-radius:50%;background:oklch(0.72 0.1 280)"></div>
-            <span style="font-family:var(--mono);font-size:13px;color:var(--white);flex:1">llama-3.3-70b</span>
-            <span style="font-size:12px;color:oklch(1 0 0/0.28)">hard only</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- METHODOLOGY -->
-<div class="bench-section">
-  <div class="bs-eyebrow" style="margin-bottom:32px">Methodology</div>
-  <div class="method-grid">
-    <div class="method-block">
-      <div class="method-label">Part A — LLM evals</div>
-      <div class="method-title">Live Bedrock runs</div>
-      <p class="method-text">All Part A benchmarks are <strong>real inference calls</strong> via AWS Bedrock. Same prompt, same token budget, same task. Mesh vs raw side-by-side. No cherry-picking, no retries, no custom scaffolding.</p>
-      <p class="method-note">Models: Sonnet 4.6, Opus 4.6, GPT-OSS-20B, Gemma 3 4B, Llama 3.3 70B<br>Run: 2026-04-20 · reproducible with .env + benchmark scripts</p>
-    </div>
-    <div class="method-block" style="transition-delay:0.15s">
-      <div class="method-label">Part B — pipeline evals</div>
-      <div class="method-title">Deterministic CI</div>
-      <p class="method-text">Compression ratios, symbol extraction, capsule determinism, targeted reads, file role classification — all <strong>fully deterministic</strong>. No LLM calls. Run in CI on every commit. Results are reproducible by anyone.</p>
-      <p class="method-note">Stack: Node.js 22+, Tree-sitter, Brotli-9 storage, zstd-chunked transport<br>Source: <code style="color:var(--cyan)">benchmarks/run-all-benchmarks.js</code></p>
-    </div>
-  </div>
-</div>
-
-<!-- CTA -->
-<div class="cta-strip">
-  <div class="cta-text">
-    <h3>See it yourself.</h3>
-    <p>Free to start. Works with any LLM.</p>
-  </div>
-  <button class="cta-btn" onclick="copyInstall()">
-    <span class="p">$</span>
-    <span id="ctaCmd">npm i -g @edgarelmo/mesh-agent-cli</span>
-  </button>
-</div>
+    <button class="install-btn" onclick="copyInstall()"><span class="prompt">$</span><span id="installCmd">npm i -g @edgarelmo/mesh-agent-cli</span></button>
+  </section>
+</main>
 
 <footer>
   <a class="f-logo" href="index.html"><img src="assets/brand/lockup-color.svg" alt="Mesh"></a>
@@ -612,76 +1255,23 @@
     <a href="index.html">Home</a>
     <a href="features.html">Features</a>
     <a href="quickstart.html">Quickstart</a>
-    <a href="https://docs.try-mesh.com">Docs</a>
+    <a href="mesh-animation.html">Animation</a>
   </div>
-  <div class="f-copy">© 2026 Mesh Intelligence</div>
+  <div class="f-copy">&copy; 2026 Mesh Intelligence</div>
 </footer>
 
 <script>
-function obs(sel, cb, threshold=0.15) {
-  const io = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ cb(e.target); io.unobserve(e.target); } }), {threshold});
-  document.querySelectorAll(sel).forEach(el => io.observe(el));
+function openModal() {
+  document.getElementById('modalBg').classList.add('open');
 }
 
-/* stat cells */
-let statsDone = false;
-new IntersectionObserver(es => {
-  if (es[0].isIntersecting && !statsDone) {
-    statsDone = true;
-    document.querySelectorAll('.stat-cell').forEach(el => el.classList.add('vis'));
-    document.querySelectorAll('.count').forEach(el => {
-      const t = +el.dataset.t, dec = el.dataset.dec;
-      let c = 0; const step = Math.max(1, Math.ceil(t/40));
-      const id = setInterval(() => {
-        c = Math.min(c + step, t);
-        el.textContent = dec ? (c/10).toFixed(1) : c;
-        if (c >= t) clearInterval(id);
-      }, 28);
-    });
+function closeModal(event) {
+  const modalBg = document.getElementById('modalBg');
+  if (!event || event.target === modalBg || event.currentTarget?.classList?.contains('modal-close')) {
+    modalBg.classList.remove('open');
   }
-}, {threshold:0.3}).observe(document.getElementById('statsRow'));
-
-/* niah bars */
-let niahDone = false;
-new IntersectionObserver(es => {
-  if (es[0].isIntersecting && !niahDone) {
-    niahDone = true;
-    document.querySelectorAll('#niahChart .dc-row').forEach((r, i) => {
-      setTimeout(() => {
-        r.classList.add('vis');
-        setTimeout(() => r.querySelectorAll('.dc-fill').forEach(f => f.style.width = f.dataset.w + '%'), 80);
-      }, i * 120);
-    });
-  }
-}, {threshold:0.1}).observe(document.getElementById('niahChart'));
-
-/* budget viz */
-let budgetDone = false;
-new IntersectionObserver(es => {
-  if (es[0].isIntersecting && !budgetDone) {
-    budgetDone = true;
-    document.querySelectorAll('.bcount').forEach(el => {
-      const t = +el.dataset.t; let c = 0; const step = Math.ceil(t/50);
-      const id = setInterval(() => { c = Math.min(c+step, t); el.textContent = c.toLocaleString(); if(c>=t) clearInterval(id); }, 25);
-    });
-    setTimeout(() => {
-      document.querySelectorAll('.bv-bar-fill').forEach(f => f.style.width = f.dataset.w + '%');
-    }, 200);
-  }
-}, {threshold:0.3}).observe(document.getElementById('budgetViz'));
-
-/* scorecard */
-obs('.sc-item', el => el.classList.add('vis'));
-obs('.method-block', el => el.classList.add('vis'));
-
-function copyInstall() {
-  navigator.clipboard.writeText('npm i -g @edgarelmo/mesh-agent-cli').then(() => {
-    const el = document.getElementById('ctaCmd');
-    el.textContent = 'copied!';
-    setTimeout(() => el.textContent = 'npm i -g @edgarelmo/mesh-agent-cli', 2000);
-  });
 }
-function openModal(open) { document.getElementById('modalBg').classList.toggle('open', open !== false); }
+
 async function submitWaitlist() {
   const emailInput = document.getElementById('wlEmail');
   const button = document.querySelector('#modalBg .modal-btn');
@@ -713,6 +1303,96 @@ async function submitWaitlist() {
   } finally {
     button.disabled = false;
   }
+}
+
+function copyInstall() {
+  navigator.clipboard.writeText('npm i -g @edgarelmo/mesh-agent-cli').then(() => {
+    const el = document.getElementById('installCmd');
+    if (!el) return;
+    el.textContent = 'copied';
+    setTimeout(() => {
+      el.textContent = 'npm i -g @edgarelmo/mesh-agent-cli';
+    }, 1700);
+  });
+}
+
+function observeOnce(selector, callback, threshold = 0.16) {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        callback(entry.target);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold });
+  document.querySelectorAll(selector).forEach((element) => observer.observe(element));
+}
+
+function animateCount(element) {
+  const target = Number(element.dataset.target);
+  const decimal = element.dataset.decimal === 'true';
+  const steps = 42;
+  let frame = 0;
+  const timer = setInterval(() => {
+    frame += 1;
+    const progress = Math.min(frame / steps, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const value = target * eased;
+    element.textContent = decimal ? (value / 10).toFixed(1) : Math.round(value).toLocaleString();
+    if (progress === 1) clearInterval(timer);
+  }, 24);
+}
+
+observeOnce('#proofStrip', () => {
+  document.querySelectorAll('.proof-cell').forEach((cell, index) => {
+    setTimeout(() => cell.classList.add('visible'), index * 110);
+  });
+  document.querySelectorAll('.count').forEach(animateCount);
+}, 0.2);
+
+observeOnce('#needleChart', () => {
+  document.querySelectorAll('.chart-row').forEach((row, index) => {
+    setTimeout(() => {
+      row.classList.add('visible');
+      row.querySelectorAll('.fill').forEach((fill) => {
+        fill.style.width = `${fill.dataset.width}%`;
+      });
+    }, index * 120);
+  });
+}, 0.2);
+
+observeOnce('#budgetPanel', () => {
+  document.querySelectorAll('.budget-card').forEach((card) => {
+    card.style.setProperty('--fill', `${card.dataset.fill}%`);
+  });
+  document.querySelectorAll('.budget-track span').forEach((fill) => {
+    fill.style.width = `${fill.dataset.width}%`;
+  });
+  document.querySelectorAll('.budget-count').forEach(animateCount);
+}, 0.24);
+
+observeOnce('#scorecard', () => {
+  document.querySelectorAll('.score-card').forEach((card, index) => {
+    setTimeout(() => card.classList.add('visible'), index * 90);
+  });
+}, 0.12);
+
+const haystack = document.getElementById('haystack');
+if (haystack) {
+  const points = [
+    [11, 18], [23, 12], [37, 20], [52, 15], [72, 19], [86, 14],
+    [18, 32], [31, 38], [46, 31], [62, 34], [78, 36], [90, 30],
+    [8, 51], [24, 55], [39, 49], [58, 52], [74, 48], [88, 56],
+    [14, 70], [30, 74], [45, 66], [64, 72], [80, 68], [92, 76],
+    [21, 88], [38, 84], [54, 90], [70, 86]
+  ];
+  points.forEach(([left, top], index) => {
+    const dot = document.createElement('span');
+    dot.className = index === 16 ? 'hay-dot needle-dot' : 'hay-dot';
+    dot.style.left = `${left}%`;
+    dot.style.top = `${top}%`;
+    haystack.appendChild(dot);
+  });
 }
 </script>
 </body>
