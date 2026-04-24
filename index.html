@@ -444,6 +444,10 @@
     <button class="modal-close" onclick="openModal(false)">×</button>
     <h3>Join the<br>waitlist.</h3>
     <p>Get early access and launch updates. No spam, ever.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <input type="text" id="wlFirst" placeholder="First name" />
+      <input type="text" id="wlLast" placeholder="Last name" />
+    </div>
     <input type="email" id="wlEmail" placeholder="you@company.com" />
     <button class="modal-btn" onclick="submitWaitlist()">Get early access →</button>
     <p id="wlMsg" style="margin-top:12px;font-size:13px;color:var(--cyan);text-align:center;min-height:18px"></p>
@@ -487,7 +491,7 @@
       <div class="ha-kicker">Watch Mesh Work</div>
       <div class="ha-copy">A short walkthrough of the CLI, compression engine, recall gains, and the four product surfaces.</div>
     </div>
-    <iframe class="ha-frame" src="/animation" title="Mesh product walkthrough" loading="lazy" allow="autoplay"></iframe>
+    <iframe class="ha-frame" src="/mesh-animation" title="Mesh product walkthrough" loading="lazy" allow="autoplay"></iframe>
   </div>
 </section>
 
@@ -750,6 +754,8 @@ async function submitWaitlist() {
   const button = document.querySelector('#modalBg .modal-btn');
   const msg = document.getElementById('wlMsg');
   const email = emailInput.value.trim();
+  const firstName = document.getElementById('wlFirst').value.trim();
+  const lastName = document.getElementById('wlLast').value.trim();
 
   if (!/^\S+@\S+\.\S+$/.test(email)) {
     msg.textContent = 'Please enter a valid email address.';
@@ -763,7 +769,7 @@ async function submitWaitlist() {
     const response = await fetch('/api/subscribe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email })
+      body: JSON.stringify({ email, firstName, lastName })
     });
     const payload = await response.json();
     if (!response.ok || !payload.ok) {
