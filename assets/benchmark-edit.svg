@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 570" width="1400" height="570" font-family="&#39;Inter&#39;, &#39;Helvetica Neue&#39;, Arial, sans-serif">
+  <rect width="1400" height="570" fill="#f7fbfd" rx="12"></rect>
+
+  
+  <text x="700" y="36" text-anchor="middle" font-size="19" font-weight="600" fill="#102432" letter-spacing="-0.3">Edit Precision Eval — Correct File &amp; Value Targeting</text>
+  <text x="700" y="57" text-anchor="middle" font-size="12.5" fill="#4a6070">Model must return exact file path + constant name + old value + new value. N/A = target file outside context window.</text>
+  <text x="700" y="74" text-anchor="middle" font-size="11" fill="#8ca0ac">Real Bedrock run · 2026-04-19 · Sonnet 4.6 · GPT-OSS-20B · Llama 3.3 70B · 4 tasks × 3 workspace sizes × 2 context types</text>
+
+  
+  <rect x="200" y="87" width="12" height="12" fill="#0f6a7b" rx="2"></rect>
+  <text x="218" y="98" font-size="11.5" fill="#102432">PASS — exact match</text>
+  <rect x="390" y="87" width="12" height="12" fill="#e8e8e8" rx="2" stroke="#ccc" stroke-width="1"></rect>
+  <text x="408" y="98" font-size="11.5" fill="#102432">N/A — target file not in context</text>
+
+  
+  <line x1="220" y1="112" x2="220" y2="365" stroke="#b0c8d4" stroke-width="1.5"></line>
+  <line x1="220" y1="365" x2="1340" y2="365" stroke="#b0c8d4" stroke-width="1.5"></line>
+
+  
+  <line x1="444" y1="108" x2="444" y2="368" stroke="#e0ebf0" stroke-width="1"></line>
+  <line x1="668" y1="108" x2="668" y2="368" stroke="#e0ebf0" stroke-width="1"></line>
+  <line x1="892" y1="108" x2="892" y2="368" stroke="#e0ebf0" stroke-width="1"></line>
+  <line x1="1116" y1="108" x2="1116" y2="368" stroke="#e0ebf0" stroke-width="1"></line>
+  <line x1="1340" y1="108" x2="1340" y2="368" stroke="#e0ebf0" stroke-width="1"></line>
+
+  
+  <text x="220" y="382" text-anchor="middle" font-size="11" fill="#6b8496">0%</text>
+  <text x="444" y="382" text-anchor="middle" font-size="11" fill="#6b8496">20%</text>
+  <text x="668" y="382" text-anchor="middle" font-size="11" fill="#6b8496">40%</text>
+  <text x="892" y="382" text-anchor="middle" font-size="11" fill="#6b8496">60%</text>
+  <text x="1116" y="382" text-anchor="middle" font-size="11" fill="#6b8496">80%</text>
+  <text x="1340" y="382" text-anchor="middle" font-size="11" fill="#6b8496">100%</text>
+  <text x="780" y="400" text-anchor="middle" font-size="12" fill="#4a6070">% of cases passing (of fair cases with target in context)</text>
+
+  
+  <text x="208" y="131" text-anchor="end" font-size="12" font-weight="600" fill="#102432">20 files</text>
+  <text x="208" y="146" text-anchor="end" font-size="9.5" fill="#6b8496">all 4 tasks in context</text>
+  <rect x="220" y="114" width="1120" height="22" fill="#0f6a7b" rx="3" opacity="0.9"></rect>
+  <text x="1350" y="129" text-anchor="start" font-size="11" font-weight="700" fill="#0f6a7b">4/4 (100%)</text>
+  <rect x="220" y="140" width="1120" height="22" fill="#8cb8c4" rx="3" opacity="0.85"></rect>
+  <text x="1350" y="155" text-anchor="start" font-size="11" font-weight="700" fill="#3a7080">4/4 (100%)</text>
+  <text x="222" y="126" font-size="8.5" fill="white" opacity="0.8">mesh</text>
+  <text x="222" y="152" font-size="8.5" fill="white" opacity="0.7">raw</text>
+
+  
+  <text x="208" y="201" text-anchor="end" font-size="12" font-weight="600" fill="#102432">60 files</text>
+  <text x="208" y="216" text-anchor="end" font-size="9.5" fill="#6b8496">api-base-url@35 deep</text>
+  <rect x="220" y="184" width="1120" height="22" fill="#0f6a7b" rx="3" opacity="0.9"></rect>
+  <text x="1350" y="199" text-anchor="start" font-size="11" font-weight="700" fill="#0f6a7b">4/4 (100%)</text>
+  <rect x="220" y="210" width="840" height="22" fill="#8cb8c4" rx="3" opacity="0.85"></rect>
+  <rect x="1060" y="210" width="280" height="22" fill="#e8e8e8" rx="3" stroke="#ccc" stroke-width="1"></rect>
+  <text x="1350" y="225" text-anchor="start" font-size="11" fill="#5a7e8c">3/3 fair · 1 N/A</text>
+  <text x="1200" y="223" text-anchor="middle" font-size="9.5" fill="#999">N/A</text>
+  <text x="1200" y="236" text-anchor="middle" font-size="8.5" fill="#bbb">api-url@35</text>
+  <text x="222" y="196" font-size="8.5" fill="white" opacity="0.8">mesh</text>
+  <text x="222" y="222" font-size="8.5" fill="white" opacity="0.7">raw</text>
+
+  
+  <text x="208" y="271" text-anchor="end" font-size="12" font-weight="600" fill="#102432">100 files</text>
+  <text x="208" y="286" text-anchor="end" font-size="9.5" fill="#6b8496">api-base-url@60 deep</text>
+  <rect x="220" y="254" width="1120" height="22" fill="#0f6a7b" rx="3" opacity="0.9"></rect>
+  <text x="1350" y="269" text-anchor="start" font-size="11" font-weight="700" fill="#0f6a7b">4/4 (100%)</text>
+  <rect x="220" y="280" width="840" height="22" fill="#8cb8c4" rx="3" opacity="0.85"></rect>
+  <rect x="1060" y="280" width="280" height="22" fill="#e8e8e8" rx="3" stroke="#ccc" stroke-width="1"></rect>
+  <text x="1350" y="295" text-anchor="start" font-size="11" fill="#5a7e8c">3/3 fair · 1 N/A</text>
+  <text x="1200" y="293" text-anchor="middle" font-size="9.5" fill="#999">N/A</text>
+  <text x="1200" y="306" text-anchor="middle" font-size="8.5" fill="#bbb">api-url@60</text>
+  <text x="222" y="266" font-size="8.5" fill="white" opacity="0.8">mesh</text>
+  <text x="222" y="292" font-size="8.5" fill="white" opacity="0.7">raw</text>
+
+  
+  <rect x="60" y="415" width="1280" height="142" fill="#eaf4f7" rx="8" stroke="#c4dde5" stroke-width="1"></rect>
+  <text x="700" y="434" text-anchor="middle" font-size="12.5" font-weight="700" fill="#102432">Cross-model summary — Edit Precision Eval</text>
+
+  <line x1="78" y1="441" x2="1322" y2="441" stroke="#c4dde5" stroke-width="1"></line>
+  <text x="200" y="456" text-anchor="middle" font-size="10.5" font-weight="600" fill="#4a6070">Model</text>
+  <text x="430" y="456" text-anchor="middle" font-size="10.5" font-weight="600" fill="#4a6070">Mesh (fair cases)</text>
+  <text x="640" y="456" text-anchor="middle" font-size="10.5" font-weight="600" fill="#4a6070">Raw (fair cases)</text>
+  <text x="850" y="456" text-anchor="middle" font-size="10.5" font-weight="600" fill="#4a6070">N/A</text>
+  <text x="1080" y="456" text-anchor="middle" font-size="10.5" font-weight="600" fill="#4a6070">Key finding</text>
+  <line x1="78" y1="461" x2="1322" y2="461" stroke="#c4dde5" stroke-width="0.8"></line>
+
+  <text x="200" y="477" text-anchor="middle" font-size="10.5" fill="#102432">Sonnet 4.6</text>
+  <text x="430" y="477" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f6a7b">12/12 (100%)</text>
+  <text x="640" y="477" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f6a7b">10/10 (100%)</text>
+  <text x="850" y="477" text-anchor="middle" font-size="10.5" fill="#6b8496">2 × api-base-url deep</text>
+  <text x="1080" y="477" text-anchor="middle" font-size="10" fill="#4a6070">Coverage advantage, no precision loss</text>
+
+  <text x="200" y="494" text-anchor="middle" font-size="10.5" fill="#102432">GPT-OSS-20B</text>
+  <text x="430" y="494" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f6a7b">12/12 (100%)</text>
+  <text x="640" y="494" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f6a7b">10/10 (100%)</text>
+  <text x="850" y="494" text-anchor="middle" font-size="10.5" fill="#6b8496">2 × api-base-url deep</text>
+  <text x="1080" y="494" text-anchor="middle" font-size="10" fill="#4a6070">Identical to Sonnet — reasoning model, same result</text>
+
+  <text x="200" y="511" text-anchor="middle" font-size="10.5" fill="#102432">Llama 3.3 70B</text>
+  <text x="430" y="511" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f6a7b">12/12 (100%)</text>
+  <text x="640" y="511" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f6a7b">10/10 (100%)</text>
+  <text x="850" y="511" text-anchor="middle" font-size="10.5" fill="#6b8496">2 × api-base-url deep</text>
+  <text x="1080" y="511" text-anchor="middle" font-size="10" fill="#4a6070">Coverage advantage, no precision loss</text>
+
+  <line x1="78" y1="520" x2="1322" y2="520" stroke="#c4dde5" stroke-width="0.8"></line>
+  <text x="700" y="535" text-anchor="middle" font-size="10.5" font-weight="600" fill="#102432">When the target file is in context, all models achieve 100% precision on file path + constant + value.</text>
+  <text x="700" y="551" text-anchor="middle" font-size="10.5" fill="#4a6070">The Mesh advantage is purely coverage: api-constants.js at index 35–60 is always in Mesh context, never reachable by raw at 6,000T.</text>
+</svg>

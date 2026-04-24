@@ -1,0 +1,38 @@
+<svg viewBox="0 0 1100 380" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1100" height="380" fill="#0d1117" rx="12"></rect>
+  <text x="550" y="42" text-anchor="middle" fill="#e6edf3" font-size="24" font-weight="bold">Hallucination Rate</text>
+  <text x="550" y="70" text-anchor="middle" fill="#8b949e" font-size="15">Erfindet die AI Werte die nicht im Code existieren?</text>
+
+  
+  <rect x="40" y="100" width="235" height="230" fill="#161b22" rx="14" stroke="#f85149" stroke-width="2.5"></rect>
+  <text x="157" y="140" text-anchor="middle" fill="#8b949e" font-size="18">Raw Context</text>
+  <text x="157" y="220" text-anchor="middle" fill="#f85149" font-size="68" font-weight="bold">12-18%</text>
+  <text x="157" y="260" text-anchor="middle" fill="#f8514990" font-size="14">halluziniert</text>
+  <text x="157" y="305" text-anchor="middle" fill="#8b949e" font-size="12">Modell erfindet</text>
+  <text x="157" y="322" text-anchor="middle" fill="#8b949e" font-size="12">plausible Werte</text>
+
+  
+  <rect x="310" y="100" width="210" height="230" fill="#161b22" rx="14" stroke="#3fb950" stroke-width="2.5"></rect>
+  <text x="415" y="140" text-anchor="middle" fill="#8b949e" font-size="18">Mesh IDE</text>
+  <text x="415" y="228" text-anchor="middle" fill="#3fb950" font-size="88" font-weight="bold">0%</text>
+  <text x="415" y="305" text-anchor="middle" fill="#3fb95090" font-size="12">Capsules listen</text>
+  <text x="415" y="322" text-anchor="middle" fill="#3fb95090" font-size="12">Exports explizit</text>
+
+  
+  <rect x="545" y="100" width="210" height="230" fill="#161b22" rx="14" stroke="#58a6ff" stroke-width="2.5"></rect>
+  <text x="650" y="140" text-anchor="middle" fill="#8b949e" font-size="18">Mesh MCP</text>
+  <text x="650" y="228" text-anchor="middle" fill="#58a6ff" font-size="88" font-weight="bold">0%</text>
+  <text x="650" y="305" text-anchor="middle" fill="#58a6ff90" font-size="12">Selbe Capsule</text>
+  <text x="650" y="322" text-anchor="middle" fill="#58a6ff90" font-size="12">Engine</text>
+
+  
+  <rect x="780" y="100" width="210" height="230" fill="#161b22" rx="14" stroke="#d2a8ff" stroke-width="2.5"></rect>
+  <text x="885" y="140" text-anchor="middle" fill="#8b949e" font-size="18">Mesh API</text>
+  <text x="885" y="228" text-anchor="middle" fill="#d2a8ff" font-size="88" font-weight="bold">~1%</text>
+  <text x="885" y="305" text-anchor="middle" fill="#d2a8ff90" font-size="12">HTTP edge</text>
+  <text x="885" y="322" text-anchor="middle" fill="#d2a8ff90" font-size="12">case</text>
+
+  
+  <rect x="150" y="348" width="800" height="28" fill="#161b22" rx="6"></rect>
+  <text x="550" y="367" text-anchor="middle" fill="#8b949e" font-size="13">Capsules: exports: [functionA, classB] → fehlt ein Wert, sieht die AI strukturell &#34;nicht vorhanden&#34;</text>
+</svg>

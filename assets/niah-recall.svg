@@ -1,0 +1,65 @@
+<svg viewBox="0 0 1100 520" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1100" height="520" fill="#0d1117" rx="12"></rect>
+  <text x="550" y="42" text-anchor="middle" fill="#e6edf3" font-size="24" font-weight="bold">Needle-in-a-Haystack — Recall Rate</text>
+  <text x="550" y="70" text-anchor="middle" fill="#8b949e" font-size="15">Findet die AI die richtige Info in 80 Dateien?</text>
+
+  <line x1="100" y1="100" x2="100" y2="420" stroke="#30363d" stroke-width="1"></line>
+  <line x1="100" y1="420" x2="1000" y2="420" stroke="#30363d" stroke-width="1"></line>
+
+  <text x="88" y="108" text-anchor="end" fill="#8b949e" font-size="13">100%</text>
+  <line x1="100" y1="104" x2="1000" y2="104" stroke="#21262d" stroke-width="0.5" stroke-dasharray="5"></line>
+  <text x="88" y="188" text-anchor="end" fill="#8b949e" font-size="13">75%</text>
+  <line x1="100" y1="183" x2="1000" y2="183" stroke="#21262d" stroke-width="0.5" stroke-dasharray="5"></line>
+  <text x="88" y="268" text-anchor="end" fill="#8b949e" font-size="13">50%</text>
+  <line x1="100" y1="262" x2="1000" y2="262" stroke="#21262d" stroke-width="0.5" stroke-dasharray="5"></line>
+  <text x="88" y="348" text-anchor="end" fill="#8b949e" font-size="13">25%</text>
+  <line x1="100" y1="341" x2="1000" y2="341" stroke="#21262d" stroke-width="0.5" stroke-dasharray="5"></line>
+
+  
+  <rect x="130" y="325" width="44" height="95" fill="#f85149" rx="5" opacity="0.85"></rect>
+  <text x="152" y="317" text-anchor="middle" fill="#f85149" font-size="13" font-weight="bold">30%</text>
+  <rect x="180" y="104" width="44" height="316" fill="#3fb950" rx="5" opacity="0.9"></rect>
+  <rect x="230" y="104" width="44" height="316" fill="#58a6ff" rx="5" opacity="0.9"></rect>
+  <rect x="280" y="107" width="44" height="313" fill="#d2a8ff" rx="5" opacity="0.8"></rect>
+  <text x="220" y="450" text-anchor="middle" fill="#e6edf3" font-size="15" font-weight="bold">Sonnet 4.6</text>
+
+  
+  <rect x="380" y="278" width="44" height="142" fill="#f85149" rx="5" opacity="0.85"></rect>
+  <text x="402" y="270" text-anchor="middle" fill="#f85149" font-size="13" font-weight="bold">45%</text>
+  <rect x="430" y="104" width="44" height="316" fill="#3fb950" rx="5" opacity="0.9"></rect>
+  <rect x="480" y="104" width="44" height="316" fill="#58a6ff" rx="5" opacity="0.9"></rect>
+  <rect x="530" y="107" width="44" height="313" fill="#d2a8ff" rx="5" opacity="0.8"></rect>
+  <text x="470" y="450" text-anchor="middle" fill="#e6edf3" font-size="15" font-weight="bold">Opus 4.6</text>
+
+  
+  <rect x="630" y="341" width="44" height="79" fill="#f85149" rx="5" opacity="0.85"></rect>
+  <text x="652" y="333" text-anchor="middle" fill="#f85149" font-size="13" font-weight="bold">25%</text>
+  <rect x="680" y="104" width="44" height="316" fill="#3fb950" rx="5" opacity="0.9"></rect>
+  <rect x="730" y="104" width="44" height="316" fill="#58a6ff" rx="5" opacity="0.9"></rect>
+  <rect x="780" y="110" width="44" height="310" fill="#d2a8ff" rx="5" opacity="0.8"></rect>
+  <text x="720" y="450" text-anchor="middle" fill="#e6edf3" font-size="15" font-weight="bold">GPT-4o</text>
+
+  
+  <rect x="880" y="309" width="44" height="111" fill="#f85149" rx="5" opacity="0.85"></rect>
+  <text x="902" y="301" text-anchor="middle" fill="#f85149" font-size="13" font-weight="bold">35%</text>
+  <text x="902" y="450" text-anchor="middle" fill="#e6edf3" font-size="15" font-weight="bold">Gemini 2.5</text>
+
+  
+  <text x="250" y="96" text-anchor="middle" fill="#3fb950" font-size="14" font-weight="bold">100%</text>
+  <text x="500" y="96" text-anchor="middle" fill="#3fb950" font-size="14" font-weight="bold">100%</text>
+  <text x="750" y="96" text-anchor="middle" fill="#3fb950" font-size="14" font-weight="bold">100%</text>
+
+  
+  <rect x="200" y="490" width="12" height="12" fill="#f85149" rx="2"></rect>
+  <text x="218" y="501" fill="#8b949e" font-size="12">Raw</text>
+  <rect x="290" y="490" width="12" height="12" fill="#3fb950" rx="2"></rect>
+  <text x="308" y="501" fill="#8b949e" font-size="12">IDE</text>
+  <rect x="370" y="490" width="12" height="12" fill="#58a6ff" rx="2"></rect>
+  <text x="388" y="501" fill="#8b949e" font-size="12">MCP</text>
+  <rect x="450" y="490" width="12" height="12" fill="#d2a8ff" rx="2"></rect>
+  <text x="468" y="501" fill="#8b949e" font-size="12">API (est.)</text>
+
+  
+  <rect x="550" y="470" width="420" height="40" fill="#161b22" rx="8"></rect>
+  <text x="760" y="496" text-anchor="middle" fill="#8b949e" font-size="12">Raw: Budget zu klein fur alle Dateien → Needle oft nicht geladen</text>
+</svg>

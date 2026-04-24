@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mesh — What It Does</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,800;1,900&family=Geist+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script type="text/babel" src="animations.jsx"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #000; font-family: 'DM Sans', sans-serif; }
+    #root { width: 100vw; height: 100vh; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+// ── colours
+const C = {
+  dark:   '#08111a',
+  dark2:  '#0d1820',
+  petrol: '#1a6b75',
+  cyan:   '#00d4e8',
+  magenta:'#c678dd',
+  green:  '#4ec994',
+  red:    '#ff5c6c',
+  dim:    'rgba(255,255,255,0.25)',
+  muted:  'rgba(255,255,255,0.45)',
+  white:  'rgba(255,255,255,0.90)',
+};
+
+// ── MESH ASCII art (matching CLI screenshot)
+const LOGO_LINES = [
+  '  ██╗   ███╗   ██╗ ██╗███████╗███╗  ██╗',
+  '  ████╗ ████╗  ██║ ██║██╔════╝████╗ ██║',
+  '  ██╔████╔██║  ██║ ██║█████╗  ██╔████╔╝',
+  '  ██║╚██╔╝██║  ██║ ██║██╔══╝  ██║╚██╔╝ ',
+  '  ██║ ╚═╝ ██║  ╚████╔╝███████╗██║ ╚═╝  ',
+  '  ╚═╝     ╚═╝   ╚═══╝ ╚══════╝╚═╝      ',
+];
+
+// ── helpers
+function lerp(a, b, t) { return a + (b - a) * Math.max(0, Math.min(1, t)); }
+function ilerp(a, b, t) { return Math.max(0, Math.min(1, (t - a) / (b - a))); }
+function ease(t) { return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2; }
+function fadeIn(t, a, b)  { return ease(ilerp(a, b, t)); }
+function fadeOut(t, a, b) { return 1 - ease(ilerp(a, b, t)); }
+function fade(t, fadeInA, fadeInB, fadeOutA, fadeOutB) {
+  return Math.min(fadeIn(t, fadeInA, fadeInB), fadeOut(t, fadeOutA, fadeOutB));
+}
+
+// ── Terminal chrome wrapper
+function Terminal({ title='mesh', children, style={} }) {
+  return (
+    <div style={{
+      background: C.dark,
+      border: '1px solid rgba(255,255,255,0.07)',
+      borderRadius: 14,
+      overflow: 'hidden',
+      boxShadow: '0 40px 100px rgba(0,0,0,0.7), 0 0 80px rgba(0,212,232,0.06)',
+      ...style,
+    }}>
+      <div style={{ background: '#111c27', padding: '12px 18px', display: 'flex', gap: 7, alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ width: 11, height: 11, borderRadius: '50%', background: '#ff5f57' }} />
+        <div style={{ width: 11, height: 11, borderRadius: '50%', background: '#febc2e' }} />
+        <div style={{ width: 11, height: 11, borderRadius: '50%', background: '#28c840' }} />
+        <div style={{ flex: 1, textAlign: 'center', fontFamily: 'Geist Mono', fontSize: 11, color: 'rgba(255,255,255,0.2)' }}>{title}</div>
+      </div>
+      <div style={{ fontFamily: 'Geist Mono', fontSize: 13, lineHeight: 1.85, padding: '20px 26px' }}>{children}</div>
+    </div>
+  );
+}
+
+// ── Scene 1: CLI Boot (0-7s) ─────────────────────────────────────────────
+function Scene1() {
+  const { localTime: t, progress } = useSprite();
+  const opacity = fade(t, 0, 0.5, 6, 7);
+
+  // Logo lines appear one by one
+  const linesVisible = Math.min(LOGO_LINES.length, Math.floor(t / 0.32) + (t > 0.1 ? 1 : 0));
+  const showInfo  = t > 2.4;
+  const showCmd   = t > 3.8;
+  const showResp  = t > 5.0;
+
+  return (
+    <div style={{ position:'absolute', inset:0, display:'flex', alignItems:'center', justifyContent:'center', opacity, background: C.dark }}>
+      {/* Subtle glow */}
+      <div style={{ position:'absolute', top:'20%', left:'50%', transform:'translateX(-50%)', width:600, height:400, background:'radial-gradient(ellipse, rgba(0,212,232,0.06) 0%, transparent 70%)', pointerEvents:'none' }} />
+
+      <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:40 }}>
+        <Terminal title="mesh — ~/my-project" style={{ width: 860 }}>
+          {/* ASCII logo */}
+          <div style={{ marginBottom: 16 }}>
+            <pre style={{ fontFamily:'Geist Mono', fontSize:12, lineHeight:1.25, letterSpacing:'0.01em' }}>
+              <span style={{ color: C.magenta }}>{'‹ '}</span>
+              <span style={{ color: C.cyan }}>
+                {LOGO_LINES.slice(0, linesVisible).join('\n')}
+              </span>
+              {linesVisible >= LOGO_LINES.length && (
+                <span style={{ color: C.magenta }}>{' ›'}</span>
+              )}
+            </pre>
+          </div>
+
+          {/* Workspace info */}
+          {showInfo && (
+            <div style={{ opacity: fadeIn(t, 2.4, 3.0) }}>
+              <div><span style={{ color: C.white }}>workspace:  </span><span style={{ color: C.cyan }}>mesh-agent-cli</span></div>
+              <div><span style={{ color: C.muted }}>model:      </span><span style={{ color: C.dim }}>claude-sonnet-4-6</span></div>
+              <div><span style={{ color: C.muted }}>context:    </span><span style={{ color: C.green }}>135/200 files cached (1,026T)</span></div>
+              <div><span style={{ color: C.dim }}>last sync:  </span><span style={{ color: C.dim }}>0 messages / 0 stars</span></div>
+            </div>
+          )}
+
+          {/* Command */}
+          {showCmd && (
+            <div style={{ marginTop: 8, opacity: fadeIn(t, 3.8, 4.3) }}>
+              <div><span style={{ color: '#5c8aab' }}>mesh/master » </span><span style={{ color: C.white }}>fix the broken login redirect</span></div>
+            </div>
+          )}
+          {showResp && (
+            <div style={{ opacity: fadeIn(t, 5.0, 5.5) }}>
+              <div style={{ color: C.dim }}>→ Reading src/routes/auth.ts...</div>
+              <div style={{ color: C.green }}>✓ Patched · All 47 tests passing</div>
+            </div>
+          )}
+        </Terminal>
+
+        {/* Label */}
+        <div style={{ opacity: fadeIn(t, 2, 3), textAlign:'center' }}>
+          <div style={{ fontFamily:'Barlow Condensed', fontStyle:'italic', fontWeight:900, fontSize:28, color:'rgba(255,255,255,0.2)', letterSpacing:'0.1em', textTransform:'uppercase' }}>Terminal CLI</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Scene 2: The Problem (7-15s) ──────────────────────────────────────────
+function Scene2() {
+  const { localTime: t } = useSprite();
+  const opacity = fade(t, 0, 0.8, 7, 8);
+
+  const filesTotal = 247;
+  const rawFit = 22;
+  const fillProgress = ease(ilerp(1, 4.5, t));
+  const rawFillPct = Math.min(1, fillProgress * (247 / rawFit)) * (rawFit / 247);
+  const isOverflow = t > 3.2;
+
+  // files appear as small dots
+  const filesShown = Math.floor(lerp(0, filesTotal, ease(ilerp(0.5, 3, t))));
+
+  return (
+    <div style={{ position:'absolute', inset:0, display:'flex', alignItems:'center', justifyContent:'center', opacity, background: C.dark }}>
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:80, alignItems:'center', maxWidth:1600, width:'100%', padding:'0 100px' }}>
+
+        {/* Left: title */}
+        <div>
+          <div style={{ fontFamily:'Geist Mono', fontSize:12, letterSpacing:'0.12em', textTransform:'uppercase', color:C.cyan, marginBottom:16, opacity: fadeIn(t,0,0.8) }}>The Problem</div>
+          <div style={{ fontFamily:'Barlow Condensed', fontStyle:'italic', fontWeight:900, fontSize:100, lineHeight:0.88, letterSpacing:'-0.03em', color:'rgba(255,255,255,0.9)', opacity: fadeIn(t,0.2,1) }}>
+            Context<br/>walls.
+          </div>
+          <div style={{ marginTop:28, fontSize:18, fontWeight:300, color:'rgba(255,255,255,0.4)', lineHeight:1.65, maxWidth:400, opacity: fadeIn(t,1,2) }}>
+            <span style={{ color:'rgba(255,255,255,0.75)', fontWeight:400 }}>247 files. 87,000 tokens raw.</span><br/>
+            At a 6,000-token budget, only <span style={{ color:C.red, fontWeight:500 }}>22 files fit</span>.<br/>
+            The model never sees the rest.
+          </div>
+        </div>
+
+        {/* Right: visualization */}
+        <div style={{ display:'flex', flexDirection:'column', gap:32, opacity: fadeIn(t,0.5,1.5) }}>
+          {/* File grid */}
+          <div>
+            <div style={{ fontFamily:'Geist Mono', fontSize:11, color:C.dim, marginBottom:10, letterSpacing:'0.06em' }}>YOUR WORKSPACE — {filesShown} files</div>
+            <div style={{ display:'flex', flexWrap:'wrap', gap:4 }}>
+              {Array.from({length: Math.min(filesShown, filesTotal)}).map((_, i) => (
+                <div key={i} style={{
+                  width: 10, height: 10, borderRadius: 2,
+                  background: i < rawFit
+                    ? (isOverflow ? C.green : 'rgba(0,212,232,0.6)')
+                    : 'rgba(255,255,255,0.1)',
+                  transition: 'background 0.3s',
+                }} />
+              ))}
+            </div>
+          </div>
+
+          {/* Context window bar */}
+          <div>
+            <div style={{ fontFamily:'Geist Mono', fontSize:11, color:C.dim, marginBottom:8, letterSpacing:'0.06em' }}>AI CONTEXT WINDOW — 6,000 tokens</div>
+            <div style={{ height:24, borderRadius:6, background:'rgba(255,255,255,0.05)', overflow:'hidden', position:'relative', border:`1px solid ${isOverflow ? 'rgba(255,92,108,0.5)' : 'rgba(255,255,255,0.08)'}` }}>
+              <div style={{
+                height:'100%', borderRadius:6,
+                background: isOverflow
+                  ? 'linear-gradient(90deg, rgba(255,92,108,0.7), rgba(255,92,108,0.4))'
+                  : 'linear-gradient(90deg, rgba(0,212,232,0.5), rgba(0,212,232,0.3))',
+                width: `${Math.min(100, rawFillPct * 100 * (247/22))}%`,
+                transition: 'background 0.3s',
+              }} />
+            </div>
+            {isOverflow && (
+              <div style={{ marginTop:8, fontFamily:'Geist Mono', fontSize:12, color:C.red, opacity: fadeIn(t, 3.2, 3.8) }}>
+                ⚠ Budget exhausted after 22 files — needle never reached
+              </div>
+            )}
+          </div>
+
+          {/* Stats */}
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16, opacity: fadeIn(t, 4, 5) }}>
+            <div style={{ background:'rgba(255,92,108,0.08)', border:'1px solid rgba(255,92,108,0.2)', borderRadius:10, padding:'20px 20px' }}>
+              <div style={{ fontFamily:'Barlow Condensed', fontStyle:'italic', fontWeight:900, fontSize:52, color:C.red, lineHeight:1 }}>22</div>
+              <div style={{ fontSize:13, color:'rgba(255,255,255,0.35)', marginTop:6 }}>files visible<br/>to the model</div>
+            </div>
+            <div style={{ background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.07)', borderRadius:10, padding:'20px 20px' }}>
+              <div style={{ fontFamily:'Barlow Condensed', fontStyle:'italic', fontWeight:900, fontSize:52, color:'rgba(255,255,255,0.25)', lineHeight:1 }}>225</div>
+              <div style={{ fontSize:13, color:'rgba(255,255,255,0.2)', marginTop:6 }}>files the model<br/>never sees</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Scene 3: Capsule Compression (14-23s) ──────────────────────────────────
+function Scene3() {
+  const { localTime: t } = useSprite();
+  const opacity = fade(t, 0, 0.8, 8, 9);
+
+  const comprProgress = ease(ilerp(1.5, 5, t));
+  const meshFit = 80;
+  const filesShown = Math.floor(lerp(0, 247, ease(ilerp(0.5, 2.5, t))));
+  const showGain = t > 4;
+
+  return (
+    <div style={{ position:'absolute', inset:0, display:'flex', alignItems:'center', justifyContent:'center', opacity, background: C.dark }}>
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:80, alignItems:'center', maxWidth:1600, width:'100%', padding:'0 100px' }}>
+
+        {/* Left: title */}
+        <div>
+          <div style={{ fontFamily:'Geist Mono', fontSize:12, letterSpacing:'0.12em', textTransform:'uppercase', color:C.cyan, marginBottom:16 }}>The Solution</div>
+          <div style={{ fontFamily:'Barlow Condensed', fontStyle:'italic', fontWeight:900, fontSize:100, lineHeight:0.88, letterSpacing:'-0.03em', color:'rgba(255,255,255,0.9)' }}>
+            Capsule<br/>Compress.
+          </div>
+          <div style={{ marginTop:28, fontSize:18, fontWeight:300, color:'rgba(255,255,255,0.4)', lineHeight:1.65, maxWidth:420 }}>
+            Tree-sitter parses every file into its structure.<br/>
+            <span style={{ color:'rgba(255,255,255,0.75)', fontWeight:400 }}>A 2,881-token file becomes a 55-token capsule</span> —<br/>
+            exports, signatures, call-sites. No boilerplate.
+          </div>
+
+          {/* Tier bars */}
+          <div style={{ marginTop:32, display:'flex', flexDirection:'column', gap:10 }}>
+            {[
+              { label: 'Ultra',  pct: 1.9,  color: C.cyan },
+              { label: 'Medium', pct: 9.2,  color: '#5eaec8' },
+              { label: 'Loose',  pct: 20.6, color: '#3a7a8c' },
+              { label: 'Raw',    pct: 100,  color: 'rgba(255,255,255,0.12)' },
+            ].map(({ label, pct, color }) => (
+              <div key={label} style={{ display:'flex', alignItems:'center', gap:14 }}>
+                <div style={{ fontFamily:'Geist Mono', fontSize:11, color:C.dim, width:52 }}>{label}</div>
+                <div style={{ flex:1, height:8, borderRadius:4, background:'rgba(255,255,255,0.05)', overflow:'hidden' }}>
+                  <div style={{ height:'100%', borderRadius:4, background:color, width:`${pct * comprProgress}%`, transition:'width 0.05s' }} />
+                </div>
+                <div style={{ fontFamily:'Geist Mono', fontSize:11, color, width:40, textAlign:'right' }}>{pct}%</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right: visualization */}
+        <div style={{ display:'flex', flexDirection:'column', gap:32 }}>
+          {/* File grid — now compressed */}
+          <div>
+            <div style={{ fontFamily:'Geist Mono', fontSize:11, color:C.dim, marginBottom:10, letterSpacing:'0.06em' }}>SAME WORKSPACE — capsule compressed</div>
+            <div style={{ display:'flex', flexWrap:'wrap', gap:4 }}>
+              {Array.from({length: Math.min(filesShown, 247)}).map((_, i) => (
+                <div key={i} style={{
+                  width: 10, height: 10, borderRadius: 2,
+                  background: i < meshFit ? C.cyan : 'rgba(0,212,232,0.18)',
+                  opacity: comprProgress > 0.5 ? 1 : 0.6,
+                }} />
+              ))}
+            </div>
+          </div>
+
+          {/* Context bar — now fits! */}
+          <div>
+            <div style={{ fontFamily:'Geist Mono', fontSize:11, color:C.dim, marginBottom:8, letterSpacing:'0.06em' }}>AI CONTEXT WINDOW — 6,000 tokens</div>
+            <div style={{ height:24, borderRadius:6, background:'rgba(255,255,255,0.05)', overflow:'hidden', border:'1px solid rgba(0,212,232,0.25)' }}>
+              <div style={{
+                height:'100%', borderRadius:6,
+                background:'linear-gradient(90deg, #1a6b75, #00d4e8)',
+                width:`${comprProgress * 100 * (3347/6000)}%`,
+              }} />
+            </div>
+            <div style={{ marginTop:8, fontFamily:'Geist Mono', fontSize:12, color:C.green }}>
+              ✓ 80/247 files · 3,347T used · 2,653T headroom
+            </div>
+          </div>
+
+          {/* Gain card */}
+          {showGain && (
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:12, opacity: fadeIn(t, 4, 5) }}>
+              {[
+                { num:'3.9×', label:'context gain', color:C.cyan },
+                { num:'1.9%', label:'ultra tier size', color:C.green },
+                { num:'5×',   label:'budget savings', color:'#a78bfa' },
+              ].map(({ num, label, color }) => (
+                <div key={label} style={{ background:'rgba(0,212,232,0.05)', border:'1px solid rgba(0,212,232,0.15)', borderRadius:10, padding:'18px 16px', textAlign:'center' }}>
+                  <div style={{ fontFamily:'Barlow Condensed', fontStyle:'italic', fontWeight:900, fontSize:44, color, lineHeight:1 }}>{num}</div>
+                  <div style={{ fontSize:12, color:'rgba(255,255,255,0.35)', marginTop:6 }}>{label}</div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Scene 4: NIAH Proof (22-30s) ─────────────────────────────────────────
+function Scene4() {
+  const { localTime: t } = useSprite();
+  const opacity = fade(t, 0, 0.8, 7, 8);
+
+  const showRaw  = t > 0.5;
+  const showMesh = t > 2.0;
+  const showX    = t > 3.5;
+  const showCheck= t > 4.2;
+  const showStats= t > 5.5;
+
+  const models = ['Sonnet 4.6', 'GPT-OSS-20B', 'Gemma 3 4B', 'Opus 4.6', 'Llama 3.3 70B'];
+
+  return (
+    <div style={{ position:'absolute', inset:0, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', opacity, background: C.dark, gap:48 }}>
+
+      {/* Header */}
+      <div style={{ textAlign:'center' }}>
+        <div style={{ fontFamily:'Geist Mono', fontSize:12, letterSpacing:'0.12em', textTransform:'uppercase', color:C.cyan, marginBottom:16 }}>A1 — Needle in a Haystack</div>
+        <div style={{ fontFamily:'Barlow Condensed', fontStyle:'italic', fontWeight:900, fontSize:72, lineHeight:0.9, letterSpacing:'-0.03em', color:'rgba(255,255,255,0.9)' }}>
+          Can the model find<br/>the right file?
+        </div>
+        <div style={{ marginTop:16, fontSize:16, color:'rgba(255,255,255,0.4)', fontWeight:300 }}>
+          <code style={{ fontFamily:'Geist Mono', color:C.cyan, fontSize:14 }}>SESSION_SECRET</code> hidden in 1 of 80 files · same 6,000T budget
+        </div>
+      </div>
+
+      {/* Split comparison */}
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:32, width:'100%', maxWidth:1400, padding:'0 100px' }}>
+
+        {/* Without Mesh */}
+        {showRaw && (
+          <div style={{ background:'rgba(255,92,108,0.05)', border:'1px solid rgba(255,92,108,0.2)', borderRadius:16, padding:'32px 36px', opacity: fadeIn(t,0.5,1.2) }}>
+            <div style={{ fontFamily:'Geist Mono', fontSize:11, letterSpacing:'0.1em', textTransform:'uppercase', color:'rgba(255,92,108,0.6)', marginBottom:20 }}>Without Mesh — raw context</div>
+            <div style={{ display:'flex', flexWrap:'wrap', gap:5, marginBottom:24 }}>
+              {Array.from({length:80}).map((_, i) => (
+                <div key={i} style={{
+                  width:14, height:14, borderRadius:3,
+                  background: i < 22 ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.05)',
+                  border: i < 22 ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(255,255,255,0.06)',
+                }} />
+              ))}
+            </div>
+            <div style={{ fontFamily:'Geist Mono', fontSize:12, color:'rgba(255,255,255,0.3)', marginBottom:16 }}>
+              Budget used after 22 files ─ needle at file 60 ─ never reached
+            </div>
+            {showX && (
+              <div style={{ display:'flex', alignItems:'center', gap:16, opacity: fadeIn(t,3.5,4.2) }}>
+                <div style={{ fontFamily:'Barlow Condensed', fontStyle:'italic', fontWeight:900, fontSize:72, color:C.red, lineHeight:1 }}>40%</div>
+                <div style={{ fontSize:14, color:'rgba(255,92,108,0.7)' }}>recall<br/>2/5 configs pass</div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* With Mesh */}
+        {showMesh && (
+          <div style={{ background:'rgba(0,212,232,0.05)', border:'1px solid rgba(0,212,232,0.25)', borderRadius:16, padding:'32px 36px', opacity: fadeIn(t,2.0,2.8) }}>
+            <div style={{ fontFamily:'Geist Mono', fontSize:11, letterSpacing:'0.1em', textTransform:'uppercase', color:'rgba(0,212,232,0.7)', marginBottom:20 }}>With Mesh — capsule context</div>
+            <div style={{ display:'flex', flexWrap:'wrap', gap:5, marginBottom:24 }}>
+              {Array.from({length:80}).map((_, i) => (
+                <div key={i} style={{
+                  width:14, height:14, borderRadius:3,
+                  background: C.cyan,
+                  opacity: 0.6,
+                  border: i === 59 ? '2px solid #fff' : 'none',
+                }} />
+              ))}
+            </div>
+            <div style={{ fontFamily:'Geist Mono', fontSize:12, color:'rgba(0,212,232,0.5)', marginBottom:16 }}>
+              All 80 files fit in context · needle at file 60 · found
+            </div>
+            {showCheck && (
+              <div style={{ display:'flex', alignItems:'center', gap:16, opacity: fadeIn(t,4.2,5.0) }}>
+                <div style={{ fontFamily:'Barlow Condensed', fontStyle:'italic', fontWeight:900, fontSize:72, color:C.cyan, lineHeight:1 }}>100%</div>
+                <div style={{ fontSize:14, color:'rgba(0,212,232,0.7)' }}>recall<br/>5/5 configs pass</div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Model badges */}
+      {showStats && (
+        <div style={{ display:'flex', gap:12, opacity: fadeIn(t, 5.5, 6.5) }}>
+          {models.map(m => (
+            <div key={m} style={{ fontFamily:'Geist Mono', fontSize:11, padding:'6px 14px', borderRadius:100, border:'1px solid rgba(0,212,232,0.2)', color:'rgba(0,212,232,0.55)' }}>{m}</div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Scene 5: Four Surfaces (29-38s) ────────────────────────────────────────
+function Scene5() {
+  const { localTime: t } = useSprite();
+  const opacity = fade(t, 0, 0.8, 7.5, 8.5);
+
+  const surfaces = [
+    { num:'01', title:'Terminal CLI', desc:'npm install · auto-exec · local voice', tag:'anywhere you type', delay:0 },
+    { num:'02', title:'Browser IDE', desc:'Monaco · PTY · AI chat · cloud voice', tag:'try-mesh.com', delay:0.4 },
+    { num:'03', title:'MCP Server', desc:'Claude Code · Cursor · Windsurf', tag:'mesh_search', delay:0.8 },
+    { num:'04', title:'Gateway API', desc:'REST endpoint · embed anywhere', tag:'POST /agent', delay:1.2 },
+  ];
+
+  return (
+    <div style={{ position:'absolute', inset:0, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', opacity, background: C.dark, gap:56 }}>
+      <div style={{ textAlign:'center' }}>
+        <div style={{ fontFamily:'Geist Mono', fontSize:12, letterSpacing:'0.12em', textTransform:'uppercase', color:C.cyan, marginBottom:16 }}>One context engine</div>
+        <div style={{ fontFamily:'Barlow Condensed', fontStyle:'italic', fontWeight:900, fontSize:80, lineHeight:0.9, letterSpacing:'-0.03em', color:'rgba(255,255,255,0.9)' }}>
+          Four surfaces.
+        </div>
+      </div>
+
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:16, maxWidth:1400, width:'100%', padding:'0 80px' }}>
+        {surfaces.map(({ num, title, desc, tag, delay }) => (
+          <div key={num} style={{
+            background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.07)', borderRadius:14, padding:'32px 28px',
+            opacity: fadeIn(t, 0.5 + delay, 1.2 + delay),
+            transform: `translateY(${lerp(20, 0, ease(ilerp(0.5 + delay, 1.2 + delay, t)))}px)`,
+            position:'relative', overflow:'hidden',
+          }}>
+            <div style={{ position:'absolute', top:-16, right:12, fontFamily:'Barlow Condensed', fontStyle:'italic', fontWeight:900, fontSize:120, lineHeight:1, color:'rgba(255,255,255,0.025)', pointerEvents:'none' }}>{num}</div>
+            <div style={{ fontFamily:'Geist Mono', fontSize:11, letterSpacing:'0.08em', color:'rgba(0,212,232,0.5)', textTransform:'uppercase', marginBottom:12 }}>{num}</div>
+            <div style={{ fontFamily:'Barlow Condensed', fontWeight:800, fontSize:28, letterSpacing:'-0.01em', color:'rgba(255,255,255,0.88)', marginBottom:10 }}>{title}</div>
+            <div style={{ fontSize:14, color:'rgba(255,255,255,0.35)', lineHeight:1.6, fontWeight:300 }}>{desc}</div>
+            <div style={{ marginTop:16, fontFamily:'Geist Mono', fontSize:11, color:C.cyan, background:'rgba(0,212,232,0.08)', padding:'4px 10px', borderRadius:4, display:'inline-block' }}>{tag}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── End card (37-40s) ──────────────────────────────────────────────────────
+function EndCard() {
+  const { localTime: t } = useSprite();
+  const opacity = fadeIn(t, 0, 1.2);
+
+  return (
+    <div style={{ position:'absolute', inset:0, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', opacity, background: C.dark, gap:24 }}>
+      <pre style={{ fontFamily:'Geist Mono', fontSize:11, lineHeight:1.3, textAlign:'center', color:C.cyan }}>
+        <span style={{ color:C.magenta }}>{'‹ '}</span>
+        {LOGO_LINES.join('\n')}
+        <span style={{ color:C.magenta }}>{' ›'}</span>
+      </pre>
+      <div style={{ fontFamily:'DM Sans', fontSize:22, fontWeight:300, color:'rgba(255,255,255,0.35)', letterSpacing:'0.02em' }}>
+        <span style={{ color:'rgba(255,255,255,0.75)' }}>Four surfaces.</span> One engine.
+      </div>
+      <div style={{ fontFamily:'Geist Mono', fontSize:13, color:'rgba(0,212,232,0.5)', marginTop:8 }}>try-mesh.com</div>
+    </div>
+  );
+}
+
+// ── Root animation
+function MeshAnimation() {
+  return (
+    <Stage width={1920} height={1080} duration={40} background={C.dark}>
+      <Sprite start={0}  end={8}><Scene1 /></Sprite>
+      <Sprite start={7}  end={16}><Scene2 /></Sprite>
+      <Sprite start={15} end={24}><Scene3 /></Sprite>
+      <Sprite start={23} end={32}><Scene4 /></Sprite>
+      <Sprite start={30} end={39}><Scene5 /></Sprite>
+      <Sprite start={38} end={40}><EndCard /></Sprite>
+    </Stage>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<MeshAnimation />);
+</script>
+</body>
+</html>

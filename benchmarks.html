@@ -1,207 +1,718 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mesh Benchmarks | Performance Data</title>
-    <meta
-      name="description"
-      content="We benchmark Mesh against raw context windows using real-world LLMs. See how our capsule engine achieves 5x token reduction and 100% recall."
-    />
-    <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
-    <link rel="canonical" href="https://www.try-mesh.com/benchmarks.html" />
-    <link rel="alternate" hreflang="en" href="https://www.try-mesh.com/benchmarks.html" />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Mesh" />
-    <meta property="og:title" content="Mesh Benchmarks | Performance Data" />
-    <meta
-      property="og:description"
-      content="Benchmarks comparing Mesh capsule workflow vs raw context windows across modern LLMs."
-    />
-    <meta property="og:url" content="https://www.try-mesh.com/benchmarks.html" />
-    <meta property="og:image" content="https://www.try-mesh.com/assets/brand/github-banner-light.svg" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Mesh Benchmarks | Performance Data" />
-    <meta
-      name="twitter:description"
-      content="Benchmarks comparing Mesh capsule workflow vs raw context windows across modern LLMs."
-    />
-    <meta name="twitter:image" content="https://www.try-mesh.com/assets/brand/github-banner-light.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="./styles.css" />
-    <link rel="stylesheet" href="./benchmarks.css" />
-  </head>
-  <body class="benchmarks-body">
-    <div class="scroll-progress" aria-hidden="true"><span></span></div>
-    <div class="cursor-dot" aria-hidden="true"></div>
-    <div class="cursor-beam" aria-hidden="true"></div>
-    <div class="grain" aria-hidden="true"></div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mesh — Benchmarks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,800;1,900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --petrol: oklch(0.38 0.09 198);
+      --cyan:   oklch(0.74 0.14 200);
+      --dark:   oklch(0.08 0.04 200);
+      --white:  oklch(0.99 0.004 195);
+      --off:    oklch(0.96 0.006 195);
+      --muted:  oklch(0.55 0.05 200);
+      --mono: 'Geist Mono', monospace;
+      --display: 'Barlow Condensed', sans-serif;
+      --sans: 'DM Sans', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--dark); color: var(--white); font-family: var(--sans); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 
-    <header class="topbar reveal" data-stagger="0">
-      <div class="topbar-inner">
-        <div class="masthead">
-          <a class="brand" href="./index.html">
-            <img src="./assets/brand/lockup-color.svg" alt="Mesh" class="nav-logo" />
-          </a>
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 56px;
+      background: oklch(0.08 0.04 200 / 0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid oklch(1 0 0 / 0.05);
+    }
+    .nav-logo { font-family: var(--mono); font-size: 16px; color: var(--cyan); text-decoration: none; }
+    .nav-right { display: flex; gap: 6px; }
+    .nav-right a { font-size: 13px; color: oklch(1 0 0 / 0.38); text-decoration: none; padding: 6px 14px; border-radius: 6px; border: 1px solid transparent; transition: all 0.2s; }
+    .nav-right a:hover { color: var(--white); border-color: oklch(1 0 0 / 0.12); }
+    .nav-active { color: var(--white) !important; }
+    .nav-cta { background: oklch(0.74 0.14 200 / 0.1) !important; border-color: oklch(0.74 0.14 200 / 0.25) !important; color: var(--cyan) !important; }
+    .nav-waitlist { background: oklch(0.74 0.14 200 / 0.12) !important; border-color: oklch(0.74 0.14 200 / 0.28) !important; color: var(--cyan) !important; cursor: pointer; }
+    .nav-waitlist:hover { background: oklch(0.74 0.14 200 / 0.22) !important; }
+    .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 200; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.25s; backdrop-filter: blur(8px); }
+    .modal-bg.open { opacity: 1; pointer-events: auto; }
+    .modal { background: oklch(0.11 0.05 200); border: 1px solid oklch(1 0 0 / 0.1); border-radius: 20px; padding: 48px 52px; max-width: 500px; width: 90%; position: relative; }
+    .modal h3 { font-family: var(--display); font-style: italic; font-weight: 900; font-size: 56px; line-height: 0.9; letter-spacing: -0.03em; color: var(--white); margin-bottom: 16px; }
+    .modal p { font-size: 16px; color: oklch(1 0 0 / 0.42); line-height: 1.6; margin-bottom: 28px; }
+    .modal input { width: 100%; padding: 14px 18px; border-radius: 10px; background: oklch(1 0 0 / 0.06); border: 1px solid oklch(1 0 0 / 0.12); color: var(--white); font-size: 15px; font-family: var(--sans); outline: none; transition: border-color 0.2s; }
+    .modal input:focus { border-color: oklch(0.74 0.14 200 / 0.5); }
+    .modal input::placeholder { color: oklch(1 0 0 / 0.25); }
+    .modal-btn { margin-top: 12px; width: 100%; padding: 14px; border-radius: 10px; background: var(--cyan); color: oklch(0.08 0.04 200); font-size: 15px; font-weight: 700; border: none; cursor: pointer; font-family: var(--sans); transition: background 0.2s; }
+    .modal-btn:hover { background: oklch(0.82 0.14 200); }
+    .modal-close { position: absolute; top: 18px; right: 22px; background: none; border: none; color: oklch(1 0 0 / 0.35); font-size: 22px; cursor: pointer; line-height: 1; }
+    .modal-close:hover { color: var(--white); }
+
+    /* ── HERO ── */
+    .bench-hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 0 80px 72px; position: relative; overflow: hidden;
+    }
+    .bh-glow {
+      position: absolute; top: 5%; left: 50%; transform: translateX(-50%);
+      width: 900px; height: 600px;
+      background: radial-gradient(ellipse, oklch(0.74 0.14 200 / 0.06) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    /* animated number behind */
+    .hero-bg-num {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -55%);
+      font-family: var(--display); font-style: italic; font-weight: 900;
+      font-size: clamp(220px, 38vw, 580px);
+      line-height: 1; letter-spacing: -0.04em;
+      color: oklch(1 0 0 / 0.03);
+      pointer-events: none; user-select: none; white-space: nowrap;
+    }
+    .bh-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--cyan); margin-bottom: 20px; position: relative; z-index: 1; }
+    .bh-title {
+      font-family: var(--display); font-style: italic; font-weight: 900;
+      font-size: clamp(72px, 13vw, 190px);
+      line-height: 0.88; letter-spacing: -0.03em; color: var(--white);
+      position: relative; z-index: 1;
+    }
+    .bh-title span { color: var(--cyan); }
+    .bh-sub {
+      margin-top: 24px; max-width: 580px;
+      font-size: 17px; font-weight: 300; color: oklch(1 0 0 / 0.42); line-height: 1.65;
+      position: relative; z-index: 1;
+    }
+    .bh-sub strong { color: oklch(1 0 0 / 0.78); font-weight: 400; }
+
+    /* ── STATS GRID ── */
+    .stats-row {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid oklch(1 0 0 / 0.07);
+      position: relative; z-index: 1;
+    }
+    .stat-cell {
+      padding: 44px 40px; border-right: 1px solid oklch(1 0 0 / 0.07);
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .stat-cell:last-child { border-right: none; }
+    .stat-cell.vis { opacity: 1; transform: none; }
+    .stat-n {
+      font-family: var(--display); font-style: italic; font-weight: 900;
+      font-size: clamp(52px, 7vw, 90px);
+      line-height: 0.9; letter-spacing: -0.04em; color: var(--white);
+      display: flex; align-items: flex-start; gap: 3px;
+    }
+    .stat-n sup { font-size: 0.38em; margin-top: 10px; color: var(--cyan); }
+    .stat-label { margin-top: 12px; font-size: 13px; color: oklch(1 0 0 / 0.38); line-height: 1.5; }
+    .stat-badge { display: inline-block; margin-top: 10px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cyan); background: oklch(0.74 0.14 200 / 0.1); padding: 3px 8px; border-radius: 4px; }
+
+    /* ── SECTION SHELL ── */
+    .bench-section { padding: 100px 80px; border-top: 1px solid oklch(1 0 0 / 0.06); }
+    .bench-section.alt { background: oklch(0.11 0.045 200); }
+    .bs-header { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: end; margin-bottom: 56px; }
+    .bs-title { font-family: var(--display); font-style: italic; font-weight: 900; font-size: clamp(44px, 6vw, 84px); line-height: 0.9; letter-spacing: -0.03em; color: var(--white); }
+    .bs-desc { font-size: 15px; color: oklch(1 0 0 / 0.42); line-height: 1.7; font-weight: 300; }
+    .bs-desc strong { color: oklch(1 0 0 / 0.78); font-weight: 400; }
+    .bs-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cyan); margin-bottom: 14px; }
+
+    /* ── DUAL BAR CHART ── */
+    .dual-chart { display: flex; flex-direction: column; gap: 0; }
+    .dc-row {
+      display: grid; grid-template-columns: 200px 1fr;
+      gap: 20px; padding: 22px 0;
+      border-bottom: 1px solid oklch(1 0 0 / 0.05);
+      opacity: 0; transform: translateX(-12px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .dc-row:first-child { border-top: 1px solid oklch(1 0 0 / 0.05); }
+    .dc-row.vis { opacity: 1; transform: none; }
+    .dc-label { font-family: var(--mono); font-size: 12px; color: oklch(1 0 0 / 0.35); display: flex; flex-direction: column; gap: 6px; justify-content: center; }
+    .dc-label .l-main { font-size: 13px; color: var(--white); }
+    .dc-bars { display: flex; flex-direction: column; gap: 6px; }
+    .dc-bar-row { display: flex; align-items: center; gap: 10px; }
+    .dc-track { flex: 1; height: 10px; border-radius: 5px; background: oklch(1 0 0 / 0.05); overflow: hidden; }
+    .dc-fill { height: 100%; border-radius: 5px; width: 0; transition: width 1.5s cubic-bezier(0.16,1,0.3,1); }
+    .dc-fill.mesh { background: linear-gradient(90deg, var(--petrol), var(--cyan)); }
+    .dc-fill.raw  { background: oklch(1 0 0 / 0.12); }
+    .dc-val { font-family: var(--mono); font-size: 12px; width: 52px; text-align: right; }
+    .dc-val.mesh { color: var(--cyan); }
+    .dc-val.raw  { color: oklch(1 0 0 / 0.28); }
+    .dc-tag { font-size: 10px; font-family: var(--mono); }
+    .dc-tag.mesh { color: oklch(0.74 0.14 200 / 0.6); }
+    .dc-tag.raw  { color: oklch(1 0 0 / 0.2); }
+
+    /* ── BUDGET VIZ ── */
+    .budget-viz {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+      margin-top: 0;
+    }
+    .bv-card {
+      border: 1px solid oklch(1 0 0 / 0.08); border-radius: 14px;
+      padding: 36px 32px; position: relative; overflow: hidden;
+    }
+    .bv-card.mesh { border-color: oklch(0.74 0.14 200 / 0.3); }
+    .bv-card.mesh::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--petrol), var(--cyan));
+    }
+    .bv-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(1 0 0 / 0.28); margin-bottom: 16px; }
+    .bv-num {
+      font-family: var(--display); font-style: italic; font-weight: 900;
+      font-size: clamp(56px, 7vw, 96px);
+      line-height: 0.9; letter-spacing: -0.04em;
+    }
+    .bv-card.mesh .bv-num { color: var(--cyan); }
+    .bv-card.raw  .bv-num { color: oklch(1 0 0 / 0.28); }
+    .bv-unit { font-size: 0.4em; vertical-align: super; }
+    .bv-desc { margin-top: 16px; font-size: 14px; color: oklch(1 0 0 / 0.38); line-height: 1.6; }
+    .bv-desc strong { color: oklch(1 0 0 / 0.72); font-weight: 400; }
+
+    /* bar representing token fill */
+    .bv-bar-wrap { margin-top: 20px; }
+    .bv-bar-track { height: 8px; border-radius: 4px; background: oklch(1 0 0 / 0.06); overflow: hidden; }
+    .bv-bar-fill { height: 100%; border-radius: 4px; width: 0; transition: width 1.5s cubic-bezier(0.16,1,0.3,1); }
+    .bv-card.mesh .bv-bar-fill { background: linear-gradient(90deg, var(--petrol), var(--cyan)); }
+    .bv-card.raw  .bv-bar-fill { background: oklch(1 0 0 / 0.18); }
+    .bv-bar-label { margin-top: 8px; font-family: var(--mono); font-size: 11px; color: oklch(1 0 0 / 0.22); }
+
+    /* ── COMPRESSION TABLE ── */
+    .comp-table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 13px; }
+    .comp-table th { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: oklch(1 0 0 / 0.3); font-weight: 500; padding: 12px 16px; border-bottom: 1px solid oklch(1 0 0 / 0.08); text-align: left; }
+    .comp-table td { padding: 14px 16px; border-bottom: 1px solid oklch(1 0 0 / 0.05); color: oklch(1 0 0 / 0.55); }
+    .comp-table td:first-child { color: var(--white); }
+    .comp-table td.highlight { color: var(--cyan); font-weight: 500; }
+    .comp-table tr:hover td { background: oklch(1 0 0 / 0.02); }
+
+    /* inline mini-bar */
+    .mini-bar { display: inline-flex; align-items: center; gap: 8px; }
+    .mini-track { width: 80px; height: 6px; border-radius: 3px; background: oklch(1 0 0 / 0.08); overflow: hidden; }
+    .mini-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--petrol), var(--cyan)); }
+
+    /* ── SCORECARD ── */
+    .scorecard {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+      border-radius: 14px; overflow: hidden;
+    }
+    .sc-item {
+      background: oklch(0.11 0.045 200);
+      padding: 32px 28px;
+      opacity: 0; transform: translateY(16px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .sc-item.vis { opacity: 1; transform: none; }
+    .sc-item-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: oklch(1 0 0 / 0.28); margin-bottom: 10px; }
+    .sc-item-val { font-family: var(--display); font-style: italic; font-weight: 900; font-size: 42px; line-height: 0.9; letter-spacing: -0.03em; color: var(--white); }
+    .sc-item-val.good { color: var(--cyan); }
+    .sc-item-sub { margin-top: 8px; font-size: 13px; color: oklch(1 0 0 / 0.3); }
+
+    /* ── METHOD ── */
+    .method-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+    .method-block { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .method-block.vis { opacity: 1; transform: none; }
+    .method-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cyan); margin-bottom: 14px; }
+    .method-title { font-family: var(--display); font-weight: 800; font-size: 32px; letter-spacing: -0.02em; color: var(--white); margin-bottom: 14px; }
+    .method-text { font-size: 15px; color: oklch(1 0 0 / 0.42); line-height: 1.75; font-weight: 300; }
+    .method-text strong { color: oklch(1 0 0 / 0.75); font-weight: 400; }
+    .method-note { margin-top: 16px; font-family: var(--mono); font-size: 11px; color: oklch(1 0 0 / 0.22); line-height: 1.7; }
+
+    /* ── CTA ── */
+    .cta-strip {
+      margin: 0 80px 80px; padding: 48px 56px;
+      background: oklch(0.12 0.05 200);
+      border: 1px solid oklch(1 0 0 / 0.07);
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: space-between; gap: 32px;
+    }
+    .cta-text h3 { font-family: var(--display); font-style: italic; font-weight: 900; font-size: 52px; line-height: 0.9; letter-spacing: -0.03em; color: var(--white); }
+    .cta-text p { margin-top: 10px; font-size: 15px; color: oklch(1 0 0 / 0.4); }
+    .cta-btn { display: flex; align-items: center; gap: 10px; background: var(--white); color: var(--dark); padding: 14px 26px; border-radius: 10px; font-family: var(--mono); font-size: 14px; font-weight: 500; cursor: pointer; white-space: nowrap; transition: background 0.2s, transform 0.15s; border: none; }
+    .cta-btn:hover { background: var(--cyan); transform: translateY(-1px); }
+    .cta-btn .p { color: var(--petrol); }
+
+    footer { background: oklch(0.06 0.04 200); padding: 44px 80px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid oklch(1 0 0 / 0.05); }
+    .f-logo { font-family: var(--mono); font-size: 14px; color: oklch(1 0 0/0.28); }
+    .f-logo span { color: var(--cyan); }
+    .f-links { display: flex; gap: 24px; }
+    .f-links a { font-size: 13px; color: oklch(1 0 0/0.22); text-decoration: none; transition: color 0.2s; }
+    .f-links a:hover { color: oklch(1 0 0/0.6); }
+    .f-copy { font-family: var(--mono); font-size: 11px; color: oklch(1 0 0/0.16); }
+  </style>
+</head>
+<body>
+
+<!-- WAITLIST MODAL -->
+<div class="modal-bg" id="modalBg" onclick="if(event.target===this)openModal(false)">
+  <div class="modal">
+    <button class="modal-close" onclick="openModal(false)">×</button>
+    <h3>Join the<br>waitlist.</h3>
+    <p>Get early access and launch updates. No spam, ever.</p>
+    <input type="email" id="wlEmail" placeholder="you@company.com" />
+    <button class="modal-btn" onclick="submitWaitlist()">Get early access →</button>
+    <p id="wlMsg" style="margin-top:12px;font-size:13px;color:var(--cyan);text-align:center;min-height:18px"></p>
+  </div>
+</div>
+
+<nav>
+  <a class="nav-logo" href="index.html">mesh.</a>
+  <div class="nav-right">
+    <a href="features.html">Features</a>
+    <a href="quickstart.html">Quickstart</a>
+    <a href="benchmarks.html" class="nav-active">Benchmarks</a>
+    <a onclick="openModal(true)" class="nav-waitlist">Waitlist</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="bench-hero">
+  <div class="bh-glow"></div>
+  <div class="hero-bg-num">3.9×</div>
+  <div class="bh-eyebrow">Benchmarks — last run 2026-04-20</div>
+  <h1 class="bh-title">Real data.<br><span>Real LLMs.</span></h1>
+  <p class="bh-sub">Mesh is benchmarked across <strong>14+ frontier and local models</strong> on real-world AI tasks. Not token counts. Not synthetic prompts. Task success.</p>
+</div>
+
+<!-- STATS -->
+<div class="stats-row" id="statsRow">
+  <div class="stat-cell">
+    <div class="stat-n"><span class="count" data-t="39" data-dec="true">0</span><sup>×</sup></div>
+    <div class="stat-label">more files per token budget</div>
+    <div class="stat-badge">context gain</div>
+  </div>
+  <div class="stat-cell" style="transition-delay:0.1s">
+    <div class="stat-n"><span class="count" data-t="100">0</span><sup>%</sup></div>
+    <div class="stat-label">NIAH recall — standard difficulty</div>
+    <div class="stat-badge">vs 40% raw</div>
+  </div>
+  <div class="stat-cell" style="transition-delay:0.2s">
+    <div class="stat-n"><span class="count" data-t="5">0</span><sup>×</sup></div>
+    <div class="stat-label">fewer tokens for full coverage</div>
+    <div class="stat-badge">4,500T vs 24,000T</div>
+  </div>
+  <div class="stat-cell" style="transition-delay:0.3s">
+    <div class="stat-n"><span class="count" data-t="0">0</span><sup>%</sup></div>
+    <div class="stat-label">hallucination rate across 4 models</div>
+    <div class="stat-badge">zero invented answers</div>
+  </div>
+</div>
+
+<!-- A1: NIAH -->
+<div class="bench-section" id="niahSection">
+  <div class="bs-header">
+    <div>
+      <div class="bs-eyebrow">A1 — Needle in a Haystack</div>
+      <div class="bs-title">Can the model find<br>the right file?</div>
+    </div>
+    <p class="bs-desc">A planted constant (<code style="font-family:var(--mono);font-size:13px;color:var(--cyan)">SESSION_SECRET</code>) is hidden in one of 10–120 files. Same token budget. Mesh fits more files — raw runs out before the needle is reached. <strong>Tested on Sonnet, Opus, GPT-OSS-20B, Gemma 3 4B, Llama 3.3 70B.</strong></p>
+  </div>
+  <div class="dual-chart" id="niahChart">
+    <div class="dc-row">
+      <div class="dc-label"><span class="l-main">Standard difficulty</span><span>6,000T budget · 5 configs</span></div>
+      <div class="dc-bars">
+        <div class="dc-bar-row">
+          <span class="dc-tag mesh">Mesh</span>
+          <div class="dc-track"><div class="dc-fill mesh" data-w="100"></div></div>
+          <span class="dc-val mesh">100%</span>
         </div>
-        <nav>
-          <a href="./products.html">Products</a>
-          <a href="./engine.html">Engine</a>
-          <a href="./benchmarks.html">Benchmarks</a>
-          <a href="./newsletter.html">Newsletter</a>
-        </nav>
-        <div class="head-cta-wrap">
-          <a class="top-newsletter" href="#newsletter-signup">Waitlist</a>
+        <div class="dc-bar-row">
+          <span class="dc-tag raw">Raw</span>
+          <div class="dc-track"><div class="dc-fill raw" data-w="40"></div></div>
+          <span class="dc-val raw">40%</span>
         </div>
       </div>
-    </header>
-
-    <main id="top" class="benchmarks-page">
-      <section class="benchmarks-hero reveal" data-stagger="1">
-        <p class="kicker">Performance Data</p>
-        <h1 class="reveal" data-stagger="2" style="min-height: 2.1em;">
-          Capsule compression<br/>
-          <span class="cycle-line" style="white-space: nowrap;"><span class="word-cycle" aria-live="polite">vs raw context</span></span>
-        </h1>
-        <p class="lede reveal" data-stagger="3">
-          We benchmarked Mesh against standard raw context windows across 14+ frontier models including <strong>Claude 4.6 Opus/Sonnet and ChatGPT 4.5</strong>, alongside powerful local models like <strong>Llama and Gemma</strong>. The results are decisive: 5x fewer tokens, 100% recall.
-        </p>
-      </section>
-
-      <section class="benchmark-cards">
-        <div class="bench-kpi reveal" data-stagger="1">
-          <div class="b-head">NIAH Needle Recall</div>
-          <div class="b-val">100%</div>
-          <div class="b-desc">Mesh (Ultra Capsules)</div>
+    </div>
+    <div class="dc-row" style="transition-delay:0.1s">
+      <div class="dc-label"><span class="l-main">Hard difficulty</span><span>8,000T budget · 5 configs</span></div>
+      <div class="dc-bars">
+        <div class="dc-bar-row">
+          <span class="dc-tag mesh">Mesh</span>
+          <div class="dc-track"><div class="dc-fill mesh" data-w="80"></div></div>
+          <span class="dc-val mesh">80%</span>
         </div>
-        <div class="bench-kpi reveal" data-stagger="2">
-          <div class="b-head">Budget Saturation</div>
-          <div class="b-val">4.5k <span style="font-size: 0.5em;">vs 24k</span></div>
-          <div class="b-desc">Tokens for full coverage</div>
+        <div class="dc-bar-row">
+          <span class="dc-tag raw">Raw</span>
+          <div class="dc-track"><div class="dc-fill raw" data-w="20"></div></div>
+          <span class="dc-val raw">20%</span>
         </div>
-        <div class="bench-kpi reveal" data-stagger="3">
-          <div class="b-head">Multi-Hop Chain</div>
-          <div class="b-val">12/12</div>
-          <div class="b-desc">Completeness vs 3/12 raw</div>
-        </div>
-      </section>
-
-      <!-- The main animated chart container -->
-      <section class="animated-chart-section reveal" data-stagger="4">
-        <div class="chart-wrapper">
-          <div class="chart-header">
-            <h3>LLM NIAH &mdash; Relevant Context Recall</h3>
-            <p>Highlights from Claude 4.6 Opus & ChatGPT 4.5. Can the model see the files it needs without blowing the budget?</p>
-          </div>
-          
-          <div class="chart-canvas">
-            <div class="bar-group">
-              <div class="bar-label">Mesh Workflow</div>
-              <div class="bar-track">
-                <div class="bar-fill mesh-fill streams-bg" style="width: 0%;" data-target="100">
-                  <span class="b-txt">100% PASS (5/5)</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="bar-group">
-              <div class="bar-label">Raw Source</div>
-              <div class="bar-track">
-                <div class="bar-fill raw-fill streams-bg" style="width: 0%;" data-target="40">
-                  <span class="b-txt">40% PASS (2/5)</span>
-                </div>
-              </div>
-            </div>
-            
-            <div class="chart-footer-note">Lower raw coverage &rarr; model guesses instead of reads because the needle file was pushed beyond the context window by irrelevant token noise.</div>
-          </div>
-        </div>
-      </section>
-
-      <section class="animated-chart-section alt-chart reveal" data-stagger="5">
-        <div class="chart-wrapper">
-          <div class="chart-header">
-            <h3>Budget Saturation (Tokens required to grasp 200 files)</h3>
-            <p>Tested across 14+ distinct model architectures. A smaller footprint allows room for the actual prompt generation.</p>
-          </div>
-          <!-- Live moving graph background element -->
-          <svg class="moving-wave-graph" viewBox="0 0 800 100" preserveAspectRatio="none" aria-hidden="true">
-             <path class="wave-path path-raw" d="M0,80 Q50,90 100,50 T200,60 T300,20 T400,70 T500,40 T600,80 T700,50 T800,90" fill="none" stroke-width="2" />
-             <path class="wave-path path-mesh" d="M0,95 Q50,97 100,90 T200,92 T300,88 T400,95 T500,91 T600,94 T700,89 T800,96" fill="none" stroke-width="2" />
-          </svg>
-          
-          <div class="chart-canvas saturation-canvas">
-            <div class="sat-bar mesh-sat">
-               <div class="sat-core" data-target-height="18"></div>
-               <span class="sat-label">Mesh (4,500T)</span>
-            </div>
-            <div class="sat-bar raw-sat">
-               <div class="sat-core" data-target-height="95"></div>
-               <span class="sat-label">Raw (24,000T)</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-
-      <section class="animated-chart-section reveal" data-stagger="6">
-        <div class="chart-wrapper">
-          <div class="chart-header">
-            <h3>LLM Hallucination Rate (NOTFOUND Accuracy)</h3>
-            <p>How often does the model invent files or hallucinate variables when the answer is not in the workspace? (Tested across 4 models)</p>
-          </div>
-          
-          <div class="chart-canvas">
-            <div class="bar-group">
-              <div class="bar-label">Mesh Workflow</div>
-              <div class="bar-track">
-                <div class="bar-fill mesh-fill" style="width: 0%;" data-target="0">
-                  <span class="b-txt" style="color: var(--ink-soft); position: absolute; margin-left: 35px;">0% (Zero Hallucinations)</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="bar-group">
-              <div class="bar-label">Raw Source</div>
-              <div class="bar-track">
-                <div class="bar-fill raw-fill streams-bg-danger" style="width: 0%;" data-target="68">
-                  <span class="b-txt">68% Hallucination Rate</span>
-                </div>
-              </div>
-            </div>
-            
-            <div class="chart-footer-note">Without Mesh, models hallucinated answers nearly 7 out of 10 times in a 200-file workspace because the context was too overwhelming.</div>
-          </div>
-        </div>
-      </section>
-
-      <section id="newsletter-signup" class="waitlist-band reveal" data-stagger="0">
-        <div>
-          <p class="kicker">Register Your Interest</p>
-          <h3>Get launch updates and docs drops first.</h3>
-        </div>
-        <form class="waitlist-form email-capture" action="/api/subscribe" method="POST">
-          <label for="email" class="sr-only">Email</label>
-          <input id="email" name="email" type="email" placeholder="you@company.com" required />
-          <button type="submit">Join Waitlist</button>
-        </form>
-        <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
-      </section>
-    </main>
-
-    <footer class="footer reveal" data-stagger="0">
-      <p>© <span id="year">2026</span> Mesh Technologies GmbH</p>
-      <div>
-        <a href="./imprint.html">Imprint</a>
-        <a href="./privacy.html">Privacy</a>
       </div>
-    </footer>
+    </div>
+    <div class="dc-row" style="transition-delay:0.2s">
+      <div class="dc-label"><span class="l-main">Multi-Hop chains</span><span>cross-file reasoning · 12 tasks</span></div>
+      <div class="dc-bars">
+        <div class="dc-bar-row">
+          <span class="dc-tag mesh">Mesh</span>
+          <div class="dc-track"><div class="dc-fill mesh" data-w="100"></div></div>
+          <span class="dc-val mesh">100%</span>
+        </div>
+        <div class="dc-bar-row">
+          <span class="dc-tag raw">Raw</span>
+          <div class="dc-track"><div class="dc-fill raw" data-w="25"></div></div>
+          <span class="dc-val raw">25%</span>
+        </div>
+      </div>
+    </div>
+    <div class="dc-row" style="transition-delay:0.3s">
+      <div class="dc-label"><span class="l-main">Edit precision</span><span>exact file + value targeting</span></div>
+      <div class="dc-bars">
+        <div class="dc-bar-row">
+          <span class="dc-tag mesh">Mesh</span>
+          <div class="dc-track"><div class="dc-fill mesh" data-w="100"></div></div>
+          <span class="dc-val mesh">100%</span>
+        </div>
+        <div class="dc-bar-row">
+          <span class="dc-tag raw">Raw</span>
+          <div class="dc-track"><div class="dc-fill raw" data-w="83"></div></div>
+          <span class="dc-val raw">83%</span>
+        </div>
+      </div>
+    </div>
+    <div class="dc-row" style="transition-delay:0.4s">
+      <div class="dc-label"><span class="l-main">Hallucination rate</span><span>absent-needle accuracy · 4 models</span></div>
+      <div class="dc-bars">
+        <div class="dc-bar-row">
+          <span class="dc-tag mesh">Mesh</span>
+          <div class="dc-track"><div class="dc-fill mesh" data-w="0.5"></div></div>
+          <span class="dc-val mesh">0%</span>
+        </div>
+        <div class="dc-bar-row">
+          <span class="dc-tag raw">Raw</span>
+          <div class="dc-track"><div class="dc-fill raw" data-w="15"></div></div>
+          <span class="dc-val raw">12–18%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p style="margin-top:28px;font-family:var(--mono);font-size:11px;color:oklch(1 0 0/0.2);line-height:1.8">
+    * Standard: Sonnet 4.6, GPT-OSS-20B, Gemma 3 4B — 10/20/40/80/120 file configs.<br>
+    * Hard: Opus, GPT-OSS-20B, Gemma 3 4B, Llama 3.3 70B — 20/50/100/180/260 file configs.
+  </p>
+</div>
 
-    <script src="./benchmarks.js"></script>
-  </body>
+<!-- A3: BUDGET SATURATION -->
+<div class="bench-section alt" id="budgetSection">
+  <div class="bs-header">
+    <div>
+      <div class="bs-eyebrow">A3 — Budget Saturation</div>
+      <div class="bs-title">How much is<br>full coverage?</div>
+    </div>
+    <p class="bs-desc">Fixed 80-file workspace. How many tokens does each approach need to read <em>every file</em> and pass NIAH + multi-hop? Mesh saturates at <strong>4,500T</strong>. Raw needs <strong>24,000T</strong> — 5× more budget for the same result.</p>
+  </div>
+  <div class="budget-viz" id="budgetViz">
+    <div class="bv-card mesh">
+      <div class="bv-label">Mesh — capsule compression</div>
+      <div class="bv-num"><span class="bcount" data-t="4500">0</span><span class="bv-unit">T</span></div>
+      <p class="bv-desc">Ultra capsules compress 80 files to <strong>3,347 tokens</strong>. Needle + multi-hop pass at this budget. 80/80 files in context.</p>
+      <div class="bv-bar-wrap">
+        <div class="bv-bar-track"><div class="bv-bar-fill" data-w="19"></div></div>
+        <div class="bv-bar-label">of 24,000T equivalent budget</div>
+      </div>
+    </div>
+    <div class="bv-card raw">
+      <div class="bv-label">Raw source — no compression</div>
+      <div class="bv-num"><span class="bcount" data-t="24000">0</span><span class="bv-unit">T</span></div>
+      <p class="bv-desc">Raw source exhausts budget at <strong>~22 files</strong>. The needle at file 60 is never reached until 24,000T — when raw finally covers all 80 files.</p>
+      <div class="bv-bar-wrap">
+        <div class="bv-bar-track"><div class="bv-bar-fill" data-w="100"></div></div>
+        <div class="bv-bar-label">full budget required</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- B1: COMPRESSION TABLE -->
+<div class="bench-section" id="compressionSection">
+  <div class="bs-header">
+    <div>
+      <div class="bs-eyebrow">B1 — Capsule Compression Ratio</div>
+      <div class="bs-title">Tokens the AI<br>actually sees.</div>
+    </div>
+    <p class="bs-desc">Ultra-tier capsules across file types and sizes. The AI sees <strong>function names, signatures, and exports</strong> — not raw source. For large codebases, this is a 50–100× reduction. <strong>Overall average: 25.5% of raw → 3.9× more files per budget.</strong></p>
+  </div>
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>File type</th>
+        <th>Size</th>
+        <th>Raw tokens</th>
+        <th>Ultra capsule</th>
+        <th>Token savings</th>
+        <th>Gain</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Code</td><td>Large</td><td>2,881</td><td class="highlight">1.9%</td><td>2,825 saved</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:98%"></div></div>98%</div></td></tr>
+      <tr><td>Code</td><td>XL</td><td>7,694</td><td class="highlight">0.7%</td><td>7,639 saved</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:99%"></div></div>99%</div></td></tr>
+      <tr><td>Code</td><td>XXL</td><td>19,394</td><td class="highlight">0.3%</td><td>19,338 saved</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:100%"></div></div>99.7%</div></td></tr>
+      <tr><td>Config</td><td>Large</td><td>1,439</td><td class="highlight">1.8%</td><td>1,413 saved</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:98%"></div></div>98%</div></td></tr>
+      <tr><td>SQL</td><td>Large</td><td>2,487</td><td class="highlight">1.7%</td><td>2,444 saved</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:98%"></div></div>98%</div></td></tr>
+      <tr><td>Markup</td><td>Large</td><td>2,059</td><td class="highlight">1.1%</td><td>2,037 saved</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:99%"></div></div>99%</div></td></tr>
+      <tr><td>Docs</td><td>Large</td><td>2,607</td><td class="highlight">0.9%</td><td>2,583 saved</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:99%"></div></div>99%</div></td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:20px;font-family:var(--mono);font-size:11px;color:oklch(1 0 0/0.2)">* Small files (&lt;150 tokens) are passed verbatim — capsule headers would exceed savings.</p>
+</div>
+
+<!-- SCORECARD -->
+<div class="bench-section alt" id="scorecardSection">
+  <div class="bs-eyebrow" style="margin-bottom:48px">Full scorecard — 12 benchmarks</div>
+
+  <!-- Big editorial layout -->
+  <div style="display:flex;flex-direction:column;gap:0">
+
+    <!-- Row 1: two giant numbers -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid oklch(1 0 0/0.07)">
+      <div class="sc-item" style="padding:52px 48px;border-right:1px solid oklch(1 0 0/0.07)">
+        <div class="sc-item-label">NIAH recall — standard · Sonnet / GPT / Gemma</div>
+        <div style="display:flex;align-items:flex-end;gap:16px;margin-top:12px">
+          <div style="font-family:var(--display);font-style:italic;font-weight:900;font-size:clamp(80px,10vw,140px);line-height:0.85;letter-spacing:-0.04em;color:var(--cyan)">100<span style="font-size:0.45em;color:var(--cyan)">%</span></div>
+          <div style="padding-bottom:16px">
+            <div style="font-family:var(--mono);font-size:13px;color:oklch(1 0 0/0.25)">vs raw</div>
+            <div style="font-family:var(--display);font-style:italic;font-weight:900;font-size:36px;color:oklch(1 0 0/0.18);line-height:1">40%</div>
+          </div>
+        </div>
+        <div style="margin-top:8px;font-family:var(--mono);font-size:11px;color:oklch(1 0 0/0.22)">5/5 configs · 3 models · standard difficulty</div>
+      </div>
+      <div class="sc-item" style="padding:52px 48px">
+        <div class="sc-item-label">Multi-hop cross-file reasoning · 3 chain types</div>
+        <div style="display:flex;align-items:flex-end;gap:16px;margin-top:12px">
+          <div style="font-family:var(--display);font-style:italic;font-weight:900;font-size:clamp(80px,10vw,140px);line-height:0.85;letter-spacing:-0.04em;color:var(--cyan)">100<span style="font-size:0.45em;color:var(--cyan)">%</span></div>
+          <div style="padding-bottom:16px">
+            <div style="font-family:var(--mono);font-size:13px;color:oklch(1 0 0/0.25)">vs raw</div>
+            <div style="font-family:var(--display);font-style:italic;font-weight:900;font-size:36px;color:oklch(1 0 0/0.18);line-height:1">25%</div>
+          </div>
+        </div>
+        <div style="margin-top:8px;font-family:var(--mono);font-size:11px;color:oklch(1 0 0/0.22)">12/12 chains · Sonnet / GPT-OSS / Gemma</div>
+      </div>
+    </div>
+
+    <!-- Row 2: four medium stats -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid oklch(1 0 0/0.07)">
+      <div class="sc-item" style="padding:36px 36px;border-right:1px solid oklch(1 0 0/0.07)">
+        <div class="sc-item-label" style="margin-bottom:10px">Budget saturation</div>
+        <div style="font-family:var(--display);font-style:italic;font-weight:900;font-size:64px;line-height:0.9;letter-spacing:-0.04em;color:var(--white)">5<span style="font-size:0.4em;color:var(--cyan)">×</span></div>
+        <div style="margin-top:8px;font-family:var(--mono);font-size:11px;color:oklch(1 0 0/0.22)">4,500T vs 24,000T</div>
+      </div>
+      <div class="sc-item" style="padding:36px 36px;border-right:1px solid oklch(1 0 0/0.07)">
+        <div class="sc-item-label" style="margin-bottom:10px">Hallucination rate</div>
+        <div style="font-family:var(--display);font-style:italic;font-weight:900;font-size:64px;line-height:0.9;letter-spacing:-0.04em;color:var(--cyan)">0<span style="font-size:0.4em">%</span></div>
+        <div style="margin-top:8px;font-family:var(--mono);font-size:11px;color:oklch(1 0 0/0.22)">4 models · all configs</div>
+      </div>
+      <div class="sc-item" style="padding:36px 36px;border-right:1px solid oklch(1 0 0/0.07)">
+        <div class="sc-item-label" style="margin-bottom:10px">Edit precision</div>
+        <div style="font-family:var(--display);font-style:italic;font-weight:900;font-size:64px;line-height:0.9;letter-spacing:-0.04em;color:var(--white)">100<span style="font-size:0.4em;color:var(--cyan)">%</span></div>
+        <div style="margin-top:8px;font-family:var(--mono);font-size:11px;color:oklch(1 0 0/0.22)">12/12 vs 10/12 raw</div>
+      </div>
+      <div class="sc-item" style="padding:36px 36px">
+        <div class="sc-item-label" style="margin-bottom:10px">Compression ratio</div>
+        <div style="font-family:var(--display);font-style:italic;font-weight:900;font-size:64px;line-height:0.9;letter-spacing:-0.04em;color:var(--white)">25.5<span style="font-size:0.4em;color:var(--cyan)">%</span></div>
+        <div style="margin-top:8px;font-family:var(--mono);font-size:11px;color:oklch(1 0 0/0.22)">3.9× more files/budget</div>
+      </div>
+    </div>
+
+    <!-- Row 3: pipeline benchmarks as a clean list -->
+    <div style="display:grid;grid-template-columns:1fr 1fr">
+      <div style="padding:40px 48px;border-right:1px solid oklch(1 0 0/0.07)">
+        <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:oklch(1 0 0/0.25);margin-bottom:24px">Pipeline Benchmarks — deterministic</div>
+        <div style="display:flex;flex-direction:column;gap:0">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid oklch(1 0 0/0.05)">
+            <span style="font-size:15px;color:oklch(1 0 0/0.55)">Symbol extraction F1</span>
+            <span style="font-family:var(--mono);font-size:14px;color:var(--cyan)">100%</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid oklch(1 0 0/0.05)">
+            <span style="font-size:15px;color:oklch(1 0 0/0.55)">Capsule determinism</span>
+            <span style="font-family:var(--mono);font-size:14px;color:var(--cyan)">90/90 stable</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid oklch(1 0 0/0.05)">
+            <span style="font-size:15px;color:oklch(1 0 0/0.55)">Targeted read recall</span>
+            <span style="font-family:var(--mono);font-size:14px;color:var(--cyan)">100% · 84.7% savings</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid oklch(1 0 0/0.05)">
+            <span style="font-size:15px;color:oklch(1 0 0/0.55)">File role classification</span>
+            <span style="font-family:var(--mono);font-size:14px;color:var(--cyan)">35/35</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0">
+            <span style="font-size:15px;color:oklch(1 0 0/0.55)">NIAH pipeline — all tiers</span>
+            <span style="font-family:var(--mono);font-size:14px;color:var(--cyan)">100%</span>
+          </div>
+        </div>
+      </div>
+      <div style="padding:40px 48px">
+        <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:oklch(1 0 0/0.25);margin-bottom:24px">Models tested</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:9px;background:oklch(1 0 0/0.03);border:1px solid oklch(1 0 0/0.07)">
+            <div style="width:7px;height:7px;border-radius:50%;background:var(--cyan)"></div>
+            <span style="font-family:var(--mono);font-size:13px;color:var(--white);flex:1">claude-sonnet-4-6</span>
+            <span style="font-size:12px;color:oklch(1 0 0/0.28)">standard + hard</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:9px;background:oklch(1 0 0/0.03);border:1px solid oklch(1 0 0/0.07)">
+            <div style="width:7px;height:7px;border-radius:50%;background:var(--cyan)"></div>
+            <span style="font-family:var(--mono);font-size:13px;color:var(--white);flex:1">claude-opus-4-6</span>
+            <span style="font-size:12px;color:oklch(1 0 0/0.28)">hard · 8,000T</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:9px;background:oklch(1 0 0/0.03);border:1px solid oklch(1 0 0/0.07)">
+            <div style="width:7px;height:7px;border-radius:50%;background:oklch(0.75 0.12 145)"></div>
+            <span style="font-family:var(--mono);font-size:13px;color:var(--white);flex:1">gpt-oss-20b</span>
+            <span style="font-size:12px;color:oklch(1 0 0/0.28)">standard + hard</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:9px;background:oklch(1 0 0/0.03);border:1px solid oklch(1 0 0/0.07)">
+            <div style="width:7px;height:7px;border-radius:50%;background:oklch(0.75 0.12 145)"></div>
+            <span style="font-family:var(--mono);font-size:13px;color:var(--white);flex:1">gemma-3-4b</span>
+            <span style="font-size:12px;color:oklch(1 0 0/0.28)">standard + hard</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:9px;background:oklch(1 0 0/0.03);border:1px solid oklch(1 0 0/0.07)">
+            <div style="width:7px;height:7px;border-radius:50%;background:oklch(0.72 0.1 280)"></div>
+            <span style="font-family:var(--mono);font-size:13px;color:var(--white);flex:1">llama-3.3-70b</span>
+            <span style="font-size:12px;color:oklch(1 0 0/0.28)">hard only</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- METHODOLOGY -->
+<div class="bench-section">
+  <div class="bs-eyebrow" style="margin-bottom:32px">Methodology</div>
+  <div class="method-grid">
+    <div class="method-block">
+      <div class="method-label">Part A — LLM evals</div>
+      <div class="method-title">Live Bedrock runs</div>
+      <p class="method-text">All Part A benchmarks are <strong>real inference calls</strong> via AWS Bedrock. Same prompt, same token budget, same task. Mesh vs raw side-by-side. No cherry-picking, no retries, no custom scaffolding.</p>
+      <p class="method-note">Models: Sonnet 4.6, Opus 4.6, GPT-OSS-20B, Gemma 3 4B, Llama 3.3 70B<br>Run: 2026-04-20 · reproducible with .env + benchmark scripts</p>
+    </div>
+    <div class="method-block" style="transition-delay:0.15s">
+      <div class="method-label">Part B — pipeline evals</div>
+      <div class="method-title">Deterministic CI</div>
+      <p class="method-text">Compression ratios, symbol extraction, capsule determinism, targeted reads, file role classification — all <strong>fully deterministic</strong>. No LLM calls. Run in CI on every commit. Results are reproducible by anyone.</p>
+      <p class="method-note">Stack: Node.js 22+, Tree-sitter, Brotli-9 storage, zstd-chunked transport<br>Source: <code style="color:var(--cyan)">benchmarks/run-all-benchmarks.js</code></p>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-strip">
+  <div class="cta-text">
+    <h3>See it yourself.</h3>
+    <p>Free to start. Works with any LLM.</p>
+  </div>
+  <button class="cta-btn" onclick="copyInstall()">
+    <span class="p">$</span>
+    <span id="ctaCmd">npm i -g @edgarelmo/mesh-agent-cli</span>
+  </button>
+</div>
+
+<footer>
+  <div class="f-logo">mesh<span>.</span></div>
+  <div class="f-links">
+    <a href="index.html">Home</a>
+    <a href="features.html">Features</a>
+    <a href="quickstart.html">Quickstart</a>
+    <a href="https://docs.try-mesh.com">Docs</a>
+  </div>
+  <div class="f-copy">© 2026 Mesh Intelligence</div>
+</footer>
+
+<script>
+function obs(sel, cb, threshold=0.15) {
+  const io = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ cb(e.target); io.unobserve(e.target); } }), {threshold});
+  document.querySelectorAll(sel).forEach(el => io.observe(el));
+}
+
+/* stat cells */
+let statsDone = false;
+new IntersectionObserver(es => {
+  if (es[0].isIntersecting && !statsDone) {
+    statsDone = true;
+    document.querySelectorAll('.stat-cell').forEach(el => el.classList.add('vis'));
+    document.querySelectorAll('.count').forEach(el => {
+      const t = +el.dataset.t, dec = el.dataset.dec;
+      let c = 0; const step = Math.max(1, Math.ceil(t/40));
+      const id = setInterval(() => {
+        c = Math.min(c + step, t);
+        el.textContent = dec ? (c/10).toFixed(1) : c;
+        if (c >= t) clearInterval(id);
+      }, 28);
+    });
+  }
+}, {threshold:0.3}).observe(document.getElementById('statsRow'));
+
+/* niah bars */
+let niahDone = false;
+new IntersectionObserver(es => {
+  if (es[0].isIntersecting && !niahDone) {
+    niahDone = true;
+    document.querySelectorAll('#niahChart .dc-row').forEach((r, i) => {
+      setTimeout(() => {
+        r.classList.add('vis');
+        setTimeout(() => r.querySelectorAll('.dc-fill').forEach(f => f.style.width = f.dataset.w + '%'), 80);
+      }, i * 120);
+    });
+  }
+}, {threshold:0.1}).observe(document.getElementById('niahChart'));
+
+/* budget viz */
+let budgetDone = false;
+new IntersectionObserver(es => {
+  if (es[0].isIntersecting && !budgetDone) {
+    budgetDone = true;
+    document.querySelectorAll('.bcount').forEach(el => {
+      const t = +el.dataset.t; let c = 0; const step = Math.ceil(t/50);
+      const id = setInterval(() => { c = Math.min(c+step, t); el.textContent = c.toLocaleString(); if(c>=t) clearInterval(id); }, 25);
+    });
+    setTimeout(() => {
+      document.querySelectorAll('.bv-bar-fill').forEach(f => f.style.width = f.dataset.w + '%');
+    }, 200);
+  }
+}, {threshold:0.3}).observe(document.getElementById('budgetViz'));
+
+/* scorecard */
+obs('.sc-item', el => el.classList.add('vis'));
+obs('.method-block', el => el.classList.add('vis'));
+
+function copyInstall() {
+  navigator.clipboard.writeText('npm i -g @edgarelmo/mesh-agent-cli').then(() => {
+    const el = document.getElementById('ctaCmd');
+    el.textContent = 'copied!';
+    setTimeout(() => el.textContent = 'npm i -g @edgarelmo/mesh-agent-cli', 2000);
+  });
+}
+function openModal(open) { document.getElementById('modalBg').classList.toggle('open', open !== false); }
+async function submitWaitlist() {
+  const emailInput = document.getElementById('wlEmail');
+  const button = document.querySelector('#modalBg .modal-btn');
+  const msg = document.getElementById('wlMsg');
+  const email = emailInput.value.trim();
+
+  if (!/^\S+@\S+\.\S+$/.test(email)) {
+    msg.textContent = 'Please enter a valid email address.';
+    return;
+  }
+
+  button.disabled = true;
+  msg.textContent = 'Submitting...';
+
+  try {
+    const response = await fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const payload = await response.json();
+    if (!response.ok || !payload.ok) {
+      throw new Error(payload.message || 'Subscription failed.');
+    }
+    msg.textContent = payload.message || `Thanks, ${email}. You are now on the waitlist.`;
+    emailInput.value = '';
+  } catch (error) {
+    msg.textContent = error instanceof Error ? error.message : 'Subscription failed.';
+  } finally {
+    button.disabled = false;
+  }
+}
+</script>
+</body>
 </html>

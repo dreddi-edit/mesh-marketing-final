@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 620" width="1400" height="620" font-family="&#39;Inter&#39;, &#39;Helvetica Neue&#39;, Arial, sans-serif">
+  <rect width="1400" height="620" fill="#f7fbfd" rx="12"></rect>
+
+  <text x="700" y="34" text-anchor="middle" font-size="18" font-weight="600" fill="#102432" letter-spacing="-0.3">Budget Saturation Curve — claude-sonnet-4-6</text>
+  <text x="700" y="54" text-anchor="middle" font-size="12.5" fill="#4a6070">Workspace coverage (files in context / total files) vs token budget. 80-file workspace. NIAH needle + multi-hop consumer at index 60.</text>
+  <text x="700" y="70" text-anchor="middle" font-size="11" fill="#8ca0ac">Real Bedrock run · 2026-04-19 · node benchmarks/llm-budget-saturation-eval.js</text>
+
+  
+  <line x1="240" y1="90" x2="280" y2="90" stroke="#0f6a7b" stroke-width="3" stroke-linecap="round"></line>
+  <text x="288" y="94" font-size="11.5" fill="#102432">Mesh coverage</text>
+  <line x1="420" y1="90" x2="460" y2="90" stroke="#8cb8c4" stroke-width="3" stroke-linecap="round"></line>
+  <text x="468" y="94" font-size="11.5" fill="#102432">Raw coverage</text>
+  <circle cx="610" cy="90" r="6" fill="#0f6a7b"></circle>
+  <text x="622" y="94" font-size="11.5" fill="#102432">NIAH PASS</text>
+  <circle cx="720" cy="90" r="6" fill="#e8e8e8" stroke="#ccc" stroke-width="1.5"></circle>
+  <text x="732" y="94" font-size="11.5" fill="#102432">NIAH N/A</text>
+  <rect x="830" y="84" width="12" height="12" rx="2" fill="#1a9a5e" transform="rotate(45 836 90)"></rect>
+  <text x="848" y="94" font-size="11.5" fill="#102432">Multi-hop PASS</text>
+  <rect x="990" y="84" width="12" height="12" rx="2" fill="#e8e8e8" stroke="#ccc" stroke-width="1.5" transform="rotate(45 996 90)"></rect>
+  <text x="1008" y="94" font-size="11.5" fill="#102432">Multi-hop N/A</text>
+
+  
+  <text x="28" y="240" text-anchor="middle" font-size="12" fill="#4a6070" transform="rotate(-90 28 240)">Coverage (% files in context)</text>
+
+  
+  <text x="690" y="420" text-anchor="middle" font-size="12" fill="#4a6070">Token budget per turn</text>
+
+  
+  <line x1="100" y1="305" x2="1280" y2="305" stroke="#dde8ec" stroke-width="1" stroke-dasharray="4,3"></line>
+  <text x="92" y="309" text-anchor="end" font-size="11" fill="#6b8496">25%</text>
+  <line x1="100" y1="230" x2="1280" y2="230" stroke="#dde8ec" stroke-width="1" stroke-dasharray="4,3"></line>
+  <text x="92" y="234" text-anchor="end" font-size="11" fill="#6b8496">50%</text>
+  <line x1="100" y1="155" x2="1280" y2="155" stroke="#dde8ec" stroke-width="1" stroke-dasharray="4,3"></line>
+  <text x="92" y="159" text-anchor="end" font-size="11" fill="#6b8496">75%</text>
+  <line x1="100" y1="80" x2="1280" y2="80" stroke="#dde8ec" stroke-width="1" stroke-dasharray="none"></line>
+  <text x="92" y="84" text-anchor="end" font-size="11" fill="#6b8496">100%</text>
+
+  
+  <polygon points="100,245 247.5,117.5 395,80 542.5,80 690,80 837.5,80 985,80 1132.5,80 1280,80 1280,80 1132.5,80 985,173.75 837.5,226.25 690,275 542.5,301.25 395,320 247.5,338.75 100,357.5" fill="#0f6a7b" opacity="0.07"></polygon>
+
+  
+  <polyline points="100,357.5 247.5,338.75 395,320 542.5,301.25 690,275 837.5,226.25 985,173.75 1132.5,80 1280,80" fill="none" stroke="#8cb8c4" stroke-width="2.5" stroke-linejoin="round"></polyline>
+  <polyline points="100,245 247.5,117.5 395,80 542.5,80 690,80 837.5,80 985,80 1132.5,80 1280,80" fill="none" stroke="#0f6a7b" stroke-width="2.5" stroke-linejoin="round"></polyline>
+
+  
+  <line x1="395" y1="80" x2="395" y2="385" stroke="#0f6a7b" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.6"></line>
+  <text x="400" y="94" font-size="10" fill="#0f6a7b">Mesh full coverage</text>
+  <line x1="1132.5" y1="80" x2="1132.5" y2="385" stroke="#c04030" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.6"></line>
+  <text x="1137.5" y="108" font-size="10" fill="#c04030">Raw reaches needle</text>
+
+  
+  <circle cx="100" cy="357.5" r="7" fill="#e8e8e8" stroke="#ccc" stroke-width="1.5" opacity="0.95"></circle><rect x="94" y="337.5" width="12" height="12" rx="2" fill="#e8e8e8" stroke="#ccc" stroke-width="1.5" opacity="0.9" transform="rotate(45 100 343.5)"></rect>
+  <circle cx="247.5" cy="338.75" r="7" fill="#e8e8e8" stroke="#ccc" stroke-width="1.5" opacity="0.95"></circle><rect x="241.5" y="318.75" width="12" height="12" rx="2" fill="#e8e8e8" stroke="#ccc" stroke-width="1.5" opacity="0.9" transform="rotate(45 247.5 324.75)"></rect>
+  <circle cx="395" cy="320" r="7" fill="#e8e8e8" stroke="#ccc" stroke-width="1.5" opacity="0.95"></circle><rect x="389" y="300" width="12" height="12" rx="2" fill="#e8e8e8" stroke="#ccc" stroke-width="1.5" opacity="0.9" transform="rotate(45 395 306)"></rect>
+  <circle cx="542.5" cy="301.25" r="7" fill="#e8e8e8" stroke="#ccc" stroke-width="1.5" opacity="0.95"></circle><rect x="536.5" y="281.25" width="12" height="12" rx="2" fill="#e8e8e8" stroke="#ccc" stroke-width="1.5" opacity="0.9" transform="rotate(45 542.5 287.25)"></rect>
+  <circle cx="690" cy="275" r="7" fill="#e8e8e8" stroke="#ccc" stroke-width="1.5" opacity="0.95"></circle><rect x="684" y="255" width="12" height="12" rx="2" fill="#e8e8e8" stroke="#ccc" stroke-width="1.5" opacity="0.9" transform="rotate(45 690 261)"></rect>
+  <circle cx="837.5" cy="226.25" r="7" fill="#e8e8e8" stroke="#ccc" stroke-width="1.5" opacity="0.95"></circle><rect x="831.5" y="206.25" width="12" height="12" rx="2" fill="#e8e8e8" stroke="#ccc" stroke-width="1.5" opacity="0.9" transform="rotate(45 837.5 212.25)"></rect>
+  <circle cx="985" cy="173.75" r="7" fill="#e8e8e8" stroke="#ccc" stroke-width="1.5" opacity="0.95"></circle><rect x="979" y="153.75" width="12" height="12" rx="2" fill="#e8e8e8" stroke="#ccc" stroke-width="1.5" opacity="0.9" transform="rotate(45 985 159.75)"></rect>
+  <circle cx="1132.5" cy="80" r="7" fill="#0f6a7b" stroke="none" stroke-width="1.5" opacity="0.95"></circle><rect x="1126.5" y="60" width="12" height="12" rx="2" fill="#1a9a5e" stroke="none" stroke-width="1.5" opacity="0.9" transform="rotate(45 1132.5 66)"></rect>
+  <circle cx="1280" cy="80" r="7" fill="#0f6a7b" stroke="none" stroke-width="1.5" opacity="0.95"></circle><rect x="1274" y="60" width="12" height="12" rx="2" fill="#1a9a5e" stroke="none" stroke-width="1.5" opacity="0.9" transform="rotate(45 1280 66)"></rect>
+
+  
+  <circle cx="100" cy="245" r="7" fill="#e8e8e8" stroke="#ccc" stroke-width="1.5" opacity="0.95"></circle><rect x="94" y="253" width="12" height="12" rx="2" fill="#e8e8e8" stroke="#ccc" stroke-width="1.5" opacity="0.9" transform="rotate(45 100 259)"></rect>
+  <circle cx="247.5" cy="117.5" r="7" fill="#0f6a7b" stroke="none" stroke-width="1.5" opacity="0.95"></circle><rect x="241.5" y="125.5" width="12" height="12" rx="2" fill="#1a9a5e" stroke="none" stroke-width="1.5" opacity="0.9" transform="rotate(45 247.5 131.5)"></rect>
+  <circle cx="395" cy="80" r="7" fill="#0f6a7b" stroke="none" stroke-width="1.5" opacity="0.95"></circle><rect x="389" y="88" width="12" height="12" rx="2" fill="#1a9a5e" stroke="none" stroke-width="1.5" opacity="0.9" transform="rotate(45 395 94)"></rect>
+  <circle cx="542.5" cy="80" r="7" fill="#0f6a7b" stroke="none" stroke-width="1.5" opacity="0.95"></circle><rect x="536.5" y="88" width="12" height="12" rx="2" fill="#1a9a5e" stroke="none" stroke-width="1.5" opacity="0.9" transform="rotate(45 542.5 94)"></rect>
+  <circle cx="690" cy="80" r="7" fill="#0f6a7b" stroke="none" stroke-width="1.5" opacity="0.95"></circle><rect x="684" y="88" width="12" height="12" rx="2" fill="#1a9a5e" stroke="none" stroke-width="1.5" opacity="0.9" transform="rotate(45 690 94)"></rect>
+  <circle cx="837.5" cy="80" r="7" fill="#0f6a7b" stroke="none" stroke-width="1.5" opacity="0.95"></circle><rect x="831.5" y="88" width="12" height="12" rx="2" fill="#1a9a5e" stroke="none" stroke-width="1.5" opacity="0.9" transform="rotate(45 837.5 94)"></rect>
+  <circle cx="985" cy="80" r="7" fill="#0f6a7b" stroke="none" stroke-width="1.5" opacity="0.95"></circle><rect x="979" y="88" width="12" height="12" rx="2" fill="#1a9a5e" stroke="none" stroke-width="1.5" opacity="0.9" transform="rotate(45 985 94)"></rect>
+  <circle cx="1132.5" cy="80" r="7" fill="#0f6a7b" stroke="none" stroke-width="1.5" opacity="0.95"></circle><rect x="1126.5" y="88" width="12" height="12" rx="2" fill="#1a9a5e" stroke="none" stroke-width="1.5" opacity="0.9" transform="rotate(45 1132.5 94)"></rect>
+  <circle cx="1280" cy="80" r="7" fill="#0f6a7b" stroke="none" stroke-width="1.5" opacity="0.95"></circle><rect x="1274" y="88" width="12" height="12" rx="2" fill="#1a9a5e" stroke="none" stroke-width="1.5" opacity="0.9" transform="rotate(45 1280 94)"></rect>
+
+  
+  <line x1="100" y1="380" x2="1280" y2="380" stroke="#b0c8d4" stroke-width="1.5"></line>
+  <text x="100" y="398" text-anchor="middle" font-size="11" fill="#4a6070">1.5k</text>
+  <text x="247.5" y="398" text-anchor="middle" font-size="11" fill="#4a6070">3k</text>
+  <text x="395" y="398" text-anchor="middle" font-size="11" fill="#4a6070">4.5k</text>
+  <text x="542.5" y="398" text-anchor="middle" font-size="11" fill="#4a6070">6k</text>
+  <text x="690" y="398" text-anchor="middle" font-size="11" fill="#4a6070">8k</text>
+  <text x="837.5" y="398" text-anchor="middle" font-size="11" fill="#4a6070">12k</text>
+  <text x="985" y="398" text-anchor="middle" font-size="11" fill="#4a6070">16k</text>
+  <text x="1132.5" y="398" text-anchor="middle" font-size="11" fill="#4a6070">24k</text>
+  <text x="1280" y="398" text-anchor="middle" font-size="11" fill="#4a6070">32k</text>
+
+  
+  <text x="690" y="200" text-anchor="middle" font-size="13" font-weight="600" fill="#0f6a7b" opacity="0.5">Mesh advantage zone</text>
+
+  
+  <rect x="80" y="440" width="1240" height="100" fill="#eaf4f7" rx="8" stroke="#c4dde5" stroke-width="1"></rect>
+  <text x="700" y="460" text-anchor="middle" font-size="12.5" font-weight="700" fill="#102432">Budget efficiency: raw needs 5.3× more tokens to achieve what Mesh delivers at saturation point</text>
+  <text x="700" y="480" text-anchor="middle" font-size="12" fill="#4a6070">Mesh full coverage (80/80 files): 4.5k T · Raw first reaches needle (index 60): 24k T</text>
+  <text x="700" y="500" text-anchor="middle" font-size="12" fill="#4a6070">Below the crossover: Mesh passes, Raw returns NOTFOUND — same model, same budget, different representation.</text>
+  <text x="700" y="520" text-anchor="middle" font-size="11" fill="#8ca0ac">Test: 80 files, NIAH needle at index 60 + multi-hop chain source@5/consumer@60. Raw = plain source, Mesh = ultra capsules.</text>
+</svg>

@@ -20,10 +20,7 @@ export default async function handler(req, res) {
       source: 'mesh-marketing-site',
       createdAt: now.toISOString(),
       userAgent: req.headers['user-agent'] || null,
-      ip:
-        req.headers['x-forwarded-for'] ||
-        req.headers['x-real-ip'] ||
-        null
+      ip: req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || null
     };
 
     const day = now.toISOString().slice(0, 10);

@@ -1,0 +1,40 @@
+<svg viewBox="0 0 1100 360" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1100" height="360" fill="#0d1117" rx="12"></rect>
+  <text x="550" y="40" text-anchor="middle" fill="#e6edf3" font-size="24" font-weight="bold">Mesh Platform — 3 Produkte</text>
+
+  
+  <rect x="30" y="70" width="330" height="240" fill="#161b22" rx="14" stroke="#3fb950" stroke-width="2.5"></rect>
+  <text x="195" y="108" text-anchor="middle" fill="#3fb950" font-size="22" font-weight="bold">Mesh IDE</text>
+  <text x="195" y="135" text-anchor="middle" fill="#3fb95080" font-size="14">Live — try-mesh.com</text>
+  <line x1="55" y1="152" x2="335" y2="152" stroke="#30363d" stroke-width="0.5"></line>
+  <text x="195" y="178" text-anchor="middle" fill="#e6edf3" font-size="14">Browser-IDE mit</text>
+  <text x="195" y="200" text-anchor="middle" fill="#8b949e" font-size="14">AI Chat, Terminal,</text>
+  <text x="195" y="222" text-anchor="middle" fill="#8b949e" font-size="14">Voice-Coding,</text>
+  <text x="195" y="244" text-anchor="middle" fill="#8b949e" font-size="14">Code Review</text>
+  <text x="195" y="290" text-anchor="middle" fill="#3fb950" font-size="18" font-weight="bold">3.6x Context Gain</text>
+
+  
+  <rect x="385" y="70" width="330" height="240" fill="#161b22" rx="14" stroke="#58a6ff" stroke-width="2.5"></rect>
+  <text x="550" y="108" text-anchor="middle" fill="#58a6ff" font-size="22" font-weight="bold">Mesh MCP</text>
+  <text x="550" y="135" text-anchor="middle" fill="#58a6ff80" font-size="14">Published — npm</text>
+  <line x1="410" y1="152" x2="690" y2="152" stroke="#30363d" stroke-width="0.5"></line>
+  <text x="550" y="178" text-anchor="middle" fill="#e6edf3" font-size="14">MCP Server fuer</text>
+  <text x="550" y="200" text-anchor="middle" fill="#8b949e" font-size="14">Claude Desktop,</text>
+  <text x="550" y="222" text-anchor="middle" fill="#8b949e" font-size="14">Cursor, Windsurf</text>
+  <text x="550" y="244" text-anchor="middle" fill="#8b949e" font-size="14">+ andere AI-Agents</text>
+  <text x="550" y="290" text-anchor="middle" fill="#58a6ff" font-size="18" font-weight="bold">3.8x Context Gain</text>
+
+  
+  <rect x="740" y="70" width="330" height="240" fill="#161b22" rx="14" stroke="#d2a8ff" stroke-width="2.5" stroke-dasharray="10"></rect>
+  <text x="905" y="108" text-anchor="middle" fill="#d2a8ff" font-size="22" font-weight="bold">Mesh API</text>
+  <text x="905" y="135" text-anchor="middle" fill="#d2a8ff80" font-size="14">Planned — next step</text>
+  <line x1="765" y1="152" x2="1045" y2="152" stroke="#30363d" stroke-width="0.5"></line>
+  <text x="905" y="178" text-anchor="middle" fill="#e6edf3" font-size="14">REST/gRPC</text>
+  <text x="905" y="200" text-anchor="middle" fill="#8b949e" font-size="14">Compression-</text>
+  <text x="905" y="222" text-anchor="middle" fill="#8b949e" font-size="14">as-a-Service fuer</text>
+  <text x="905" y="244" text-anchor="middle" fill="#8b949e" font-size="14">jede AI-Anwendung</text>
+  <text x="905" y="290" text-anchor="middle" fill="#d2a8ff" font-size="18" font-weight="bold">3.5x Context Gain</text>
+
+  
+  <text x="550" y="340" text-anchor="middle" fill="#8b949e" font-size="14">Alle drei nutzen dieselbe Capsule Compression Engine (Tree-sitter AST)</text>
+</svg>

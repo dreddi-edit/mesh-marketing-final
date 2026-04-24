@@ -1,0 +1,242 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 870" width="1400" height="870" font-family="&#39;Inter&#39;, &#39;Helvetica Neue&#39;, Arial, sans-serif">
+  
+  <rect width="1400" height="870" fill="#f7fbfd" rx="12"></rect>
+
+  
+  <text x="700" y="36" text-anchor="middle" font-size="19" font-weight="600" fill="#102432" letter-spacing="-0.3">LLM NIAH — Sonnet vs Opus Recall With vs Without Mesh</text>
+  <text x="700" y="57" text-anchor="middle" font-size="12.5" fill="#4a6070">Real eval: model must find planted SESSION_SECRET in a synthetic workspace. N/A = needle file beyond context window.</text>
+  <text x="700" y="74" text-anchor="middle" font-size="11" fill="#8ca0ac">Actual Bedrock run · 2026-04-19 · node benchmarks/llm-niah-eval.js --both</text>
+
+  
+  <rect x="270" y="87" width="14" height="14" fill="#0f6a7b" rx="2"></rect>
+  <text x="290" y="99" font-size="12" fill="#102432">With Mesh (ultra capsules) — PASS</text>
+  <rect x="520" y="87" width="14" height="14" fill="#8cb8c4" rx="2" opacity="0.85"></rect>
+  <text x="540" y="99" font-size="12" fill="#102432">Without Mesh (raw source) — PASS</text>
+  <rect x="770" y="87" width="14" height="14" fill="#e8e8e8" rx="2" stroke="#ccc" stroke-width="1"></rect>
+  <text x="790" y="99" font-size="12" fill="#102432">N/A — needle outside context window</text>
+
+  
+  <text x="700" y="126" text-anchor="middle" font-size="13.5" font-weight="700" fill="#102432">Sonnet 4.6 — 6,000T budget</text>
+  <text x="700" y="143" text-anchor="middle" font-size="11.5" fill="#4a6070">5/5 PASS with Mesh · 2/5 PASS without Mesh · 40% recall · 54% avg coverage without / 100% with</text>
+
+  
+  <rect x="93" y="155" width="80" height="175" fill="#8cb8c4" rx="4" opacity="0.9"></rect>
+  <text x="133" y="148" text-anchor="middle" font-size="12" font-weight="700" fill="#3a7080">PASS</text>
+  <rect x="203" y="155" width="80" height="175" fill="#0f6a7b" rx="4" opacity="0.9"></rect>
+  <text x="243" y="148" text-anchor="middle" font-size="12" font-weight="700" fill="#0f6a7b">PASS</text>
+
+  
+  <rect x="349" y="155" width="80" height="175" fill="#8cb8c4" rx="4" opacity="0.9"></rect>
+  <text x="389" y="148" text-anchor="middle" font-size="12" font-weight="700" fill="#3a7080">PASS</text>
+  <rect x="459" y="155" width="80" height="175" fill="#0f6a7b" rx="4" opacity="0.9"></rect>
+  <text x="499" y="148" text-anchor="middle" font-size="12" font-weight="700" fill="#0f6a7b">PASS</text>
+
+  
+  <rect x="605" y="210" width="80" height="80" fill="#e8e8e8" rx="4" stroke="#ccc" stroke-width="1.5"></rect>
+  <text x="645" y="247" text-anchor="middle" font-size="11" font-weight="600" fill="#999">N/A</text>
+  <text x="645" y="261" text-anchor="middle" font-size="10" fill="#bbb">17/40 incl</text>
+  <rect x="715" y="155" width="80" height="175" fill="#0f6a7b" rx="4" opacity="0.9"></rect>
+  <text x="755" y="148" text-anchor="middle" font-size="12" font-weight="700" fill="#0f6a7b">PASS</text>
+
+  
+  <rect x="861" y="210" width="80" height="80" fill="#e8e8e8" rx="4" stroke="#ccc" stroke-width="1.5"></rect>
+  <text x="901" y="247" text-anchor="middle" font-size="11" font-weight="600" fill="#999">N/A</text>
+  <text x="901" y="261" text-anchor="middle" font-size="10" fill="#bbb">17/80 incl</text>
+  <rect x="971" y="155" width="80" height="175" fill="#0f6a7b" rx="4" opacity="0.9"></rect>
+  <text x="1011" y="148" text-anchor="middle" font-size="12" font-weight="700" fill="#0f6a7b">PASS</text>
+
+  
+  <rect x="1117" y="210" width="80" height="80" fill="#e8e8e8" rx="4" stroke="#ccc" stroke-width="1.5"></rect>
+  <text x="1157" y="247" text-anchor="middle" font-size="11" font-weight="600" fill="#999">N/A</text>
+  <text x="1157" y="261" text-anchor="middle" font-size="10" fill="#bbb">17/120 incl</text>
+  <rect x="1227" y="155" width="80" height="175" fill="#0f6a7b" rx="4" opacity="0.9"></rect>
+  <text x="1267" y="148" text-anchor="middle" font-size="12" font-weight="700" fill="#0f6a7b">PASS</text>
+
+  
+  <line x1="60" y1="330" x2="1340" y2="330" stroke="#b0c8d4" stroke-width="1.5"></line>
+
+  <text x="133" y="273" text-anchor="middle" font-size="9" fill="white" opacity="0.8">raw</text>
+  <text x="243" y="273" text-anchor="middle" font-size="9" fill="white" opacity="0.8">mesh</text>
+  <text x="389" y="273" text-anchor="middle" font-size="9" fill="white" opacity="0.8">raw</text>
+  <text x="499" y="273" text-anchor="middle" font-size="9" fill="white" opacity="0.8">mesh</text>
+  <text x="755" y="273" text-anchor="middle" font-size="9" fill="white" opacity="0.8">mesh</text>
+  <text x="1011" y="273" text-anchor="middle" font-size="9" fill="white" opacity="0.8">mesh</text>
+  <text x="1267" y="273" text-anchor="middle" font-size="9" fill="white" opacity="0.8">mesh</text>
+
+  <text x="188" y="346" text-anchor="middle" font-size="12" font-weight="700" fill="#102432">10 files</text>
+  <text x="188" y="361" text-anchor="middle" font-size="9.5" fill="#6b8496">3,195T · 477T</text>
+  <text x="444" y="346" text-anchor="middle" font-size="12" font-weight="700" fill="#102432">20 files</text>
+  <text x="444" y="361" text-anchor="middle" font-size="9.5" fill="#6b8496">5,995T · 887T</text>
+  <text x="700" y="346" text-anchor="middle" font-size="12" font-weight="700" fill="#c04030">40 files ← Mesh advantage begins</text>
+  <text x="700" y="361" text-anchor="middle" font-size="9.5" fill="#c04030">raw: 17 incl · mesh: 40 incl</text>
+  <text x="700" y="374" text-anchor="middle" font-size="9.5" fill="#6b8496">5,882T · 1,707T</text>
+  <text x="956" y="346" text-anchor="middle" font-size="12" font-weight="700" fill="#102432">80 files</text>
+  <text x="956" y="361" text-anchor="middle" font-size="9.5" fill="#c04030">raw: 17 incl · mesh: 80 incl</text>
+  <text x="956" y="374" text-anchor="middle" font-size="9.5" fill="#6b8496">5,882T · 3,347T</text>
+  <text x="1212" y="346" text-anchor="middle" font-size="12" font-weight="700" fill="#102432">120 files</text>
+  <text x="1212" y="361" text-anchor="middle" font-size="9.5" fill="#c04030">raw: 17 incl · mesh: 120 incl</text>
+  <text x="1212" y="374" text-anchor="middle" font-size="9.5" fill="#6b8496">5,882T · 4,987T</text>
+
+  
+  <line x1="60" y1="395" x2="1340" y2="395" stroke="#c4dde5" stroke-width="1.5" stroke-dasharray="5,4"></line>
+
+  
+  <text x="700" y="416" text-anchor="middle" font-size="13.5" font-weight="700" fill="#102432">Opus — 8,000T budget (harder: deeper needle, more files)</text>
+  <text x="700" y="433" text-anchor="middle" font-size="11.5" fill="#4a6070">4/5 PASS with Mesh · 1/5 PASS without Mesh · Same pattern confirmed by GPT-OSS-20B, Gemma 3 4B, Llama 3.3 70B</text>
+
+  
+  <rect x="93" y="445" width="80" height="115" fill="#8cb8c4" rx="4" opacity="0.9"></rect>
+  <text x="133" y="439" text-anchor="middle" font-size="12" font-weight="700" fill="#3a7080">PASS</text>
+  <rect x="203" y="445" width="80" height="115" fill="#0f6a7b" rx="4" opacity="0.9"></rect>
+  <text x="243" y="439" text-anchor="middle" font-size="12" font-weight="700" fill="#0f6a7b">PASS</text>
+
+  
+  <rect x="349" y="488" width="80" height="62" fill="#e8e8e8" rx="4" stroke="#ccc" stroke-width="1.5"></rect>
+  <text x="389" y="521" text-anchor="middle" font-size="11" font-weight="600" fill="#999">N/A</text>
+  <text x="389" y="535" text-anchor="middle" font-size="9" fill="#bbb">23/50 incl</text>
+  <rect x="459" y="445" width="80" height="115" fill="#0f6a7b" rx="4" opacity="0.9"></rect>
+  <text x="499" y="439" text-anchor="middle" font-size="12" font-weight="700" fill="#0f6a7b">PASS</text>
+
+  
+  <rect x="605" y="488" width="80" height="62" fill="#e8e8e8" rx="4" stroke="#ccc" stroke-width="1.5"></rect>
+  <text x="645" y="521" text-anchor="middle" font-size="11" font-weight="600" fill="#999">N/A</text>
+  <text x="645" y="535" text-anchor="middle" font-size="9" fill="#bbb">23/100 incl</text>
+  <rect x="715" y="445" width="80" height="115" fill="#0f6a7b" rx="4" opacity="0.9"></rect>
+  <text x="755" y="439" text-anchor="middle" font-size="12" font-weight="700" fill="#0f6a7b">PASS</text>
+
+  
+  <rect x="861" y="488" width="80" height="62" fill="#e8e8e8" rx="4" stroke="#ccc" stroke-width="1.5"></rect>
+  <text x="901" y="521" text-anchor="middle" font-size="11" font-weight="600" fill="#999">N/A</text>
+  <text x="901" y="535" text-anchor="middle" font-size="9" fill="#bbb">23/180 incl</text>
+  <rect x="971" y="445" width="80" height="115" fill="#0f6a7b" rx="4" opacity="0.9"></rect>
+  <text x="1011" y="439" text-anchor="middle" font-size="12" font-weight="700" fill="#0f6a7b">PASS</text>
+
+  
+  <rect x="1117" y="488" width="80" height="62" fill="#e8e8e8" rx="4" stroke="#ccc" stroke-width="1.5"></rect>
+  <text x="1157" y="521" text-anchor="middle" font-size="11" font-weight="600" fill="#999">N/A</text>
+  <text x="1157" y="535" text-anchor="middle" font-size="9" fill="#bbb">23/260 incl</text>
+  <rect x="1227" y="488" width="80" height="62" fill="#e8e8e8" rx="4" stroke="#ccc" stroke-width="1.5"></rect>
+  <text x="1267" y="521" text-anchor="middle" font-size="11" font-weight="600" fill="#999">N/A</text>
+  <text x="1267" y="535" text-anchor="middle" font-size="9" fill="#bbb">195/260 incl</text>
+
+  
+  <line x1="60" y1="560" x2="1340" y2="560" stroke="#b0c8d4" stroke-width="1.5"></line>
+
+  <text x="133" y="510" text-anchor="middle" font-size="9" fill="white" opacity="0.8">raw</text>
+  <text x="243" y="510" text-anchor="middle" font-size="9" fill="white" opacity="0.8">mesh</text>
+  <text x="499" y="510" text-anchor="middle" font-size="9" fill="white" opacity="0.8">mesh</text>
+  <text x="755" y="510" text-anchor="middle" font-size="9" fill="white" opacity="0.8">mesh</text>
+  <text x="1011" y="510" text-anchor="middle" font-size="9" fill="white" opacity="0.8">mesh</text>
+
+  <text x="188" y="575" text-anchor="middle" font-size="12" font-weight="700" fill="#102432">20 files</text>
+  <text x="188" y="590" text-anchor="middle" font-size="9.5" fill="#6b8496">6,697T · 887T</text>
+  <text x="444" y="575" text-anchor="middle" font-size="12" font-weight="700" fill="#c04030">50 files ← Mesh advantage</text>
+  <text x="444" y="590" text-anchor="middle" font-size="9.5" fill="#c04030">raw: 23 incl · mesh: 50 incl</text>
+  <text x="444" y="603" text-anchor="middle" font-size="9.5" fill="#6b8496">7,988T · 2,117T</text>
+  <text x="700" y="575" text-anchor="middle" font-size="12" font-weight="700" fill="#102432">100 files</text>
+  <text x="700" y="590" text-anchor="middle" font-size="9.5" fill="#c04030">raw: 23 incl · mesh: 100 incl</text>
+  <text x="700" y="603" text-anchor="middle" font-size="9.5" fill="#6b8496">7,988T · 4,167T</text>
+  <text x="956" y="575" text-anchor="middle" font-size="12" font-weight="700" fill="#102432">180 files</text>
+  <text x="956" y="590" text-anchor="middle" font-size="9.5" fill="#c04030">raw: 23 incl · mesh: 180 incl</text>
+  <text x="956" y="603" text-anchor="middle" font-size="9.5" fill="#6b8496">7,988T · 7,447T</text>
+  <text x="1212" y="575" text-anchor="middle" font-size="12" font-weight="700" fill="#c04030">260 files (at limit)</text>
+  <text x="1212" y="590" text-anchor="middle" font-size="9.5" fill="#c04030">raw: 23 incl · mesh: 195 incl</text>
+  <text x="1212" y="603" text-anchor="middle" font-size="9.5" fill="#6b8496">7,988T · 7,985T · needle@220</text>
+
+  
+  <rect x="60" y="622" width="1280" height="224" fill="#eaf4f7" rx="8" stroke="#c4dde5" stroke-width="1"></rect>
+  <text x="700" y="642" text-anchor="middle" font-size="12.5" font-weight="700" fill="#102432">Cross-model comparison — all models, real Bedrock inference calls</text>
+
+  
+  <text x="190" y="662" text-anchor="middle" font-size="10.5" font-weight="600" fill="#4a6070">Model</text>
+  <text x="360" y="662" text-anchor="middle" font-size="10.5" font-weight="600" fill="#4a6070">Difficulty</text>
+  <text x="490" y="662" text-anchor="middle" font-size="10.5" font-weight="600" fill="#4a6070">Budget</text>
+  <text x="630" y="662" text-anchor="middle" font-size="10.5" font-weight="600" fill="#4a6070">Raw recall</text>
+  <text x="790" y="662" text-anchor="middle" font-size="10.5" font-weight="600" fill="#4a6070">Mesh recall</text>
+  <text x="960" y="662" text-anchor="middle" font-size="10.5" font-weight="600" fill="#4a6070">Raw coverage</text>
+  <text x="1120" y="662" text-anchor="middle" font-size="10.5" font-weight="600" fill="#4a6070">Mesh coverage</text>
+  <text x="1275" y="662" text-anchor="middle" font-size="10.5" font-weight="600" fill="#4a6070">Coverage gain</text>
+  <line x1="78" y1="668" x2="1322" y2="668" stroke="#c4dde5" stroke-width="1"></line>
+
+  
+  <text x="360" y="683" text-anchor="middle" font-size="9.5" font-weight="600" fill="#7aa0b0" font-style="italic">standard</text>
+
+  
+  <text x="190" y="697" text-anchor="middle" font-size="10.5" fill="#102432">Sonnet 4.6</text>
+  <text x="360" y="697" text-anchor="middle" font-size="10" fill="#6b8496">6k / 5 configs</text>
+  <text x="490" y="697" text-anchor="middle" font-size="10.5" fill="#102432">6,000T</text>
+  <text x="630" y="697" text-anchor="middle" font-size="10.5" fill="#c04030">2/5 (40%)</text>
+  <text x="790" y="697" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f6a7b">5/5 (100%)</text>
+  <text x="960" y="697" text-anchor="middle" font-size="10.5" fill="#c04030">54% avg</text>
+  <text x="1120" y="697" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f6a7b">100% avg</text>
+  <text x="1275" y="697" text-anchor="middle" font-size="10.5" fill="#102432">1.9× more files</text>
+
+  
+  <text x="190" y="713" text-anchor="middle" font-size="10.5" fill="#102432">GPT-OSS-20B</text>
+  <text x="360" y="713" text-anchor="middle" font-size="10" fill="#6b8496">6k / 5 configs</text>
+  <text x="490" y="713" text-anchor="middle" font-size="10.5" fill="#102432">6,000T</text>
+  <text x="630" y="713" text-anchor="middle" font-size="10.5" fill="#c04030">2/5 (40%)</text>
+  <text x="790" y="713" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f6a7b">5/5 (100%)</text>
+  <text x="960" y="713" text-anchor="middle" font-size="10.5" fill="#c04030">54% avg</text>
+  <text x="1120" y="713" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f6a7b">100% avg</text>
+  <text x="1275" y="713" text-anchor="middle" font-size="10.5" fill="#102432">1.9× more files</text>
+
+  
+  <text x="190" y="729" text-anchor="middle" font-size="10.5" fill="#102432">Gemma 3 4B</text>
+  <text x="360" y="729" text-anchor="middle" font-size="10" fill="#6b8496">6k / 5 configs</text>
+  <text x="490" y="729" text-anchor="middle" font-size="10.5" fill="#102432">6,000T</text>
+  <text x="630" y="729" text-anchor="middle" font-size="10.5" fill="#c04030">2/5 (40%)</text>
+  <text x="790" y="729" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f6a7b">5/5 (100%)</text>
+  <text x="960" y="729" text-anchor="middle" font-size="10.5" fill="#c04030">54% avg</text>
+  <text x="1120" y="729" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f6a7b">100% avg</text>
+  <text x="1275" y="729" text-anchor="middle" font-size="10.5" fill="#102432">1.9× more files</text>
+
+  
+  <line x1="78" y1="738" x2="1322" y2="738" stroke="#c4dde5" stroke-width="0.8" stroke-dasharray="4,3"></line>
+  <text x="360" y="752" text-anchor="middle" font-size="9.5" font-weight="600" fill="#7aa0b0" font-style="italic">hard (deeper needle)</text>
+
+  
+  <text x="190" y="766" text-anchor="middle" font-size="10.5" fill="#102432">Opus</text>
+  <text x="360" y="766" text-anchor="middle" font-size="10" fill="#6b8496">8k / 5 configs</text>
+  <text x="490" y="766" text-anchor="middle" font-size="10.5" fill="#102432">8,000T</text>
+  <text x="630" y="766" text-anchor="middle" font-size="10.5" fill="#c04030">1/5 (20%)</text>
+  <text x="790" y="766" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f6a7b">4/5 (80%) *</text>
+  <text x="960" y="766" text-anchor="middle" font-size="10.5" fill="#c04030">38% avg</text>
+  <text x="1120" y="766" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f6a7b">95% avg</text>
+  <text x="1275" y="766" text-anchor="middle" font-size="10.5" fill="#102432">2.5× more files</text>
+
+  
+  <text x="190" y="782" text-anchor="middle" font-size="10.5" fill="#102432">GPT-OSS-20B</text>
+  <text x="360" y="782" text-anchor="middle" font-size="10" fill="#6b8496">8k / 5 configs</text>
+  <text x="490" y="782" text-anchor="middle" font-size="10.5" fill="#102432">8,000T</text>
+  <text x="630" y="782" text-anchor="middle" font-size="10.5" fill="#c04030">1/5 (20%)</text>
+  <text x="790" y="782" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f6a7b">4/5 (80%) *</text>
+  <text x="960" y="782" text-anchor="middle" font-size="10.5" fill="#c04030">38% avg</text>
+  <text x="1120" y="782" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f6a7b">95% avg</text>
+  <text x="1275" y="782" text-anchor="middle" font-size="10.5" fill="#102432">2.5× more files</text>
+
+  
+  <text x="190" y="798" text-anchor="middle" font-size="10.5" fill="#102432">Gemma 3 4B</text>
+  <text x="360" y="798" text-anchor="middle" font-size="10" fill="#6b8496">8k / 5 configs</text>
+  <text x="490" y="798" text-anchor="middle" font-size="10.5" fill="#102432">8,000T</text>
+  <text x="630" y="798" text-anchor="middle" font-size="10.5" fill="#c04030">1/5 (20%)</text>
+  <text x="790" y="798" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f6a7b">4/5 (80%) *</text>
+  <text x="960" y="798" text-anchor="middle" font-size="10.5" fill="#c04030">38% avg</text>
+  <text x="1120" y="798" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f6a7b">95% avg</text>
+  <text x="1275" y="798" text-anchor="middle" font-size="10.5" fill="#102432">2.5× more files</text>
+
+  
+  <text x="190" y="814" text-anchor="middle" font-size="10.5" fill="#102432">Llama 3.3 70B</text>
+  <text x="360" y="814" text-anchor="middle" font-size="10" fill="#6b8496">8k / 5 configs</text>
+  <text x="490" y="814" text-anchor="middle" font-size="10.5" fill="#102432">8,000T</text>
+  <text x="630" y="814" text-anchor="middle" font-size="10.5" fill="#c04030">1/5 (20%)</text>
+  <text x="790" y="814" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f6a7b">4/5 (80%) *</text>
+  <text x="960" y="814" text-anchor="middle" font-size="10.5" fill="#c04030">38% avg</text>
+  <text x="1120" y="814" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f6a7b">95% avg</text>
+  <text x="1275" y="814" text-anchor="middle" font-size="10.5" fill="#102432">2.5× more files</text>
+
+  
+  <text x="700" y="835" text-anchor="middle" font-size="9.5" fill="#8ca0ac">* 260-file config: mesh also N/A — needle at file 220, only 195 fit in 8,000T. Physical context limit reached for all models.</text>
+  <text x="700" y="851" text-anchor="middle" font-size="9.5" fill="#8ca0ac">Key finding: coverage wall is model-agnostic — identical N/A pattern from 4B to frontier. Mesh advantage is structural, not model-specific.</text>
+  <text x="700" y="864" text-anchor="middle" font-size="9.5" fill="#8ca0ac">Needle = SESSION_SECRET constant. Model must return exact value or NOTFOUND. Raw = plain source. Mesh = ultra capsules (~7–10× smaller).</text>
+</svg>

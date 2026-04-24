@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 648" width="1400" height="648" font-family="&#39;Inter&#39;, &#39;Helvetica Neue&#39;, Arial, sans-serif">
+  <rect width="1400" height="648" fill="#f7fbfd" rx="12"></rect>
+
+  
+  <text x="700" y="36" text-anchor="middle" font-size="19" font-weight="600" fill="#102432" letter-spacing="-0.3">Mesh Coverage Advantage — All Evals, All Models</text>
+  <text x="700" y="57" text-anchor="middle" font-size="12.5" fill="#4a6070">Coverage wall is model-agnostic. Same structural failure across 4B → frontier models. Mesh solves it equally for all.</text>
+  <text x="700" y="74" text-anchor="middle" font-size="11" fill="#8ca0ac">Real Bedrock inference · 2026-04-19 · 5 evals · 5 models</text>
+
+  
+  <rect x="240" y="86" width="12" height="12" fill="#0f6a7b" rx="2"></rect>
+  <text x="258" y="97" font-size="11.5" fill="#102432">With Mesh</text>
+  <rect x="370" y="86" width="12" height="12" fill="#8cb8c4" rx="2" opacity="0.85"></rect>
+  <text x="388" y="97" font-size="11.5" fill="#102432">Without Mesh</text>
+  <rect x="520" y="86" width="12" height="12" fill="#e8e8e8" rx="2" stroke="#ccc" stroke-width="1"></rect>
+  <text x="538" y="97" font-size="11.5" fill="#102432">N/A (context wall)</text>
+
+  
+  <line x1="230" y1="108" x2="230" y2="430" stroke="#b0c8d4" stroke-width="1.5"></line>
+  <line x1="230" y1="430" x2="1330" y2="430" stroke="#b0c8d4" stroke-width="1.5"></line>
+
+  
+  <line x1="450" y1="105" x2="450" y2="433" stroke="#e0ebf0" stroke-width="1"></line>
+  <line x1="670" y1="105" x2="670" y2="433" stroke="#e0ebf0" stroke-width="1"></line>
+  <line x1="890" y1="105" x2="890" y2="433" stroke="#e0ebf0" stroke-width="1"></line>
+  <line x1="1110" y1="105" x2="1110" y2="433" stroke="#e0ebf0" stroke-width="1"></line>
+  <line x1="1330" y1="105" x2="1330" y2="433" stroke="#e0ebf0" stroke-width="1"></line>
+
+  <text x="230" y="446" text-anchor="middle" font-size="11" fill="#6b8496">0%</text>
+  <text x="450" y="446" text-anchor="middle" font-size="11" fill="#6b8496">20%</text>
+  <text x="670" y="446" text-anchor="middle" font-size="11" fill="#6b8496">40%</text>
+  <text x="890" y="446" text-anchor="middle" font-size="11" fill="#6b8496">60%</text>
+  <text x="1110" y="446" text-anchor="middle" font-size="11" fill="#6b8496">80%</text>
+  <text x="1330" y="446" text-anchor="middle" font-size="11" fill="#6b8496">100%</text>
+  <text x="780" y="464" text-anchor="middle" font-size="12" fill="#4a6070">Recall / pass rate (% of test cases with correct answer)</text>
+
+  
+  <text x="218" y="132" text-anchor="end" font-size="11.5" font-weight="600" fill="#102432">NIAH Standard</text>
+  <text x="218" y="147" text-anchor="end" font-size="9.5" fill="#6b8496">6,000T · 3 models</text>
+  <rect x="230" y="116" width="1100" height="18" fill="#0f6a7b" rx="3" opacity="0.9"></rect>
+  <text x="1340" y="129" text-anchor="start" font-size="10.5" font-weight="700" fill="#0f6a7b">5/5 (100%)</text>
+  <rect x="230" y="138" width="440" height="18" fill="#8cb8c4" rx="3" opacity="0.85"></rect>
+  <rect x="670" y="138" width="660" height="18" fill="#e8e8e8" rx="3" stroke="#ccc" stroke-width="0.8" opacity="0.7"></rect>
+  <text x="1340" y="151" text-anchor="start" font-size="10.5" fill="#5a7e8c">2/5 (40%)</text>
+  <text x="1000" y="150" text-anchor="middle" font-size="9" fill="#aaa">3 configs: needle not reached</text>
+  <text x="232" y="127" font-size="8.5" fill="white" opacity="0.8">mesh · Sonnet / GPT-OSS-20B / Gemma 3 4B</text>
+  <text x="232" y="149" font-size="8.5" fill="white" opacity="0.7">raw</text>
+
+  
+  <text x="218" y="178" text-anchor="end" font-size="11.5" font-weight="600" fill="#102432">NIAH Hard</text>
+  <text x="218" y="193" text-anchor="end" font-size="9.5" fill="#6b8496">8,000T · 4 models</text>
+  <rect x="230" y="162" width="880" height="18" fill="#0f6a7b" rx="3" opacity="0.9"></rect>
+  <rect x="1110" y="162" width="220" height="18" fill="#e8e8e8" rx="3" stroke="#ccc" stroke-width="0.8" opacity="0.7"></rect>
+  <text x="1340" y="175" text-anchor="start" font-size="10.5" font-weight="700" fill="#0f6a7b">4/5 (80%)</text>
+  <rect x="230" y="184" width="220" height="18" fill="#8cb8c4" rx="3" opacity="0.85"></rect>
+  <rect x="450" y="184" width="880" height="18" fill="#e8e8e8" rx="3" stroke="#ccc" stroke-width="0.8" opacity="0.7"></rect>
+  <text x="1340" y="197" text-anchor="start" font-size="10.5" fill="#5a7e8c">1/5 (20%)</text>
+  <text x="1200" y="174" text-anchor="middle" font-size="8.5" fill="#aaa">260f limit</text>
+  <text x="890" y="196" text-anchor="middle" font-size="9" fill="#aaa">4 configs: needle not reached</text>
+  <text x="232" y="173" font-size="8.5" fill="white" opacity="0.8">mesh · Opus / GPT-OSS-20B / Gemma 3 4B / Llama 3.3 70B</text>
+  <text x="232" y="195" font-size="8.5" fill="white" opacity="0.7">raw</text>
+
+  <line x1="65" y1="213" x2="1390" y2="213" stroke="#d8eaf0" stroke-width="1" stroke-dasharray="4,3"></line>
+
+  
+  <text x="218" y="233" text-anchor="end" font-size="11.5" font-weight="600" fill="#102432">Multi-Hop</text>
+  <text x="218" y="248" text-anchor="end" font-size="9.5" fill="#6b8496">6,000T · 3 models</text>
+  <rect x="230" y="217" width="1100" height="18" fill="#0f6a7b" rx="3" opacity="0.9"></rect>
+  <text x="1340" y="230" text-anchor="start" font-size="10.5" font-weight="700" fill="#0f6a7b">12/12 (100%)</text>
+  <rect x="230" y="239" width="275" height="18" fill="#8cb8c4" rx="3" opacity="0.85"></rect>
+  <rect x="505" y="239" width="825" height="18" fill="#e8e8e8" rx="3" stroke="#ccc" stroke-width="0.8" opacity="0.7"></rect>
+  <text x="1340" y="252" text-anchor="start" font-size="10.5" fill="#5a7e8c">3/12 (25%)</text>
+  <text x="890" y="251" text-anchor="middle" font-size="9" fill="#aaa">consumer files not in context</text>
+  <text x="232" y="228" font-size="8.5" fill="white" opacity="0.8">mesh</text>
+  <text x="232" y="250" font-size="8.5" fill="white" opacity="0.7">raw</text>
+
+  <line x1="65" y1="269" x2="1390" y2="269" stroke="#d8eaf0" stroke-width="1" stroke-dasharray="4,3"></line>
+
+  
+  <text x="218" y="288" text-anchor="end" font-size="11.5" font-weight="600" fill="#102432">Hallucination</text>
+  <text x="218" y="303" text-anchor="end" font-size="9.5" fill="#4a9a6a">0% rate · 4 models</text>
+  <rect x="230" y="272" width="1100" height="18" fill="#0f6a7b" rx="3" opacity="0.9"></rect>
+  <text x="1340" y="285" text-anchor="start" font-size="10.5" font-weight="700" fill="#0f6a7b">0% hallucination</text>
+  <rect x="230" y="294" width="1100" height="18" fill="#8cb8c4" rx="3" opacity="0.85"></rect>
+  <text x="1340" y="307" text-anchor="start" font-size="10.5" font-weight="700" fill="#3a7080">0% hallucination</text>
+  <text x="232" y="283" font-size="8.5" fill="white" opacity="0.8">mesh — 7 configs × 4 models (Sonnet / GPT-OSS-20B / Gemma 3 4B / Llama 3.3 70B)</text>
+  <text x="232" y="305" font-size="8.5" fill="white" opacity="0.8">raw — 7 configs × 4 models</text>
+
+  <line x1="65" y1="323" x2="1390" y2="323" stroke="#d8eaf0" stroke-width="1" stroke-dasharray="4,3"></line>
+
+  
+  <text x="218" y="343" text-anchor="end" font-size="11.5" font-weight="600" fill="#102432">Edit Precision</text>
+  <text x="218" y="358" text-anchor="end" font-size="9.5" fill="#6b8496">3 models</text>
+  <text x="218" y="372" text-anchor="end" font-size="9.5" fill="#6b8496">100% fair cases</text>
+  <rect x="230" y="327" width="1100" height="18" fill="#0f6a7b" rx="3" opacity="0.9"></rect>
+  <text x="1340" y="340" text-anchor="start" font-size="10.5" font-weight="700" fill="#0f6a7b">12/12 (100%)</text>
+  <rect x="230" y="349" width="916" height="18" fill="#8cb8c4" rx="3" opacity="0.85"></rect>
+  <rect x="1146" y="349" width="184" height="18" fill="#e8e8e8" rx="3" stroke="#ccc" stroke-width="0.8" opacity="0.7"></rect>
+  <text x="1340" y="362" text-anchor="start" font-size="10.5" fill="#5a7e8c">10/10 fair · 2 N/A</text>
+  <text x="1238" y="361" text-anchor="middle" font-size="8.5" fill="#aaa">2 N/A</text>
+  <text x="232" y="338" font-size="8.5" fill="white" opacity="0.8">mesh · Sonnet / GPT-OSS-20B / Llama 3.3 70B</text>
+  <text x="232" y="360" font-size="8.5" fill="white" opacity="0.8">raw (fair cases only)</text>
+
+  
+  <rect x="60" y="393" width="1280" height="238" fill="#eaf4f7" rx="8" stroke="#c4dde5" stroke-width="1"></rect>
+  <text x="700" y="413" text-anchor="middle" font-size="12.5" font-weight="700" fill="#102432">Key Findings</text>
+  <line x1="78" y1="420" x2="1322" y2="420" stroke="#c4dde5" stroke-width="1"></line>
+
+  <rect x="80" y="430" width="4" height="38" fill="#0f6a7b" rx="2"></rect>
+  <text x="94" y="443" font-size="11" font-weight="600" fill="#102432">1. Coverage wall is model-agnostic</text>
+  <text x="94" y="459" font-size="10.5" fill="#4a6070">Identical N/A pattern from Gemma 3 4B to Opus. The failure is physical (file not in context), not cognitive or model-specific.</text>
+
+  <rect x="80" y="477" width="4" height="38" fill="#0f6a7b" rx="2"></rect>
+  <text x="94" y="490" font-size="11" font-weight="600" fill="#102432">2. Mesh coverage gain holds across the full model spectrum</text>
+  <text x="94" y="506" font-size="10.5" fill="#4a6070">1.9× at standard configs (6,000T), 2.5× at hard configs (8,000T). Consistent across all 5 models tested.</text>
+
+  <rect x="80" y="524" width="4" height="38" fill="#1a9a5e" rx="2"></rect>
+  <text x="94" y="537" font-size="11" font-weight="600" fill="#102432">3. Mesh does not degrade precision — only extends coverage</text>
+  <text x="94" y="553" font-size="10.5" fill="#4a6070">Sonnet, GPT-OSS-20B, and Llama 3.3 70B all achieve 100% edit precision when the target file is in context. 0% hallucination across all models.</text>
+
+  <text x="700" y="581" text-anchor="middle" font-size="9.5" fill="#8ca0ac">NIAH · Multi-hop · Budget Saturation · Hallucination · Edit Precision — all real Bedrock inference calls on AWS us-east-1</text>
+  <text x="700" y="596" text-anchor="middle" font-size="9.5" fill="#8ca0ac">Models: claude-sonnet-4-6 · claude-opus-4-6-v1 · openai.gpt-oss-20b-1:0 · google.gemma-3-4b-it · us.meta.llama3-3-70b-instruct-v1:0</text>
+  <text x="700" y="619" text-anchor="middle" font-size="9.5" fill="#8ca0ac">node --env-file .env benchmarks/llm-niah-eval.js --model &lt;name&gt; --hard --budget=8000 --save</text>
+</svg>

@@ -1,0 +1,51 @@
+<svg viewBox="0 0 1100 500" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1100" height="500" fill="#0d1117" rx="12"></rect>
+  <text x="550" y="42" text-anchor="middle" fill="#e6edf3" font-size="24" font-weight="bold">Context Gain — Raw vs Mesh</text>
+  <text x="550" y="70" text-anchor="middle" fill="#8b949e" font-size="15">Wie viele Dateien sieht die AI bei 6.000 Token Budget?</text>
+
+  <line x1="120" y1="100" x2="120" y2="390" stroke="#30363d" stroke-width="1"></line>
+  <line x1="120" y1="390" x2="980" y2="390" stroke="#30363d" stroke-width="1"></line>
+
+  <text x="108" y="108" text-anchor="end" fill="#8b949e" font-size="13">80</text>
+  <line x1="120" y1="104" x2="980" y2="104" stroke="#21262d" stroke-width="0.5" stroke-dasharray="5"></line>
+  <text x="108" y="180" text-anchor="end" fill="#8b949e" font-size="13">60</text>
+  <line x1="120" y1="176" x2="980" y2="176" stroke="#21262d" stroke-width="0.5" stroke-dasharray="5"></line>
+  <text x="108" y="252" text-anchor="end" fill="#8b949e" font-size="13">40</text>
+  <line x1="120" y1="248" x2="980" y2="248" stroke="#21262d" stroke-width="0.5" stroke-dasharray="5"></line>
+  <text x="108" y="324" text-anchor="end" fill="#8b949e" font-size="13">20</text>
+  <line x1="120" y1="320" x2="980" y2="320" stroke="#21262d" stroke-width="0.5" stroke-dasharray="5"></line>
+
+  
+  <rect x="160" y="311" width="85" height="79" fill="#f85149" rx="6" opacity="0.9"></rect>
+  <text x="202" y="303" text-anchor="middle" fill="#f85149" font-size="18" font-weight="bold">22</text>
+  <rect x="260" y="104" width="85" height="286" fill="#3fb950" rx="6" opacity="0.9"></rect>
+  <text x="302" y="96" text-anchor="middle" fill="#3fb950" font-size="18" font-weight="bold">80</text>
+  <text x="240" y="420" text-anchor="middle" fill="#e6edf3" font-size="18" font-weight="bold">IDE</text>
+  <text x="240" y="448" text-anchor="middle" fill="#3fb950" font-size="22" font-weight="bold">3.6x</text>
+
+  
+  <rect x="430" y="311" width="85" height="79" fill="#f85149" rx="6" opacity="0.9"></rect>
+  <text x="472" y="303" text-anchor="middle" fill="#f85149" font-size="18" font-weight="bold">22</text>
+  <rect x="530" y="93" width="85" height="297" fill="#58a6ff" rx="6" opacity="0.9"></rect>
+  <text x="572" y="85" text-anchor="middle" fill="#58a6ff" font-size="18" font-weight="bold">83</text>
+  <text x="510" y="420" text-anchor="middle" fill="#e6edf3" font-size="18" font-weight="bold">MCP</text>
+  <text x="510" y="448" text-anchor="middle" fill="#58a6ff" font-size="22" font-weight="bold">3.8x</text>
+
+  
+  <rect x="700" y="311" width="85" height="79" fill="#f85149" rx="6" opacity="0.9"></rect>
+  <text x="742" y="303" text-anchor="middle" fill="#f85149" font-size="18" font-weight="bold">22</text>
+  <rect x="800" y="118" width="85" height="272" fill="#d2a8ff" rx="6" opacity="0.85"></rect>
+  <text x="842" y="110" text-anchor="middle" fill="#d2a8ff" font-size="18" font-weight="bold">76</text>
+  <text x="780" y="420" text-anchor="middle" fill="#e6edf3" font-size="18" font-weight="bold">API</text>
+  <text x="780" y="448" text-anchor="middle" fill="#d2a8ff" font-size="22" font-weight="bold">3.5x</text>
+
+  
+  <rect x="200" y="478" width="14" height="14" fill="#f85149" rx="3"></rect>
+  <text x="220" y="491" fill="#8b949e" font-size="13">Raw (kein Mesh)</text>
+  <rect x="380" y="478" width="14" height="14" fill="#3fb950" rx="3"></rect>
+  <text x="400" y="491" fill="#8b949e" font-size="13">Mesh IDE</text>
+  <rect x="520" y="478" width="14" height="14" fill="#58a6ff" rx="3"></rect>
+  <text x="540" y="491" fill="#8b949e" font-size="13">Mesh MCP</text>
+  <rect x="670" y="478" width="14" height="14" fill="#d2a8ff" rx="3"></rect>
+  <text x="690" y="491" fill="#8b949e" font-size="13">Mesh API (est.)</text>
+</svg>
