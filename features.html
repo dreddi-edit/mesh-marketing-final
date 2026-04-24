@@ -5,25 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mesh Features - CLI, IDE, MCP Server, and Gateway API</title>
   <meta name="description" content="Explore Mesh features across Terminal CLI, Mesh IDE, MCP server, and Gateway API. One code-context engine for compressed workspace intelligence.">
-  <meta name="robots" content="index,follow,max-image-preview:large">
-  <link rel="canonical" href="https://try-mesh.com/features">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="manifest" href="/site.webmanifest">
-  <meta name="theme-color" content="#00d4e8">
-  <meta property="og:site_name" content="Mesh">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Mesh Features - CLI, IDE, MCP Server, and Gateway API">
-  <meta property="og:description" content="Four surfaces powered by one context engine: Terminal CLI, IDE, MCP server, and Gateway API.">
-  <meta property="og:url" content="https://try-mesh.com/features">
-  <meta property="og:image" content="https://try-mesh.com/assets/brand/og-image.svg">
-  <meta property="og:image:type" content="image/svg+xml">
-  <meta property="og:image:alt" content="Mesh - code context for AI agents">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Mesh Features - CLI, IDE, MCP Server, and Gateway API">
-  <meta name="twitter:description" content="Terminal CLI, IDE, MCP server, and Gateway API powered by Mesh context compression.">
-  <meta name="twitter:image" content="https://try-mesh.com/assets/brand/og-image.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,800;1,900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -35,246 +17,97 @@
       --dark:    oklch(0.08 0.04 200);
       --dark2:   oklch(0.13 0.05 200);
       --white:   oklch(0.99 0.004 195);
-      --off:     oklch(0.96 0.006 195);
       --muted:   oklch(0.55 0.05 200);
-      --border:  oklch(0.88 0.015 195);
       --bg: oklch(0.078 0.038 200);
       --bg-deep: oklch(0.046 0.034 204);
       --panel: oklch(0.108 0.046 200);
-      --panel-2: oklch(0.135 0.052 199);
       --line: oklch(1 0 0 / 0.08);
       --line-strong: oklch(0.74 0.14 200 / 0.28);
       --ink: oklch(0.98 0.004 195);
       --dim: oklch(0.74 0.026 198 / 0.38);
       --cyan-soft: oklch(0.74 0.14 200 / 0.12);
       --green: oklch(0.75 0.12 145);
-      --amber: oklch(0.78 0.10 58);
       --mono: 'Geist Mono', monospace;
       --display: 'Barlow Condensed', sans-serif;
       --sans: 'DM Sans', sans-serif;
     }
-
     html { scroll-behavior: smooth; }
-    body {
-      background: var(--bg);
-      color: var(--ink);
-      font-family: var(--sans);
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* CANVAS */
+    body { background: var(--bg); color: var(--ink); font-family: var(--sans); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
     #mesh-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-
-    a { color: inherit; }
-    code { font-family: var(--mono); color: var(--cyan); }
-
-    .site-nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 22px 56px;
-      background: oklch(0.078 0.038 200 / 0.82);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--line);
-    }
-    .nav-logo { display: inline-flex; align-items: center; text-decoration: none; }
-    .nav-logo img { display: block; width: auto; height: 25px; }
+    a { color: inherit; text-decoration: none; }
+    .site-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 22px 56px; background: oklch(0.078 0.038 200 / 0.82); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+    .nav-logo { display: inline-flex; align-items: center; }
+    .nav-logo img { height: 25px; width: auto; }
     .nav-right { display: flex; gap: 6px; align-items: center; }
-    .nav-right a {
-      font-size: 13px; color: oklch(1 0 0 / 0.42);
-      text-decoration: none; padding: 6px 14px;
-      border-radius: 6px; border: 1px solid transparent;
-      transition: color 0.2s, border-color 0.2s, background 0.2s;
-    }
+    .nav-right a { font-size: 13px; color: oklch(1 0 0 / 0.42); padding: 6px 14px; border-radius: 6px; border: 1px solid transparent; transition: all 0.2s; }
     .nav-right a:hover { color: var(--ink); border-color: oklch(1 0 0 / 0.12); }
     .nav-active { color: var(--ink) !important; }
-    .nav-waitlist {
-      background: var(--cyan-soft) !important;
-      border-color: var(--line-strong) !important;
-      color: var(--cyan) !important;
-      cursor: pointer;
-    }
-
-    .page-shell {
-      width: min(1180px, calc(100% - 64px));
-      margin: 0 auto;
-      position: relative; z-index: 1;
-    }
-
-    .feature-hero {
-      min-height: 100vh;
-      padding-top: 132px;
-      display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(340px, 0.8fr);
-      gap: 64px;
-      align-items: center;
-      position: relative;
-    }
-    
-    .hero-word {
-      font-family: var(--display);
-      font-style: italic; font-weight: 900;
-      font-size: clamp(60px, 9vw, 130px);
-      line-height: 0.9;
-      letter-spacing: -0.03em;
-      color: var(--white);
-      display: block;
-      user-select: none;
-      overflow: visible;
-    }
+    .nav-waitlist { background: var(--cyan-soft) !important; border-color: var(--line-strong) !important; color: var(--cyan) !important; cursor: pointer; }
+    .page-shell { width: min(1180px, calc(100% - 64px)); margin: 0 auto; position: relative; z-index: 1; }
+    .feature-hero { min-height: 100vh; padding-top: 132px; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(340px, 0.8fr); gap: 64px; align-items: center; }
+    .hero-word { font-family: var(--display); font-style: italic; font-weight: 900; font-size: clamp(60px, 9vw, 130px); line-height: 0.9; letter-spacing: -0.03em; color: var(--white); display: block; user-select: none; }
     .hero-word div { display: flex; flex-wrap: nowrap; align-items: baseline; }
     .hero-word .cyan-line { color: var(--cyan); }
-    .hero-word .l {
-      display: inline-block;
-      opacity: 0; transform: translateY(30px);
-      transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1);
-    }
+    .hero-word .l { display: inline-block; opacity: 0; transform: translateY(30px); transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1); }
     .hero-word .l.in { opacity: 1; transform: none; }
-
-    .eyebrow {
-      display: inline-flex; align-items: center; gap: 10px;
-      font-family: var(--mono); font-size: 11px;
-      text-transform: uppercase; letter-spacing: 0.12em;
-      color: var(--cyan); margin-bottom: 22px;
-      opacity: 0; animation: up 0.8s 0.2s ease forwards;
-    }
+    .eyebrow { display: inline-flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--cyan); margin-bottom: 22px; opacity: 0; animation: up 0.8s 0.2s ease forwards; }
     .eyebrow::before { content: ""; width: 26px; height: 1px; background: var(--cyan); }
     @keyframes up { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:none} }
-
-    .hero-copy {
-      margin-top: 30px; max-width: 610px;
-      font-size: 18px; font-weight: 300; line-height: 1.7;
-      color: var(--muted);
-      opacity: 0; animation: up 0.8s 0.6s ease forwards;
-    }
-    .hero-copy strong { color: var(--ink); font-weight: 500; }
+    .hero-copy { margin-top: 30px; max-width: 610px; font-size: 18px; font-weight: 300; line-height: 1.7; color: var(--muted); opacity: 0; animation: up 0.8s 0.6s ease forwards; }
+    .hero-copy strong { color: var(--white); font-weight: 500; }
     .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 34px; opacity: 0; animation: up 0.8s 0.8s ease forwards; }
-
-    .primary-btn, .secondary-btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      min-height: 44px; padding: 0 18px; border-radius: 8px;
-      font-size: 14px; font-weight: 700; text-decoration: none;
-      border: 1px solid transparent; cursor: pointer;
-      font-family: var(--sans);
-      transition: transform 0.2s, border-color 0.2s, background 0.2s;
-    }
+    .primary-btn, .secondary-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 18px; border-radius: 8px; font-size: 14px; font-weight: 700; border: 1px solid transparent; cursor: pointer; font-family: var(--sans); transition: transform 0.2s, border-color 0.2s; }
     .primary-btn { background: var(--cyan); color: var(--bg-deep); }
     .secondary-btn { background: oklch(1 0 0 / 0.035); border-color: var(--line); color: var(--ink); }
     .primary-btn:hover, .secondary-btn:hover { transform: translateY(-2px); }
-    .secondary-btn:hover { border-color: var(--line-strong); }
-
-    .surface-map {
-      border: 1px solid var(--line); border-radius: 8px;
-      background: linear-gradient(180deg, oklch(0.13 0.05 200 / 0.92), oklch(0.08 0.04 200 / 0.92));
-      box-shadow: 0 32px 90px oklch(0 0 0 / 0.28);
-      overflow: hidden; position: relative;
-    }
-    .map-top {
-      position: relative; display: flex; align-items: center; justify-content: space-between;
-      padding: 16px 18px; border-bottom: 1px solid var(--line);
-      font-family: var(--mono); font-size: 10px; color: var(--dim);
-    }
+    .surface-map { border: 1px solid var(--line); border-radius: 8px; background: linear-gradient(180deg, oklch(0.13 0.05 200 / 0.92), oklch(0.08 0.04 200 / 0.92)); box-shadow: 0 32px 90px oklch(0 0 0 / 0.28); overflow: hidden; position: relative; }
+    .map-top { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 10px; color: var(--dim); }
     .map-pulse { display: inline-flex; gap: 6px; align-items: center; color: var(--green); }
     .map-pulse::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 18px var(--green); }
-    .map-body { position: relative; padding: 28px 24px 24px; display: grid; gap: 12px; }
-    .map-row {
-      display: grid; grid-template-columns: 48px 1fr auto; gap: 14px;
-      align-items: center; padding: 16px; border: 1px solid oklch(1 0 0 / 0.07);
-      border-radius: 8px; background: oklch(1 0 0 / 0.028);
-      position: relative; --x: 50%; --y: 50%;
-    }
-    .map-row::before {
-      content: ''; position: absolute; inset: 0;
-      background: radial-gradient(300px circle at var(--x) var(--y), oklch(0.74 0.14 200 / 0.08), transparent 40%);
-      opacity: 0; transition: opacity 0.3s; pointer-events: none;
-    }
+    .map-body { padding: 28px 24px 24px; display: grid; gap: 12px; }
+    .map-row { display: grid; grid-template-columns: 48px 1fr auto; gap: 14px; align-items: center; padding: 16px; border: 1px solid oklch(1 0 0 / 0.07); border-radius: 8px; background: oklch(1 0 0 / 0.028); position: relative; --x: 50%; --y: 50%; }
+    .map-row::before { content: ''; position: absolute; inset: 0; background: radial-gradient(300px circle at var(--x) var(--y), oklch(0.74 0.14 200 / 0.08), transparent 40%); opacity: 0; transition: opacity 0.3s; pointer-events: none; }
     .map-row:hover::before { opacity: 1; }
-    .map-num {
-      width: 32px; height: 32px; display: grid; place-items: center;
-      border: 1px solid var(--line); border-radius: 50%;
-      color: var(--cyan); font-family: var(--mono); font-size: 12px;
-    }
+    .map-num { width: 32px; height: 32px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; color: var(--cyan); font-family: var(--mono); font-size: 12px; }
     .map-title { color: var(--ink); font-size: 15px; font-weight: 700; }
     .map-copy { margin-top: 4px; color: var(--muted); font-size: 13px; line-height: 1.5; }
-    .map-badge {
-      padding: 5px 9px; border-radius: 999px; background: oklch(1 0 0 / 0.035);
-      border: 1px solid var(--line); color: var(--dim);
-      font-family: var(--mono); font-size: 10px; white-space: nowrap;
-    }
-
+    .map-badge { padding: 5px 9px; border-radius: 999px; background: oklch(1 0 0 / 0.035); border: 1px solid var(--line); color: var(--dim); font-family: var(--mono); font-size: 10px; white-space: nowrap; }
     .surfaces-section { padding: 100px 0; }
-    .feature-surface {
-      width: min(1180px, calc(100% - 64px)); margin: 0 auto 64px;
-      border: 1px solid var(--line); border-radius: 12px;
-      background: oklch(0.10 0.046 200 / 0.6);
-      display: grid; grid-template-columns: 1fr 1fr; overflow: hidden;
-      opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16,1,0.3,1);
-    }
+    .feature-surface { width: min(1180px, calc(100% - 64px)); margin: 0 auto 64px; border: 1px solid var(--line); border-radius: 12px; background: oklch(0.10 0.046 200 / 0.6); display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16,1,0.3,1); }
     .feature-surface.visible { opacity: 1; transform: none; }
     .fs-content { padding: 64px; }
     .fs-kicker { color: var(--cyan); font-family: var(--mono); font-size: 11px; text-transform: uppercase; margin-bottom: 16px; letter-spacing: 0.1em; }
     .fs-title { font-family: var(--display); font-size: 64px; font-style: italic; font-weight: 900; line-height: 0.95; margin-bottom: 24px; }
     .fs-copy { color: var(--muted); font-size: 17px; line-height: 1.7; margin-bottom: 32px; }
-    .fs-visual {
-      background: linear-gradient(135deg, oklch(0.12 0.05 200), oklch(0.06 0.03 204));
-      border-left: 1px solid var(--line); position: relative; display: grid; place-items: center;
-    }
-
-    .ascii-logo {
-      margin-bottom: 24px; font-family: 'Courier New', Courier, monospace;
-      font-size: 13px; line-height: 1; letter-spacing: 0;
-      white-space: pre; color: var(--cyan); font-weight: bold;
-    }
-
-    /* Terminal UI */
-    .terminal-visual {
-      width: 85%; background: #050b12; border: 1px solid var(--line); border-radius: 10px;
-      box-shadow: 0 40px 100px rgba(0,0,0,0.5); overflow: hidden;
-    }
+    .fs-copy strong { color: var(--white); font-weight: 500; }
+    .fs-visual { background: linear-gradient(135deg, oklch(0.12 0.05 200), oklch(0.06 0.03 204)); border-left: 1px solid var(--line); position: relative; display: grid; place-items: center; }
+    .terminal-visual { width: 85%; background: #050b12; border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 40px 100px rgba(0,0,0,0.5); overflow: hidden; }
     .window-bar { background: oklch(1 0 0 / 0.03); padding: 12px 16px; display: flex; gap: 7px; border-bottom: 1px solid var(--line); }
     .dot { width: 10px; height: 10px; border-radius: 50%; background: #ff5f57; }
     .dot:nth-child(2) { background: #febc2e; }
     .dot:nth-child(3) { background: #28c840; }
     .terminal-body { padding: 24px; font-family: var(--mono); font-size: 13px; line-height: 1.85; color: oklch(1 0 0 / 0.68); }
+    .ascii-logo { margin-bottom: 24px; font-family: 'Courier New', Courier, monospace; font-size: 12px; line-height: 1; letter-spacing: 0; white-space: pre; color: var(--cyan); font-weight: bold; }
     .terminal-prompt { color: var(--cyan); }
     .terminal-muted { color: oklch(1 0 0 / 0.28); }
-
-    footer {
-      background: oklch(0.045 0.032 204); padding: 44px 80px;
-      display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--line);
-    }
-    .f-logo { display: inline-flex; align-items: center; text-decoration: none; }
+    .t-cyan { color: var(--cyan); } .t-green { color: var(--green); } .t-dim { color: var(--dim); }
+    footer { background: oklch(0.045 0.032 204); padding: 44px 80px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--line); }
+    .f-logo { display: inline-flex; align-items: center; }
     .f-links { display: flex; gap: 24px; }
-    .f-links a { color: oklch(1 0 0 / 0.26); font-size: 13px; text-decoration: none; transition: color 0.2s; }
+    .f-links a { color: oklch(1 0 0 / 0.26); font-size: 13px; transition: color 0.2s; }
     .f-links a:hover { color: oklch(1 0 0 / 0.66); }
     .f-copy { color: oklch(1 0 0 / 0.18); font-family: var(--mono); font-size: 11px; }
-
-    .modal-bg {
-      position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center;
-      background: rgba(0,0,0,0.75); opacity: 0; pointer-events: none; transition: opacity 0.25s; backdrop-filter: blur(8px);
-    }
+    .modal-bg { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.75); opacity: 0; pointer-events: none; transition: opacity 0.25s; backdrop-filter: blur(8px); }
     .modal-bg.open { opacity: 1; pointer-events: auto; }
-    .modal {
-      position: relative; width: 90%; max-width: 500px; padding: 48px 52px;
-      border: 1px solid oklch(1 0 0 / 0.1); border-radius: 16px; background: var(--panel);
-    }
+    .modal { position: relative; width: 90%; max-width: 500px; padding: 48px 52px; border: 1px solid oklch(1 0 0 / 0.1); border-radius: 16px; background: var(--panel); }
     .modal h3 { margin-bottom: 16px; font-family: var(--display); font-size: 52px; font-style: italic; font-weight: 900; line-height: 0.92; }
     .modal p { margin-bottom: 28px; color: var(--muted); font-size: 16px; line-height: 1.6; }
-    .modal input {
-      width: 100%; padding: 14px 18px; border: 1px solid oklch(1 0 0 / 0.12); border-radius: 10px;
-      outline: none; background: oklch(1 0 0 / 0.06); color: var(--ink); font-family: var(--sans); font-size: 15px;
-    }
-    .modal-btn {
-      width: 100%; margin-top: 12px; padding: 14px; border: none; border-radius: 10px;
-      background: var(--cyan); color: var(--bg); cursor: pointer; font-size: 15px; font-weight: 700;
-    }
-
+    .modal input { width: 100%; padding: 14px 18px; border: 1px solid oklch(1 0 0 / 0.12); border-radius: 10px; outline: none; background: oklch(1 0 0 / 0.06); color: var(--ink); font-family: var(--sans); font-size: 15px; margin-bottom: 10px; }
+    .modal-btn { width: 100%; margin-top: 12px; padding: 14px; border: none; border-radius: 10px; background: var(--cyan); color: #000; font-weight: 700; cursor: pointer; }
+    .modal-close { position: absolute; top: 20px; right: 24px; border: none; background: none; color: rgba(255,255,255,0.3); cursor: pointer; font-size: 22px; }
     @media (max-width: 1020px) {
       .site-nav { padding: 18px 24px; }
       .feature-hero { grid-template-columns: 1fr; padding-top: 100px; text-align: center; }
-      .hero-word { margin: 0 auto; }
       .hero-word div { justify-content: center; }
       .hero-copy { margin-left: auto; margin-right: auto; }
       .hero-actions { justify-content: center; }
@@ -285,15 +118,13 @@
   </style>
 </head>
 <body>
-
 <canvas id="mesh-canvas"></canvas>
-
 <div class="modal-bg" id="modalBg" onclick="closeModal(event)">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">×</button>
     <h3>Join the<br>waitlist.</h3>
     <p>Get early access + launch updates. No spam, ever.</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
       <input type="text" id="wlFirst" placeholder="First name">
       <input type="text" id="wlLast" placeholder="Last name">
     </div>
@@ -302,9 +133,8 @@
     <p id="wlMsg" style="margin-top:12px;font-size:13px;color:var(--cyan);text-align:center;min-height:18px"></p>
   </div>
 </div>
-
 <nav class="site-nav">
-  <a class="nav-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg" aria-label="Mesh"><path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text></svg></a>
+  <a class="nav-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg"><path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text></svg></a>
   <div class="nav-right">
     <a href="/features" class="nav-active">Features</a>
     <a href="/quickstart">Quickstart</a>
@@ -312,55 +142,37 @@
     <a onclick="openModal()" class="nav-waitlist">Waitlist</a>
   </div>
 </nav>
-
 <main>
   <section class="page-shell feature-hero">
     <div>
       <div class="eyebrow">Features</div>
       <h1 class="hero-word">
         <div><span class="l">F</span><span class="l">o</span><span class="l">u</span><span class="l">r</span>&nbsp;<span class="l">s</span><span class="l">u</span><span class="l">r</span><span class="l">f</span><span class="l">a</span><span class="l">c</span><span class="l">e</span><span class="l">s</span><span class="l">.</span></div>
-        <div class="cyan-line"><span class="l">O</span><span class="l">n</span><span class="l">e</span>&nbsp;<span class="l">e</span><span class="l">n</span><span class="l">g</span><span class="l">i</span><span class="l">n</span><span class="l">e</span><span class="l">.</span></div>
+        <div class="cyan-line"><span class="l">O</span><span class="l">n</span>&nbsp;<span class="l">e</span>&nbsp;<span class="l">e</span><span class="l">n</span><span class="l">g</span><span class="l">i</span><span class="l">n</span><span class="l">e</span><span class="l">.</span></div>
       </h1>
-      <p class="hero-copy">Mesh gives agents the code context they need without flooding the model. Terminal, IDE, MCP, and API all run on the same <strong>capsule compression engine</strong>.</p>
+      <p class="hero-copy">Mesh gives agents the code context they need without flooding the model. Terminal, IDE, MCP, and API all run on the same <strong>capsule compression engine</strong>: structural search, targeted reads, exact span recovery, and resumable sessions.</p>
       <div class="hero-actions">
         <a class="primary-btn" onclick="openModal()">Join waitlist</a>
         <a class="secondary-btn" href="#surfaces">Explore surfaces</a>
       </div>
     </div>
-
     <div class="surface-map">
       <div class="map-top"><span>mesh/features-manifest</span><span class="map-pulse">indexed</span></div>
       <div class="map-body">
-        <div class="map-row">
-          <div class="map-num">01</div>
-          <div><div class="map-title">Terminal CLI</div><div class="map-copy">Local-first agent loop with shell execution.</div></div>
-          <div class="map-badge">perfect for devs</div>
-        </div>
-        <div class="map-row">
-          <div class="map-num">02</div>
-          <div><div class="map-title">Mesh IDE</div><div class="map-copy">VS Code-style workspace intelligence.</div></div>
-          <div class="map-badge">visual work</div>
-        </div>
-        <div class="map-row">
-          <div class="map-num">03</div>
-          <div><div class="map-title">MCP Server</div><div class="map-copy">Connect Claude or Cursor to Mesh.</div></div>
-          <div class="map-badge">bring your agent</div>
-        </div>
-        <div class="map-row">
-          <div class="map-num">04</div>
-          <div><div class="map-title">Gateway API</div><div class="map-copy">Programmable endpoint for indexing.</div></div>
-          <div class="map-badge">build on Mesh</div>
-        </div>
+        <div class="map-row"><div class="map-num">01</div><div><div class="map-title">Terminal CLI</div><div class="map-copy">Local-first agent loop with shell execution.</div></div><div class="map-badge">perfect for devs</div></div>
+        <div class="map-row"><div class="map-num">02</div><div><div class="map-title">Mesh IDE</div><div class="map-copy">VS Code-style workspace intelligence.</div></div><div class="map-badge">visual work</div></div>
+        <div class="map-row"><div class="map-num">03</div><div><div class="map-title">MCP Server</div><div class="map-copy">Connect Claude or Cursor to Mesh.</div></div><div class="map-badge">bring your agent</div></div>
+        <div class="map-row"><div class="map-num">04</div><div><div class="map-title">Gateway API</div><div class="map-copy">Programmable endpoint for indexing.</div></div><div class="map-badge">build on Mesh</div></div>
       </div>
     </div>
   </section>
-
   <section id="surfaces" class="surfaces-section">
+    <!-- CLI -->
     <div class="feature-surface">
       <div class="fs-content">
         <div class="fs-kicker">Surface 01</div>
         <h2 class="fs-title">The CLI.</h2>
-        <p class="fs-copy">Install globally. Runs in any terminal. Local Whisper voice, auto-exec shell, no browser required. Just code.</p>
+        <p class="fs-copy">Install globally. Runs in any terminal. <strong>Local Whisper voice</strong>, auto-exec shell, no browser required. Features interactive diffing, symbol search, and multi-file editing directly from your shell.</p>
         <button class="primary-btn" onclick="openModal()">Get started</button>
       </div>
       <div class="fs-visual">
@@ -381,104 +193,64 @@
         </div>
       </div>
     </div>
+    <!-- IDE -->
+    <div class="feature-surface">
+      <div class="fs-visual">
+        <div class="terminal-visual" style="width:90%; height:320px; background:#081118; border-radius:8px; position:relative; overflow:hidden;">
+          <div style="position:absolute; top:0; left:0; width:60px; height:100%; border-right:1px solid var(--line); background:rgba(255,255,255,0.02);"></div>
+          <div style="margin-left:70px; padding:20px;">
+            <div style="width:120px; height:8px; background:var(--line); border-radius:4px; margin-bottom:12px;"></div>
+            <div style="width:200px; height:8px; background:var(--cyan-soft); border-radius:4px; margin-bottom:24px;"></div>
+            <div style="display:flex; gap:10px;">
+              <div style="flex:1; height:160px; border:1px solid var(--line-strong); border-radius:4px; background:oklch(0.74 0.14 200 / 0.03);"></div>
+              <div style="width:80px; height:160px; border:1px solid var(--line); border-radius:4px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="fs-content">
+        <div class="fs-kicker">Surface 02</div>
+        <h2 class="fs-title">Mesh IDE.</h2>
+        <p class="fs-copy">A VS Code-style workspace intelligence layer for your browser. Full file tree, structural search, and multi-file editing with live context compression. <strong>Perfect for complex refactors</strong>.</p>
+        <button class="secondary-btn" onclick="openModal()">Request early access</button>
+      </div>
+    </div>
+    <!-- MCP -->
+    <div class="feature-surface">
+      <div class="fs-content">
+        <div class="fs-kicker">Surface 03</div>
+        <h2 class="fs-title">MCP Server.</h2>
+        <p class="fs-copy">Bring Mesh to Claude Desktop or Cursor. Any agent supporting <strong>Model Context Protocol</strong> can now query your codebase through Mesh's capsule engine. Use Mesh as a local data source for any agent stack.</p>
+        <button class="secondary-btn" onclick="navigator.clipboard.writeText('mesh connect --mcp'); alert('Copied')">Copy config command</button>
+      </div>
+      <div class="fs-visual">
+        <div style="display:flex; gap:20px; align-items:center;">
+          <div style="width:80px; height:80px; border:1px solid var(--line-strong); border-radius:20px; display:grid; place-items:center; background:var(--panel);"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+          <div style="font-family:var(--mono); color:var(--dim);">⇄</div>
+          <div style="width:80px; height:80px; border:1px solid var(--line); border-radius:20px; display:grid; place-items:center; background:rgba(255,255,255,0.03);"><div style="width:40px; height:40px; background:var(--ink); border-radius:50%; opacity:0.1;"></div></div>
+        </div>
+      </div>
+    </div>
+    <!-- API -->
+    <div class="feature-surface">
+      <div class="fs-visual">
+        <div class="terminal-visual" style="width:85%;"><div class="terminal-body" style="font-size:12px;"><div class="t-cyan">POST /v1/index</div><div class="t-dim">{ "repo": "github.com/org/repo" }</div><br><div class="t-green">200 OK</div><div class="t-dim">{ "capsule_id": "cap_8kX9..." }</div></div></div>
+      </div>
+      <div class="fs-content">
+        <div class="fs-kicker">Surface 04</div>
+        <h2 class="fs-title">Gateway API.</h2>
+        <p class="fs-copy">Build your own agentic tools on top of Mesh. A fully programmable endpoint for indexing, searching, and recovering code context at scale. <strong>Integrate Mesh into your CI/CD</strong>.</p>
+        <a href="https://docs.try-mesh.com" class="secondary-btn">Read API Docs</a>
+      </div>
+    </div>
   </section>
 </main>
-
 <footer>
-  <a class="f-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg" aria-label="Mesh"><path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text></svg></a>
-  <div class="f-links">
-    <a href="https://docs.try-mesh.com">Docs</a>
-    <a href="https://github.com/dreddi-edit/homebrew-mesh.git">GitHub</a>
-    <a href="https://www.npmjs.com/package/@edgarelmo/mesh-agent-cli">npm</a>
-    <a href="https://twitter.com">Twitter</a>
-  </div>
+  <a class="f-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg"><path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text></svg></a>
+  <div class="f-links"><a href="https://docs.try-mesh.com">Docs</a><a href="https://github.com/dreddi-edit/homebrew-mesh.git">GitHub</a><a href="https://twitter.com">Twitter</a></div>
   <div class="f-copy">© 2026 Mesh Intelligence</div>
 </footer>
-
 <script>
-const canvas = document.getElementById('mesh-canvas');
-const ctx = canvas.getContext('2d');
-let W, H, pts;
-const mouse = { x: -9999, y: -9999 };
-const LINK = 155;
-
-function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
-function mkPts() {
-  const n = Math.min(80, Math.floor(W * H / 12000));
-  pts = Array.from({length: n}, () => ({
-    x: Math.random() * W, y: Math.random() * H,
-    vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4
-  }));
-}
-function raf() {
-  ctx.clearRect(0, 0, W, H);
-  pts.forEach(p => {
-    p.x += p.vx; p.y += p.vy;
-    if (p.x < 0 || p.x > W) p.vx *= -1; if (p.y < 0 || p.y > H) p.vy *= -1;
-    const dx = p.x - mouse.x, dy = p.y - mouse.y, d = Math.hypot(dx, dy);
-    if (d < 100) { p.vx += dx / d * 0.02; p.vy += dy / d * 0.02; }
-  });
-  for (let i = 0; i < pts.length; i++) {
-    for (let j = i+1; j < pts.length; j++) {
-      const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y, d = Math.hypot(dx, dy);
-      if (d < LINK) {
-        ctx.strokeStyle = `rgba(0,180,200,${(1 - d / LINK) * 0.25})`;
-        ctx.lineWidth = 0.6; ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y); ctx.stroke();
-      }
-    }
-    ctx.fillStyle = 'rgba(0,212,232,0.45)';
-    ctx.beginPath(); ctx.arc(pts[i].x, pts[i].y, 1.6, 0, Math.PI*2); ctx.fill();
-  }
-  requestAnimationFrame(raf);
-}
-resize(); mkPts(); raf();
-window.addEventListener('resize', () => { resize(); mkPts(); });
-window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; }, {passive:true});
-
-setTimeout(() => {
-  document.querySelectorAll('.hero-word .l').forEach((el, i) => setTimeout(() => el.classList.add('in'), i * 60 + 50));
-}, 50);
-
-const spotlightElements = document.querySelectorAll('.map-row');
-spotlightElements.forEach(el => {
-  el.addEventListener('mousemove', e => {
-    const r = el.getBoundingClientRect();
-    el.style.setProperty('--x', `${e.clientX - r.left}px`);
-    el.style.setProperty('--y', `${e.clientY - r.top}px`);
-  }, {passive:true});
-});
-
-function openModal() { document.getElementById('modalBg').classList.add('open'); }
-function closeModal(event) {
-  const modalBg = document.getElementById('modalBg');
-  if (!event || event.target === modalBg || event.currentTarget?.classList?.contains('modal-close')) {
-    modalBg.classList.remove('open');
-  }
-}
-
-async function submitWaitlist() {
-  const emailInput = document.getElementById('wlEmail');
-  const firstInput = document.getElementById('wlFirst');
-  const lastInput = document.getElementById('wlLast');
-  const msg = document.getElementById('wlMsg');
-  const email = emailInput.value.trim();
-  if (!/^\S+@\S+\.\S+$/.test(email)) { msg.textContent = 'Please enter a valid email address.'; return; }
-  msg.textContent = 'Submitting...';
-  try {
-    const response = await fetch('/api/subscribe', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, firstName: firstInput.value, lastName: lastInput.value })
-    });
-    const payload = await response.json();
-    msg.textContent = payload.message || `Thanks. You are now on the waitlist.`;
-  } catch (error) { msg.textContent = 'Subscription failed.'; }
-}
-
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('visible'); revealObserver.unobserve(entry.target); } });
-}, { threshold: 0.15 });
-document.querySelectorAll('.feature-surface').forEach((section) => revealObserver.observe(section));
-</script>
+const canvas=document.getElementById('mesh-canvas'),ctx=canvas.getContext('2d');let W,H,pts;const mouse={x:-9999,y:-9999},LINK=155;function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}function mkPts(){const n=Math.min(80,Math.floor(W*H/12000));pts=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-0.5)*0.4,vy:(Math.random()-0.5)*0.4}))}function raf(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;const dx=p.x-mouse.x,dy=p.y-mouse.y,d=Math.hypot(dx,dy);if(d<100){p.vx+=dx/d*0.02;p.vy+=dy/d*0.02}});for(let i=0;i<pts.length;i++){for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.hypot(dx,dy);if(d<LINK){ctx.strokeStyle=`rgba(0,180,200,${(1-d/LINK)*0.25})`;ctx.lineWidth=0.6;ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.stroke()}}ctx.fillStyle='rgba(0,212,232,0.45)';ctx.beginPath();ctx.arc(pts[i].x,pts[i].y,1.6,0,Math.PI*2);ctx.fill()}requestAnimationFrame(raf)}resize();mkPts();raf();window.addEventListener('resize',()=>{resize();mkPts()});window.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY},{passive:true});setTimeout(()=>{document.querySelectorAll('.hero-word .l').forEach((el,i)=>setTimeout(()=>el.classList.add('in'),i*60+50))},50);const spotlightElements=document.querySelectorAll('.map-row, .feature-surface');spotlightElements.forEach(el=>{el.addEventListener('mousemove',e=>{const r=el.getBoundingClientRect();el.style.setProperty('--x',`${e.clientX-r.left}px`);el.style.setProperty('--y',`${e.clientY-r.top}px`)},{passive:true})});function openModal(){document.getElementById('modalBg').classList.add('open')}function closeModal(e){const m=document.getElementById('modalBg');if(!e||e.target===m||e.currentTarget?.classList?.contains('modal-close'))m.classList.remove('open')}async function submitWaitlist(){const e=document.getElementById('wlEmail'),f=document.getElementById('wlFirst'),l=document.getElementById('wlLast'),m=document.getElementById('wlMsg'),v=e.value.trim();if(!/^\S+@\S+\.\S+$/.test(v)){m.textContent='Please enter a valid email address.';return}m.textContent='Submitting...';try{const r=await fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:v,firstName:f.value,lastName:l.value})});const p=await r.json();m.textContent=p.message||'Thanks. You are now on the waitlist.'}catch(err){m.textContent='Subscription failed.'}}const revealObserver=new IntersectionObserver((entries)=>{entries.forEach((entry)=>{if(entry.isIntersecting){entry.target.classList.add('visible');revealObserver.unobserve(entry.target)}})},{threshold:0.15});document.querySelectorAll('.feature-surface').forEach((section)=>revealObserver.observe(section));</script>
 </body>
 </html>
