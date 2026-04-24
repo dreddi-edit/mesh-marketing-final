@@ -665,11 +665,15 @@
 
 <div class="modal-bg" id="modalBg" onclick="closeModal(event)">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal()">x</button>
+    <button class="modal-close" onclick="closeModal()">×</button>
     <h3>Join the<br>waitlist.</h3>
     <p>Get early access and launch updates. No spam, ever.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <input type="text" id="wlFirst" placeholder="First name" />
+      <input type="text" id="wlLast" placeholder="Last name" />
+    </div>
     <input type="email" id="wlEmail" placeholder="you@company.com">
-    <button class="modal-btn" onclick="submitWaitlist()">Get early access -></button>
+    <button class="modal-btn" onclick="submitWaitlist()">Get early access →</button>
     <p id="wlMsg" style="margin-top:12px;font-size:13px;color:var(--cyan);text-align:center;min-height:18px"></p>
   </div>
 </div>
@@ -831,9 +835,14 @@ function closeModal(event) {
 
 async function submitWaitlist() {
   const emailInput = document.getElementById('wlEmail');
+  const firstInput = document.getElementById('wlFirst');
+  const lastInput = document.getElementById('wlLast');
   const button = document.querySelector('#modalBg .modal-btn');
   const msg = document.getElementById('wlMsg');
+  
   const email = emailInput.value.trim();
+  const firstName = firstInput.value.trim();
+  const lastName = lastInput.value.trim();
 
   if (!/^\S+@\S+\.\S+$/.test(email)) {
     msg.textContent = 'Please enter a valid email address.';
@@ -847,7 +856,7 @@ async function submitWaitlist() {
     const response = await fetch('/api/subscribe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email })
+      body: JSON.stringify({ email, firstName, lastName })
     });
     const payload = await response.json();
     if (!response.ok || !payload.ok) {
@@ -855,6 +864,8 @@ async function submitWaitlist() {
     }
     msg.textContent = payload.message || `Thanks, ${email}. You are now on the waitlist.`;
     emailInput.value = '';
+    firstInput.value = '';
+    lastInput.value = '';
   } catch (error) {
     msg.textContent = error instanceof Error ? error.message : 'Subscription failed.';
   } finally {

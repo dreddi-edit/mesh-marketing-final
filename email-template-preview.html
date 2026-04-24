@@ -1,14 +1,4 @@
-import crypto from 'node:crypto';
-import { put } from '@vercel/blob';
-import { Resend } from 'resend';
-
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
-
-function buildConfirmationEmail(email, firstName, lastName) {
-  const name = firstName ? firstName.toUpperCase() : 'DEVELOPER';
-  return {
-    subject: `ACCESS GRANTED: ${name} // MESH WAITLIST`,
-    html: `<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -159,7 +149,7 @@ function buildConfirmationEmail(email, firstName, lastName) {
 <span style="color: #c678dd;">&lsaquo; </span>██║╚██╔╝██║██╔══╝  ╚════██║██╔══██║
 <span style="color: #c678dd;">&lsaquo; </span>██║ ╚═╝ ██║███████╗███████║██║  ██║
 <span style="color: #c678dd;">&lsaquo; </span>╚═╝     ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝ <span style="color: #c678dd;">&rsaquo;</span></pre>
-          <div class="line"><span class="cyan">user:</span> <span class="white">${email}</span></div>
+          <div class="line"><span class="cyan">user:</span> <span class="white">ALEX@EXAMPLE.COM</span></div>
           <div class="line"><span class="cyan">node:</span> <span class="white">global-cluster-01</span></div>
           <div class="line"><span class="cyan">status:</span> <span class="green">EARLY_ACCESS_GRANTED</span></div>
           <div class="line"><span class="muted">----------------------------</span></div>
@@ -191,74 +181,4 @@ function buildConfirmationEmail(email, firstName, lastName) {
     </div>
   </div>
 </body>
-</html>`
-  };
-}
-
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ ok: false, message: 'Method Not Allowed' });
-  }
-
-  const email = String(req.body?.email || '').trim().toLowerCase();
-  const firstName = String(req.body?.firstName || '').trim().slice(0, 80);
-  const lastName = String(req.body?.lastName || '').trim().slice(0, 80);
-
-  const isValidEmail = /^\S+@\S+\.\S+$/.test(email);
-  if (!isValidEmail) {
-    return res.status(400).json({ ok: false, message: 'Please enter a valid email address.' });
-  }
-
-  try {
-    const now = new Date();
-    const entry = {
-      id: crypto.randomUUID(),
-      email,
-      firstName,
-      lastName,
-      source: 'mesh-marketing-site',
-      createdAt: now.toISOString(),
-      userAgent: req.headers['user-agent'] || null,
-      ip: req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || null
-    };
-
-    const day = now.toISOString().slice(0, 10);
-    const digest = crypto.createHash('sha256').update(entry.id).digest('hex').slice(0, 12);
-    const path = `waitlist/${day}/${digest}.json`;
-
-    await put(path, JSON.stringify(entry, null, 2), {
-      access: 'private',
-      addRandomSuffix: false,
-      contentType: 'application/json'
-    });
-
-    let confirmationEmailSent = false;
-    if (resend) {
-      const emailContent = buildConfirmationEmail(email, firstName, lastName);
-      try {
-        await resend.emails.send({
-          from: 'Mesh <noreply@try-mesh.com>',
-          to: email,
-          subject: emailContent.subject,
-          html: emailContent.html
-        });
-        confirmationEmailSent = true;
-      } catch (emailError) {
-        console.error('[waitlist] confirmation email failed', emailError);
-      }
-    }
-
-    const greeting = firstName ? firstName : email;
-    return res.status(200).json({
-      ok: true,
-      message: `Thanks, ${greeting}. You're on the waitlist.`,
-      confirmationEmailSent
-    });
-  } catch (error) {
-    console.error('[waitlist] save failed', error);
-    return res.status(500).json({
-      ok: false,
-      message: 'Signup failed on the server. Please try again.'
-    });
-  }
-}
+</html>

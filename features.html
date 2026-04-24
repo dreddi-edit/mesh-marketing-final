@@ -500,12 +500,14 @@
       color: oklch(1 0 0 / 0.68);
     }
     .ascii-logo {
-      margin-bottom: 18px;
-      color: var(--cyan);
-      font-size: 12px;
-      line-height: 1.02;
+      margin-bottom: 24px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 13px;
+      line-height: 1;
+      letter-spacing: 0;
       white-space: pre;
-      text-shadow: 0 0 18px oklch(0.74 0.14 200 / 0.22);
+      color: var(--cyan);
+      font-weight: bold;
     }
     .terminal-prompt { color: var(--cyan); }
     .terminal-muted { color: oklch(1 0 0 / 0.28); }
@@ -801,11 +803,15 @@
 
 <div class="modal-bg" id="modalBg" onclick="closeModal(event)">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal()">x</button>
+    <button class="modal-close" onclick="closeModal()">×</button>
     <h3>Join the<br>waitlist.</h3>
     <p>Get early access + launch updates. No spam, ever.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <input type="text" id="wlFirst" placeholder="First name" />
+      <input type="text" id="wlLast" placeholder="Last name" />
+    </div>
     <input type="email" id="wlEmail" placeholder="you@company.com">
-    <button class="modal-btn" onclick="submitWaitlist()">Get early access -></button>
+    <button class="modal-btn" onclick="submitWaitlist()">Get early access →</button>
     <p id="wlMsg" style="margin-top:12px;font-size:13px;color:var(--cyan);text-align:center;min-height:18px"></p>
   </div>
 </div>
@@ -955,11 +961,13 @@
         <span class="window-title">mesh - ~/my-project</span>
       </div>
       <div class="terminal-body">
-        <pre class="ascii-logo"> __  __ _____ ____  _   _
-|  \/  | ____/ ___|| | | |
-| |\/| |  _| \___ \| |_| |
-| |  | | |___ ___) |  _  |
-|_|  |_|_____|____/|_| |_|</pre>
+<pre class="ascii-logo">
+<span style="color:#c678dd">‹ </span>███╗   ███╗███████╗███████╗██╗  ██╗
+<span style="color:#c678dd">‹ </span>████╗ ████║██╔════╝██╔════╝██║  ██║
+<span style="color:#c678dd">‹ </span>██╔████╔██║█████╗  ███████╗███████║
+<span style="color:#c678dd">‹ </span>██║╚██╔╝██║██╔══╝  ╚════██║██╔══██║
+<span style="color:#c678dd">‹ </span>██║ ╚═╝ ██║███████╗███████║██║  ██║
+<span style="color:#c678dd">‹ </span>╚═╝     ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝ <span style="color:#c678dd">›</span></pre>
         <div><span class="terminal-muted">workspace:</span> <span class="cyan">mesh-agent-cli</span></div>
         <div><span class="terminal-muted">model:</span> claude-sonnet-4-6</div>
         <div><span class="terminal-muted">context:</span> <span class="green">135/200 files cached</span></div>
@@ -1138,9 +1146,14 @@ function closeModal(event) {
 
 async function submitWaitlist() {
   const emailInput = document.getElementById('wlEmail');
+  const firstInput = document.getElementById('wlFirst');
+  const lastInput = document.getElementById('wlLast');
   const button = document.querySelector('#modalBg .modal-btn');
   const msg = document.getElementById('wlMsg');
+  
   const email = emailInput.value.trim();
+  const firstName = firstInput.value.trim();
+  const lastName = lastInput.value.trim();
 
   if (!/^\S+@\S+\.\S+$/.test(email)) {
     msg.textContent = 'Please enter a valid email address.';
@@ -1154,7 +1167,7 @@ async function submitWaitlist() {
     const response = await fetch('/api/subscribe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email })
+      body: JSON.stringify({ email, firstName, lastName })
     });
     const payload = await response.json();
     if (!response.ok || !payload.ok) {
@@ -1162,6 +1175,8 @@ async function submitWaitlist() {
     }
     msg.textContent = payload.message || `Thanks, ${email}. You are now on the waitlist.`;
     emailInput.value = '';
+    firstInput.value = '';
+    lastInput.value = '';
   } catch (error) {
     msg.textContent = error instanceof Error ? error.message : 'Subscription failed.';
   } finally {
