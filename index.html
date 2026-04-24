@@ -108,6 +108,33 @@
 
     @keyframes up { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:none} }
 
+    .hero-animation {
+      position: relative; z-index: 1;
+      padding: 0 80px 120px;
+    }
+    .ha-shell {
+      border-radius: 24px;
+      border: 1px solid oklch(1 0 0 / 0.07);
+      background: oklch(0.07 0.035 200);
+      overflow: hidden;
+      box-shadow: 0 40px 120px oklch(0 0 0 / 0.35);
+    }
+    .ha-head {
+      display:flex; align-items:center; justify-content:space-between; gap:20px;
+      padding: 18px 24px;
+      border-bottom: 1px solid oklch(1 0 0 / 0.06);
+      background: oklch(0.08 0.04 200 / 0.92);
+    }
+    .ha-kicker { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cyan); }
+    .ha-copy { font-size: 14px; color: oklch(1 0 0 / 0.42); }
+    .ha-frame {
+      display:block;
+      width:100%;
+      aspect-ratio: 16 / 9;
+      border: 0;
+      background: oklch(0.05 0.03 200);
+    }
+
     /* FOUR SURFACES GRID */
     .surfaces-section {
       position: relative; z-index: 1;
@@ -266,6 +293,8 @@
 
     @media (max-width: 900px) {
       .surfaces-section { padding: 80px 24px 100px; }
+      .hero-animation { padding: 0 24px 80px; }
+      .ha-head { flex-direction:column; align-items:flex-start; }
       .ss-grid { grid-template-columns: 1fr; }
       .surface-card { min-height: auto; padding: 36px 28px; }
       .sc-num { font-size: 56px; }
@@ -407,6 +436,16 @@
   <div class="scroll-cue">
     <span class="scroll-cue-label">scroll</span>
     <div class="scroll-bar"></div>
+  </div>
+</section>
+
+<section class="hero-animation">
+  <div class="ha-shell">
+    <div class="ha-head">
+      <div class="ha-kicker">Watch Mesh Work</div>
+      <div class="ha-copy">A short walkthrough of the CLI, compression engine, recall gains, and the four product surfaces.</div>
+    </div>
+    <iframe class="ha-frame" src="mesh-animation.html" title="Mesh product walkthrough" loading="lazy"></iframe>
   </div>
 </section>
 

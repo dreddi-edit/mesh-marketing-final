@@ -34,16 +34,6 @@ const C = {
   white:  'rgba(255,255,255,0.90)',
 };
 
-// ── MESH ASCII art (matching CLI screenshot)
-const LOGO_LINES = [
-  '  ██╗   ███╗   ██╗ ██╗███████╗███╗  ██╗',
-  '  ████╗ ████╗  ██║ ██║██╔════╝████╗ ██║',
-  '  ██╔████╔██║  ██║ ██║█████╗  ██╔████╔╝',
-  '  ██║╚██╔╝██║  ██║ ██║██╔══╝  ██║╚██╔╝ ',
-  '  ██║ ╚═╝ ██║  ╚████╔╝███████╗██║ ╚═╝  ',
-  '  ╚═╝     ╚═╝   ╚═══╝ ╚══════╝╚═╝      ',
-];
-
 // ── helpers
 function lerp(a, b, t) { return a + (b - a) * Math.max(0, Math.min(1, t)); }
 function ilerp(a, b, t) { return Math.max(0, Math.min(1, (t - a) / (b - a))); }
@@ -78,54 +68,70 @@ function Terminal({ title='mesh', children, style={} }) {
 
 // ── Scene 1: CLI Boot (0-7s) ─────────────────────────────────────────────
 function Scene1() {
-  const { localTime: t, progress } = useSprite();
+  const { localTime: t } = useSprite();
   const opacity = fade(t, 0, 0.5, 6, 7);
 
-  // Logo lines appear one by one
-  const linesVisible = Math.min(LOGO_LINES.length, Math.floor(t / 0.32) + (t > 0.1 ? 1 : 0));
-  const showInfo  = t > 2.4;
-  const showCmd   = t > 3.8;
-  const showResp  = t > 5.0;
+  const showHeader = t > 0.4;
+  const showMeta = t > 1.0;
+  const showStats = t > 2.0;
+  const showPrompt = t > 3.3;
+  const showResp = t > 4.9;
 
   return (
     <div style={{ position:'absolute', inset:0, display:'flex', alignItems:'center', justifyContent:'center', opacity, background: C.dark }}>
-      {/* Subtle glow */}
-      <div style={{ position:'absolute', top:'20%', left:'50%', transform:'translateX(-50%)', width:600, height:400, background:'radial-gradient(ellipse, rgba(0,212,232,0.06) 0%, transparent 70%)', pointerEvents:'none' }} />
+      <div style={{ position:'absolute', inset:0, background:'radial-gradient(ellipse at center, rgba(0,212,232,0.06) 0%, transparent 55%)', pointerEvents:'none' }} />
+      <div style={{ position:'absolute', inset:'10% 8% 12%', border:'1px solid rgba(255,255,255,0.025)', borderRadius:48, pointerEvents:'none', opacity:0.5 }} />
+      <div style={{ position:'absolute', inset:'22% 20% 18%', border:'1px solid rgba(255,255,255,0.02)', borderRadius:36, pointerEvents:'none', opacity:0.35 }} />
 
       <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:40 }}>
-        <Terminal title="mesh — ~/my-project" style={{ width: 860 }}>
-          {/* ASCII logo */}
-          <div style={{ marginBottom: 16 }}>
-            <pre style={{ fontFamily:'Geist Mono', fontSize:12, lineHeight:1.25, letterSpacing:'0.01em' }}>
-              <span style={{ color: C.magenta }}>{'‹ '}</span>
-              <span style={{ color: C.cyan }}>
-                {LOGO_LINES.slice(0, linesVisible).join('\n')}
-              </span>
-              {linesVisible >= LOGO_LINES.length && (
-                <span style={{ color: C.magenta }}>{' ›'}</span>
-              )}
-            </pre>
-          </div>
+        <Terminal title="mesh — ~/my-project" style={{ width: 980, background:'#050b12', border:'1px solid rgba(0,212,232,0.08)' }}>
+          <div style={{ color: C.green, fontSize:12, marginBottom: 10, opacity: fadeIn(t, 0.15, 0.55) }}>✓ Workspace indexed successfully.</div>
+          <div style={{ height:2, background:'rgba(0,212,232,0.85)', margin:'0 -26px 18px' }} />
 
-          {/* Workspace info */}
-          {showInfo && (
-            <div style={{ opacity: fadeIn(t, 2.4, 3.0) }}>
-              <div><span style={{ color: C.white }}>workspace:  </span><span style={{ color: C.cyan }}>mesh-agent-cli</span></div>
-              <div><span style={{ color: C.muted }}>model:      </span><span style={{ color: C.dim }}>claude-sonnet-4-6</span></div>
-              <div><span style={{ color: C.muted }}>context:    </span><span style={{ color: C.green }}>135/200 files cached (1,026T)</span></div>
-              <div><span style={{ color: C.dim }}>last sync:  </span><span style={{ color: C.dim }}>0 messages / 0 stars</span></div>
+          {showHeader && (
+            <div style={{ display:'grid', gridTemplateColumns:'240px 1fr', gap:28, alignItems:'center', marginBottom:14, opacity: fadeIn(t, 0.4, 0.95) }}>
+              <div style={{ display:'flex', alignItems:'center' }}>
+                <img src="assets/brand/lockup-color.svg" alt="Mesh" style={{ width:220, height:'auto', display:'block' }} />
+              </div>
+              <div style={{ fontFamily:'Geist Mono', fontSize:88, lineHeight:0.9, color:C.cyan, letterSpacing:'-0.08em' }}>{'<    >'}</div>
             </div>
           )}
 
-          {/* Command */}
-          {showCmd && (
-            <div style={{ marginTop: 8, opacity: fadeIn(t, 3.8, 4.3) }}>
-              <div><span style={{ color: '#5c8aab' }}>mesh/master » </span><span style={{ color: C.white }}>fix the broken login redirect</span></div>
+          {showMeta && (
+            <div style={{ fontSize:12, lineHeight:1.65, color:'rgba(255,255,255,0.66)', marginBottom:10, opacity: fadeIn(t, 1.0, 1.55) }}>
+              <div><span style={{ color:C.white }}>mesh</span>: local · <span style={{ color:C.cyan }}>mesh-marketing-final</span></div>
+              <div>branch: <span style={{ color:C.white }}>main</span> · model: <span style={{ color:C.white }}>Claude Sonnet 4.6</span></div>
+              <div>commands: <span style={{ color:C.cyan }}>/help</span> /status /capsule /model /clear /exit</div>
+              <div style={{ color:'rgba(255,255,255,0.42)' }}>tip: Type `/` and press TAB for command completion</div>
             </div>
           )}
+
+          <div style={{ height:2, background:'rgba(0,212,232,0.85)', margin:'0 -26px 16px' }} />
+
+          {showStats && (
+            <div style={{ display:'grid', gridTemplateColumns:'140px 1fr', rowGap:2, fontSize:12, lineHeight:1.55, opacity: fadeIn(t, 2.0, 2.55), marginBottom:14 }}>
+              <div style={{ color:C.dim }}>mode:</div><div style={{ color:C.white }}>local</div>
+              <div style={{ color:C.dim }}>workspace:</div><div style={{ color:C.white }}>mesh-marketing-final</div>
+              <div style={{ color:C.dim }}>model:</div><div style={{ color:C.white }}>us.anthropic.claude-sonnet-4-6</div>
+              <div style={{ color:C.dim }}>index:</div><div style={{ color:C.green }}>28/28 files cached (100%)</div>
+              <div style={{ color:C.dim }}>session:</div><div style={{ color:'rgba(255,255,255,0.62)' }}>0 messages / 0 chars</div>
+              <div style={{ color:C.dim }}>capsule:</div><div style={{ color:'rgba(255,255,255,0.62)' }}>none</div>
+            </div>
+          )}
+
+          {showPrompt && (
+            <div style={{ opacity: fadeIn(t, 3.3, 3.85) }}>
+              <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:10 }}>
+                <span style={{ color:C.white, fontWeight:700 }}>mesh/main</span>
+                <span style={{ flex:1, height:2, background:'rgba(0,212,232,0.85)' }} />
+              </div>
+              <div><span style={{ color:C.cyan }}>› </span><span style={{ color:C.white }}>fix the broken login redirect</span></div>
+            </div>
+          )}
+
           {showResp && (
-            <div style={{ opacity: fadeIn(t, 5.0, 5.5) }}>
-              <div style={{ color: C.dim }}>→ Reading src/routes/auth.ts...</div>
+            <div style={{ opacity: fadeIn(t, 4.9, 5.45), marginTop:10 }}>
+              <div style={{ color:'rgba(255,255,255,0.42)' }}>→ Reading src/routes/auth.ts...</div>
               <div style={{ color: C.green }}>✓ Patched · All 47 tests passing</div>
             </div>
           )}
