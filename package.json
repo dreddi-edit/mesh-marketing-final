@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Mesh Marketing Website",
   "dependencies": {
-    "@vercel/blob": "^2.3.3"
+    "@vercel/blob": "^2.3.3",
+    "resend": "^4.1.2"
   },
   "engines": {
     "node": ">=18.x"
