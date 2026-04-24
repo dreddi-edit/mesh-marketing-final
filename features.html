@@ -30,16 +30,22 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
+      --petrol:  oklch(0.38 0.09 198);
+      --cyan:    oklch(0.74 0.14 200);
+      --dark:    oklch(0.08 0.04 200);
+      --dark2:   oklch(0.13 0.05 200);
+      --white:   oklch(0.99 0.004 195);
+      --off:     oklch(0.96 0.006 195);
+      --muted:   oklch(0.55 0.05 200);
+      --border:  oklch(0.88 0.015 195);
       --bg: oklch(0.078 0.038 200);
-      --bg-deep: oklch(0.052 0.034 204);
+      --bg-deep: oklch(0.046 0.034 204);
       --panel: oklch(0.108 0.046 200);
       --panel-2: oklch(0.135 0.052 199);
       --line: oklch(1 0 0 / 0.08);
       --line-strong: oklch(0.74 0.14 200 / 0.28);
       --ink: oklch(0.98 0.004 195);
-      --muted: oklch(0.74 0.028 198 / 0.62);
       --dim: oklch(0.74 0.026 198 / 0.38);
-      --cyan: oklch(0.74 0.14 200);
       --cyan-soft: oklch(0.74 0.14 200 / 0.12);
       --green: oklch(0.75 0.12 145);
       --amber: oklch(0.78 0.10 58);
@@ -50,29 +56,15 @@
 
     html { scroll-behavior: smooth; }
     body {
-      background:
-        radial-gradient(circle at 18% 12%, oklch(0.28 0.08 198 / 0.24), transparent 32rem),
-        radial-gradient(circle at 82% 8%, oklch(0.74 0.14 200 / 0.10), transparent 28rem),
-        linear-gradient(180deg, var(--bg), var(--bg-deep) 60%, var(--bg));
+      background: var(--bg);
       color: var(--ink);
       font-family: var(--sans);
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: -1;
-      opacity: 0.22;
-      background-image:
-        linear-gradient(oklch(1 0 0 / 0.035) 1px, transparent 1px),
-        linear-gradient(90deg, oklch(1 0 0 / 0.03) 1px, transparent 1px);
-      background-size: 56px 56px;
-      mask-image: linear-gradient(to bottom, black, transparent 82%);
-    }
+    /* CANVAS */
+    #mesh-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
 
     a { color: inherit; }
     code { font-family: var(--mono); color: var(--cyan); }
@@ -87,8 +79,8 @@
       align-items: center;
       justify-content: space-between;
       padding: 22px 56px;
-      background: oklch(0.078 0.038 200 / 0.88);
-      backdrop-filter: blur(20px);
+      background: oklch(0.078 0.038 200 / 0.82);
+      backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--line);
     }
     .nav-logo { display: inline-flex; align-items: center; text-decoration: none; }
@@ -115,6 +107,7 @@
     .page-shell {
       width: min(1180px, calc(100% - 64px));
       margin: 0 auto;
+      position: relative; z-index: 1;
     }
 
     .feature-hero {
@@ -126,19 +119,27 @@
       align-items: center;
       position: relative;
     }
-    .feature-hero::after {
-      content: "FEATURES";
-      position: absolute;
-      right: -128px;
-      bottom: 48px;
+    
+    .hero-word {
       font-family: var(--display);
-      font-size: 168px;
       font-style: italic;
       font-weight: 900;
-      line-height: 1;
-      color: oklch(1 0 0 / 0.024);
-      pointer-events: none;
+      font-size: clamp(80px, 12vw, 150px);
+      line-height: 0.85;
+      letter-spacing: -0.03em;
+      color: var(--white);
+      display: flex;
+      flex-wrap: wrap;
+      user-select: none;
     }
+    .hero-word span { color: var(--cyan); }
+    .hero-word .l {
+      display: inline-block;
+      opacity: 0; transform: translateY(40px);
+      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .hero-word .l.in { opacity: 1; transform: none; }
+
     .eyebrow {
       display: inline-flex;
       align-items: center;
@@ -149,6 +150,7 @@
       letter-spacing: 0.12em;
       color: var(--cyan);
       margin-bottom: 22px;
+      opacity: 0; animation: up 0.8s 0.2s ease forwards;
     }
     .eyebrow::before {
       content: "";
@@ -156,14 +158,8 @@
       height: 1px;
       background: var(--cyan);
     }
-    h1 {
-      font-family: var(--display);
-      font-size: 122px;
-      font-style: italic;
-      font-weight: 900;
-      line-height: 0.88;
-      max-width: 780px;
-    }
+    @keyframes up { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:none} }
+
     .hero-copy {
       margin-top: 30px;
       max-width: 610px;
@@ -171,9 +167,10 @@
       font-weight: 300;
       line-height: 1.72;
       color: var(--muted);
+      opacity: 0; animation: up 0.8s 0.6s ease forwards;
     }
     .hero-copy strong { color: var(--ink); font-weight: 500; }
-    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 34px; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 34px; opacity: 0; animation: up 0.8s 0.8s ease forwards; }
     .primary-btn, .secondary-btn {
       display: inline-flex;
       align-items: center;
@@ -801,6 +798,8 @@
 </head>
 <body>
 
+<canvas id="mesh-canvas"></canvas>
+
 <div class="modal-bg" id="modalBg" onclick="closeModal(event)">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">×</button>
@@ -830,7 +829,10 @@
   <section class="page-shell feature-hero">
     <div>
       <div class="eyebrow">Features</div>
-      <h1>Four surfaces.<br><span class="cyan">One engine.</span></h1>
+      <div class="hero-word">
+        <span class="l">F</span><span class="l">o</span><span class="l">u</span><span class="l">r</span>&nbsp;<span class="l">s</span><span class="l">u</span><span class="l">r</span><span class="l">f</span><span class="l">a</span><span class="l">c</span><span class="l">e</span><span class="l">s</span><span class="l">.</span><br>
+        <span><span class="l">O</span><span class="l">n</span><span class="l">e</span>&nbsp;<span class="l">e</span><span class="l">n</span><span class="l">g</span><span class="l">i</span><span class="l">n</span><span class="l">e</span><span class="l">.</span></span>
+      </div>
       <p class="hero-copy">Mesh gives agents the code context they need without flooding the model. Terminal, IDE, MCP, and API all run on the same <strong>capsule compression engine</strong>: structural search, targeted reads, exact span recovery, and resumable sessions.</p>
       <div class="hero-actions">
         <a class="primary-btn" onclick="openModal()">Join waitlist</a>
@@ -1133,6 +1135,78 @@
 </footer>
 
 <script>
+/* ── CANVAS PARTICLE MESH ── */
+const canvas = document.getElementById('mesh-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, pts;
+const mouse = { x: -9999, y: -9999 };
+const LINK = 155;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+function mkPts() {
+  const n = Math.min(90, Math.floor(W * H / 10000));
+  pts = Array.from({length: n}, () => ({
+    x: Math.random() * W, y: Math.random() * H,
+    vx: (Math.random() - 0.5) * 0.45,
+    vy: (Math.random() - 0.5) * 0.45,
+  }));
+}
+function raf() {
+  ctx.clearRect(0, 0, W, H);
+  pts.forEach(p => {
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0 || p.x > W) p.vx *= -1;
+    if (p.y < 0 || p.y > H) p.vy *= -1;
+    const dx = p.x - mouse.x, dy = p.y - mouse.y, d = Math.hypot(dx, dy);
+    if (d < 110) { p.vx += dx / d * 0.025; p.vy += dy / d * 0.025; }
+    const sp = Math.hypot(p.vx, p.vy);
+    if (sp > 1.1) { p.vx *= 0.97; p.vy *= 0.97; }
+  });
+  for (let i = 0; i < pts.length; i++) {
+    for (let j = i+1; j < pts.length; j++) {
+      const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
+      const d = Math.hypot(dx, dy);
+      if (d < LINK) {
+        ctx.strokeStyle = `rgba(0,180,200,${(1 - d / LINK) * 0.3})`;
+        ctx.lineWidth = 0.7;
+        ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y); ctx.stroke();
+      }
+    }
+    ctx.fillStyle = 'rgba(0,212,232,0.55)';
+    ctx.beginPath(); ctx.arc(pts[i].x, pts[i].y, 1.8, 0, Math.PI*2); ctx.fill();
+  }
+  requestAnimationFrame(raf);
+}
+resize(); mkPts(); raf();
+window.addEventListener('resize', () => { resize(); mkPts(); });
+window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; }, {passive:true});
+
+/* canvas fades after hero */
+window.addEventListener('scroll', () => {
+  const t = Math.max(0, Math.min(1, 1 - window.scrollY / window.innerHeight));
+  canvas.style.opacity = 0.2 + t * 0.5;
+}, {passive:true});
+
+/* ── HERO LETTERS ── */
+setTimeout(() => {
+  document.querySelectorAll('.hero-word .l').forEach((el, i) =>
+    setTimeout(() => el.classList.add('in'), i * 80 + 100)
+  );
+}, 50);
+
+/* ── SPOTLIGHT EFFECT ── */
+const spotlightElements = document.querySelectorAll('.map-row, .surface-link, .feature-surface');
+spotlightElements.forEach(el => {
+  el.addEventListener('mousemove', e => {
+    const r = el.getBoundingClientRect();
+    el.style.setProperty('--x', `${e.clientX - r.left}px`);
+    el.style.setProperty('--y', `${e.clientY - r.top}px`);
+  }, {passive:true});
+});
+
 function openModal() {
   document.getElementById('modalBg').classList.add('open');
 }
@@ -1193,7 +1267,7 @@ const revealObserver = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.16 });
 
-document.querySelectorAll('.feature-surface').forEach((section) => revealObserver.observe(section));
+document.querySelectorAll('.feature-surface, .compression-visual, .engine-inner > div').forEach((section) => revealObserver.observe(section));
 </script>
 </body>
 </html>

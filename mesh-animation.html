@@ -33,12 +33,71 @@
   <script type="text/babel" src="animations.jsx"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #000; font-family: 'DM Sans', sans-serif; }
-    #root { width: 100vw; height: 100vh; }
+    :root {
+      --bg: oklch(0.078 0.038 200);
+      --bg-deep: oklch(0.046 0.032 204);
+      --cyan: oklch(0.74 0.14 200);
+      --white: oklch(0.99 0.004 195);
+      --display: 'Barlow Condensed', sans-serif;
+    }
+    body { background: #000; font-family: 'DM Sans', sans-serif; overflow: hidden; }
+    #root { width: 100vw; height: 100vh; position: relative; z-index: 1; }
+    #mesh-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.3; }
   </style>
 </head>
 <body>
+<canvas id="mesh-canvas"></canvas>
 <div id="root"></div>
+<script>
+/* ── CANVAS PARTICLE MESH ── */
+const canvas = document.getElementById('mesh-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, pts;
+const mouse = { x: -9999, y: -9999 };
+const LINK = 155;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+function mkPts() {
+  const n = Math.min(80, Math.floor(W * H / 12000));
+  pts = Array.from({length: n}, () => ({
+    x: Math.random() * W, y: Math.random() * H,
+    vx: (Math.random() - 0.5) * 0.45,
+    vy: (Math.random() - 0.5) * 0.45,
+  }));
+}
+function raf() {
+  ctx.clearRect(0, 0, W, H);
+  pts.forEach(p => {
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0 || p.x > W) p.vx *= -1;
+    if (p.y < 0 || p.y > H) p.vy *= -1;
+    const dx = p.x - mouse.x, dy = p.y - mouse.y, d = Math.hypot(dx, dy);
+    if (d < 110) { p.vx += dx / d * 0.025; p.vy += dy / d * 0.025; }
+    const sp = Math.hypot(p.vx, p.vy);
+    if (sp > 1.1) { p.vx *= 0.97; p.vy *= 0.97; }
+  });
+  for (let i = 0; i < pts.length; i++) {
+    for (let j = i+1; j < pts.length; j++) {
+      const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
+      const d = Math.hypot(dx, dy);
+      if (d < LINK) {
+        ctx.strokeStyle = `rgba(0,180,200,${(1 - d / LINK) * 0.3})`;
+        ctx.lineWidth = 0.7;
+        ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y); ctx.stroke();
+      }
+    }
+    ctx.fillStyle = 'rgba(0,212,232,0.45)';
+    ctx.beginPath(); ctx.arc(pts[i].x, pts[i].y, 1.8, 0, Math.PI*2); ctx.fill();
+  }
+  requestAnimationFrame(raf);
+}
+resize(); mkPts(); raf();
+window.addEventListener('resize', () => { resize(); mkPts(); });
+window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; }, {passive:true});
+</script>
 <script type="text/babel">
 const { useState, useEffect, useRef } = React;
 
