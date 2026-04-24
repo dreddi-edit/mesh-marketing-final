@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mesh Docs — CLI, IDE, MCP &amp; Gateway API</title>
+  <meta name="description" content="Mesh documentation: install the CLI, set up the IDE, run the MCP server, query the Gateway API, configure providers, recover spans, and more.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,800;1,900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cyan: oklch(0.74 0.14 200); --petrol: oklch(0.38 0.09 198);
+      --white: oklch(0.99 0.004 195); --muted: oklch(0.55 0.05 200);
+      --bg: oklch(0.078 0.038 200); --bg-deep: oklch(0.046 0.032 204);
+      --panel: oklch(0.105 0.045 200); --panel-2: oklch(0.132 0.052 199);
+      --line: oklch(1 0 0 / 0.08); --line-strong: oklch(0.74 0.14 200 / 0.30);
+      --ink: oklch(0.985 0.004 195); --dim: oklch(0.74 0.026 198 / 0.42);
+      --cyan-soft: oklch(0.74 0.14 200 / 0.12); --green: oklch(0.75 0.12 145); --amber: oklch(0.78 0.10 58); --red: oklch(0.68 0.13 25);
+      --mono: 'Geist Mono', monospace; --display: 'Barlow Condensed', sans-serif; --sans: 'DM Sans', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--ink); font-family: var(--sans); overflow-x: hidden; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+    a { color: inherit; text-decoration: none; }
+    code, kbd { font-family: var(--mono); font-size: 0.92em; }
+    p { color: oklch(1 0 0 / 0.78); }
+
+    /* ── NAV ── */
+    .site-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 18px 32px; background: oklch(0.078 0.038 200 / 0.85); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+    .nav-right { display: flex; gap: 4px; align-items: center; }
+    .nav-right a { font-size: 13px; color: oklch(1 0 0 / 0.42); padding: 6px 12px; border-radius: 6px; border: 1px solid transparent; transition: all 0.2s; cursor: pointer; }
+    .nav-right a:hover { color: var(--ink); border-color: oklch(1 0 0 / 0.12); }
+    .nav-active { color: var(--ink) !important; }
+    .nav-waitlist { background: var(--cyan-soft) !important; border-color: var(--line-strong) !important; color: var(--cyan) !important; }
+
+    /* ── DOCS LAYOUT ── */
+    .docs-layout {
+      display: grid;
+      grid-template-columns: 264px minmax(0, 1fr) 220px;
+      gap: 56px;
+      width: min(1280px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 88px 0 80px;
+      position: relative;
+    }
+    /* Sidebar */
+    .docs-side {
+      position: sticky; top: 72px;
+      align-self: start;
+      max-height: calc(100vh - 96px);
+      overflow-y: auto;
+      padding: 26px 0 60px;
+      border-right: 1px solid var(--line);
+      padding-right: 26px;
+    }
+    .docs-side::-webkit-scrollbar { width: 4px; }
+    .docs-side::-webkit-scrollbar-thumb { background: oklch(1 0 0 / 0.12); border-radius: 2px; }
+    .docs-search { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: oklch(0.05 0.03 200 / 0.6); margin-bottom: 24px; color: oklch(1 0 0 / 0.5); font-size: 13px; cursor: text; transition: border-color .2s; }
+    .docs-search:hover { border-color: oklch(1 0 0 / 0.18); }
+    .docs-search kbd { padding: 2px 6px; border: 1px solid var(--line); border-radius: 4px; background: oklch(1 0 0 / 0.04); color: oklch(1 0 0 / 0.6); font-size: 10.5px; }
+    .side-group { margin-bottom: 28px; }
+    .side-h {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--mono); font-size: 10px;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--cyan); margin-bottom: 8px;
+    }
+    .side-h::before { content:''; width: 14px; height: 1px; background: var(--cyan); opacity: 0.6; }
+    .side-link {
+      display: block;
+      padding: 7px 12px;
+      margin-left: -12px;
+      font-size: 13.5px; color: oklch(1 0 0 / 0.62);
+      border-radius: 7px;
+      border-left: 2px solid transparent;
+      transition: color .15s, background .15s, border-color .15s;
+      line-height: 1.35;
+    }
+    .side-link:hover { color: var(--ink); background: oklch(1 0 0 / 0.025); }
+    .side-link.active { color: var(--cyan); background: oklch(0.74 0.14 200 / 0.06); border-left-color: var(--cyan); }
+
+    /* Main */
+    .docs-main { min-width: 0; padding-top: 18px; }
+    .docs-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cyan); margin-bottom: 16px; }
+    .docs-eyebrow::before { content:''; width: 18px; height: 1px; background: var(--cyan); }
+    h1.docs-title { font-family: var(--display); font-style: italic; font-weight: 900; font-size: clamp(54px, 7vw, 96px); line-height: 0.92; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 18px; }
+    h1.docs-title em { color: var(--cyan); font-style: italic; }
+    .docs-lede { font-size: 18px; line-height: 1.65; color: oklch(1 0 0 / 0.7); max-width: 680px; font-weight: 300; }
+    .docs-lede strong { color: var(--ink); font-weight: 500; }
+
+    h2.docs-h2 { font-family: var(--display); font-style: italic; font-weight: 900; font-size: clamp(34px, 4vw, 50px); line-height: 1; color: var(--ink); margin: 64px 0 18px; letter-spacing: -0.01em; scroll-margin-top: 80px; }
+    h2.docs-h2 em { color: var(--cyan); font-style: italic; }
+    h3.docs-h3 { font-family: var(--sans); font-weight: 700; font-size: 20px; color: var(--ink); margin: 36px 0 10px; scroll-margin-top: 80px; }
+    h4.docs-h4 { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cyan); margin: 28px 0 10px; }
+    .docs-main p + p { margin-top: 12px; }
+    .docs-main p { font-size: 15.5px; }
+    .docs-main ul, .docs-main ol { padding-left: 22px; margin: 14px 0; color: oklch(1 0 0 / 0.78); font-size: 15.5px; }
+    .docs-main li { margin: 6px 0; }
+    .docs-main strong { color: var(--ink); font-weight: 600; }
+    .docs-main a:not(.button):not(.copy-btn) { color: var(--cyan); border-bottom: 1px dashed oklch(0.74 0.14 200 / 0.4); transition: border-color .2s; }
+    .docs-main a:not(.button):not(.copy-btn):hover { border-bottom-color: var(--cyan); }
+    .docs-main hr { border: 0; border-top: 1px solid var(--line); margin: 56px 0; }
+
+    /* code blocks */
+    .code {
+      position: relative;
+      margin: 18px 0;
+      background: oklch(0.045 0.03 204);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.25);
+    }
+    .code-head {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--line);
+      font-family: var(--mono); font-size: 10.5px; color: var(--dim);
+      letter-spacing: 0.05em;
+    }
+    .code-head .lang { color: var(--cyan); text-transform: uppercase; font-weight: 600; letter-spacing: 0.1em; font-size: 10px; }
+    .code-head .copy-btn {
+      margin-left: auto;
+      padding: 4px 10px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: oklch(1 0 0 / 0.025);
+      color: oklch(1 0 0 / 0.6);
+      font-family: var(--mono); font-size: 10px;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .code-head .copy-btn:hover { color: var(--cyan); border-color: var(--line-strong); }
+    .code-head .copy-btn.ok { color: var(--green); border-color: oklch(0.75 0.12 145 / 0.4); }
+    .code pre {
+      margin: 0; padding: 18px 18px;
+      font-family: var(--mono); font-size: 12.5px; line-height: 1.65;
+      color: oklch(1 0 0 / 0.85);
+      overflow-x: auto;
+    }
+    .code pre .c { color: var(--cyan); }
+    .code pre .g { color: var(--green); }
+    .code pre .d { color: oklch(1 0 0 / 0.36); font-style: italic; }
+    .code pre .k { color: #c678dd; }
+    .code pre .s { color: #98c379; }
+    .code pre .n { color: #d19a66; }
+    .docs-main code:not(.code code) {
+      padding: 2px 6px;
+      background: oklch(1 0 0 / 0.045);
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      color: var(--cyan);
+      font-size: 0.88em;
+    }
+
+    /* callouts */
+    .note {
+      display: grid; grid-template-columns: 22px 1fr; gap: 14px;
+      padding: 16px 18px;
+      margin: 18px 0;
+      border: 1px solid var(--line-strong);
+      border-radius: 10px;
+      background: oklch(0.74 0.14 200 / 0.05);
+      align-items: start;
+    }
+    .note .ic {
+      width: 22px; height: 22px; display: grid; place-items: center;
+      border-radius: 6px; background: oklch(0.74 0.14 200 / 0.16); color: var(--cyan);
+    }
+    .note p { font-size: 14px; color: oklch(1 0 0 / 0.78); margin: 0; }
+    .note.warn { border-color: oklch(0.78 0.10 58 / 0.4); background: oklch(0.78 0.10 58 / 0.05); }
+    .note.warn .ic { background: oklch(0.78 0.10 58 / 0.18); color: var(--amber); }
+    .note.danger { border-color: oklch(0.68 0.13 25 / 0.4); background: oklch(0.68 0.13 25 / 0.05); }
+    .note.danger .ic { background: oklch(0.68 0.13 25 / 0.18); color: var(--red); }
+
+    /* tables */
+    .table-wrap {
+      margin: 20px 0; border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
+      background: oklch(0.058 0.034 200 / 0.7);
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    table th, table td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--line); }
+    table th { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--cyan); background: oklch(1 0 0 / 0.02); }
+    table tr:last-child td { border-bottom: 0; }
+    table td code { color: var(--cyan); font-size: 12.5px; }
+
+    /* card grid (overview) */
+    .surface-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin: 28px 0 8px;
+    }
+    .surface-card {
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: linear-gradient(160deg, oklch(0.10 0.045 200 / 0.7), oklch(0.06 0.034 200 / 0.7));
+      transition: transform .25s, border-color .25s, background .25s;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .surface-card:hover { transform: translateY(-3px); border-color: var(--line-strong); background: linear-gradient(160deg, oklch(0.74 0.14 200 / 0.08), oklch(0.06 0.034 200 / 0.8)); }
+    .surface-card .ic { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; background: oklch(0.74 0.14 200 / 0.12); color: var(--cyan); }
+    .surface-card h3 { font-family: var(--display); font-style: italic; font-weight: 900; font-size: 32px; color: var(--ink); line-height: 1; margin: 0; }
+    .surface-card p { color: var(--muted); font-size: 14px; line-height: 1.55; margin: 0; flex: 1; }
+    .surface-card .arrow { display: inline-flex; align-items: center; gap: 6px; color: var(--cyan); font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
+
+    /* Right TOC */
+    .docs-toc {
+      position: sticky; top: 88px;
+      align-self: start;
+      max-height: calc(100vh - 120px);
+      overflow-y: auto;
+      padding-top: 24px;
+      font-size: 13px;
+    }
+    .docs-toc::-webkit-scrollbar { width: 0; }
+    .docs-toc h6 {
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--cyan); margin-bottom: 12px;
+    }
+    .docs-toc a {
+      display: block; padding: 5px 10px;
+      color: oklch(1 0 0 / 0.42);
+      border-left: 2px solid transparent;
+      transition: color .15s, border-color .15s;
+      line-height: 1.4;
+    }
+    .docs-toc a.h3 { padding-left: 22px; font-size: 12.5px; }
+    .docs-toc a:hover { color: var(--ink); }
+    .docs-toc a.active { color: var(--cyan); border-left-color: var(--cyan); }
+
+    /* Mobile */
+    @media (max-width: 1100px) {
+      .docs-toc { display: none; }
+      .docs-layout { grid-template-columns: 220px minmax(0, 1fr); gap: 36px; padding: 80px 0 60px; }
+    }
+    @media (max-width: 760px) {
+      .site-nav { padding: 14px 18px; }
+      .docs-layout { grid-template-columns: 1fr; padding: 92px 0 48px; gap: 30px; width: min(100% - 28px, 720px); }
+      .docs-side { position: relative; top: 0; max-height: none; padding-right: 0; border-right: 0; border-bottom: 1px solid var(--line); padding-bottom: 22px; }
+      .surface-grid { grid-template-columns: 1fr; }
+    }
+
+    /* MODAL */
+    .modal-bg { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.75); opacity: 0; pointer-events: none; transition: opacity 0.25s; backdrop-filter: blur(8px); padding: 24px; }
+    .modal-bg.open { opacity: 1; pointer-events: auto; }
+    .modal { position: relative; width: 100%; max-width: 480px; padding: 44px 44px 36px; border: 1px solid oklch(1 0 0 / 0.1); border-radius: 16px; background: var(--panel); box-shadow: 0 40px 120px rgba(0,0,0,0.6); }
+    .modal h3 { margin-bottom: 12px; font-family: var(--display); font-size: 52px; font-style: italic; font-weight: 900; line-height: 0.92; color: var(--ink); }
+    .modal p { color: var(--muted); font-size: 14px; line-height: 1.55; margin-bottom: 22px; }
+    .modal input { width: 100%; padding: 13px 14px; border-radius: 10px; border: 1px solid oklch(1 0 0 / 0.1); background: oklch(1 0 0 / 0.04); color: #fff; font-size: 14px; font-family: var(--sans); outline: none; }
+    .modal input:focus { border-color: var(--cyan); background: oklch(1 0 0 / 0.06); }
+    .modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    .modal-btn { width: 100%; padding: 14px; border: none; border-radius: 10px; background: var(--cyan); color: #001318; font-weight: 700; cursor: pointer; font-size: 14px; font-family: var(--sans); transition: transform .2s; }
+    .modal-btn:hover { transform: translateY(-1px); }
+    .modal-msg { margin-top: 14px; font-size: 13px; color: var(--cyan); text-align: center; min-height: 18px; }
+    .modal-close { position: absolute; top: 14px; right: 18px; width: 32px; height: 32px; display: grid; place-items: center; border: none; background: oklch(1 0 0 / 0.04); border-radius: 8px; color: rgba(255,255,255,0.6); cursor: pointer; font-size: 18px; }
+
+    /* Footer */
+    footer { background: oklch(0.045 0.032 204); padding: 38px 56px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--line); margin-top: 0; }
+    footer .f-links { display: flex; gap: 22px; }
+    footer .f-links a { color: oklch(1 0 0 / 0.26); font-size: 13px; }
+    footer .f-links a:hover { color: oklch(1 0 0 / 0.66); }
+    footer .f-copy { color: oklch(1 0 0 / 0.18); font-family: var(--mono); font-size: 11px; }
+  </style>
+</head>
+<body>
+
+<div class="modal-bg" id="modalBg" onclick="closeModal(event)">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="wlTitle">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">×</button>
+    <h3 id="wlTitle">Join the<br>waitlist.</h3>
+    <p>Get early access + launch updates. No spam, ever.</p>
+    <div class="modal-row">
+      <input type="text" id="wlFirst" placeholder="First name" autocomplete="given-name">
+      <input type="text" id="wlLast" placeholder="Last name" autocomplete="family-name">
+    </div>
+    <input type="email" id="wlEmail" placeholder="you@company.com" autocomplete="email" style="margin-bottom:12px;">
+    <button class="modal-btn" id="wlSubmit" onclick="submitWaitlist()">Get early access →</button>
+    <p id="wlMsg" class="modal-msg"></p>
+  </div>
+</div>
+
+<nav class="site-nav">
+  <a class="nav-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg"><path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text></svg></a>
+  <div class="nav-right">
+    <a href="/features">Features</a><a href="/quickstart">Quickstart</a><a href="/benchmarks">Benchmarks</a><a href="/docs" class="nav-active">Docs</a><a onclick="openModal()" class="nav-waitlist">Waitlist</a>
+  </div>
+</nav>
+
+<div class="docs-layout">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="docs-side" aria-label="Documentation navigation">
+    <div class="docs-search" role="button" tabindex="0" onclick="alert('Search coming soon — for now use ⌘F')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span style="flex:1">Search docs…</span>
+      <kbd>⌘K</kbd>
+    </div>
+
+    <div class="side-group">
+      <div class="side-h">Get started</div>
+      <a class="side-link" href="#welcome">Welcome</a>
+      <a class="side-link" href="#install">Install</a>
+      <a class="side-link" href="#first-run">First run</a>
+      <a class="side-link" href="#concepts">Concepts</a>
+    </div>
+
+    <div class="side-group">
+      <div class="side-h">CLI</div>
+      <a class="side-link" href="#cli-overview">Overview</a>
+      <a class="side-link" href="#cli-commands">Commands</a>
+      <a class="side-link" href="#cli-providers">Providers &amp; keys</a>
+      <a class="side-link" href="#cli-voice">Voice mode</a>
+    </div>
+
+    <div class="side-group">
+      <div class="side-h">IDE</div>
+      <a class="side-link" href="#ide-launch">Launch the IDE</a>
+      <a class="side-link" href="#ide-shortcuts">Shortcuts</a>
+    </div>
+
+    <div class="side-group">
+      <div class="side-h">MCP server</div>
+      <a class="side-link" href="#mcp-install">Install &amp; run</a>
+      <a class="side-link" href="#mcp-claude">Add to Claude / Cursor</a>
+      <a class="side-link" href="#mcp-tools">Tool reference</a>
+    </div>
+
+    <div class="side-group">
+      <div class="side-h">Gateway API</div>
+      <a class="side-link" href="#api-auth">Auth</a>
+      <a class="side-link" href="#api-capsules">Capsules</a>
+      <a class="side-link" href="#api-search">Search &amp; recover</a>
+      <a class="side-link" href="#api-errors">Errors</a>
+    </div>
+
+    <div class="side-group">
+      <div class="side-h">Reference</div>
+      <a class="side-link" href="#config">Configuration</a>
+      <a class="side-link" href="#telemetry">Telemetry</a>
+      <a class="side-link" href="#troubleshoot">Troubleshooting</a>
+      <a class="side-link" href="#changelog">Changelog</a>
+    </div>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <main class="docs-main">
+    <div class="docs-eyebrow">Documentation · v0.9 (preview)</div>
+    <h1 class="docs-title">Mesh in <em>five minutes.</em></h1>
+    <p class="docs-lede">Mesh is a deterministic <strong>code-context engine</strong> that compresses your workspace 3.9× while keeping 100% recall. Same engine, four surfaces — terminal CLI, browser IDE, MCP server, and the raw Gateway API. This is everything you need to ship.</p>
+
+    <!-- Surface grid -->
+    <h2 class="docs-h2" id="welcome">Pick a <em>surface.</em></h2>
+    <div class="surface-grid">
+      <a class="surface-card" href="#cli-overview">
+        <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
+        <h3>CLI</h3>
+        <p>Terminal-native agent. Three commands to install, one to launch.</p>
+        <span class="arrow">Read · CLI ↗</span>
+      </a>
+      <a class="surface-card" href="#ide-launch">
+        <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div>
+        <h3>IDE</h3>
+        <p>Browser workspace with file tree, structural search, and inline chat.</p>
+        <span class="arrow">Read · IDE ↗</span>
+      </a>
+      <a class="surface-card" href="#mcp-install">
+        <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M3.5 12c0-2 1-4 3-5.5M20.5 12c0 2-1 4-3 5.5M12 3.5c2 0 4 1 5.5 3M12 20.5c-2 0-4-1-5.5-3"/></svg></div>
+        <h3>MCP</h3>
+        <p>Bring Mesh to Claude Desktop or Cursor through Model Context Protocol.</p>
+        <span class="arrow">Read · MCP ↗</span>
+      </a>
+      <a class="surface-card" href="#api-auth">
+        <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <h3>Gateway API</h3>
+        <p>Programmable HTTPS endpoint. Index, search, recover spans at scale.</p>
+        <span class="arrow">Read · API ↗</span>
+      </a>
+    </div>
+
+    <!-- Install -->
+    <h2 class="docs-h2" id="install">Install.</h2>
+    <p>Mesh is shipped as a single npm binary. macOS, Linux, and WSL2 are first-class. Node 18+ required.</p>
+
+    <div class="code">
+      <div class="code-head"><span class="lang">bash</span><span>install · 1 line</span><button class="copy-btn" data-copy="npm i -g @edgarelmo/mesh-agent-cli">copy</button></div>
+<pre><span class="d"># global install (recommended)</span>
+$ <span class="c">npm i -g @edgarelmo/mesh-agent-cli</span>
+
+<span class="d"># or with pnpm / yarn</span>
+$ <span class="c">pnpm add -g @edgarelmo/mesh-agent-cli</span>
+$ <span class="c">yarn global add @edgarelmo/mesh-agent-cli</span>
+
+<span class="d"># verify</span>
+$ <span class="c">mesh --version</span>
+<span class="g">mesh 0.9.0</span></pre>
+    </div>
+
+    <div class="note">
+      <div class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <p><strong>Homebrew is coming.</strong> A formal Homebrew tap (<code>brew install mesh</code>) is in private beta. <a onclick="openModal()">Join the waitlist</a> to get early access.</p>
+    </div>
+
+    <!-- First run -->
+    <h2 class="docs-h2" id="first-run">First run.</h2>
+    <p>Mesh always opens against your current working directory. Drop into any repo and launch — it'll index the workspace before the agent says a word.</p>
+
+    <div class="code">
+      <div class="code-head"><span class="lang">bash</span><span>session</span><button class="copy-btn" data-copy="cd my-project && mesh">copy</button></div>
+<pre>$ <span class="c">cd my-project</span>
+$ <span class="c">mesh</span>
+
+<span class="d">▸ scanning workspace…</span>
+<span class="g">✓ 247 files · 12 languages indexed in 1.4s</span>
+<span class="d">▸ building capsule (3.9× compression)…</span>
+<span class="g">✓ capsule cap_8kX9z2a ready</span>
+
+mesh › <span class="s">why are voided invoices being charged?</span>
+<span class="d">▸ pulled: invoices.ts:14, webhooks.ts:88, billing.spec.ts:42</span>
+<span class="g">✓ proposed patch · src/billing/invoices.ts</span>
+<span class="d">  press ↵ to apply, e to edit, q to skip</span></pre>
+    </div>
+
+    <h3 class="docs-h3">What just happened?</h3>
+    <ol>
+      <li><strong>Scan</strong> — Mesh walks the working tree and skips <code>.gitignore</code> entries by default.</li>
+      <li><strong>Compress</strong> — A capsule of structural symbols, signatures, and call edges is built (Tree-sitter under the hood).</li>
+      <li><strong>Recover</strong> — When the agent needs full context, Mesh pulls the exact byte-range from disk — never from a hallucination.</li>
+    </ol>
+
+    <!-- Concepts -->
+    <h2 class="docs-h2" id="concepts"><em>Concepts</em>.</h2>
+    <p>Six things to understand before you go deep.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Concept</th><th>What it is</th></tr></thead>
+        <tbody>
+          <tr><td><code>capsule</code></td><td>A compressed structural index of a workspace. ~600 tokens / 1k LOC.</td></tr>
+          <tr><td><code>span</code></td><td>A byte-range in a real file. Returned verbatim — never paraphrased.</td></tr>
+          <tr><td><code>recall</code></td><td>The percent of NIAH probes Mesh answers correctly. Standard track: 100%.</td></tr>
+          <tr><td><code>provider</code></td><td>The LLM that does the reasoning. Mesh is provider-agnostic.</td></tr>
+          <tr><td><code>session</code></td><td>An interactive mesh shell with full capsule + chat history. Resumable.</td></tr>
+          <tr><td><code>workspace</code></td><td>Any directory Mesh has built a capsule for. Stored in <code>~/.mesh/</code>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr>
+
+    <!-- ─────────── CLI ─────────── -->
+    <h2 class="docs-h2" id="cli-overview">CLI · <em>overview</em>.</h2>
+    <p>The terminal CLI is the canonical Mesh experience. Everything else (IDE, MCP, API) wraps the same engine.</p>
+
+    <h3 class="docs-h3" id="cli-commands">Commands</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Command</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><code>mesh</code></td><td>Open an interactive session in the current directory.</td></tr>
+          <tr><td><code>mesh ask "&lt;query&gt;"</code></td><td>One-shot query without opening the shell.</td></tr>
+          <tr><td><code>mesh index</code></td><td>Build (or rebuild) the capsule for the current workspace.</td></tr>
+          <tr><td><code>mesh resume &lt;id&gt;</code></td><td>Continue any previous session by id.</td></tr>
+          <tr><td><code>mesh recover &lt;path:line&gt;</code></td><td>Pull the exact span Mesh returned to the model.</td></tr>
+          <tr><td><code>mesh providers</code></td><td>List available providers and active key status.</td></tr>
+          <tr><td><code>mesh doctor</code></td><td>Verify Node version, env, and provider routing.</td></tr>
+          <tr><td><code>mesh bench</code></td><td>Run the benchmark suite locally.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="docs-h3" id="cli-providers">Providers &amp; keys</h3>
+    <p>Mesh supports six providers out of the box. Set the env var, point <code>MESH_PROVIDER</code> at it, and go.</p>
+
+    <div class="code">
+      <div class="code-head"><span class="lang">bash</span><span>~/.zshrc · provider env</span><button class="copy-btn" data-copy="export ANTHROPIC_API_KEY=sk-...
+export MESH_PROVIDER=anthropic
+export MESH_MODEL=claude-sonnet-4.6">copy</button></div>
+<pre><span class="d"># Anthropic (default)</span>
+<span class="k">export</span> ANTHROPIC_API_KEY=<span class="s">sk-ant-...</span>
+
+<span class="d"># OpenAI</span>
+<span class="k">export</span> OPENAI_API_KEY=<span class="s">sk-...</span>
+
+<span class="d"># OpenRouter (any model)</span>
+<span class="k">export</span> OPENROUTER_API_KEY=<span class="s">sk-or-...</span>
+
+<span class="d"># Local: Ollama</span>
+<span class="k">export</span> MESH_PROVIDER=ollama
+<span class="k">export</span> MESH_MODEL=llama3.3:70b
+
+<span class="d"># Switch active provider</span>
+<span class="k">export</span> MESH_PROVIDER=anthropic
+<span class="k">export</span> MESH_MODEL=claude-sonnet-4.6</pre>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Provider</th><th><code>MESH_PROVIDER</code></th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Anthropic</td><td><code>anthropic</code></td><td>Default. Recommended.</td></tr>
+          <tr><td>OpenAI</td><td><code>openai</code></td><td>GPT-5, GPT-5-mini.</td></tr>
+          <tr><td>OpenRouter</td><td><code>openrouter</code></td><td>Any model, any host.</td></tr>
+          <tr><td>Groq</td><td><code>groq</code></td><td>Fastest inference. Llama, Qwen.</td></tr>
+          <tr><td>DeepSeek</td><td><code>deepseek</code></td><td>v3, Coder v2.</td></tr>
+          <tr><td>Ollama</td><td><code>ollama</code></td><td>100% local. No internet.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="docs-h3" id="cli-voice">Voice mode</h3>
+    <p>Speak instead of type. Voice mode runs a local Whisper turbo model — nothing leaves your machine.</p>
+
+    <div class="code">
+      <div class="code-head"><span class="lang">bash</span><span>voice</span><button class="copy-btn" data-copy="mesh voice install && mesh --voice">copy</button></div>
+<pre>$ <span class="c">mesh voice install</span>     <span class="d"># one-time, ~120MB model</span>
+$ <span class="c">mesh --voice</span>            <span class="d"># launch in voice mode</span>
+
+<span class="g">✓ whisper-turbo loaded</span>
+<span class="d">🎙  press [space] to talk · [esc] to cancel</span></pre>
+    </div>
+
+    <hr>
+
+    <!-- ─────────── IDE ─────────── -->
+    <h2 class="docs-h2" id="ide-launch">IDE · <em>launch</em>.</h2>
+    <p>The Mesh IDE is a browser workspace at <a href="https://ide.try-mesh.com" target="_blank" rel="noreferrer">ide.try-mesh.com</a>. VS Code-style file tree, structural search, and inline chat — all powered by the same capsule engine.</p>
+
+    <ol>
+      <li>Open <a href="https://ide.try-mesh.com" target="_blank" rel="noreferrer">ide.try-mesh.com</a> and sign in with GitHub.</li>
+      <li>Pick a repository (read-only or read-write).</li>
+      <li>Press <kbd>⌘K</kbd> → <code>Index workspace</code>.</li>
+      <li>Open the chat panel (<kbd>⌘L</kbd>) and start asking.</li>
+    </ol>
+
+    <div class="note">
+      <div class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <p><strong>Capsules are reused.</strong> If you ran <code>mesh index</code> in your CLI, the IDE will pick up the same capsule via <code>~/.mesh/</code>. Index once, query everywhere.</p>
+    </div>
+
+    <h3 class="docs-h3" id="ide-shortcuts">Shortcuts</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Action</th><th>Shortcut</th></tr></thead>
+        <tbody>
+          <tr><td>Open command palette</td><td><kbd>⌘K</kbd> / <kbd>Ctrl K</kbd></td></tr>
+          <tr><td>Toggle Mesh chat panel</td><td><kbd>⌘L</kbd> / <kbd>Ctrl L</kbd></td></tr>
+          <tr><td>Index / re-index workspace</td><td><kbd>⌘⇧I</kbd></td></tr>
+          <tr><td>Quick file open</td><td><kbd>⌘P</kbd></td></tr>
+          <tr><td>Structural search</td><td><kbd>⌘⇧F</kbd></td></tr>
+          <tr><td>Apply suggested patch</td><td><kbd>⌘↵</kbd></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr>
+
+    <!-- ─────────── MCP ─────────── -->
+    <h2 class="docs-h2" id="mcp-install">MCP · <em>install &amp; run</em>.</h2>
+    <p>The Mesh MCP server exposes capsule operations as Model Context Protocol tools. Any MCP-compatible client (Claude Desktop, Cursor, Zed) can use Mesh as a code-context backend.</p>
+
+    <div class="code">
+      <div class="code-head"><span class="lang">bash</span><span>mcp · install &amp; serve</span><button class="copy-btn" data-copy="npm i -g @edgarelmo/mesh-mcp
+mesh mcp serve --port 7400">copy</button></div>
+<pre>$ <span class="c">npm i -g @edgarelmo/mesh-mcp</span>
+$ <span class="c">mesh mcp serve --port 7400</span>
+
+<span class="d">▸ binding 127.0.0.1:7400</span>
+<span class="g">✓ MCP server ready · 4 tools registered</span>
+  <span class="d">• mesh.search_code</span>
+  <span class="d">• mesh.read_span</span>
+  <span class="d">• mesh.find_refs</span>
+  <span class="d">• mesh.recover</span></pre>
+    </div>
+
+    <h3 class="docs-h3" id="mcp-claude">Add to Claude Desktop / Cursor</h3>
+    <p>Drop this snippet into your client's MCP config:</p>
+
+    <div class="code">
+      <div class="code-head"><span class="lang">json</span><span>~/Library/Application Support/Claude/mcp.json</span><button class="copy-btn" data-copy='{
+  "mcpServers": {
+    "mesh": { "url": "http://localhost:7400" }
+  }
+}'>copy</button></div>
+<pre>{
+  <span class="s">"mcpServers"</span>: {
+    <span class="s">"mesh"</span>: {
+      <span class="s">"url"</span>: <span class="s">"http://localhost:7400"</span>,
+      <span class="s">"description"</span>: <span class="s">"Mesh code context"</span>
+    }
+  }
+}</pre>
+    </div>
+
+    <h3 class="docs-h3" id="mcp-tools">Tool reference</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Tool</th><th>Args</th><th>Returns</th></tr></thead>
+        <tbody>
+          <tr><td><code>mesh.search_code</code></td><td><code>{ query, limit }</code></td><td>Top-N symbol matches w/ file paths.</td></tr>
+          <tr><td><code>mesh.read_span</code></td><td><code>{ path, line }</code></td><td>Exact byte-range from the file.</td></tr>
+          <tr><td><code>mesh.find_refs</code></td><td><code>{ symbol }</code></td><td>Every reference site across the workspace.</td></tr>
+          <tr><td><code>mesh.recover</code></td><td><code>{ capsule_id }</code></td><td>Full source for any capsule reference.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr>
+
+    <!-- ─────────── API ─────────── -->
+    <h2 class="docs-h2" id="api-auth">Gateway API · <em>auth</em>.</h2>
+    <p>The Gateway API is a thin HTTPS layer around the same engine. Bearer-token auth. Rate-limited per key.</p>
+
+    <div class="code">
+      <div class="code-head"><span class="lang">bash</span><span>auth header</span><button class="copy-btn" data-copy='curl https://api.mesh.dev/v1/me \
+  -H "Authorization: Bearer $MESH_KEY"'>copy</button></div>
+<pre>$ <span class="c">curl https://api.mesh.dev/v1/me \</span>
+    <span class="c">-H</span> <span class="s">"Authorization: Bearer $MESH_KEY"</span>
+
+<span class="g">{ "id": "usr_8kX9", "plan": "preview", "rate_limit": 60 }</span></pre>
+    </div>
+
+    <h3 class="docs-h3" id="api-capsules">Capsules</h3>
+    <p>Index a repo. Returns a <code>capsule_id</code> you can query against.</p>
+
+    <div class="code">
+      <div class="code-head"><span class="lang">bash</span><span>POST /v1/capsules</span><button class="copy-btn" data-copy='curl -X POST https://api.mesh.dev/v1/capsules \
+  -H "Authorization: Bearer $MESH_KEY" \
+  -d "{\"repo\":\"github.com/acme/payments\",\"branch\":\"main\"}"'>copy</button></div>
+<pre>$ <span class="c">curl -X POST https://api.mesh.dev/v1/capsules \</span>
+    <span class="c">-H</span> <span class="s">"Authorization: Bearer $MESH_KEY"</span> \
+    <span class="c">-d</span> <span class="s">'{"repo":"github.com/acme/payments","branch":"main"}'</span>
+
+<span class="g">{
+  "capsule_id": "cap_8kX9z2a",
+  "files": 3174,
+  "tokens_in": 2400000,
+  "tokens_out": 612000,
+  "ratio": 3.92,
+  "recall": 1.00,
+  "status": "ready"
+}</span></pre>
+    </div>
+
+    <h3 class="docs-h3" id="api-search">Search &amp; recover</h3>
+
+    <div class="code">
+      <div class="code-head"><span class="lang">bash</span><span>GET /v1/search</span><button class="copy-btn" data-copy='curl "https://api.mesh.dev/v1/search?q=stripe.charge&capsule=cap_8kX9z2a" \
+  -H "Authorization: Bearer $MESH_KEY"'>copy</button></div>
+<pre>$ <span class="c">curl</span> <span class="s">"https://api.mesh.dev/v1/search?q=stripe.charge&amp;capsule=cap_8kX9z2a"</span> \
+    <span class="c">-H</span> <span class="s">"Authorization: Bearer $MESH_KEY"</span>
+
+<span class="g">{
+  "matches": [
+    { "path": "src/billing/invoices.ts", "line": 18, "score": 0.94 },
+    { "path": "src/webhooks.ts",         "line": 88, "score": 0.81 }
+  ]
+}</span></pre>
+    </div>
+
+    <p>Then recover the exact span — verbatim, byte-for-byte.</p>
+
+    <div class="code">
+      <div class="code-head"><span class="lang">bash</span><span>GET /v1/recover</span><button class="copy-btn" data-copy='curl "https://api.mesh.dev/v1/recover?capsule=cap_8kX9z2a&path=src/billing/invoices.ts&line=18&context=10" \
+  -H "Authorization: Bearer $MESH_KEY"'>copy</button></div>
+<pre>$ <span class="c">curl</span> <span class="s">"https://api.mesh.dev/v1/recover?capsule=cap_8kX9z2a\
+&amp;path=src/billing/invoices.ts&amp;line=18&amp;context=10"</span> \
+    <span class="c">-H</span> <span class="s">"Authorization: Bearer $MESH_KEY"</span>
+
+<span class="g">{
+  "path": "src/billing/invoices.ts",
+  "start_line": 8, "end_line": 28,
+  "sha": "a3f8b9...",
+  "source": "export async function finalizeInvoice(id) { ... }"
+}</span></pre>
+    </div>
+
+    <h3 class="docs-h3" id="api-errors">Errors</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Code</th><th>Meaning</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td><code>401</code></td><td>Missing or invalid bearer token.</td><td>Check <code>$MESH_KEY</code>.</td></tr>
+          <tr><td><code>404</code></td><td>Capsule not found.</td><td>Re-index, capsules expire after 30 days.</td></tr>
+          <tr><td><code>422</code></td><td>Invalid query.</td><td>Inspect <code>error.detail</code> for field-level info.</td></tr>
+          <tr><td><code>429</code></td><td>Rate-limited.</td><td>Backoff. Read <code>Retry-After</code> header.</td></tr>
+          <tr><td><code>503</code></td><td>Indexing in progress.</td><td>Poll <code>GET /v1/capsules/:id</code> until <code>ready</code>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr>
+
+    <!-- ─────────── Reference ─────────── -->
+    <h2 class="docs-h2" id="config">Configuration.</h2>
+    <p>Mesh reads from three places, in order: CLI flags → env vars → <code>~/.mesh/config.toml</code>. Later wins.</p>
+
+    <div class="code">
+      <div class="code-head"><span class="lang">toml</span><span>~/.mesh/config.toml</span><button class="copy-btn" data-copy='[provider]
+default = "anthropic"
+model = "claude-sonnet-4.6"
+
+[capsule]
+max_tokens = 6000
+compression = "high"
+exclude = ["node_modules", "dist", ".next"]'>copy</button></div>
+<pre>[provider]
+default = <span class="s">"anthropic"</span>
+model = <span class="s">"claude-sonnet-4.6"</span>
+temperature = <span class="n">0.2</span>
+
+[capsule]
+max_tokens = <span class="n">6000</span>
+compression = <span class="s">"high"</span>     <span class="d"># "low" | "balanced" | "high"</span>
+exclude = [<span class="s">"node_modules"</span>, <span class="s">"dist"</span>, <span class="s">".next"</span>]
+
+[ide]
+auto_index = <span class="k">true</span>
+
+[telemetry]
+enabled = <span class="k">false</span>          <span class="d"># opt-in, off by default</span></pre>
+    </div>
+
+    <h3 class="docs-h3" id="telemetry">Telemetry</h3>
+    <p>Mesh ships with telemetry <strong>off</strong>. If you opt in (<code>telemetry.enabled = true</code>), we collect: command invocations, error types, and capsule sizes. Never source code, never queries. Disable any time.</p>
+
+    <h3 class="docs-h3" id="troubleshoot">Troubleshooting</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Symptom</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td>"Provider not configured"</td><td>Run <code>mesh providers</code> and set the matching env var.</td></tr>
+          <tr><td>Stale answers after editing files</td><td>Run <code>mesh index --force</code> or set <code>auto_index = true</code>.</td></tr>
+          <tr><td>Slow first run</td><td>Capsule build is single-threaded. Pass <code>--workers 4</code>.</td></tr>
+          <tr><td>MCP client can't see Mesh</td><td>Confirm <code>mesh mcp serve</code> is running. Check the port matches the client config.</td></tr>
+          <tr><td>Voice mode silent</td><td>Re-run <code>mesh voice install</code>. Check microphone permissions.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note danger">
+      <div class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <p><strong>Preview release.</strong> Mesh is in private preview (v0.9). The API surface and config schema may change before 1.0. Pin <code>@edgarelmo/mesh-agent-cli@0.9.x</code> in CI.</p>
+    </div>
+
+    <h3 class="docs-h3" id="changelog">Changelog</h3>
+    <ul>
+      <li><strong>0.9.0</strong> — Multi-hop reasoning benchmark added. <code>mesh recover</code> now byte-exact across all providers.</li>
+      <li><strong>0.8.4</strong> — MCP server ships standalone (<code>@edgarelmo/mesh-mcp</code>). <code>find_refs</code> tool added.</li>
+      <li><strong>0.8.0</strong> — Browser IDE preview. Capsule sharing via <code>~/.mesh/</code>.</li>
+      <li><strong>0.7.0</strong> — Voice mode (Whisper turbo, local-only).</li>
+      <li><strong>0.6.0</strong> — Provider plugin system. Ollama support.</li>
+    </ul>
+
+    <hr>
+
+    <p style="color:var(--dim);font-size:14px;text-align:center;margin-top:48px">
+      Stuck? <a onclick="openModal()">Join the waitlist</a> for direct support during private preview, or open an issue on
+      <a href="https://github.com/dreddi-edit/homebrew-mesh.git" target="_blank" rel="noreferrer">GitHub</a>.
+    </p>
+  </main>
+
+  <!-- ── RIGHT TOC ── -->
+  <aside class="docs-toc" aria-label="On this page">
+    <h6>On this page</h6>
+    <a href="#welcome">Welcome</a>
+    <a href="#install">Install</a>
+    <a href="#first-run">First run</a>
+    <a href="#concepts">Concepts</a>
+    <a href="#cli-overview">CLI overview</a>
+    <a href="#cli-commands" class="h3">Commands</a>
+    <a href="#cli-providers" class="h3">Providers &amp; keys</a>
+    <a href="#cli-voice" class="h3">Voice mode</a>
+    <a href="#ide-launch">IDE launch</a>
+    <a href="#ide-shortcuts" class="h3">Shortcuts</a>
+    <a href="#mcp-install">MCP install</a>
+    <a href="#mcp-claude" class="h3">Claude / Cursor</a>
+    <a href="#mcp-tools" class="h3">Tools</a>
+    <a href="#api-auth">API · auth</a>
+    <a href="#api-capsules" class="h3">Capsules</a>
+    <a href="#api-search" class="h3">Search &amp; recover</a>
+    <a href="#api-errors" class="h3">Errors</a>
+    <a href="#config">Configuration</a>
+    <a href="#telemetry" class="h3">Telemetry</a>
+    <a href="#troubleshoot" class="h3">Troubleshooting</a>
+    <a href="#changelog" class="h3">Changelog</a>
+  </aside>
+</div>
+
+<footer>
+  <a class="f-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg"><path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text></svg></a>
+  <div class="f-links"><a href="/quickstart">Quickstart</a><a href="/benchmarks">Benchmarks</a><a href="https://github.com/dreddi-edit/homebrew-mesh.git">GitHub</a></div>
+  <div class="f-copy">© 2026 Mesh Intelligence</div>
+</footer>
+
+<script>
+/* ── modal ── */
+function openModal(){document.getElementById('modalBg').classList.add('open');setTimeout(()=>document.getElementById('wlFirst').focus(),120)}
+function closeModal(e){const m=document.getElementById('modalBg');if(!e||e.target===m||e.currentTarget?.classList?.contains('modal-close'))m.classList.remove('open')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+async function submitWaitlist(){
+  const e=document.getElementById('wlEmail'),f=document.getElementById('wlFirst'),l=document.getElementById('wlLast');
+  const m=document.getElementById('wlMsg'),btn=document.getElementById('wlSubmit');
+  const v=e.value.trim();
+  if(!/^\S+@\S+\.\S+$/.test(v)){m.style.color='#ff8a8a';m.textContent='Please enter a valid email address.';return}
+  btn.disabled=true;m.style.color='var(--cyan)';m.textContent='Submitting…';
+  try{
+    const r=await fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:v,firstName:f.value.trim(),lastName:l.value.trim()})});
+    const p=await r.json();
+    m.textContent=p.message||'You are on the waitlist.';
+  }catch(err){m.style.color='#ff8a8a';m.textContent='Subscription failed. Try again.'}
+  finally{btn.disabled=false}
+}
+
+/* ── copy buttons ── */
+document.querySelectorAll('.copy-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const txt=btn.dataset.copy||btn.parentElement.parentElement.querySelector('pre').innerText;
+    navigator.clipboard.writeText(txt).then(()=>{
+      const old=btn.textContent;
+      btn.textContent='✓ copied';
+      btn.classList.add('ok');
+      setTimeout(()=>{btn.textContent=old;btn.classList.remove('ok')},1400);
+    });
+  });
+});
+
+/* ── sidebar + TOC active link ── */
+const headings=[...document.querySelectorAll('h2.docs-h2[id], h3.docs-h3[id]')];
+const sideLinks=document.querySelectorAll('.docs-side .side-link');
+const tocLinks=document.querySelectorAll('.docs-toc a');
+function setActive(){
+  const y=window.scrollY+120;
+  let cur=headings[0];
+  for(const h of headings){if(h.offsetTop<=y)cur=h;}
+  if(!cur)return;
+  const id='#'+cur.id;
+  sideLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')===id));
+  tocLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')===id));
+}
+let raf;
+window.addEventListener('scroll',()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(setActive)},{passive:true});
+setActive();
+</script>
+</body>
+</html>

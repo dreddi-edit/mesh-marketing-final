@@ -150,31 +150,194 @@
 
     @keyframes up { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:none} }
 
-    .hero-animation {
+    /* ── HOW IT WORKS — inline animated diagram ── */
+    .how {
       position: relative; z-index: 1;
-      padding: 0 80px 120px;
+      padding: 40px 80px 120px;
     }
-    .ha-shell {
+    .how-shell {
       border-radius: 24px;
       border: 1px solid oklch(1 0 0 / 0.07);
-      background: oklch(0.07 0.035 200);
+      background: linear-gradient(180deg, oklch(0.092 0.04 200 / 0.96), oklch(0.06 0.032 200 / 0.96));
       overflow: hidden;
       box-shadow: 0 40px 120px oklch(0 0 0 / 0.35);
     }
-    .ha-head {
+    .how-head {
       display:flex; align-items:center; justify-content:space-between; gap:20px;
-      padding: 18px 24px;
+      padding: 22px 28px;
       border-bottom: 1px solid oklch(1 0 0 / 0.06);
-      background: oklch(0.08 0.04 200 / 0.92);
     }
-    .ha-kicker { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cyan); }
-    .ha-copy { font-size: 14px; color: oklch(1 0 0 / 0.42); }
-    .ha-frame {
-      display:block;
-      width:100%;
-      aspect-ratio: 16 / 9;
-      border: 0;
-      background: oklch(0.05 0.03 200);
+    .how-kicker {
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--cyan);
+      display: inline-flex; align-items: center; gap: 10px;
+    }
+    .how-kicker::before {
+      content: ''; width: 7px; height: 7px; border-radius: 50%;
+      background: var(--cyan); box-shadow: 0 0 14px var(--cyan);
+      animation: pulseDot 2.4s ease-in-out infinite;
+    }
+    @keyframes pulseDot { 0%,100%{opacity:0.4} 50%{opacity:1} }
+    .how-meta { display: flex; gap: 22px; font-family: var(--mono); font-size: 11px; color: oklch(1 0 0 / 0.32); }
+    .how-meta b { color: oklch(1 0 0 / 0.7); font-weight: 500; }
+
+    .how-stage {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 0;
+      min-height: 480px;
+    }
+    .how-col {
+      position: relative;
+      padding: 36px 32px 30px;
+      border-right: 1px solid oklch(1 0 0 / 0.05);
+      display: flex; flex-direction: column;
+    }
+    .how-col:last-child { border-right: 0; }
+    .how-step {
+      font-family: var(--mono); font-size: 10px;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: oklch(1 0 0 / 0.32); margin-bottom: 8px;
+    }
+    .how-title {
+      font-family: var(--display); font-style: italic; font-weight: 900;
+      font-size: 38px; line-height: 0.95; letter-spacing: -0.02em;
+      color: var(--white); margin-bottom: 8px;
+    }
+    .how-sub {
+      font-family: var(--mono); font-size: 11px; color: var(--cyan);
+      margin-bottom: 22px;
+    }
+    .how-canvas {
+      flex: 1; position: relative; overflow: hidden;
+      border-radius: 10px;
+      background: oklch(0.04 0.025 200 / 0.7);
+      border: 1px solid oklch(1 0 0 / 0.05);
+      padding: 18px;
+    }
+    .how-foot {
+      margin-top: 16px;
+      display: flex; gap: 14px; align-items: baseline;
+    }
+    .how-foot .num {
+      font-family: var(--display); font-style: italic; font-weight: 900;
+      font-size: 32px; color: var(--cyan); line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    .how-foot .lbl {
+      font-family: var(--mono); font-size: 11px; color: oklch(1 0 0 / 0.42);
+      line-height: 1.4;
+    }
+
+    /* col 1 — file dots */
+    .file-grid {
+      position: absolute; inset: 18px;
+      display: grid; grid-template-columns: repeat(20, 1fr); gap: 4px;
+    }
+    .file-grid i {
+      display: block; aspect-ratio: 1;
+      background: oklch(1 0 0 / 0.06);
+      border-radius: 1.5px;
+      transition: background 0.5s ease, transform 0.5s ease;
+    }
+    .file-grid i.on { background: oklch(0.74 0.14 200 / 0.55); }
+    .file-grid i.lost { background: oklch(0.65 0.18 28 / 0.4); }
+
+    /* col 2 — engine */
+    .engine {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .engine-ring {
+      position: absolute;
+      width: 220px; height: 220px;
+      border: 1px solid oklch(0.74 0.14 200 / 0.18);
+      border-radius: 50%;
+      animation: spinRing 14s linear infinite;
+    }
+    .engine-ring::before, .engine-ring::after {
+      content: ''; position: absolute;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--cyan); box-shadow: 0 0 12px var(--cyan);
+    }
+    .engine-ring::before { top: -3px; left: 50%; transform: translateX(-50%); }
+    .engine-ring::after { bottom: -3px; left: 50%; transform: translateX(-50%); opacity: 0.5; }
+    .engine-ring.r2 { width: 150px; height: 150px; animation: spinRing 9s linear infinite reverse; border-color: oklch(0.74 0.14 200 / 0.28); }
+    @keyframes spinRing { to { transform: rotate(360deg); } }
+    .engine-core {
+      position: relative; z-index: 2;
+      width: 80px; height: 80px;
+      display: grid; place-items: center;
+      background: oklch(0.07 0.035 200);
+      border: 1px solid oklch(0.74 0.14 200 / 0.3);
+      border-radius: 50%;
+    }
+    .engine-core svg { width: 36px; height: 36px; }
+    .engine-tokens {
+      position: absolute; inset: 0;
+      pointer-events: none;
+    }
+    .engine-tokens span {
+      position: absolute; top: 50%; left: 50%;
+      width: 14px; height: 6px; border-radius: 1.5px;
+      background: linear-gradient(90deg, oklch(0.74 0.14 200 / 0.9), oklch(0.74 0.14 200 / 0));
+      transform-origin: 0 50%;
+      animation: shoot 2.4s linear infinite;
+    }
+    @keyframes shoot {
+      0%   { opacity: 0; transform: rotate(var(--a)) translateX(0) scaleX(0.4); }
+      20%  { opacity: 1; }
+      80%  { opacity: 0.8; }
+      100% { opacity: 0; transform: rotate(var(--a)) translateX(160px) scaleX(1); }
+    }
+
+    /* col 3 — context bar */
+    .ctx {
+      position: absolute; inset: 18px;
+      display: flex; flex-direction: column; gap: 18px;
+      justify-content: center;
+    }
+    .ctx-row { font-family: var(--mono); font-size: 10px; color: oklch(1 0 0 / 0.42); }
+    .ctx-row .lbl { display: flex; justify-content: space-between; margin-bottom: 6px; }
+    .ctx-bar {
+      height: 14px; border-radius: 4px;
+      background: oklch(1 0 0 / 0.05);
+      border: 1px solid oklch(1 0 0 / 0.08);
+      overflow: hidden; position: relative;
+    }
+    .ctx-bar i {
+      display: block; height: 100%;
+      background: linear-gradient(90deg, oklch(0.65 0.18 28 / 0.45), oklch(0.65 0.18 28 / 0.7));
+      width: var(--w, 0%);
+      transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .ctx-bar.ok i { background: linear-gradient(90deg, oklch(0.38 0.09 198), var(--cyan)); }
+    .ctx-tag {
+      display: inline-block; margin-top: 8px;
+      padding: 3px 8px; border-radius: 999px;
+      font-family: var(--mono); font-size: 9px;
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .ctx-tag.bad { background: oklch(0.65 0.18 28 / 0.12); color: oklch(0.78 0.18 28); }
+    .ctx-tag.good { background: oklch(0.74 0.14 200 / 0.12); color: var(--cyan); }
+    .ctx-result {
+      margin-top: 10px;
+      padding: 10px 12px; border-radius: 8px;
+      background: oklch(0.74 0.14 200 / 0.06);
+      border: 1px solid oklch(0.74 0.14 200 / 0.18);
+      font-family: var(--mono); font-size: 11px;
+      color: oklch(1 0 0 / 0.65); line-height: 1.5;
+    }
+    .ctx-result b { color: var(--cyan); font-weight: 500; }
+
+    @media (max-width: 1100px) {
+      .how-stage { grid-template-columns: 1fr; }
+      .how-col { border-right: 0; border-bottom: 1px solid oklch(1 0 0 / 0.05); min-height: 360px; }
+      .how-col:last-child { border-bottom: 0; }
+    }
+    @media (max-width: 900px) {
+      .how { padding: 24px 24px 80px; }
+      .how-head { flex-direction: column; align-items: flex-start; }
+      .how-meta { flex-wrap: wrap; }
     }
 
     /* FOUR SURFACES GRID */
@@ -459,9 +622,10 @@
 <nav>
   <a class="nav-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg" aria-label="Mesh"><path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text></svg></a>
   <div class="nav-right">
-    <a href="/features.html">Features</a>
-    <a href="/quickstart.html">Quickstart</a>
-    <a href="/benchmarks.html">Benchmarks</a>
+    <a href="/features">Features</a>
+    <a href="/quickstart">Quickstart</a>
+    <a href="/benchmarks">Benchmarks</a>
+    <a href="/docs">Docs</a>
     <a onclick="openModal(true)" class="nav-waitlist">Waitlist</a>
   </div>
 </nav>
@@ -478,20 +642,97 @@
     <span>npm i -g @edgarelmo/mesh-agent-cli</span>
     <span class="copy-hint" id="copyHint">click to copy</span>
   </div>
-  <a href="/mesh-animation.html" style="margin-top:12px;font-family:var(--mono);font-size:12px;color:oklch(1 0 0/0.28);text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='var(--cyan)'" onmouseout="this.style.color='oklch(1 0 0/0.28)'">▶ Watch animation →</a>
+  <a href="#how" style="margin-top:12px;font-family:var(--mono);font-size:12px;color:oklch(1 0 0/0.28);text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='var(--cyan)'" onmouseout="this.style.color='oklch(1 0 0/0.28)'">↓ See how it works</a>
   <div class="scroll-cue">
     <span class="scroll-cue-label">scroll</span>
     <div class="scroll-bar"></div>
   </div>
 </section>
 
-<section class="hero-animation">
-  <div class="ha-shell">
-    <div class="ha-head">
-      <div class="ha-kicker">Watch Mesh Work</div>
-      <div class="ha-copy">A short walkthrough of the CLI, compression engine, recall gains, and the four product surfaces.</div>
+<!-- HOW IT WORKS — inline animated diagram (no controls, no iframe) -->
+<section class="how" id="how">
+  <div class="how-shell">
+    <div class="how-head">
+      <div class="how-kicker">Live · Capsule Engine</div>
+      <div class="how-meta">
+        <span><b id="howFiles">247</b> files</span>
+        <span><b id="howRatio">3.9×</b> compression</span>
+        <span><b id="howRecall">100%</b> recall</span>
+        <span>model: <b>claude-sonnet-4.6</b></span>
+      </div>
     </div>
-    <iframe class="ha-frame" src="/mesh-animation" title="Mesh product walkthrough" loading="lazy" allow="autoplay"></iframe>
+
+    <div class="how-stage" id="howStage">
+
+      <!-- COL 1 — Workspace scan -->
+      <div class="how-col">
+        <div class="how-step">Step 01</div>
+        <h3 class="how-title">Workspace.</h3>
+        <div class="how-sub">247 files · 87,000 raw tokens</div>
+        <div class="how-canvas">
+          <div class="file-grid" id="fileGrid"></div>
+        </div>
+        <div class="how-foot">
+          <span class="num" id="fileCount">0</span>
+          <span class="lbl">files indexed<br>via Tree-sitter AST</span>
+        </div>
+      </div>
+
+      <!-- COL 2 — Compression engine -->
+      <div class="how-col">
+        <div class="how-step">Step 02</div>
+        <h3 class="how-title">Compress.</h3>
+        <div class="how-sub">Capsule tier · structural distill</div>
+        <div class="how-canvas">
+          <div class="engine">
+            <div class="engine-ring"></div>
+            <div class="engine-ring r2"></div>
+            <div class="engine-core">
+              <svg viewBox="0 0 32 32" fill="none">
+                <path d="M9 6 L4 16 L9 26" stroke="#00d4e8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M19 6 L24 16 L19 26" stroke="#7ceeff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="14" cy="16" r="1.6" fill="#00d4e8"/>
+              </svg>
+            </div>
+            <div class="engine-tokens" id="engineTokens"></div>
+          </div>
+        </div>
+        <div class="how-foot">
+          <span class="num">2,881<span style="color:oklch(1 0 0/0.28)">→</span><span style="color:#fff">55T</span></span>
+          <span class="lbl">avg per file<br>after capsule pass</span>
+        </div>
+      </div>
+
+      <!-- COL 3 — Context fits -->
+      <div class="how-col">
+        <div class="how-step">Step 03</div>
+        <h3 class="how-title">It fits.</h3>
+        <div class="how-sub">6,000 token budget · all 247 files</div>
+        <div class="how-canvas">
+          <div class="ctx">
+            <div class="ctx-row">
+              <div class="lbl"><span>Raw context</span><span>22 / 247 files</span></div>
+              <div class="ctx-bar"><i style="--w:100%"></i></div>
+              <span class="ctx-tag bad">budget exhausted</span>
+            </div>
+            <div class="ctx-row">
+              <div class="lbl"><span>Mesh capsules</span><span><span id="ctxFitFiles">247</span> / 247 files</span></div>
+              <div class="ctx-bar ok"><i id="ctxFill" style="--w:0%"></i></div>
+              <span class="ctx-tag good">3,347T used · 2,653T headroom</span>
+            </div>
+            <div class="ctx-result">
+              <b>mesh »</b> fix broken auth<br>
+              → patched <b>src/auth.ts</b> · 47 / 47 tests pass
+            </div>
+          </div>
+        </div>
+        <div class="how-foot">
+          <span class="num">100<span style="color:oklch(1 0 0/0.28)">%</span></span>
+          <span class="lbl">NIAH recall<br>5 / 5 model configs</span>
+        </div>
+      </div>
+
+    </div>
   </div>
 </section>
 
@@ -647,7 +888,7 @@
 <footer>
   <a class="f-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg" aria-label="Mesh"><path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text></svg></a>
   <div class="f-links">
-    <a href="https://docs.try-mesh.com">Docs</a>
+    <a href="/docs">Docs</a>
     <a href="https://github.com/dreddi-edit/homebrew-mesh.git">GitHub</a>
     <a href="https://www.npmjs.com/package/@edgarelmo/mesh-agent-cli">npm</a>
     <a href="https://twitter.com">Twitter</a>
@@ -792,6 +1033,73 @@ function copyInstall() {
     setTimeout(() => { h.textContent = 'click to copy'; h.style.color = ''; }, 2000);
   });
 }
+
+/* ── HOW-IT-WORKS animated diagram ── */
+(function initHow() {
+  const grid = document.getElementById('fileGrid');
+  const tokens = document.getElementById('engineTokens');
+  const ctxFill = document.getElementById('ctxFill');
+  const ctxFitFiles = document.getElementById('ctxFitFiles');
+  const fileCount = document.getElementById('fileCount');
+  if (!grid) return;
+
+  const TOTAL = 240;
+  for (let i = 0; i < TOTAL; i++) {
+    const el = document.createElement('i');
+    grid.appendChild(el);
+  }
+  const cells = grid.children;
+
+  for (let i = 0; i < 12; i++) {
+    const s = document.createElement('span');
+    s.style.setProperty('--a', (i * 30) + 'deg');
+    s.style.animationDelay = (i * -0.2) + 's';
+    tokens.appendChild(s);
+  }
+
+  let started = false;
+  const startCycle = () => {
+    if (started) return;
+    started = true;
+    runCycle();
+    setInterval(runCycle, 7200);
+  };
+
+  function runCycle() {
+    [...cells].forEach(c => { c.classList.remove('on', 'lost'); });
+    if (ctxFill) ctxFill.style.setProperty('--w', '0%');
+    if (fileCount) fileCount.textContent = '0';
+
+    let i = 0;
+    const fillInt = setInterval(() => {
+      if (i >= TOTAL) { clearInterval(fillInt); return; }
+      const batch = 6;
+      for (let k = 0; k < batch && i < TOTAL; k++, i++) {
+        cells[i].classList.add('on');
+      }
+      if (fileCount) fileCount.textContent = Math.min(i, 247);
+    }, 28);
+
+    setTimeout(() => {
+      [...cells].forEach((c, idx) => {
+        if (idx >= 22) c.classList.add('lost');
+      });
+    }, 1500);
+
+    setTimeout(() => {
+      [...cells].forEach(c => c.classList.remove('lost'));
+      [...cells].forEach((c, idx) => {
+        setTimeout(() => c.classList.add('on'), idx * 4);
+      });
+      if (ctxFill) ctxFill.style.setProperty('--w', '55%');
+    }, 2400);
+  }
+
+  const io = new IntersectionObserver((es) => {
+    es.forEach(e => { if (e.isIntersecting) { startCycle(); io.disconnect(); } });
+  }, { threshold: 0.25 });
+  io.observe(grid);
+})();
 
 /* ── SURFACE GRID: spotlight + pulse + stagger ── */
 const cards = document.querySelectorAll('.surface-card');

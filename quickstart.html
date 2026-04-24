@@ -31,7 +31,13 @@
     .nav-active { color: var(--ink) !important; }
     .nav-waitlist { background: var(--cyan-soft) !important; border-color: var(--line-strong) !important; color: var(--cyan) !important; cursor: pointer; }
     .page-shell { width: min(1180px, calc(100% - 64px)); margin: 0 auto; position: relative; z-index: 1; }
-    .hero { min-height: 100vh; padding-top: 128px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(380px, 1fr); gap: 68px; align-items: center; }
+    .hero { padding-top: 130px; padding-bottom: 60px; display: grid; grid-template-columns: 1fr; gap: 38px; align-items: start; }
+    .hero-top { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.85fr); gap: 56px; align-items: end; }
+    .hero-aside { display: grid; gap: 16px; padding: 22px; border: 1px solid var(--line); border-radius: 12px; background: oklch(0.10 0.042 200 / 0.5); }
+    .hero-aside-row { display: grid; grid-template-columns: 28px 1fr; gap: 12px; align-items: start; }
+    .hero-aside-row .ic { width: 28px; height: 28px; border-radius: 8px; background: oklch(0.74 0.14 200 / 0.1); color: var(--cyan); display: grid; place-items: center; }
+    .hero-aside-row .tx { font-size: 13px; line-height: 1.45; color: oklch(1 0 0 / 0.7); }
+    .hero-aside-row .tx b { color: var(--ink); font-weight: 700; display: block; margin-bottom: 2px; font-size: 13px; }
     .hero-word { font-family: var(--display); font-style: italic; font-weight: 900; font-size: clamp(60px, 9vw, 130px); line-height: 0.9; letter-spacing: -0.03em; color: var(--white); display: block; user-select: none; }
     .hero-word div { display: flex; flex-wrap: nowrap; align-items: baseline; }
     .hero-word .cyan-line { color: var(--cyan); }
@@ -88,17 +94,37 @@
     .f-links a { color: oklch(1 0 0 / 0.26); font-size: 13px; transition: color 0.2s; }
     .f-links a:hover { color: oklch(1 0 0 / 0.66); }
     .f-copy { color: oklch(1 0 0 / 0.18); font-family: var(--mono); font-size: 11px; }
-    .modal-bg { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.75); opacity: 0; pointer-events: none; transition: opacity 0.25s; backdrop-filter: blur(8px); }
+    .modal-bg { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.75); opacity: 0; pointer-events: none; transition: opacity 0.25s; backdrop-filter: blur(8px); padding: 24px; }
     .modal-bg.open { opacity: 1; pointer-events: auto; }
-    .modal { position: relative; width: 90%; max-width: 500px; padding: 48px 52px; border: 1px solid oklch(1 0 0 / 0.1); border-radius: 16px; background: var(--panel); }
-    .modal h3 { margin-bottom: 16px; font-family: var(--display); font-size: 52px; font-style: italic; font-weight: 900; line-height: 0.92; }
-    .modal-close { position: absolute; top: 20px; right: 24px; border: none; background: none; color: rgba(255,255,255,0.3); cursor: pointer; font-size: 22px; }
+    .modal { position: relative; width: 100%; max-width: 480px; padding: 44px 44px 36px; border: 1px solid oklch(1 0 0 / 0.1); border-radius: 16px; background: var(--panel); box-shadow: 0 40px 120px rgba(0,0,0,0.6); }
+    .modal h3 { margin-bottom: 12px; font-family: var(--display); font-size: 52px; font-style: italic; font-weight: 900; line-height: 0.92; color: var(--ink); }
+    .modal p { color: var(--muted); font-size: 14px; line-height: 1.55; margin-bottom: 22px; }
+    .modal input { width: 100%; padding: 13px 14px; border-radius: 10px; border: 1px solid oklch(1 0 0 / 0.1); background: oklch(1 0 0 / 0.04); color: #fff; font-size: 14px; font-family: var(--sans); outline: none; transition: border-color .2s, background .2s; }
+    .modal input::placeholder { color: oklch(1 0 0 / 0.32); }
+    .modal input:focus { border-color: var(--cyan); background: oklch(1 0 0 / 0.06); }
+    .modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    .modal-btn { width: 100%; padding: 14px; border: none; border-radius: 10px; background: var(--cyan); color: #001318; font-weight: 700; cursor: pointer; font-size: 14px; font-family: var(--sans); transition: transform .2s, opacity .2s; }
+    .modal-btn:hover { transform: translateY(-1px); }
+    .modal-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .modal-msg { margin-top: 14px; font-size: 13px; color: var(--cyan); text-align: center; min-height: 18px; }
+    .modal-close { position: absolute; top: 14px; right: 18px; width: 32px; height: 32px; display: grid; place-items: center; border: none; background: oklch(1 0 0 / 0.04); border-radius: 8px; color: rgba(255,255,255,0.6); cursor: pointer; font-size: 18px; transition: background .2s, color .2s; }
+    .modal-close:hover { background: oklch(1 0 0 / 0.08); color: #fff; }
+
+    /* ── TABS ── */
+    .surface-tabs { display: flex; gap: 4px; padding: 6px; margin: 0 0 18px; border: 1px solid var(--line); border-radius: 12px; background: oklch(0.046 0.034 204 / 0.6); }
+    .surface-tab { flex: 1; padding: 11px 14px; border: none; background: transparent; color: oklch(1 0 0 / 0.5); font-family: var(--sans); font-size: 13px; font-weight: 600; cursor: pointer; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: background .2s, color .2s; }
+    .surface-tab:hover { color: oklch(1 0 0 / 0.85); }
+    .surface-tab.act { background: oklch(0.74 0.14 200 / 0.12); color: var(--cyan); box-shadow: inset 0 0 0 1px oklch(0.74 0.14 200 / 0.28); }
+    .surface-tab svg { opacity: 0.85; }
+    .surface-pane { display: none; }
+    .surface-pane.act { display: block; animation: paneIn .35s cubic-bezier(0.16,1,0.3,1); }
+    @keyframes paneIn { from { opacity: 0; transform: translateY(8px) } to { opacity: 1; transform: none } }
     @media (max-width: 1040px) {
       .site-nav { padding: 18px 24px; } .page-shell, .quick-grid, .flow-section { width: min(100% - 32px, 760px); }
-      .hero, .console-grid, .section-grid { grid-template-columns: 1fr; }
-      .hero { min-height: auto; padding-top: 126px; padding-bottom: 54px; text-align: center; }
-      .hero-word div { justify-content: center; } .hero-copy, .hero-actions { margin-left: auto; margin-right: auto; justify-content: center; }
+      .hero-top, .console-grid, .section-grid { grid-template-columns: 1fr; }
+      .hero { padding-top: 126px; padding-bottom: 54px; text-align: left; }
       .command-stack { border-right: 0; border-bottom: 1px solid var(--line); } .quick-grid { grid-template-columns: repeat(2, 1fr); }
+      .surface-tab { font-size: 12px; padding: 10px 8px; }
       footer { padding: 38px 24px; gap: 26px; flex-wrap: wrap; }
     }
   </style>
@@ -106,59 +132,145 @@
 <body>
 <canvas id="mesh-canvas"></canvas>
 <div class="modal-bg" id="modalBg" onclick="closeModal(event)">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">×</button>
-    <h3>Join the<br>waitlist.</h3>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="wlTitle">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">×</button>
+    <h3 id="wlTitle">Join the<br>waitlist.</h3>
     <p>Get early access + launch updates. No spam, ever.</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-      <input type="text" id="wlFirst" placeholder="First name" style="width:100%; padding:14px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.05); color:#fff; outline:none;">
-      <input type="text" id="wlLast" placeholder="Last name" style="width:100%; padding:14px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.05); color:#fff; outline:none;">
+    <div class="modal-row">
+      <input type="text" id="wlFirst" placeholder="First name" autocomplete="given-name">
+      <input type="text" id="wlLast" placeholder="Last name" autocomplete="family-name">
     </div>
-    <input type="email" id="wlEmail" placeholder="you@company.com" style="width:100%; padding:14px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.05); color:#fff; outline:none; margin-bottom:12px;">
-    <button class="modal-btn" onclick="submitWaitlist()" style="width:100%; padding:14px; border:none; border-radius:10px; background:var(--cyan); color:#000; font-weight:700; cursor:pointer;">Get early access →</button>
-    <p id="wlMsg" style="margin-top:12px;font-size:13px;color:var(--cyan);text-align:center;min-height:18px"></p>
+    <input type="email" id="wlEmail" placeholder="you@company.com" autocomplete="email" style="margin-bottom:12px;">
+    <button class="modal-btn" id="wlSubmit" onclick="submitWaitlist()">Get early access →</button>
+    <p id="wlMsg" class="modal-msg"></p>
   </div>
 </div>
 <nav class="site-nav">
   <a class="nav-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg"><path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text></svg></a>
   <div class="nav-right">
-    <a href="/features">Features</a><a href="/quickstart" class="nav-active">Quickstart</a><a href="/benchmarks">Benchmarks</a><a onclick="openModal()" class="nav-waitlist">Waitlist</a>
+    <a href="/features">Features</a><a href="/quickstart" class="nav-active">Quickstart</a><a href="/benchmarks">Benchmarks</a><a href="/docs">Docs</a><a onclick="openModal()" class="nav-waitlist">Waitlist</a>
   </div>
 </nav>
 <main>
   <section class="page-shell hero">
-    <div>
-      <div class="eyebrow">Quickstart</div>
-      <h1 class="hero-word">
-        <div><span class="l">S</span><span class="l">t</span><span class="l">a</span><span class="l">r</span><span class="l">t</span>&nbsp;<span class="l">M</span><span class="l">e</span><span class="l">s</span><span class="l">h</span></div>
-        <div class="cyan-line"><span class="l">i</span><span class="l">n</span>&nbsp;<span class="l">3</span><span class="l">0</span>&nbsp;<span class="l">s</span><span class="l">e</span><span class="l">c</span><span class="l">o</span><span class="l">n</span><span class="l">d</span><span class="l">s</span><span class="l">.</span></div>
-      </h1>
-      <p class="hero-copy">Install the CLI, open any repo, and let Mesh index the workspace before the agent acts. No long setup wizard. No account wall.</p>
-      <div class="hero-actions">
-        <a class="primary-btn" href="#install">Install now</a>
-        <button class="secondary-btn" onclick="navigator.clipboard.writeText('npm i -g @edgarelmo/mesh-agent-cli'); alert('Copied')">Copy command</button>
+    <div class="hero-top">
+      <div>
+        <div class="eyebrow">Quickstart · 4 surfaces</div>
+        <h1 class="hero-word">
+          <div><span class="l">S</span><span class="l">t</span><span class="l">a</span><span class="l">r</span><span class="l">t</span>&nbsp;<span class="l">M</span><span class="l">e</span><span class="l">s</span><span class="l">h</span></div>
+          <div class="cyan-line"><span class="l">i</span><span class="l">n</span>&nbsp;<span class="l">3</span><span class="l">0</span>&nbsp;<span class="l">s</span><span class="l">e</span><span class="l">c</span><span class="l">o</span><span class="l">n</span><span class="l">d</span><span class="l">s</span><span class="l">.</span></div>
+        </h1>
+        <p class="hero-copy">Pick a surface — terminal, browser IDE, MCP for Claude/Cursor, or the raw Gateway API. Same capsule engine underneath, three commands to ship.</p>
+        <div class="hero-actions">
+          <a class="primary-btn" href="#install">Install now</a>
+          <a class="secondary-btn" href="/docs">Read docs</a>
+        </div>
       </div>
+      <aside class="hero-aside" aria-label="What you get">
+        <div class="hero-aside-row">
+          <div class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="tx"><b>Same engine, four surfaces.</b>One capsule index powers CLI, IDE, MCP, and API.</div>
+        </div>
+        <div class="hero-aside-row">
+          <div class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="tx"><b>3.9× compression, 100% recall.</b>Deterministic — no embeddings, no hallucination.</div>
+        </div>
+        <div class="hero-aside-row">
+          <div class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="tx"><b>Local-first.</b>Indexes stay on your machine. Bring your own keys.</div>
+        </div>
+      </aside>
     </div>
-    <aside class="launch-console" id="install">
-      <div class="console-top"><span>mesh/launch-console</span><span class="console-live">ready</span></div>
-      <div class="console-grid">
-        <div class="command-stack">
-          <div class="command-card"><div class="command-num">1</div><div class="command-title">Add Mesh globally</div><button class="copy-line" onclick="navigator.clipboard.writeText('npm i -g @edgarelmo/mesh-agent-cli'); alert('Copied')"><span class="t-cyan">$</span><span>npm i -g ...</span></button></div>
-          <div class="command-card"><div class="command-num">2</div><div class="command-title">Move into repo</div><button class="copy-line" onclick="navigator.clipboard.writeText('cd my-project'); alert('Copied')"><span class="t-cyan">$</span><span>cd my-project</span></button></div>
-          <div class="command-card"><div class="command-num">3</div><div class="command-title">Launch agent</div><button class="copy-line" onclick="navigator.clipboard.writeText('mesh'); alert('Copied')"><span class="t-cyan">$</span><span>mesh</span></button></div>
-        </div>
-        <div class="terminal-wrap">
-          <div class="terminal-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-          <div class="terminal-body" id="terminalOutput"></div>
-        </div>
+    <div id="install" style="width:100%">
+      <div class="surface-tabs" role="tablist" aria-label="Install surface">
+        <button class="surface-tab act" role="tab" data-tab="cli" aria-selected="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+          CLI
+        </button>
+        <button class="surface-tab" role="tab" data-tab="ide" aria-selected="false">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+          IDE
+        </button>
+        <button class="surface-tab" role="tab" data-tab="mcp" aria-selected="false">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M3.5 12c0-2 1-4 3-5.5M20.5 12c0 2-1 4-3 5.5M12 3.5c2 0 4 1 5.5 3M12 20.5c-2 0-4-1-5.5-3"/></svg>
+          MCP
+        </button>
+        <button class="surface-tab" role="tab" data-tab="api" aria-selected="false">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          Gateway API
+        </button>
       </div>
-    </aside>
+
+      <!-- CLI -->
+      <aside class="launch-console surface-pane act" data-pane="cli">
+        <div class="console-top"><span>mesh/cli · launch-console</span><span class="console-live">ready</span></div>
+        <div class="console-grid">
+          <div class="command-stack">
+            <div class="command-card"><div class="command-num">1</div><div class="command-title">Install Mesh CLI</div><button class="copy-line" onclick="copyCmd(this,'npm i -g @edgarelmo/mesh-agent-cli')"><span class="t-cyan">$</span><span>npm i -g @edgarelmo/mesh-agent-cli</span></button></div>
+            <div class="command-card"><div class="command-num">2</div><div class="command-title">Open your project</div><button class="copy-line" onclick="copyCmd(this,'cd my-project')"><span class="t-cyan">$</span><span>cd my-project</span></button></div>
+            <div class="command-card"><div class="command-num">3</div><div class="command-title">Launch the agent</div><button class="copy-line" onclick="copyCmd(this,'mesh')"><span class="t-cyan">$</span><span>mesh</span></button></div>
+          </div>
+          <div class="terminal-wrap">
+            <div class="terminal-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+            <div class="terminal-body" id="terminalCli"></div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- IDE -->
+      <aside class="launch-console surface-pane" data-pane="ide">
+        <div class="console-top"><span>mesh/ide · browser workspace</span><span class="console-live">browser</span></div>
+        <div class="console-grid">
+          <div class="command-stack">
+            <div class="command-card"><div class="command-num">1</div><div class="command-title">Open the IDE</div><button class="copy-line" onclick="window.open('https://ide.try-mesh.com','_blank')"><span class="t-cyan">↗</span><span>ide.try-mesh.com</span></button></div>
+            <div class="command-card"><div class="command-num">2</div><div class="command-title">Sign in with GitHub</div><button class="copy-line" onclick="copyCmd(this,'gh auth login --web')"><span class="t-cyan">$</span><span>gh auth login --web</span></button></div>
+            <div class="command-card"><div class="command-num">3</div><div class="command-title">Pick a repo &amp; index</div><button class="copy-line" onclick="copyCmd(this,'⌘K  →  Index workspace')"><span class="t-cyan">⌘</span><span>⌘K → Index workspace</span></button></div>
+          </div>
+          <div class="terminal-wrap">
+            <div class="terminal-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--dim)">ide://acme/payments</span></div>
+            <div class="terminal-body" id="terminalIde"></div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- MCP -->
+      <aside class="launch-console surface-pane" data-pane="mcp">
+        <div class="console-top"><span>mesh/mcp · model-context-protocol</span><span class="console-live">localhost:7400</span></div>
+        <div class="console-grid">
+          <div class="command-stack">
+            <div class="command-card"><div class="command-num">1</div><div class="command-title">Install the MCP server</div><button class="copy-line" onclick="copyCmd(this,'npm i -g @edgarelmo/mesh-mcp')"><span class="t-cyan">$</span><span>npm i -g @edgarelmo/mesh-mcp</span></button></div>
+            <div class="command-card"><div class="command-num">2</div><div class="command-title">Start the server</div><button class="copy-line" onclick="copyCmd(this,'mesh mcp serve --port 7400')"><span class="t-cyan">$</span><span>mesh mcp serve --port 7400</span></button></div>
+            <div class="command-card"><div class="command-num">3</div><div class="command-title">Add to Claude / Cursor</div><button class="copy-line" onclick="copyCmd(this,'{\n  \\\"mcpServers\\\": {\n    \\\"mesh\\\": { \\\"url\\\": \\\"http://localhost:7400\\\" }\n  }\n}')"><span class="t-cyan">{}</span><span>copy mcp config →</span></button></div>
+          </div>
+          <div class="terminal-wrap">
+            <div class="terminal-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--dim)">mcp.json</span></div>
+            <div class="terminal-body" id="terminalMcp"></div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- API -->
+      <aside class="launch-console surface-pane" data-pane="api">
+        <div class="console-top"><span>mesh/api · gateway endpoint</span><span class="console-live">api.mesh.dev</span></div>
+        <div class="console-grid">
+          <div class="command-stack">
+            <div class="command-card"><div class="command-num">1</div><div class="command-title">Get an API key</div><button class="copy-line" onclick="window.open('https://app.try-mesh.com/keys','_blank')"><span class="t-cyan">↗</span><span>app.try-mesh.com/keys</span></button></div>
+            <div class="command-card"><div class="command-num">2</div><div class="command-title">Index a repo</div><button class="copy-line" onclick="copyCmd(this,'curl -X POST https://api.mesh.dev/v1/capsules \\n  -H \\\"Authorization: Bearer $MESH_KEY\\\" \\n  -d \\'{\\\"repo\\\":\\\"github.com/acme/payments\\\"}\\'')"><span class="t-cyan">$</span><span>curl POST /v1/capsules</span></button></div>
+            <div class="command-card"><div class="command-num">3</div><div class="command-title">Query context</div><button class="copy-line" onclick="copyCmd(this,'curl https://api.mesh.dev/v1/search?q=auth&capsule=cap_8kX9z2a')"><span class="t-cyan">$</span><span>curl GET /v1/search</span></button></div>
+          </div>
+          <div class="terminal-wrap">
+            <div class="terminal-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--dim)">https · api.mesh.dev</span></div>
+            <div class="terminal-body" id="terminalApi"></div>
+          </div>
+        </div>
+      </aside>
+    </div>
   </section>
   <section class="quick-grid">
-    <div class="quick-card"><h3>MCP.</h3><p>Connect Claude Desktop or Cursor. Use Model Context Protocol to query your codebase through Mesh's capsule engine.</p></div>
-    <div class="quick-card"><h3>Voice.</h3><p>Go hands-free. Install local Whisper dependencies and speak commands directly from your terminal.</p></div>
-    <div class="quick-card"><h3>Resume.</h3><p>Keep your flow. Continue any previous agent session with full capsule history and file state recovery.</p></div>
-    <div class="quick-card"><h3>Doctor.</h3><p>Check health. Automatically verify model routing, Node version, and local environment dependencies.</p></div>
+    <div class="quick-card"><h3>Voice.</h3><p>Hands-free terminal mode. Install local Whisper deps once, then speak commands directly to the agent.</p></div>
+    <div class="quick-card"><h3>Resume.</h3><p>Continue any previous session with full capsule history. <span class="t-cyan" style="font-family:var(--mono)">mesh resume &lt;id&gt;</span></p></div>
+    <div class="quick-card"><h3>Doctor.</h3><p>Verify model routing, Node version, env. <span class="t-cyan" style="font-family:var(--mono)">mesh doctor</span></p></div>
+    <div class="quick-card"><h3>Bring keys.</h3><p>Anthropic, OpenAI, OpenRouter, Groq, local Ollama — set <span class="t-cyan" style="font-family:var(--mono)">MESH_PROVIDER</span> &amp; go.</p></div>
   </section>
   <section class="flow-section">
     <div class="section-grid">
@@ -177,10 +289,77 @@
 </main>
 <footer>
   <a class="f-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg"><path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text></svg></a>
-  <div class="f-links"><a href="https://docs.try-mesh.com">Docs</a><a href="https://github.com/dreddi-edit/homebrew-mesh.git">GitHub</a><a href="https://twitter.com">Twitter</a></div>
+  <div class="f-links"><a href="/docs">Docs</a><a href="https://github.com/dreddi-edit/homebrew-mesh.git">GitHub</a><a href="https://twitter.com">Twitter</a></div>
   <div class="f-copy">© 2026 Mesh Intelligence</div>
 </footer>
 <script>
-const canvas=document.getElementById('mesh-canvas'),ctx=canvas.getContext('2d');let W,H,pts;const mouse={x:-9999,y:-9999},LINK=155;function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}function mkPts(){const n=Math.min(80,Math.floor(W*H/12000));pts=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-0.5)*0.4,vy:(Math.random()-0.5)*0.4}))}function raf(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;const dx=p.x-mouse.x,dy=p.y-mouse.y,d=Math.hypot(dx,dy);if(d<100){p.vx+=dx/d*0.02;p.vy+=dy/d*0.02}});for(let i=0;i<pts.length;i++){for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.hypot(dx,dy);if(d<LINK){ctx.strokeStyle=`rgba(0,180,200,${(1-d/LINK)*0.25})`;ctx.lineWidth=0.6;ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.stroke()}}ctx.fillStyle='rgba(0,212,232,0.45)';ctx.beginPath();ctx.arc(pts[i].x,pts[i].y,1.6,0,Math.PI*2);ctx.fill()}requestAnimationFrame(raf)}resize();mkPts();raf();window.addEventListener('resize',()=>{resize();mkPts()});window.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY},{passive:true});setTimeout(()=>{document.querySelectorAll('.hero-word .l').forEach((el,i)=>setTimeout(()=>el.classList.add('in'),i*60+50))},50);function openModal(){document.getElementById('modalBg').classList.add('open')}function closeModal(e){const m=document.getElementById('modalBg');if(!e||e.target===m||e.currentTarget?.classList?.contains('modal-close'))m.classList.remove('open')}async function submitWaitlist(){const e=document.getElementById('wlEmail'),m=document.getElementById('wlMsg'),v=e.value.trim();if(!/^\S+@\S+\.\S+$/.test(v)){m.textContent='Valid email required.';return}m.textContent='Submitting...';try{const r=await fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:v})});const p=await r.json();m.textContent=p.message||'Added to waitlist.'}catch(err){m.textContent='Failed.'}}const scripts=[['cyan','$ mesh'],['dim','indexing workspace...'],['green','✓ success: 247 symbols cached'],['white','mesh > fix login auth redirect'],['dim','searching symbols...'],['green','✓ patched: src/auth.ts']];async function runTerminal(){const t=document.getElementById('terminalOutput');t.innerHTML='';for(const[type,txt]of scripts){const d=document.createElement('div');d.className='t-'+type;d.textContent=txt;t.appendChild(d);await new Promise(r=>setTimeout(r,900))}const c=document.createElement('span');c.className='cursor';t.appendChild(c)}runTerminal();const revealObserver=new IntersectionObserver((entries)=>{entries.forEach((entry)=>{if(entry.isIntersecting){entry.target.classList.add('visible');revealObserver.unobserve(entry.target)}})},{threshold:0.15});document.querySelectorAll('.command-card, .quick-card, .flow-row').forEach(el=>revealObserver.observe(el));</script>
+const canvas=document.getElementById('mesh-canvas'),ctx=canvas.getContext('2d');let W,H,pts;const mouse={x:-9999,y:-9999},LINK=155;
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}
+function mkPts(){const n=Math.min(80,Math.floor(W*H/12000));pts=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-0.5)*0.4,vy:(Math.random()-0.5)*0.4}))}
+function raf(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;const dx=p.x-mouse.x,dy=p.y-mouse.y,d=Math.hypot(dx,dy);if(d<100){p.vx+=dx/d*0.02;p.vy+=dy/d*0.02}});for(let i=0;i<pts.length;i++){for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.hypot(dx,dy);if(d<LINK){ctx.strokeStyle=`rgba(0,180,200,${(1-d/LINK)*0.25})`;ctx.lineWidth=0.6;ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.stroke()}}ctx.fillStyle='rgba(0,212,232,0.45)';ctx.beginPath();ctx.arc(pts[i].x,pts[i].y,1.6,0,Math.PI*2);ctx.fill()}requestAnimationFrame(raf)}
+resize();mkPts();raf();
+window.addEventListener('resize',()=>{resize();mkPts()});
+window.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY},{passive:true});
+setTimeout(()=>{document.querySelectorAll('.hero-word .l').forEach((el,i)=>setTimeout(()=>el.classList.add('in'),i*60+50))},50);
+
+/* ── modal ── */
+function openModal(){document.getElementById('modalBg').classList.add('open');setTimeout(()=>document.getElementById('wlFirst').focus(),120)}
+function closeModal(e){const m=document.getElementById('modalBg');if(!e||e.target===m||e.currentTarget?.classList?.contains('modal-close'))m.classList.remove('open')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+async function submitWaitlist(){
+  const e=document.getElementById('wlEmail'),f=document.getElementById('wlFirst'),l=document.getElementById('wlLast');
+  const m=document.getElementById('wlMsg'),btn=document.getElementById('wlSubmit');
+  const v=e.value.trim();
+  if(!/^\S+@\S+\.\S+$/.test(v)){m.style.color='#ff8a8a';m.textContent='Please enter a valid email address.';return}
+  btn.disabled=true;m.style.color='var(--cyan)';m.textContent='Submitting…';
+  try{
+    const r=await fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:v,firstName:f.value.trim(),lastName:l.value.trim()})});
+    const p=await r.json();
+    m.textContent=p.message||'You are on the waitlist.';
+  }catch(err){m.style.color='#ff8a8a';m.textContent='Subscription failed. Try again.'}
+  finally{btn.disabled=false}
+}
+
+/* ── copy helper ── */
+function copyCmd(btn,cmd){
+  navigator.clipboard.writeText(cmd).then(()=>{
+    const old=btn.innerHTML;
+    btn.innerHTML='<span class="t-green">✓</span><span>copied</span>';
+    setTimeout(()=>{btn.innerHTML=old},1200);
+  });
+}
+
+/* ── tabs + per-tab terminal scripts ── */
+const TERM_SCRIPTS={
+  cli:[['cyan','$ mesh'],['dim','▸ scanning workspace…'],['green','✓ 247 files · 12 languages indexed'],['dim','▸ building capsule (3.9× compression)…'],['green','✓ capsule cap_8kX9z2a ready'],['white','mesh › why are voided invoices being charged?'],['dim','▸ searching: invoices, charge, void…'],['cyan','▸ pulled: invoices.ts:14, webhooks.ts:88'],['green','✓ proposed patch · src/billing/invoices.ts'],['dim','press ↵ to apply, e to edit, q to skip']],
+  ide:[['dim','▸ opening ide.try-mesh.com…'],['green','✓ signed in as @you'],['dim','▸ acme/payments-service · main'],['cyan','▸ ⌘K  →  Index workspace'],['green','✓ 3,174 files · capsule ready in 1.4s'],['white','chat › refactor stripe charge flow'],['cyan','▸ Mesh opened: invoices.ts, webhooks.ts'],['green','✓ inline diff in editor (12 +, 4 -)']],
+  mcp:[['cyan','$ mesh mcp serve --port 7400'],['dim','▸ binding 127.0.0.1:7400'],['green','✓ MCP server ready · 4 tools registered'],['dim','  • mesh.search_code'],['dim','  • mesh.read_span'],['dim','  • mesh.find_refs'],['dim','  • mesh.recover'],['white','claude › "find every place we call stripe.charge"'],['cyan','▸ tool call: mesh.find_refs(symbol="stripe.charge")'],['green','✓ 6 references in 4 files · returned to model']],
+  api:[['cyan','$ curl -X POST https://api.mesh.dev/v1/capsules \\'],['cyan','    -H "Authorization: Bearer $MESH_KEY" \\'],['cyan','    -d \'{"repo":"github.com/acme/payments"}\''],['dim','▸ event: capsule.indexing'],['dim','▸ files: 3,174 · tokens_in: 2.4M'],['green','✓ event: capsule.ready'],['white','{ "capsule_id": "cap_8kX9z2a",'],['white','  "ratio": 3.92, "recall": 1.00 }']]
+};
+
+const playing={};
+async function playTerm(id,scripts){
+  if(playing[id])return;playing[id]=true;
+  const t=document.getElementById(id);if(!t)return;
+  t.innerHTML='';
+  for(const[type,txt]of scripts){
+    const d=document.createElement('div');d.className='t-'+type;d.textContent=txt;t.appendChild(d);
+    await new Promise(r=>setTimeout(r,650));
+  }
+  const c=document.createElement('span');c.className='cursor';t.appendChild(c);
+  playing[id]=false;
+}
+const TERM_ID={cli:'terminalCli',ide:'terminalIde',mcp:'terminalMcp',api:'terminalApi'};
+function activateTab(name){
+  document.querySelectorAll('.surface-tab').forEach(b=>{const on=b.dataset.tab===name;b.classList.toggle('act',on);b.setAttribute('aria-selected',on)});
+  document.querySelectorAll('.surface-pane').forEach(p=>p.classList.toggle('act',p.dataset.pane===name));
+  playTerm(TERM_ID[name],TERM_SCRIPTS[name]);
+}
+document.querySelectorAll('.surface-tab').forEach(b=>b.addEventListener('click',()=>activateTab(b.dataset.tab)));
+playTerm('terminalCli',TERM_SCRIPTS.cli);
+
+const revealObserver=new IntersectionObserver((entries)=>{entries.forEach((entry)=>{if(entry.isIntersecting){entry.target.classList.add('visible');revealObserver.unobserve(entry.target)}})},{threshold:0.15});
+document.querySelectorAll('.command-card, .quick-card, .flow-row').forEach(el=>revealObserver.observe(el));
+</script>
 </body>
 </html>

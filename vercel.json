@@ -12,6 +12,7 @@
     { "source": "/features.html", "destination": "/features", "permanent": true },
     { "source": "/quickstart.html", "destination": "/quickstart", "permanent": true },
     { "source": "/benchmarks.html", "destination": "/benchmarks", "permanent": true },
+    { "source": "/docs.html", "destination": "/docs", "permanent": true },
     { "source": "/animation", "destination": "/mesh-animation", "permanent": true }
   ],
   "rewrites": [

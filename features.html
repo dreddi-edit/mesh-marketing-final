@@ -90,7 +90,210 @@
     .ascii-logo { margin-bottom: 24px; font-family: 'Courier New', Courier, monospace; font-size: 12px; line-height: 1; letter-spacing: 0; white-space: pre; color: var(--cyan); font-weight: bold; }
     .terminal-prompt { color: var(--cyan); }
     .terminal-muted { color: oklch(1 0 0 / 0.28); }
-    .t-cyan { color: var(--cyan); } .t-green { color: var(--green); } .t-dim { color: var(--dim); }
+    .t-cyan { color: var(--cyan); } .t-green { color: var(--green); } .t-dim { color: var(--dim); } .t-magenta { color: #c678dd; } .t-amber { color: #e5a96e; }
+
+    /* ── IDE MOCK ── */
+    .ide-mock {
+      width: 92%; height: 360px;
+      background: oklch(0.05 0.028 200);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      box-shadow: 0 36px 100px rgba(0,0,0,0.55), 0 0 0 1px oklch(0.74 0.14 200 / 0.04);
+      overflow: hidden; display: grid;
+      grid-template-rows: 32px 1fr;
+    }
+    .ide-bar {
+      display: flex; align-items: center; gap: 8px;
+      padding: 0 12px;
+      background: oklch(0.078 0.038 200);
+      border-bottom: 1px solid var(--line);
+    }
+    .ide-bar .d { width: 9px; height: 9px; border-radius: 50%; background: #ff5f57; }
+    .ide-bar .d:nth-child(2) { background: #febc2e; }
+    .ide-bar .d:nth-child(3) { background: #28c840; }
+    .ide-bar .ttl { flex: 1; text-align: center; font-family: var(--mono); font-size: 10px; color: oklch(1 0 0 / 0.32); }
+    .ide-grid {
+      display: grid;
+      grid-template-columns: 138px 1fr 220px;
+      min-height: 0;
+    }
+    .ide-tree {
+      border-right: 1px solid var(--line);
+      padding: 12px 10px;
+      font-family: var(--mono); font-size: 10.5px; line-height: 1.85;
+      color: oklch(1 0 0 / 0.4);
+      background: oklch(0.06 0.032 200);
+      overflow: hidden;
+    }
+    .ide-tree .h { color: var(--cyan); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
+    .ide-tree .f { padding-left: 10px; }
+    .ide-tree .f.a { color: #fff; background: oklch(0.74 0.14 200 / 0.08); border-left: 2px solid var(--cyan); padding-left: 8px; }
+    .ide-tree .dr { color: oklch(1 0 0 / 0.6); }
+    .ide-edit {
+      position: relative;
+      background: oklch(0.045 0.028 200);
+      padding: 14px 16px;
+      font-family: var(--mono); font-size: 11px; line-height: 1.65;
+      overflow: hidden;
+    }
+    .ide-edit .ln { display: grid; grid-template-columns: 18px 1fr; gap: 12px; color: oklch(1 0 0 / 0.7); }
+    .ide-edit .ln .n { color: oklch(1 0 0 / 0.18); text-align: right; }
+    .ide-edit .ln.hl { background: oklch(0.74 0.14 200 / 0.06); margin: 0 -16px; padding: 0 16px; }
+    .ide-edit .kw { color: var(--cyan); }
+    .ide-edit .st { color: #98c379; }
+    .ide-edit .fn { color: #61afef; }
+    .ide-edit .cm { color: oklch(1 0 0 / 0.28); font-style: italic; }
+    .ide-tab {
+      position: absolute; top: 0; left: 0;
+      display: flex; gap: 0; height: 26px;
+      background: oklch(0.06 0.032 200);
+      width: 100%; border-bottom: 1px solid var(--line);
+    }
+    .ide-tab span {
+      padding: 0 14px; display: inline-flex; align-items: center;
+      font-family: var(--mono); font-size: 10px; color: oklch(1 0 0 / 0.4);
+      border-right: 1px solid var(--line);
+    }
+    .ide-tab span.act { color: #fff; background: oklch(0.045 0.028 200); border-bottom: 1px solid oklch(0.045 0.028 200); margin-bottom: -1px; }
+    .ide-edit { padding-top: 36px; }
+    .ide-side {
+      border-left: 1px solid var(--line);
+      background: oklch(0.058 0.032 200);
+      padding: 14px 12px;
+      display: flex; flex-direction: column; gap: 10px;
+      overflow: hidden;
+    }
+    .ide-side .lbl { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; color: var(--cyan); text-transform: uppercase; }
+    .ide-msg {
+      font-family: var(--mono); font-size: 10.5px; line-height: 1.55;
+      padding: 8px 10px;
+      border-radius: 6px;
+      background: oklch(1 0 0 / 0.025);
+      border: 1px solid oklch(1 0 0 / 0.06);
+      color: oklch(1 0 0 / 0.7);
+    }
+    .ide-msg.you { border-color: oklch(0.74 0.14 200 / 0.22); background: oklch(0.74 0.14 200 / 0.06); color: #fff; }
+    .ide-msg .from { display: block; font-size: 9px; color: oklch(1 0 0 / 0.4); margin-bottom: 4px; letter-spacing: 0.08em; text-transform: uppercase; }
+    .ide-pill {
+      display: inline-flex; align-items: center; gap: 6px; margin-top: 4px;
+      padding: 3px 8px; font-family: var(--mono); font-size: 9px;
+      border-radius: 999px; background: oklch(0.74 0.14 200 / 0.1); color: var(--cyan);
+    }
+
+    /* ── MCP MOCK ── */
+    .mcp-mock {
+      width: 90%; padding: 32px;
+      background: oklch(0.05 0.028 200);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 36px 100px rgba(0,0,0,0.5);
+    }
+    .mcp-mock .lbl {
+      text-align: center; font-family: var(--mono); font-size: 9px;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: oklch(1 0 0 / 0.32); margin-bottom: 18px;
+    }
+    .mcp-row {
+      display: grid; grid-template-columns: 1fr 60px 1fr;
+      align-items: center; gap: 0;
+      margin-bottom: 14px;
+    }
+    .mcp-node {
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: oklch(0.078 0.034 200);
+      display: grid; grid-template-columns: 32px 1fr; gap: 12px; align-items: center;
+    }
+    .mcp-node.mesh { border-color: oklch(0.74 0.14 200 / 0.32); background: oklch(0.74 0.14 200 / 0.04); }
+    .mcp-node .ic {
+      width: 32px; height: 32px;
+      display: grid; place-items: center;
+      border-radius: 8px;
+      background: oklch(1 0 0 / 0.04);
+      color: var(--ink);
+    }
+    .mcp-node.mesh .ic { background: oklch(0.74 0.14 200 / 0.12); color: var(--cyan); }
+    .mcp-node .nm { font-size: 13px; font-weight: 700; color: var(--ink); line-height: 1.2; }
+    .mcp-node .sub { font-family: var(--mono); font-size: 10px; color: oklch(1 0 0 / 0.36); margin-top: 2px; }
+    .mcp-conn {
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .mcp-conn::before {
+      content: ''; position: absolute; left: 0; right: 0;
+      height: 1px; background: linear-gradient(90deg, transparent, oklch(0.74 0.14 200 / 0.4), transparent);
+    }
+    .mcp-conn .pulse {
+      position: relative; z-index: 2;
+      width: 9px; height: 9px; border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 10px var(--cyan);
+      animation: mcpPulse 2s ease-in-out infinite;
+    }
+    @keyframes mcpPulse { 0%,100%{transform:scale(0.8);opacity:0.5} 50%{transform:scale(1.2);opacity:1} }
+    .mcp-tools {
+      margin-top: 18px;
+      padding-top: 16px; border-top: 1px solid var(--line);
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
+    }
+    .mcp-tool {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      background: oklch(1 0 0 / 0.025);
+      border: 1px solid oklch(1 0 0 / 0.06);
+      font-family: var(--mono); font-size: 10.5px; color: oklch(1 0 0 / 0.7);
+    }
+    .mcp-tool::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--green); box-shadow: 0 0 6px var(--green);
+    }
+
+    /* ── API MOCK ── */
+    .api-mock {
+      width: 92%;
+      display: grid; gap: 12px;
+    }
+    .api-pane {
+      background: oklch(0.05 0.028 200);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 28px 80px rgba(0,0,0,0.5);
+    }
+    .api-head {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--line);
+      background: oklch(0.07 0.032 200);
+      font-family: var(--mono); font-size: 10px;
+      color: oklch(1 0 0 / 0.4);
+    }
+    .api-head .method {
+      padding: 3px 8px; border-radius: 4px;
+      font-weight: 700; letter-spacing: 0.04em;
+    }
+    .api-head .method.post { background: #c678dd33; color: #d9a4ee; }
+    .api-head .method.res { background: oklch(0.75 0.12 145 / 0.18); color: var(--green); }
+    .api-head .url { color: var(--ink); flex: 1; }
+    .api-head .ms { color: oklch(1 0 0 / 0.32); }
+    .api-body {
+      padding: 14px 16px;
+      font-family: var(--mono); font-size: 11px; line-height: 1.7;
+      color: oklch(1 0 0 / 0.7);
+    }
+    .api-body .k { color: var(--cyan); }
+    .api-body .s { color: #98c379; }
+    .api-body .n { color: #d19a66; }
+    .api-body .b { color: #61afef; }
+    .api-body .br { color: oklch(1 0 0 / 0.32); }
+    .api-stream {
+      display: inline-block; height: 8px; width: 8px; border-radius: 50%;
+      background: var(--cyan); margin-right: 6px;
+      animation: streamDot 1.2s ease-in-out infinite;
+    }
+    @keyframes streamDot { 0%,100%{opacity:0.3;transform:scale(0.85)} 50%{opacity:1;transform:scale(1.1)} }
     footer { background: oklch(0.045 0.032 204); padding: 44px 80px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--line); }
     .f-logo { display: inline-flex; align-items: center; }
     .f-links { display: flex; gap: 24px; }
@@ -139,6 +342,7 @@
     <a href="/features" class="nav-active">Features</a>
     <a href="/quickstart">Quickstart</a>
     <a href="/benchmarks">Benchmarks</a>
+    <a href="/docs">Docs</a>
     <a onclick="openModal()" class="nav-waitlist">Waitlist</a>
   </div>
 </nav>
@@ -196,14 +400,49 @@
     <!-- IDE -->
     <div class="feature-surface">
       <div class="fs-visual">
-        <div class="terminal-visual" style="width:90%; height:320px; background:#081118; border-radius:8px; position:relative; overflow:hidden;">
-          <div style="position:absolute; top:0; left:0; width:60px; height:100%; border-right:1px solid var(--line); background:rgba(255,255,255,0.02);"></div>
-          <div style="margin-left:70px; padding:20px;">
-            <div style="width:120px; height:8px; background:var(--line); border-radius:4px; margin-bottom:12px;"></div>
-            <div style="width:200px; height:8px; background:var(--cyan-soft); border-radius:4px; margin-bottom:24px;"></div>
-            <div style="display:flex; gap:10px;">
-              <div style="flex:1; height:160px; border:1px solid var(--line-strong); border-radius:4px; background:oklch(0.74 0.14 200 / 0.03);"></div>
-              <div style="width:80px; height:160px; border:1px solid var(--line); border-radius:4px;"></div>
+        <div class="ide-mock" aria-hidden="true">
+          <div class="ide-bar"><div class="d"></div><div class="d"></div><div class="d"></div><div class="ttl">mesh-ide · acme/payments-service</div></div>
+          <div class="ide-grid">
+            <div class="ide-tree">
+              <div class="h">Workspace</div>
+              <div class="dr">▾ src/</div>
+              <div class="f">  api/</div>
+              <div class="f">  billing/</div>
+              <div class="f">  db/</div>
+              <div class="f a">  invoices.ts</div>
+              <div class="f">  webhooks.ts</div>
+              <div class="dr">▾ tests/</div>
+              <div class="f">  invoices.spec.ts</div>
+              <div class="dr">▸ infra/</div>
+              <div class="dr">▸ docs/</div>
+            </div>
+            <div class="ide-edit">
+              <div class="ide-tab"><span>billing.ts</span><span class="act">invoices.ts</span><span>webhooks.ts</span></div>
+              <div class="ln"><span class="n">14</span><span><span class="kw">export async function</span> <span class="fn">finalizeInvoice</span>(id: <span class="kw">string</span>) {</span></div>
+              <div class="ln"><span class="n">15</span><span>  <span class="kw">const</span> inv = <span class="kw">await</span> <span class="fn">db.invoices.find</span>(id);</span></div>
+              <div class="ln hl"><span class="n">16</span><span>  <span class="cm">// ↳ Mesh suggests: handle "void" status before charge</span></span></div>
+              <div class="ln"><span class="n">17</span><span>  <span class="kw">if</span> (inv.status === <span class="st">'void'</span>) <span class="kw">return</span>;</span></div>
+              <div class="ln"><span class="n">18</span><span>  <span class="kw">await</span> <span class="fn">stripe.charge</span>(inv.amount, {</span></div>
+              <div class="ln"><span class="n">19</span><span>    customer: inv.customerId,</span></div>
+              <div class="ln"><span class="n">20</span><span>    metadata: { source: <span class="st">'mesh'</span> },</span></div>
+              <div class="ln"><span class="n">21</span><span>  });</span></div>
+              <div class="ln"><span class="n">22</span><span>}</span></div>
+            </div>
+            <div class="ide-side">
+              <div class="lbl">Mesh chat · context</div>
+              <div class="ide-msg">
+                <span class="from">Indexed</span>
+                3.2k files · 12 lang · 1 capsule
+                <span class="ide-pill">3.9× compressed</span>
+              </div>
+              <div class="ide-msg you">
+                <span class="from">You</span>
+                Why are voided invoices being charged?
+              </div>
+              <div class="ide-msg">
+                <span class="from">Mesh</span>
+                Pulled <b>invoices.ts:14</b>, <b>webhooks.ts:88</b>, <b>billing.spec.ts:42</b>. The charge runs before the status check…
+              </div>
             </div>
           </div>
         </div>
@@ -224,30 +463,92 @@
         <button class="secondary-btn" onclick="navigator.clipboard.writeText('mesh connect --mcp'); alert('Copied')">Copy config command</button>
       </div>
       <div class="fs-visual">
-        <div style="display:flex; gap:20px; align-items:center;">
-          <div style="width:80px; height:80px; border:1px solid var(--line-strong); border-radius:20px; display:grid; place-items:center; background:var(--panel);"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
-          <div style="font-family:var(--mono); color:var(--dim);">⇄</div>
-          <div style="width:80px; height:80px; border:1px solid var(--line); border-radius:20px; display:grid; place-items:center; background:rgba(255,255,255,0.03);"><div style="width:40px; height:40px; background:var(--ink); border-radius:50%; opacity:0.1;"></div></div>
+        <div class="mcp-mock" aria-hidden="true">
+          <div class="lbl">Model Context Protocol · live wire</div>
+          <div class="mcp-row">
+            <div class="mcp-node">
+              <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M3.5 12c0-2 1-4 3-5.5M20.5 12c0 2-1 4-3 5.5M12 3.5c2 0 4 1 5.5 3M12 20.5c-2 0-4-1-5.5-3"/></svg></div>
+              <div>
+                <div class="nm">Claude Desktop</div>
+                <div class="sub">agent · sonnet-4.6</div>
+              </div>
+            </div>
+            <div class="mcp-conn"><span class="pulse"></span></div>
+            <div class="mcp-node mesh">
+              <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 6L2 12l3 6M11 6L8 12l3 6M17 6l-3 6 3 6M22 6l-3 6 3 6"/></svg></div>
+              <div>
+                <div class="nm">Mesh MCP Server</div>
+                <div class="sub">localhost:7400 · 247 files</div>
+              </div>
+            </div>
+          </div>
+          <div class="mcp-row">
+            <div class="mcp-node">
+              <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+              <div>
+                <div class="nm">Cursor</div>
+                <div class="sub">agent · gpt-5</div>
+              </div>
+            </div>
+            <div class="mcp-conn"><span class="pulse" style="animation-delay:.4s"></span></div>
+            <div class="mcp-node mesh">
+              <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+              <div>
+                <div class="nm">Capsule Engine</div>
+                <div class="sub">3.9× compression · 100% recall</div>
+              </div>
+            </div>
+          </div>
+          <div class="mcp-tools">
+            <div class="mcp-tool">mesh.search_code()</div>
+            <div class="mcp-tool">mesh.read_span()</div>
+            <div class="mcp-tool">mesh.find_refs()</div>
+            <div class="mcp-tool">mesh.recover()</div>
+          </div>
         </div>
       </div>
     </div>
     <!-- API -->
     <div class="feature-surface">
       <div class="fs-visual">
-        <div class="terminal-visual" style="width:85%;"><div class="terminal-body" style="font-size:12px;"><div class="t-cyan">POST /v1/index</div><div class="t-dim">{ "repo": "github.com/org/repo" }</div><br><div class="t-green">200 OK</div><div class="t-dim">{ "capsule_id": "cap_8kX9..." }</div></div></div>
+        <div class="api-mock" aria-hidden="true">
+          <div class="api-pane">
+            <div class="api-head"><span class="method post">POST</span><span class="url">api.mesh.dev/v1/capsules</span><span class="ms">→ request</span></div>
+            <div class="api-body">
+<span class="br">{</span>
+  <span class="k">"repo"</span>: <span class="s">"github.com/acme/payments"</span>,
+  <span class="k">"branch"</span>: <span class="s">"main"</span>,
+  <span class="k">"include"</span>: <span class="br">[</span><span class="s">"src/**"</span>, <span class="s">"tests/**"</span><span class="br">]</span>,
+  <span class="k">"compress"</span>: <span class="b">true</span>
+<span class="br">}</span>
+            </div>
+          </div>
+          <div class="api-pane">
+            <div class="api-head"><span class="method res">200</span><span class="url">stream · server-sent events</span><span class="ms">238 ms</span></div>
+            <div class="api-body">
+<span class="br">{</span>
+  <span class="k">"capsule_id"</span>: <span class="s">"cap_8kX9z2a"</span>,
+  <span class="k">"files"</span>: <span class="n">3174</span>, <span class="k">"tokens_in"</span>: <span class="n">2.4M</span>,
+  <span class="k">"tokens_out"</span>: <span class="n">612k</span>, <span class="k">"ratio"</span>: <span class="n">3.92</span>,
+  <span class="k">"recall"</span>: <span class="n">1.00</span>, <span class="k">"status"</span>: <span class="s">"ready"</span>
+<span class="br">}</span>
+<span class="api-stream"></span><span style="color:var(--cyan)">event: capsule.ready</span>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="fs-content">
         <div class="fs-kicker">Surface 04</div>
         <h2 class="fs-title">Gateway API.</h2>
         <p class="fs-copy">Build your own agentic tools on top of Mesh. A fully programmable endpoint for indexing, searching, and recovering code context at scale. <strong>Integrate Mesh into your CI/CD</strong>.</p>
-        <a href="https://docs.try-mesh.com" class="secondary-btn">Read API Docs</a>
+        <a href="/docs" class="secondary-btn">Read API Docs</a>
       </div>
     </div>
   </section>
 </main>
 <footer>
   <a class="f-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg"><path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text></svg></a>
-  <div class="f-links"><a href="https://docs.try-mesh.com">Docs</a><a href="https://github.com/dreddi-edit/homebrew-mesh.git">GitHub</a><a href="https://twitter.com">Twitter</a></div>
+  <div class="f-links"><a href="/docs">Docs</a><a href="https://github.com/dreddi-edit/homebrew-mesh.git">GitHub</a><a href="https://twitter.com">Twitter</a></div>
   <div class="f-copy">© 2026 Mesh Intelligence</div>
 </footer>
 <script>

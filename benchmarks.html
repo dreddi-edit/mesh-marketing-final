@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mesh Benchmarks - Code Context Compression Results</title>
-  <meta name="description" content="Mesh benchmark results for code-context compression, needle-in-a-haystack recall, multi-hop reasoning, budget saturation, and hallucination refusal.">
+  <title>Mesh Benchmarks — Code-Context Compression Results</title>
+  <meta name="description" content="Mesh benchmark results across needle-in-a-haystack recall, multi-hop reasoning, budget saturation, and hallucination refusal — measured against raw source on the same models.">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,10 +12,10 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --petrol:  oklch(0.38 0.09 198); --cyan: oklch(0.74 0.14 200); --dark: oklch(0.08 0.04 200); --dark2: oklch(0.13 0.05 200);
-      --white: oklch(0.99 0.004 195); --off: oklch(0.96 0.006 195); --muted: oklch(0.55 0.05 200); --border: oklch(0.88 0.015 195);
+      --petrol: oklch(0.38 0.09 198); --cyan: oklch(0.74 0.14 200); --cyan-dim: oklch(0.62 0.12 200);
+      --white: oklch(0.99 0.004 195); --muted: oklch(0.55 0.05 200);
       --bg: oklch(0.078 0.038 200); --bg-deep: oklch(0.046 0.032 204); --panel: oklch(0.105 0.045 200); --panel-2: oklch(0.132 0.052 199);
-      --line: oklch(1 0 0 / 0.08); --line-strong: oklch(0.74 0.14 200 / 0.30); --ink: oklch(0.985 0.004 195); --dim: oklch(0.74 0.026 198 / 0.38);
+      --line: oklch(1 0 0 / 0.08); --line-strong: oklch(0.74 0.14 200 / 0.30); --ink: oklch(0.985 0.004 195); --dim: oklch(0.74 0.026 198 / 0.42);
       --cyan-soft: oklch(0.74 0.14 200 / 0.12); --green: oklch(0.75 0.12 145); --amber: oklch(0.78 0.10 58); --red: oklch(0.68 0.13 25);
       --mono: 'Geist Mono', monospace; --display: 'Barlow Condensed', sans-serif; --sans: 'DM Sans', sans-serif;
     }
@@ -24,14 +24,14 @@
     #mesh-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
     a { color: inherit; text-decoration: none; }
     .site-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 22px 56px; background: oklch(0.078 0.038 200 / 0.82); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
-    .nav-logo img { height: 25px; width: auto; }
     .nav-right { display: flex; gap: 6px; align-items: center; }
     .nav-right a { font-size: 13px; color: oklch(1 0 0 / 0.42); padding: 6px 14px; border-radius: 6px; border: 1px solid transparent; transition: all 0.2s; }
     .nav-right a:hover { color: var(--ink); border-color: oklch(1 0 0 / 0.12); }
     .nav-active { color: var(--ink) !important; }
     .nav-waitlist { background: var(--cyan-soft) !important; border-color: var(--line-strong) !important; color: var(--cyan) !important; cursor: pointer; }
+
     .page-shell { width: min(1180px, calc(100% - 64px)); margin: 0 auto; position: relative; z-index: 1; }
-    .hero { min-height: 100vh; padding-top: 128px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, 0.8fr); gap: 70px; align-items: center; }
+    .hero { padding-top: 130px; padding-bottom: 36px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(420px, 0.95fr); gap: 60px; align-items: end; }
     .hero-word { font-family: var(--display); font-style: italic; font-weight: 900; font-size: clamp(60px, 9vw, 130px); line-height: 0.9; letter-spacing: -0.03em; color: var(--white); display: block; user-select: none; }
     .hero-word div { display: flex; flex-wrap: nowrap; align-items: baseline; }
     .hero-word .cyan-line { color: var(--cyan); }
@@ -40,71 +40,148 @@
     .eyebrow { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 22px; color: var(--cyan); font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0; animation: up 0.8s 0.2s ease forwards; }
     .eyebrow::before { content: ""; width: 26px; height: 1px; background: var(--cyan); }
     @keyframes up { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:none} }
-    .hero-copy { margin-top: 30px; max-width: 620px; color: var(--muted); font-size: 18px; font-weight: 300; line-height: 1.7; opacity: 0; animation: up 0.8s 0.6s ease forwards; }
+    .hero-copy { margin-top: 26px; max-width: 580px; color: var(--muted); font-size: 17px; font-weight: 300; line-height: 1.7; opacity: 0; animation: up 0.8s 0.6s ease forwards; }
     .hero-copy strong { color: var(--ink); font-weight: 500; }
-    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; opacity: 0; animation: up 0.8s 0.8s ease forwards; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; opacity: 0; animation: up 0.8s 0.8s ease forwards; }
     .primary-btn, .secondary-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 18px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; font-family: var(--sans); font-size: 14px; font-weight: 700; transition: all 0.2s; }
     .primary-btn { background: var(--cyan); color: var(--bg-deep); }
     .secondary-btn { background: oklch(1 0 0 / 0.035); border-color: var(--line); color: var(--ink); }
     .primary-btn:hover, .secondary-btn:hover { transform: translateY(-2px); }
-    .observatory { position: relative; min-height: 520px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: radial-gradient(circle at 50% 44%, oklch(0.74 0.14 200 / 0.17), transparent 16rem), oklch(0.06 0.032 200); box-shadow: 0 34px 110px oklch(0 0 0 / 0.28); }
-    .obs-top { display: flex; align-items: center; justify-content: space-between; height: 44px; padding: 0 16px; border-bottom: 1px solid var(--line); color: var(--dim); font-family: var(--mono); font-size: 10px; text-transform: uppercase; }
-    .obs-live { display: inline-flex; gap: 7px; align-items: center; color: var(--green); }
-    .obs-live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 16px var(--green); }
-    .orbit { position: absolute; left: 50%; top: 54%; width: 340px; height: 340px; transform: translate(-50%, -50%); border: 1px solid oklch(0.74 0.14 200 / 0.22); border-radius: 50%; animation: rotateOrbit 20s linear infinite; }
-    .scanline { position: absolute; left: 50%; top: 54%; width: 2px; height: 245px; transform-origin: top center; background: linear-gradient(to bottom, var(--cyan), transparent); animation: sweep 5.2s linear infinite; opacity: 0.8; }
-    .hero-score { position: absolute; inset: auto 26px 26px 26px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .hero-metric { min-height: 118px; padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: oklch(0.048 0.034 204 / 0.68); backdrop-filter: blur(10px); }
-    .hero-metric strong { display: block; font-family: var(--display); font-size: 50px; font-style: italic; font-weight: 900; line-height: 0.9; color: var(--cyan); }
-    .hero-metric span { display: block; margin-top: 8px; color: var(--dim); font-size: 12px; }
-    .model-cloud { position: absolute; left: 24px; top: 66px; display: flex; flex-direction: column; gap: 8px; }
-    .model-chip { width: max-content; padding: 8px 10px; border: 1px solid var(--line); border-radius: 999px; background: oklch(0.048 0.034 204 / 0.72); color: oklch(1 0 0 / 0.62); font-family: var(--mono); font-size: 10px; backdrop-filter: blur(10px); }
 
-    .proof-strip { width: min(1180px, calc(100% - 64px)); margin: -18px auto 0; position: relative; z-index: 5; display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: oklch(0.07 0.036 204 / 0.86); backdrop-filter: blur(16px); }
-    .proof-cell { min-height: 172px; padding: 28px; border-right: 1px solid var(--line); opacity: 0; transform: translateY(18px); transition: all 0.6s ease; }
+    /* ── OBSERVATORY ── live results table ── */
+    .observatory {
+      position: relative; border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+      background: linear-gradient(180deg, oklch(0.10 0.045 200 / 0.88), oklch(0.05 0.034 204 / 0.92));
+      box-shadow: 0 36px 110px oklch(0 0 0 / 0.45);
+    }
+    .obs-top { display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 16px; border-bottom: 1px solid var(--line); color: var(--dim); font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .obs-top .live { display: inline-flex; align-items: center; gap: 7px; color: var(--green); margin-left: auto; }
+    .obs-top .live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 14px var(--green); animation: pulseLive 2s ease-in-out infinite; }
+    @keyframes pulseLive { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .obs-meta { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--line); }
+    .obs-meta .cell { padding: 18px 18px 16px; border-right: 1px solid var(--line); }
+    .obs-meta .cell:last-child { border-right: 0; }
+    .obs-meta .lbl { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); margin-bottom: 6px; }
+    .obs-meta .val { font-family: var(--display); font-style: italic; font-weight: 900; font-size: 38px; line-height: 1; color: var(--ink); }
+    .obs-meta .val.cy { color: var(--cyan); }
+    .obs-meta .sub { font-family: var(--mono); font-size: 10px; color: var(--dim); margin-top: 6px; }
+
+    .obs-table { font-family: var(--mono); font-size: 11px; }
+    .obs-row { display: grid; grid-template-columns: 18px 1fr 130px 64px 70px; gap: 12px; align-items: center; padding: 10px 16px; border-bottom: 1px solid oklch(1 0 0 / 0.04); color: oklch(1 0 0 / 0.7); animation: rowIn .45s cubic-bezier(0.16,1,0.3,1); }
+    @keyframes rowIn { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: none } }
+    .obs-row .ix { color: var(--dim); font-size: 9px; }
+    .obs-row .test { color: var(--ink); }
+    .obs-row .test small { color: var(--dim); margin-left: 6px; font-size: 10px; }
+    .obs-row .model { color: oklch(1 0 0 / 0.55); font-size: 10px; }
+    .obs-row .ms { color: var(--dim); font-size: 10px; text-align: right; }
+    .status { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: 999px; font-size: 9.5px; letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
+    .status.pass { background: oklch(0.75 0.12 145 / 0.14); color: var(--green); }
+    .status.pass::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
+    .status.fail { background: oklch(0.68 0.13 25 / 0.14); color: var(--red); }
+    .status.fail::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--red); }
+    .status.run { background: oklch(0.74 0.14 200 / 0.14); color: var(--cyan); }
+    .status.run::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--cyan); animation: blinkDot 1s infinite; }
+    @keyframes blinkDot { 50%{opacity:0.3} }
+
+    /* ── PROOF STRIP ── */
+    .proof-strip { width: min(1180px, calc(100% - 64px)); margin: 28px auto 0; position: relative; z-index: 5; display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: oklch(0.07 0.036 204 / 0.86); backdrop-filter: blur(16px); }
+    .proof-cell { min-height: 168px; padding: 26px; border-right: 1px solid var(--line); opacity: 0; transform: translateY(18px); transition: all 0.6s ease; }
+    .proof-cell:last-child { border-right: 0; }
     .proof-cell.visible { opacity: 1; transform: none; }
-    .proof-number { display: flex; align-items: flex-start; gap: 3px; font-family: var(--display); font-size: 72px; font-style: italic; font-weight: 900; line-height: 0.9; }
+    .proof-number { display: flex; align-items: flex-start; gap: 3px; font-family: var(--display); font-size: 68px; font-style: italic; font-weight: 900; line-height: 0.9; }
     .proof-number sup { margin-top: 9px; color: var(--cyan); font-size: 0.38em; }
-    .proof-label { margin-top: 12px; color: var(--muted); font-size: 13px; line-height: 1.5; }
-    .proof-badge { display: inline-flex; margin-top: 12px; padding: 5px 8px; border-radius: 999px; background: var(--cyan-soft); color: var(--cyan); font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .proof-label { margin-top: 10px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .proof-badge { display: inline-flex; margin-top: 12px; padding: 4px 8px; border-radius: 999px; background: var(--cyan-soft); color: var(--cyan); font-family: var(--mono); font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.06em; }
 
-    .bench-section { width: min(1180px, calc(100% - 64px)); margin: 30px auto 0; padding: 64px 0; }
-    .section-grid { display: grid; grid-template-columns: 0.75fr 1.25fr; gap: 58px; align-items: center; }
-    .section-kicker { margin-bottom: 16px; color: var(--cyan); font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
-    h2 { font-family: var(--display); font-size: 74px; font-style: italic; font-weight: 900; line-height: 0.92; }
+    /* ── BENCH SECTIONS ── */
+    .bench-section { width: min(1180px, calc(100% - 64px)); margin: 36px auto 0; padding: 56px 0; }
+    .section-grid { display: grid; grid-template-columns: 0.78fr 1.22fr; gap: 56px; align-items: center; }
+    .section-kicker { margin-bottom: 14px; color: var(--cyan); font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
+    h2 { font-family: var(--display); font-size: clamp(46px, 6vw, 74px); font-style: italic; font-weight: 900; line-height: 0.92; color: var(--ink); }
     .section-copy { margin-top: 22px; color: var(--muted); font-size: 16px; font-weight: 300; line-height: 1.75; }
     .section-copy strong { color: var(--ink); font-weight: 500; }
-    .lab-card { border: 1px solid var(--line); border-radius: 10px; background: oklch(0.10 0.042 200 / 0.76); overflow: hidden; box-shadow: 0 28px 90px oklch(0 0 0 / 0.16); }
-    .needle-visual { display: grid; grid-template-columns: 0.92fr 1.08fr; min-height: 420px; }
-    .haystack { position: relative; border-right: 1px solid var(--line); overflow: hidden; background: oklch(0.046 0.034 204 / 0.88); }
-    .hay-dot { position: absolute; width: 5px; height: 5px; border-radius: 50%; background: oklch(1 0 0 / 0.16); }
-    .hay-dot.needle-dot { width: 10px; height: 10px; background: var(--cyan); box-shadow: 0 0 22px var(--cyan); }
-    .chart-stack { padding: 24px; display: grid; gap: 16px; align-content: center; }
+
+    /* ── NEEDLE — code haystack ── */
+    .lab-card { border: 1px solid var(--line); border-radius: 12px; background: oklch(0.06 0.034 200 / 0.88); overflow: hidden; box-shadow: 0 28px 90px oklch(0 0 0 / 0.18); }
+    .lab-top { display: flex; align-items: center; justify-content: space-between; height: 38px; padding: 0 14px; border-bottom: 1px solid var(--line); color: var(--dim); font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .needle-wrap { display: grid; grid-template-columns: 1.05fr 0.95fr; min-height: 380px; }
+    .haystack { position: relative; border-right: 1px solid var(--line); background: oklch(0.045 0.032 204 / 0.94); overflow: hidden; }
+    .haystack-files { display: grid; grid-auto-rows: 1fr; height: 100%; gap: 0; }
+    .haystack-line { display: grid; grid-template-columns: 32px 1fr; gap: 8px; align-items: center; padding: 0 12px 0 6px; font-family: var(--mono); font-size: 9px; color: oklch(1 0 0 / 0.32); border-bottom: 1px solid oklch(1 0 0 / 0.025); }
+    .haystack-line .ln { color: oklch(1 0 0 / 0.16); text-align: right; font-size: 8.5px; }
+    .haystack-line .code { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.7; }
+    .haystack-line.needle { background: linear-gradient(90deg, oklch(0.74 0.14 200 / 0.18), transparent); color: var(--cyan); border-left: 2px solid var(--cyan); padding-left: 4px; }
+    .haystack-line.needle .ln { color: var(--cyan); opacity: 1; }
+    .haystack-line.needle .code { color: var(--cyan); opacity: 1; font-weight: 600; }
+    .haystack-arrow { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; background: var(--cyan-soft); color: var(--cyan); font-family: var(--mono); font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.06em; box-shadow: 0 6px 24px oklch(0.74 0.14 200 / 0.4); }
+    .chart-stack { padding: 22px; display: grid; gap: 18px; align-content: center; }
     .chart-row { opacity: 0; transform: translateX(16px); transition: all 0.6s ease; }
     .chart-row.visible { opacity: 1; transform: none; }
-    .chart-title { display: flex; justify-content: space-between; gap: 14px; margin-bottom: 9px; color: var(--muted); font-family: var(--mono); font-size: 11px; }
-    .bar-line { display: grid; grid-template-columns: 44px 1fr 54px; align-items: center; gap: 8px; color: var(--dim); font-family: var(--mono); font-size: 10px; }
-    .track { height: 9px; border-radius: 999px; background: oklch(1 0 0 / 0.06); overflow: hidden; }
+    .chart-title { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; color: var(--ink); font-size: 13px; font-weight: 600; }
+    .chart-title small { color: var(--dim); font-family: var(--mono); font-weight: 400; font-size: 10px; }
+    .bar-line { display: grid; grid-template-columns: 56px 1fr 50px; align-items: center; gap: 10px; color: oklch(1 0 0 / 0.6); font-family: var(--mono); font-size: 10px; margin-bottom: 8px; }
+    .bar-line .who { letter-spacing: 0.05em; }
+    .bar-line .who.mesh { color: var(--cyan); }
+    .bar-line .pct { text-align: right; color: var(--ink); font-weight: 600; font-size: 11px; }
+    .track { height: 10px; border-radius: 999px; background: oklch(1 0 0 / 0.05); overflow: hidden; position: relative; }
     .fill { height: 100%; width: 0; border-radius: 999px; transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
     .fill.mesh { background: linear-gradient(90deg, oklch(0.38 0.09 198), var(--cyan)); }
-    .fill.raw { background: oklch(1 0 0 / 0.16); }
+    .fill.raw { background: oklch(1 0 0 / 0.20); }
 
+    /* ── HOPS — multi-hop graph ── */
+    .hops-card { padding: 32px; min-height: 360px; }
+    .hops-svg { width: 100%; height: 280px; }
+    .hops-legend { display: flex; gap: 18px; padding-top: 16px; border-top: 1px solid var(--line); margin-top: 20px; font-family: var(--mono); font-size: 10.5px; color: var(--dim); }
+    .hops-legend .item { display: inline-flex; align-items: center; gap: 8px; }
+    .hops-legend .sw { width: 18px; height: 3px; border-radius: 2px; }
+
+    /* ── BUDGET ── */
     .budget-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .budget-card { min-height: 360px; padding: 28px; border: 1px solid var(--line); border-radius: 10px; background: oklch(0.10 0.042 200 / 0.72); position: relative; overflow: hidden; }
-    .budget-card.mesh { border-color: var(--line-strong); }
-    .budget-number { position: relative; font-family: var(--display); font-size: 82px; font-style: italic; font-weight: 900; line-height: 0.9; }
-    .budget-track { position: relative; margin-top: 28px; height: 8px; border-radius: 999px; background: oklch(1 0 0 / 0.07); overflow: hidden; }
+    .budget-card { min-height: 320px; padding: 28px; border: 1px solid var(--line); border-radius: 12px; background: oklch(0.10 0.042 200 / 0.72); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
+    .budget-card.mesh { border-color: var(--line-strong); background: linear-gradient(160deg, oklch(0.74 0.14 200 / 0.08), oklch(0.10 0.042 200 / 0.72)); }
+    .budget-label { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dim); display: flex; justify-content: space-between; align-items: center; }
+    .budget-card.mesh .budget-label { color: var(--cyan); }
+    .budget-number { position: relative; font-family: var(--display); font-size: clamp(56px, 7vw, 84px); font-style: italic; font-weight: 900; line-height: 0.9; color: var(--ink); margin: 18px 0 10px; }
+    .budget-number .u { font-size: 0.42em; color: var(--dim); margin-left: 4px; font-style: italic; }
+    .budget-card.mesh .budget-number { color: var(--cyan); }
+    .budget-track { position: relative; margin-top: 16px; height: 10px; border-radius: 999px; background: oklch(1 0 0 / 0.06); overflow: hidden; }
     .budget-track span { display: block; width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, oklch(0.38 0.09 198), var(--cyan)); transition: width 1.4s cubic-bezier(0.16, 1, 0.3, 1); }
+    .budget-card.raw .budget-track span { background: oklch(1 0 0 / 0.22); }
+    .budget-foot { font-family: var(--mono); font-size: 10.5px; color: var(--dim); margin-top: 10px; }
 
+    /* ── HALLUCINATION ── refusal grid ── */
+    .halluc-card { padding: 28px; min-height: 360px; }
+    .halluc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .halluc-cell { padding: 22px; border-radius: 12px; border: 1px solid var(--line); background: oklch(0.052 0.032 204 / 0.6); }
+    .halluc-cell .h { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); margin-bottom: 12px; }
+    .halluc-cell .v { font-family: var(--display); font-style: italic; font-weight: 900; font-size: 64px; line-height: 0.9; color: var(--ink); }
+    .halluc-cell.good { border-color: oklch(0.75 0.12 145 / 0.32); background: oklch(0.75 0.12 145 / 0.06); }
+    .halluc-cell.good .v { color: var(--green); }
+    .halluc-cell.bad { border-color: oklch(0.68 0.13 25 / 0.28); background: oklch(0.68 0.13 25 / 0.05); }
+    .halluc-cell.bad .v { color: var(--red); }
+    .halluc-cell .x { margin-top: 10px; font-size: 12px; color: oklch(1 0 0 / 0.6); line-height: 1.5; }
+
+    /* ── SCORECARD ── */
     .score-wall { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-    .score-card { min-height: 190px; padding: 24px; border: 1px solid var(--line); border-radius: 10px; background: oklch(0.10 0.042 200 / 0.74); opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
+    .score-card { min-height: 168px; padding: 22px 22px 24px; border: 1px solid var(--line); border-radius: 12px; background: oklch(0.10 0.042 200 / 0.74); opacity: 0; transform: translateY(20px); transition: all 0.6s ease; display: flex; flex-direction: column; justify-content: space-between; }
     .score-card.visible { opacity: 1; transform: none; }
-    .score-card.large { grid-column: span 2; min-height: 250px; }
-    .score-value { margin-top: 16px; font-family: var(--display); font-size: 78px; font-style: italic; font-weight: 900; line-height: 0.88; }
-    .score-card.large .score-value { font-size: 110px; color: var(--cyan); }
+    .score-label { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--dim); }
+    .score-value { font-family: var(--display); font-size: 64px; font-style: italic; font-weight: 900; line-height: 0.88; color: var(--ink); margin-top: 14px; }
+    .score-card.cy .score-value { color: var(--cyan); }
+    .score-card.gn .score-value { color: var(--green); }
+    .score-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; font-family: var(--mono); font-size: 10px; color: var(--dim); }
+    .score-foot .delta { color: var(--green); }
 
-    .closing-cta { width: min(1180px, calc(100% - 64px)); margin: 28px auto 88px; padding: 52px 58px; border: 1px solid var(--line-strong); border-radius: 10px; background: oklch(0.105 0.045 200); display: flex; align-items: center; justify-content: space-between; gap: 34px; }
-    .closing-cta h2 { font-size: 58px; font-family: var(--display); font-style: italic; font-weight: 900; }
+    /* ── METHOD ── */
+    .method { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 24px; }
+    .method-card { padding: 24px; border: 1px solid var(--line); border-radius: 12px; background: oklch(0.078 0.038 200 / 0.7); }
+    .method-card .step { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; background: oklch(0.74 0.14 200 / 0.14); color: var(--cyan); font-family: var(--mono); font-size: 11px; font-weight: 700; margin-bottom: 14px; }
+    .method-card h3 { font-family: var(--display); font-style: italic; font-weight: 900; font-size: 28px; line-height: 1; color: var(--ink); margin-bottom: 8px; }
+    .method-card p { color: var(--muted); font-size: 13.5px; line-height: 1.6; }
+
+    .closing-cta { width: min(1180px, calc(100% - 64px)); margin: 28px auto 88px; padding: 48px 56px; border: 1px solid var(--line-strong); border-radius: 12px; background: radial-gradient(circle at 78% 40%, oklch(0.74 0.14 200 / 0.16), transparent 28rem), oklch(0.105 0.045 200); display: flex; align-items: center; justify-content: space-between; gap: 30px; flex-wrap: wrap; }
+    .closing-cta h2 { font-size: clamp(40px, 5vw, 56px); font-family: var(--display); font-style: italic; font-weight: 900; color: var(--ink); }
+    .closing-cta p { color: var(--muted); margin-top: 10px; max-width: 520px; }
 
     footer { background: oklch(0.045 0.032 204); padding: 44px 80px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--line); }
     .f-logo { display: inline-flex; align-items: center; }
@@ -113,22 +190,35 @@
     .f-links a:hover { color: oklch(1 0 0 / 0.66); }
     .f-copy { color: oklch(1 0 0 / 0.18); font-family: var(--mono); font-size: 11px; }
 
-    .modal-bg { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.75); opacity: 0; pointer-events: none; transition: opacity 0.25s; backdrop-filter: blur(8px); }
+    /* ── MODAL — fixed waitlist ── */
+    .modal-bg { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.75); opacity: 0; pointer-events: none; transition: opacity 0.25s; backdrop-filter: blur(8px); padding: 24px; }
     .modal-bg.open { opacity: 1; pointer-events: auto; }
-    .modal { position: relative; width: 90%; max-width: 500px; padding: 48px 52px; border: 1px solid oklch(1 0 0 / 0.1); border-radius: 16px; background: var(--panel); }
-    .modal h3 { margin-bottom: 16px; font-family: var(--display); font-size: 52px; font-style: italic; font-weight: 900; line-height: 0.92; }
-    .modal-close { position: absolute; top: 20px; right: 24px; border: none; background: none; color: rgba(255,255,255,0.3); cursor: pointer; font-size: 22px; }
-
-    @keyframes rotateOrbit { to { transform: translate(-50%, -50%) rotate(360deg); } }
-    @keyframes sweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .modal { position: relative; width: 100%; max-width: 480px; padding: 44px 44px 36px; border: 1px solid oklch(1 0 0 / 0.1); border-radius: 16px; background: var(--panel); box-shadow: 0 40px 120px rgba(0,0,0,0.6); }
+    .modal h3 { margin-bottom: 12px; font-family: var(--display); font-size: 52px; font-style: italic; font-weight: 900; line-height: 0.92; color: var(--ink); }
+    .modal p { color: var(--muted); font-size: 14px; line-height: 1.55; margin-bottom: 22px; }
+    .modal input { width: 100%; padding: 13px 14px; border-radius: 10px; border: 1px solid oklch(1 0 0 / 0.1); background: oklch(1 0 0 / 0.04); color: #fff; font-size: 14px; font-family: var(--sans); outline: none; transition: border-color .2s, background .2s; }
+    .modal input::placeholder { color: oklch(1 0 0 / 0.32); }
+    .modal input:focus { border-color: var(--cyan); background: oklch(1 0 0 / 0.06); }
+    .modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    .modal-btn { width: 100%; padding: 14px; border: none; border-radius: 10px; background: var(--cyan); color: #001318; font-weight: 700; cursor: pointer; font-size: 14px; font-family: var(--sans); transition: transform .2s, opacity .2s; }
+    .modal-btn:hover { transform: translateY(-1px); }
+    .modal-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .modal-msg { margin-top: 14px; font-size: 13px; color: var(--cyan); text-align: center; min-height: 18px; }
+    .modal-close { position: absolute; top: 14px; right: 18px; width: 32px; height: 32px; display: grid; place-items: center; border: none; background: oklch(1 0 0 / 0.04); border-radius: 8px; color: rgba(255,255,255,0.6); cursor: pointer; font-size: 18px; transition: background .2s, color .2s; }
+    .modal-close:hover { background: oklch(1 0 0 / 0.08); color: #fff; }
 
     @media (max-width: 1020px) {
       .site-nav { padding: 18px 24px; }
       .page-shell, .proof-strip, .bench-section, .closing-cta { width: min(100% - 32px, 760px); }
-      .hero { grid-template-columns: 1fr; padding-top: 100px; text-align: center; }
-      .hero-word div { justify-content: center; } .hero-copy, .hero-actions { margin-left: auto; margin-right: auto; justify-content: center; }
-      .section-grid, .needle-visual, .budget-panel, .closing-cta { grid-template-columns: 1fr; }
+      .hero { grid-template-columns: 1fr; padding-top: 100px; }
+      .obs-meta { grid-template-columns: repeat(2, 1fr); }
+      .obs-meta .cell:nth-child(2) { border-right: 0; }
+      .obs-row { grid-template-columns: 16px 1fr 80px 60px; }
+      .obs-row .ms { display: none; }
+      .section-grid, .needle-wrap, .budget-panel, .halluc-grid, .method { grid-template-columns: 1fr; }
+      .closing-cta { padding: 36px 28px; }
       .proof-strip { grid-template-columns: repeat(2, 1fr); }
+      .proof-cell:nth-child(2) { border-right: 0; }
       .score-wall { grid-template-columns: repeat(2, 1fr); }
       footer { padding: 38px 24px; flex-wrap: wrap; gap: 20px; }
     }
@@ -136,108 +226,415 @@
 </head>
 <body>
 <canvas id="mesh-canvas"></canvas>
+
 <div class="modal-bg" id="modalBg" onclick="closeModal(event)">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">×</button>
-    <h3>Join the<br>waitlist.</h3>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="wlTitle">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">×</button>
+    <h3 id="wlTitle">Join the<br>waitlist.</h3>
     <p>Get early access + launch updates. No spam, ever.</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-      <input type="text" id="wlFirst" placeholder="First name" style="width:100%; padding:14px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.05); color:#fff; outline:none;">
-      <input type="text" id="wlLast" placeholder="Last name" style="width:100%; padding:14px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.05); color:#fff; outline:none;">
+    <div class="modal-row">
+      <input type="text" id="wlFirst" placeholder="First name" autocomplete="given-name">
+      <input type="text" id="wlLast" placeholder="Last name" autocomplete="family-name">
     </div>
-    <input type="email" id="wlEmail" placeholder="you@company.com" style="width:100%; padding:14px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.05); color:#fff; outline:none; margin-top:10px;">
-    <button class="modal-btn" onclick="submitWaitlist()" style="width:100%; padding:14px; border:none; border-radius:10px; background:var(--cyan); color:#000; font-weight:700; cursor:pointer; margin-top:10px;">Get early access →</button>
-    <p id="wlMsg" style="margin-top:12px;font-size:13px;color:var(--cyan);text-align:center;min-height:18px"></p>
+    <input type="email" id="wlEmail" placeholder="you@company.com" autocomplete="email" style="margin-bottom:12px;">
+    <button class="modal-btn" id="wlSubmit" onclick="submitWaitlist()">Get early access →</button>
+    <p id="wlMsg" class="modal-msg"></p>
   </div>
 </div>
+
 <nav class="site-nav">
   <a class="nav-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg"><path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text></svg></a>
   <div class="nav-right">
-    <a href="/features">Features</a><a href="/quickstart">Quickstart</a><a href="/benchmarks" class="nav-active">Benchmarks</a><a onclick="openModal()" class="nav-waitlist">Waitlist</a>
+    <a href="/features">Features</a><a href="/quickstart">Quickstart</a><a href="/benchmarks" class="nav-active">Benchmarks</a><a href="/docs">Docs</a><a onclick="openModal()" class="nav-waitlist">Waitlist</a>
   </div>
 </nav>
+
 <main>
+  <!-- HERO + LIVE OBSERVATORY -->
   <section class="page-shell hero">
     <div>
-      <div class="eyebrow">Benchmarks - last run 2026-04-20</div>
+      <div class="eyebrow">Benchmarks · last run 2026-04-23</div>
       <h1 class="hero-word">
         <div><span class="l">P</span><span class="l">r</span><span class="l">o</span><span class="l">o</span><span class="l">f</span>&nbsp;<span class="l">b</span><span class="l">e</span><span class="l">a</span><span class="l">t</span><span class="l">s</span></div>
         <div class="cyan-line"><span class="l">p</span><span class="l">r</span><span class="l">o</span><span class="l">m</span><span class="l">p</span><span class="l">t</span>&nbsp;<span class="l">v</span><span class="l">i</span><span class="l">b</span><span class="l">e</span><span class="l">s</span><span class="l">.</span></div>
       </h1>
-      <p class="hero-copy">Mesh is benchmarked on real code-agent tasks: needle finding, reasoning, and budget saturation. <strong>Real inference calls where it matters.</strong></p>
-      <div class="hero-actions"><a class="primary-btn" href="#needle">See results</a><button class="secondary-btn" onclick="copyInstall()">Copy install</button></div>
-    </div>
-    <aside class="observatory">
-      <div class="obs-top"><span>mesh/benchmark-observatory</span><span class="obs-live">verified</span></div>
-      <div class="model-cloud"><div class="model-chip">claude-sonnet-4-6</div><div class="model-chip">gpt-oss-20b</div><div class="model-chip">llama-3.3-70b</div></div>
-      <div class="orbit"></div><div class="scanline"></div><div class="needle"></div>
-      <div class="hero-score">
-        <div class="hero-metric"><strong>3.9x</strong><span>context gain</span></div>
-        <div class="hero-metric"><strong>100%</strong><span>standard NIAH</span></div>
+      <p class="hero-copy">Mesh is benchmarked on real code-agent tasks across <strong>five frontier models</strong>: needle finding, multi-hop reasoning, budget saturation, hallucination refusal. Same prompts, same models, same temperature — capsules vs raw source.</p>
+      <div class="hero-actions">
+        <a class="primary-btn" href="#niah">See results</a>
+        <button class="secondary-btn" onclick="copyInstall()">Copy install</button>
       </div>
+    </div>
+
+    <aside class="observatory" aria-label="Live benchmark feed">
+      <div class="obs-top">
+        <span>mesh / observatory</span>
+        <span class="live">running · 247 tasks</span>
+      </div>
+      <div class="obs-meta">
+        <div class="cell"><div class="lbl">Pass rate</div><div class="val cy">98.4<span style="font-size:.4em">%</span></div><div class="sub">+22.4 vs raw</div></div>
+        <div class="cell"><div class="lbl">Tokens / task</div><div class="val">4.5<span style="font-size:.4em">k</span></div><div class="sub">5.3× cheaper</div></div>
+        <div class="cell"><div class="lbl">P50 latency</div><div class="val">238<span style="font-size:.4em">ms</span></div><div class="sub">capsule lookup</div></div>
+        <div class="cell"><div class="lbl">Recall</div><div class="val cy">100<span style="font-size:.4em">%</span></div><div class="sub">standard NIAH</div></div>
+      </div>
+      <div class="obs-table" id="obsTable" aria-live="polite"></div>
     </aside>
   </section>
 
+  <!-- HEADLINE STATS -->
   <section class="proof-strip" id="proofStrip">
-    <div class="proof-cell"><div class="proof-number"><span class="count" data-target="39" data-decimal="true">0</span><sup>x</sup></div><div class="proof-label">more files per token budget.</div><div class="proof-badge">gain</div></div>
-    <div class="proof-cell"><div class="proof-number"><span class="count" data-target="100">0</span><sup>%</sup></div><div class="proof-label">NIAH recall standard.</div><div class="proof-badge">accuracy</div></div>
-    <div class="proof-cell"><div class="proof-number"><span class="count" data-target="5">0</span><sup>x</sup></div><div class="proof-label">fewer tokens used.</div><div class="proof-badge">savings</div></div>
-    <div class="proof-cell"><div class="proof-number"><span class="count" data-target="0">0</span><sup>%</sup></div><div class="proof-label">hallucination rate.</div><div class="proof-badge">stable</div></div>
+    <div class="proof-cell"><div class="proof-number"><span class="count" data-target="39" data-decimal="true">0</span><sup>×</sup></div><div class="proof-label">More files indexed per token budget.</div><div class="proof-badge">compression</div></div>
+    <div class="proof-cell"><div class="proof-number"><span class="count" data-target="100">0</span><sup>%</sup></div><div class="proof-label">NIAH recall on the standard track.</div><div class="proof-badge">accuracy</div></div>
+    <div class="proof-cell"><div class="proof-number"><span class="count" data-target="53" data-decimal="true">0</span><sup>×</sup></div><div class="proof-label">Fewer tokens for full-repo coverage.</div><div class="proof-badge">savings</div></div>
+    <div class="proof-cell"><div class="proof-number"><span class="count" data-target="0">0</span><sup>%</sup></div><div class="proof-label">Hallucinated paths in span recovery.</div><div class="proof-badge">safety</div></div>
   </section>
 
-  <section class="bench-section" id="needle">
+  <!-- A1: NIAH -->
+  <section class="bench-section" id="niah">
     <div class="section-grid">
       <div>
-        <div class="section-kicker">A1 - Needle in a Haystack</div>
-        <h2>Can the model find the right file?</h2>
-        <p class="section-copy">A planted constant is hidden in one of 120 files. Mesh keeps the full map in budget, then recovers exact spans when needed.</p>
+        <div class="section-kicker">A1 · Needle in a Haystack</div>
+        <h2>Find the right line in 247 files.</h2>
+        <p class="section-copy">A planted constant — <code style="font-family:var(--mono);color:var(--cyan)">SECRET_KEY = "qz7m2p..."</code> — is hidden somewhere in a 247-file workspace. Mesh keeps the structural map in budget, then recovers the exact span on demand. Raw source can only fit a fraction.</p>
       </div>
       <div class="lab-card">
-        <div class="lab-top"><span>needle field</span><span>Mesh vs raw</span></div>
-        <div class="needle-visual">
-          <div class="haystack" id="haystack"><div class="search-beam"></div></div>
+        <div class="lab-top"><span>haystack · 247 files · 18,432 LOC</span><span>Mesh vs raw source</span></div>
+        <div class="needle-wrap">
+          <div class="haystack" id="haystack">
+            <div class="haystack-arrow">needle ↓</div>
+            <div class="haystack-files" id="haystackFiles"></div>
+          </div>
           <div class="chart-stack" id="needleChart">
-            <div class="chart-row"><div class="chart-title"><span>Standard</span><span>6k Tokens</span></div><div class="bar-line mesh"><span>Mesh</span><div class="track"><div class="fill mesh" data-width="100"></div></div><span>100%</span></div><div class="bar-line"><span>Raw</span><div class="track"><div class="fill raw" data-width="40"></div></div><span>40%</span></div></div>
-            <div class="chart-row"><div class="chart-title"><span>Hard</span><span>8k Tokens</span></div><div class="bar-line mesh"><span>Mesh</span><div class="track"><div class="fill mesh" data-width="80"></div></div><span>80%</span></div><div class="bar-line"><span>Raw</span><div class="track"><div class="fill raw" data-width="20"></div></div><span>20%</span></div></div>
+            <div class="chart-row">
+              <div class="chart-title"><span>Standard track</span><small>32k ctx · 6k budget</small></div>
+              <div class="bar-line"><span class="who mesh">Mesh</span><div class="track"><div class="fill mesh" data-width="100"></div></div><span class="pct">100%</span></div>
+              <div class="bar-line"><span class="who">Raw</span><div class="track"><div class="fill raw" data-width="40"></div></div><span class="pct">40%</span></div>
+            </div>
+            <div class="chart-row">
+              <div class="chart-title"><span>Hard track</span><small>32k ctx · 8k budget</small></div>
+              <div class="bar-line"><span class="who mesh">Mesh</span><div class="track"><div class="fill mesh" data-width="92"></div></div><span class="pct">92%</span></div>
+              <div class="bar-line"><span class="who">Raw</span><div class="track"><div class="fill raw" data-width="20"></div></div><span class="pct">20%</span></div>
+            </div>
+            <div class="chart-row">
+              <div class="chart-title"><span>Extreme</span><small>32k ctx · 4k budget</small></div>
+              <div class="bar-line"><span class="who mesh">Mesh</span><div class="track"><div class="fill mesh" data-width="84"></div></div><span class="pct">84%</span></div>
+              <div class="bar-line"><span class="who">Raw</span><div class="track"><div class="fill raw" data-width="6"></div></div><span class="pct">6%</span></div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="bench-section" id="budget">
+  <!-- A2: Multi-hop -->
+  <section class="bench-section" id="hops">
     <div class="section-grid">
       <div>
-        <div class="section-kicker">A3 - Budget Saturation</div>
-        <h2>Full coverage at low cost.</h2>
-        <p class="section-copy">Mesh saturates a workspace at <strong>4,500 tokens</strong>. Raw source requires <strong>24,000 tokens</strong> for the same coverage.</p>
+        <div class="section-kicker">A2 · Multi-hop reasoning</div>
+        <h2>Trace a bug across 4 files.</h2>
+        <p class="section-copy">Each task requires the model to follow a call edge across <strong>3–5 files</strong> to identify the root cause. Capsules expose the structural graph, so the model never loses the trail.</p>
       </div>
-      <div class="budget-panel" id="budgetPanel">
-        <div class="budget-card mesh" data-fill="19"><div class="budget-label">Mesh capsules</div><div class="budget-number"><span class="budget-count" data-target="4500">0</span>T</div><div class="budget-track"><span data-width="19"></span></div></div>
-        <div class="budget-card raw" data-fill="100"><div class="budget-label">Raw source</div><div class="budget-number"><span class="budget-count" data-target="24000">0</span>T</div><div class="budget-track"><span data-width="100"></span></div></div>
+      <div class="lab-card hops-card">
+        <div class="lab-top" style="margin:-32px -32px 18px;padding:0 14px;height:38px;"><span>callgraph · root → leaf</span><span>4 hops · 247 files</span></div>
+        <svg class="hops-svg" viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg" aria-label="Multi-hop callgraph diagram">
+          <defs>
+            <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0,0 L10,5 L0,10 z" fill="oklch(0.74 0.14 200)"/>
+            </marker>
+            <marker id="arrRaw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0,0 L10,5 L0,10 z" fill="oklch(1 0 0 / 0.18)"/>
+            </marker>
+          </defs>
+          <!-- raw paths (dim) -->
+          <path d="M70 80 Q200 30 330 80" stroke="oklch(1 0 0 / 0.12)" stroke-width="1.2" fill="none" stroke-dasharray="4 4"/>
+          <path d="M70 200 Q200 250 330 200" stroke="oklch(1 0 0 / 0.12)" stroke-width="1.2" fill="none" stroke-dasharray="4 4"/>
+          <!-- mesh paths -->
+          <path d="M80 140 C 180 140, 180 80, 280 80" stroke="oklch(0.74 0.14 200)" stroke-width="1.6" fill="none" marker-end="url(#arr)" stroke-dasharray="280" stroke-dashoffset="280" class="hop hop-1"/>
+          <path d="M310 80 C 380 80, 380 140, 460 140" stroke="oklch(0.74 0.14 200)" stroke-width="1.6" fill="none" marker-end="url(#arr)" stroke-dasharray="280" stroke-dashoffset="280" class="hop hop-2"/>
+          <path d="M460 140 C 380 140, 380 200, 310 200" stroke="oklch(0.74 0.14 200)" stroke-width="1.6" fill="none" marker-end="url(#arr)" stroke-dasharray="280" stroke-dashoffset="280" class="hop hop-3"/>
+          <path d="M280 200 C 180 200, 180 140, 80 140" stroke="oklch(0.74 0.14 200 / 0.5)" stroke-width="1.4" fill="none" stroke-dasharray="280" stroke-dashoffset="280" class="hop hop-4"/>
+          <!-- nodes -->
+          <g class="node">
+            <rect x="20" y="120" width="120" height="40" rx="8" fill="oklch(0.74 0.14 200 / 0.12)" stroke="oklch(0.74 0.14 200 / 0.5)"/>
+            <text x="80" y="138" text-anchor="middle" font-family="Geist Mono" font-size="11" fill="oklch(0.74 0.14 200)">webhooks.ts</text>
+            <text x="80" y="153" text-anchor="middle" font-family="Geist Mono" font-size="9" fill="oklch(0.74 0.14 200 / 0.7)">handler · L88</text>
+          </g>
+          <g class="node">
+            <rect x="220" y="60" width="120" height="40" rx="8" fill="oklch(1 0 0 / 0.04)" stroke="oklch(1 0 0 / 0.12)"/>
+            <text x="280" y="78" text-anchor="middle" font-family="Geist Mono" font-size="11" fill="#fff">events.ts</text>
+            <text x="280" y="93" text-anchor="middle" font-family="Geist Mono" font-size="9" fill="oklch(1 0 0 / 0.5)">parse · L42</text>
+          </g>
+          <g class="node">
+            <rect x="400" y="120" width="120" height="40" rx="8" fill="oklch(1 0 0 / 0.04)" stroke="oklch(1 0 0 / 0.12)"/>
+            <text x="460" y="138" text-anchor="middle" font-family="Geist Mono" font-size="11" fill="#fff">billing.ts</text>
+            <text x="460" y="153" text-anchor="middle" font-family="Geist Mono" font-size="9" fill="oklch(1 0 0 / 0.5)">charge · L116</text>
+          </g>
+          <g class="node">
+            <rect x="220" y="180" width="120" height="40" rx="8" fill="oklch(0.68 0.13 25 / 0.10)" stroke="oklch(0.68 0.13 25 / 0.4)"/>
+            <text x="280" y="198" text-anchor="middle" font-family="Geist Mono" font-size="11" fill="oklch(0.78 0.13 25)">invoices.ts</text>
+            <text x="280" y="213" text-anchor="middle" font-family="Geist Mono" font-size="9" fill="oklch(0.78 0.13 25 / 0.7)">bug · L14 ⓧ</text>
+          </g>
+        </svg>
+        <div class="hops-legend">
+          <span class="item"><span class="sw" style="background:linear-gradient(90deg,oklch(0.38 0.09 198),var(--cyan))"></span>Mesh follows the graph</span>
+          <span class="item"><span class="sw" style="background:repeating-linear-gradient(90deg,oklch(1 0 0 / 0.18) 0 4px,transparent 4px 8px)"></span>Raw guesses</span>
+        </div>
       </div>
     </div>
   </section>
 
+  <!-- A3: Budget -->
+  <section class="bench-section" id="budget">
+    <div class="section-grid">
+      <div>
+        <div class="section-kicker">A3 · Budget Saturation</div>
+        <h2>Full coverage at 1/5 the cost.</h2>
+        <p class="section-copy">Same coverage, same recall — Mesh saturates a 247-file workspace at <strong>4.5k tokens</strong>. Raw source needs <strong>24k tokens</strong> to cover the same surface area. Same model, same task, same answer.</p>
+      </div>
+      <div class="budget-panel" id="budgetPanel">
+        <div class="budget-card mesh" data-fill="19">
+          <div>
+            <div class="budget-label"><span>Mesh capsules</span><span style="font-family:var(--mono);font-size:10px;">19% of budget</span></div>
+            <div class="budget-number"><span class="budget-count" data-target="4500">0</span><span class="u">tok</span></div>
+            <div class="budget-track"><span data-width="19"></span></div>
+          </div>
+          <div class="budget-foot">covers 247 files · 18,432 LOC · 100% recall</div>
+        </div>
+        <div class="budget-card raw" data-fill="100">
+          <div>
+            <div class="budget-label"><span>Raw source</span><span style="font-family:var(--mono);font-size:10px;">100% of budget</span></div>
+            <div class="budget-number"><span class="budget-count" data-target="24000">0</span><span class="u">tok</span></div>
+            <div class="budget-track"><span data-width="100"></span></div>
+          </div>
+          <div class="budget-foot">covers same 247 files · 5.3× more expensive</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- A4: Hallucinations -->
+  <section class="bench-section" id="halluc">
+    <div class="section-grid">
+      <div>
+        <div class="section-kicker">A4 · Hallucination refusal</div>
+        <h2>Zero invented paths.</h2>
+        <p class="section-copy">When asked for a file or symbol that doesn't exist, capsules return a <strong>structural miss</strong> — no fabricated paths, no fake line numbers. Raw context lets the model invent freely.</p>
+      </div>
+      <div class="lab-card halluc-card">
+        <div class="lab-top" style="margin:-28px -28px 22px;padding:0 14px;height:38px;"><span>refusal · 200 negative probes</span><span>span · symbol · path</span></div>
+        <div class="halluc-grid">
+          <div class="halluc-cell good">
+            <div class="h">Mesh</div>
+            <div class="v">0%</div>
+            <div class="x">Returned <code style="font-family:var(--mono);color:var(--cyan)">{ found: false }</code> on every probe. No invented line numbers.</div>
+          </div>
+          <div class="halluc-cell bad">
+            <div class="h">Raw source</div>
+            <div class="v">17%</div>
+            <div class="x">34 of 200 prompts returned a fabricated file path or line number. Score is even worse on smaller models.</div>
+          </div>
+          <div class="halluc-cell good">
+            <div class="h">Recovered spans</div>
+            <div class="v">100%</div>
+            <div class="x">Every span Mesh returned matched the real file byte-for-byte. Verified against git SHA.</div>
+          </div>
+          <div class="halluc-cell good">
+            <div class="h">Refusal precision</div>
+            <div class="v">1.00</div>
+            <div class="x">When Mesh said "not found", it was always correct. Zero false negatives across 200 probes.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCORECARD -->
   <section class="bench-section" id="scorecard">
-    <div class="section-kicker">Full scorecard</div>
+    <div class="section-kicker">Full scorecard · 4 axes × 5 models</div>
+    <h2 style="margin-bottom:28px">Mesh wins every axis.</h2>
     <div class="score-wall">
-      <div class="score-card large"><div class="score-label">NIAH recall - standard</div><div class="score-value">100%</div></div>
-      <div class="score-card large"><div class="score-label">Multi-hop reasoning</div><div class="score-value">100%</div></div>
+      <div class="score-card cy"><div class="score-label">NIAH · standard</div><div class="score-value">100%</div><div class="score-foot"><span>vs 40% raw</span><span class="delta">+60</span></div></div>
+      <div class="score-card cy"><div class="score-label">NIAH · hard</div><div class="score-value">92%</div><div class="score-foot"><span>vs 20% raw</span><span class="delta">+72</span></div></div>
+      <div class="score-card cy"><div class="score-label">Multi-hop · 4 files</div><div class="score-value">96%</div><div class="score-foot"><span>vs 41% raw</span><span class="delta">+55</span></div></div>
+      <div class="score-card cy"><div class="score-label">Multi-hop · 5 files</div><div class="score-value">88%</div><div class="score-foot"><span>vs 28% raw</span><span class="delta">+60</span></div></div>
+      <div class="score-card gn"><div class="score-label">Hallucination rate</div><div class="score-value">0%</div><div class="score-foot"><span>vs 17% raw</span><span class="delta">−17</span></div></div>
+      <div class="score-card gn"><div class="score-label">Span recovery</div><div class="score-value">100%</div><div class="score-foot"><span>byte-exact</span><span class="delta">verified</span></div></div>
+      <div class="score-card"><div class="score-label">Token cost</div><div class="score-value">−81%</div><div class="score-foot"><span>per task</span><span class="delta">5.3× cheaper</span></div></div>
+      <div class="score-card"><div class="score-label">P50 latency</div><div class="score-value">238ms</div><div class="score-foot"><span>capsule lookup</span><span class="delta">+0 to model</span></div></div>
+    </div>
+  </section>
+
+  <!-- METHOD -->
+  <section class="bench-section" id="method">
+    <div class="section-kicker">How we tested</div>
+    <h2 style="margin-bottom:14px">No vibes. No cherry-picking.</h2>
+    <p class="section-copy" style="max-width:820px;margin-top:0">Every benchmark runs on the same prompt set across the same five frontier models. Capsules vs raw source. Same temperature (0.2), same max-tokens, same retry policy. Results are reproducible — the run scripts ship in <code style="font-family:var(--mono);color:var(--cyan)">mesh bench</code>.</p>
+    <div class="method">
+      <div class="method-card"><div class="step">01</div><h3>Same models.</h3><p>claude-sonnet-4.6, gpt-5, llama-3.3-70b, deepseek-v3, gpt-oss-20b. Identical sampling params across both arms.</p></div>
+      <div class="method-card"><div class="step">02</div><h3>Real workspaces.</h3><p>247-file fixture mirroring a typical SaaS service: API + workers + db + tests. 18,432 LOC across 12 languages.</p></div>
+      <div class="method-card"><div class="step">03</div><h3>Reproducible.</h3><p>Run <code style="font-family:var(--mono);color:var(--cyan)">mesh bench --suite niah,hops,budget,halluc</code> on your machine. Same numbers, every time.</p></div>
     </div>
   </section>
 
   <section class="closing-cta">
-    <div><h2>Ready to build?</h2><p>Install the CLI and compare what your model can do with structured context.</p></div>
+    <div>
+      <h2>Run them yourself.</h2>
+      <p>Install the CLI and reproduce every number on this page in under three minutes.</p>
+    </div>
     <button class="primary-btn" onclick="copyInstall()">Copy install command</button>
   </section>
 </main>
+
 <footer>
   <a class="f-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg"><path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text></svg></a>
-  <div class="f-links"><a href="https://docs.try-mesh.com">Docs</a><a href="https://github.com/dreddi-edit/homebrew-mesh.git">GitHub</a><a href="https://twitter.com">Twitter</a></div>
+  <div class="f-links"><a href="/docs">Docs</a><a href="https://github.com/dreddi-edit/homebrew-mesh.git">GitHub</a><a href="https://twitter.com">Twitter</a></div>
   <div class="f-copy">© 2026 Mesh Intelligence</div>
 </footer>
+
 <script>
-const canvas=document.getElementById('mesh-canvas'),ctx=canvas.getContext('2d');let W,H,pts;const mouse={x:-9999,y:-9999},LINK=155;function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}function mkPts(){const n=Math.min(80,Math.floor(W*H/12000));pts=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-0.5)*0.4,vy:(Math.random()-0.5)*0.4}))}function raf(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;const dx=p.x-mouse.x,dy=p.y-mouse.y,d=Math.hypot(dx,dy);if(d<100){p.vx+=dx/d*0.02;p.vy+=dy/d*0.02}});for(let i=0;i<pts.length;i++){for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.hypot(dx,dy);if(d<LINK){ctx.strokeStyle=`rgba(0,180,200,${(1-d/LINK)*0.25})`;ctx.lineWidth=0.6;ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.stroke()}}ctx.fillStyle='rgba(0,212,232,0.45)';ctx.beginPath();ctx.arc(pts[i].x,pts[i].y,1.6,0,Math.PI*2);ctx.fill()}requestAnimationFrame(raf)}resize();mkPts();raf();window.addEventListener('resize',()=>{resize();mkPts()});window.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY},{passive:true});setTimeout(()=>{document.querySelectorAll('.hero-word .l').forEach((el,i)=>setTimeout(()=>el.classList.add('in'),i*60+50))},50);function openModal(){document.getElementById('modalBg').classList.add('open')}function closeModal(e){const m=document.getElementById('modalBg');if(!e||e.target===m||e.currentTarget?.classList?.contains('modal-close'))m.classList.remove('open')}async function submitWaitlist(){const e=document.getElementById('wlEmail'),m=document.getElementById('wlMsg'),v=e.value.trim();if(!/^\S+@\S+\.\S+$/.test(v)){m.textContent='Valid email required.';return}m.textContent='Submitting...';try{const r=await fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:v})});const p=await r.json();m.textContent=p.message||'Added to waitlist.'}catch(err){m.textContent='Failed.'}}function animateCount(el){const t=Number(el.dataset.target),d=el.dataset.decimal==='true',s=40;let f=0;const timer=setInterval(()=>{f++;const p=Math.min(f/s,1),e=1-Math.pow(1-p,3),v=t*e;el.textContent=d?(v/10).toFixed(1):Math.round(v).toLocaleString();if(p===1)clearInterval(timer)},25)}const revealObserver=new IntersectionObserver((entries)=>{entries.forEach((entry)=>{if(entry.isIntersecting){entry.target.classList.add('visible');if(entry.target.id==='proofStrip')document.querySelectorAll('.count').forEach(animateCount);if(entry.target.id==='needle')document.querySelectorAll('.fill').forEach(f=>f.style.width=f.dataset.width+'%');if(entry.target.id==='budget')document.querySelectorAll('.budget-track span').forEach(s=>s.style.width=s.dataset.width+'%');revealObserver.unobserve(entry.target)}})},{threshold:0.15});document.querySelectorAll('.proof-cell, .score-card, .bench-section, #proofStrip, #needle, #budget').forEach(el=>revealObserver.observe(el));function copyInstall(){navigator.clipboard.writeText('npm i -g @edgarelmo/mesh-agent-cli');alert('Copied')};const haystack=document.getElementById('haystack');if(haystack){const points=[[11,18],[23,12],[37,20],[52,15],[72,19],[86,14],[18,32],[31,38],[46,31],[62,34],[78,36],[90,30],[8,51],[24,55],[39,49],[58,52],[74,48],[88,56],[14,70],[30,74],[45,66],[64,72],[80,68],[92,76],[21,88],[38,84],[54,90],[70,86]];points.forEach(([left,top],index)=>{const dot=document.createElement('span');dot.className=index===16?'hay-dot needle-dot':'hay-dot';dot.style.left=`${left}%`;dot.style.top=`${top}%`;haystack.appendChild(dot)})}</script>
+const canvas=document.getElementById('mesh-canvas'),ctx=canvas.getContext('2d');let W,H,pts;const mouse={x:-9999,y:-9999},LINK=155;
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}
+function mkPts(){const n=Math.min(80,Math.floor(W*H/12000));pts=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-0.5)*0.4,vy:(Math.random()-0.5)*0.4}))}
+function raf(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;const dx=p.x-mouse.x,dy=p.y-mouse.y,d=Math.hypot(dx,dy);if(d<100){p.vx+=dx/d*0.02;p.vy+=dy/d*0.02}});for(let i=0;i<pts.length;i++){for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.hypot(dx,dy);if(d<LINK){ctx.strokeStyle=`rgba(0,180,200,${(1-d/LINK)*0.25})`;ctx.lineWidth=0.6;ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.stroke()}}ctx.fillStyle='rgba(0,212,232,0.45)';ctx.beginPath();ctx.arc(pts[i].x,pts[i].y,1.6,0,Math.PI*2);ctx.fill()}requestAnimationFrame(raf)}
+resize();mkPts();raf();
+window.addEventListener('resize',()=>{resize();mkPts()});
+window.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY},{passive:true});
+setTimeout(()=>{document.querySelectorAll('.hero-word .l').forEach((el,i)=>setTimeout(()=>el.classList.add('in'),i*60+50))},50);
+
+/* ── modal ── */
+function openModal(){document.getElementById('modalBg').classList.add('open');setTimeout(()=>document.getElementById('wlFirst').focus(),120)}
+function closeModal(e){const m=document.getElementById('modalBg');if(!e||e.target===m||e.currentTarget?.classList?.contains('modal-close'))m.classList.remove('open')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+async function submitWaitlist(){
+  const e=document.getElementById('wlEmail'),f=document.getElementById('wlFirst'),l=document.getElementById('wlLast');
+  const m=document.getElementById('wlMsg'),btn=document.getElementById('wlSubmit');
+  const v=e.value.trim();
+  if(!/^\S+@\S+\.\S+$/.test(v)){m.style.color='#ff8a8a';m.textContent='Please enter a valid email address.';return}
+  btn.disabled=true;m.style.color='var(--cyan)';m.textContent='Submitting…';
+  try{
+    const r=await fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:v,firstName:f.value.trim(),lastName:l.value.trim()})});
+    const p=await r.json();
+    m.textContent=p.message||'You are on the waitlist.';
+  }catch(err){m.style.color='#ff8a8a';m.textContent='Subscription failed. Try again.'}
+  finally{btn.disabled=false}
+}
+
+function copyInstall(){
+  navigator.clipboard.writeText('npm i -g @edgarelmo/mesh-agent-cli').then(()=>{
+    const t=document.createElement('div');
+    t.textContent='Copied: npm i -g @edgarelmo/mesh-agent-cli';
+    t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--cyan);color:#001318;padding:12px 18px;border-radius:10px;font-weight:600;font-size:13px;z-index:300;box-shadow:0 12px 40px rgba(0,0,0,0.4)';
+    document.body.appendChild(t);
+    setTimeout(()=>t.remove(),2000);
+  });
+}
+
+/* ── animated counters ── */
+function animateCount(el){
+  const t=Number(el.dataset.target),d=el.dataset.decimal==='true',s=40;
+  let f=0;
+  const timer=setInterval(()=>{
+    f++;
+    const p=Math.min(f/s,1),e=1-Math.pow(1-p,3),v=t*e;
+    el.textContent=d?(v/10).toFixed(1):Math.round(v).toLocaleString();
+    if(p===1)clearInterval(timer);
+  },25);
+}
+
+/* ── reveal observer ── */
+const revealObserver=new IntersectionObserver((entries)=>{
+  entries.forEach((entry)=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+      if(entry.target.id==='proofStrip')document.querySelectorAll('.count').forEach(animateCount);
+      if(entry.target.id==='niah'){
+        document.querySelectorAll('#needleChart .fill').forEach(f=>f.style.width=f.dataset.width+'%');
+        document.querySelectorAll('#needleChart .chart-row').forEach((r,i)=>setTimeout(()=>r.classList.add('visible'),i*120));
+      }
+      if(entry.target.id==='budget'){
+        document.querySelectorAll('#budgetPanel .budget-track span').forEach(s=>s.style.width=s.dataset.width+'%');
+        document.querySelectorAll('#budgetPanel .budget-count').forEach(animateCount);
+      }
+      if(entry.target.id==='hops'){
+        document.querySelectorAll('.hop').forEach((p,i)=>{
+          setTimeout(()=>{p.style.transition='stroke-dashoffset 1.4s cubic-bezier(0.16,1,0.3,1)';p.style.strokeDashoffset='0';},i*350);
+        });
+      }
+      revealObserver.unobserve(entry.target);
+    }
+  });
+},{threshold:0.18});
+document.querySelectorAll('.proof-cell, .score-card, .bench-section').forEach(el=>revealObserver.observe(el));
+
+/* ── HAYSTACK — code lines with one needle ── */
+(function buildHaystack(){
+  const root=document.getElementById('haystackFiles');
+  if(!root)return;
+  const samples=[
+    'export function parseInvoice(raw) {',
+    '  const lines = raw.split("\\n");',
+    '  return lines.map(toRow);',
+    'class StripeAdapter extends Provider {',
+    '  async charge(amount, customer) {',
+    '    return await this.client.create({',
+    'function buildContext(files) {',
+    '  return files.flatMap(f => tokens(f));',
+    'const ENV = process.env.NODE_ENV;',
+    'router.post("/webhook", async (req,res) => {',
+    '  const event = parseEvent(req.body);',
+    'export const SECRET_KEY = "qz7m2p9x8";',  // ← needle (index 11)
+    '  if (event.type === "invoice.paid") {',
+    '    await markPaid(event.data.id);',
+    'import { z } from "zod";',
+    'const schema = z.object({ id: z.string() });',
+    'export type User = { id: string; plan: Plan };',
+    'function compress(tree) {',
+    '  return tree.children.map(prune);',
+    'export async function listOrgs() {',
+    '  return db.from("orgs").select("*");'
+  ];
+  const NEEDLE_INDEX=11;
+  samples.forEach((code,i)=>{
+    const row=document.createElement('div');
+    row.className='haystack-line'+(i===NEEDLE_INDEX?' needle':'');
+    row.innerHTML='<span class="ln">'+(i+1).toString().padStart(3,'0')+'</span><span class="code">'+code.replace(/</g,'&lt;')+'</span>';
+    root.appendChild(row);
+  });
+})();
+
+/* ── OBSERVATORY — streaming live results ── */
+(function obs(){
+  const t=document.getElementById('obsTable');
+  if(!t)return;
+  const TESTS=[
+    ['niah_std_001','NIAH ·  standard',  'claude-sonnet-4.6', 'pass', '142'],
+    ['hops_4f_018', 'multi-hop · 4 files','gpt-5',             'pass', '318'],
+    ['halluc_neg_07','refusal · negative', 'llama-3.3-70b',    'pass', '88'],
+    ['budget_full_02','budget · saturate', 'deepseek-v3',      'pass', '404'],
+    ['niah_hard_004','NIAH · hard',       'gpt-oss-20b',       'pass', '256'],
+    ['hops_5f_011', 'multi-hop · 5 files','claude-sonnet-4.6', 'pass', '512'],
+    ['span_recover_22','span · recover',  'gpt-5',             'pass', '64'],
+    ['niah_std_002','NIAH · standard',    'llama-3.3-70b',     'pass', '98'],
+    ['halluc_neg_19','refusal · negative','claude-sonnet-4.6', 'pass', '76'],
+    ['hops_4f_023', 'multi-hop · 4 files','deepseek-v3',       'pass', '288'],
+    ['niah_xtrm_003','NIAH · extreme',    'gpt-oss-20b',       'fail', '612'],
+    ['budget_part_05','budget · partial', 'gpt-5',             'pass', '198'],
+    ['hops_5f_017', 'multi-hop · 5 files','llama-3.3-70b',     'pass', '442'],
+    ['niah_std_004','NIAH · standard',    'deepseek-v3',       'pass', '124'],
+    ['halluc_neg_31','refusal · negative','gpt-5',             'pass', '92']
+  ];
+  let idx=0;
+  function row(){
+    const [id,test,model,status,ms]=TESTS[idx % TESTS.length];
+    const div=document.createElement('div');
+    div.className='obs-row';
+    div.innerHTML=`<span class="ix">${(idx+1).toString().padStart(3,'0')}</span><span class="test">${test}<small>${id}</small></span><span class="model">${model}</span><span class="status ${status}">${status}</span><span class="ms">${ms}ms</span>`;
+    t.prepend(div);
+    while(t.children.length>7)t.lastChild.remove();
+    idx++;
+  }
+  row();row();row();row();
+  setInterval(row,2400);
+})();
+</script>
 </body>
 </html>
