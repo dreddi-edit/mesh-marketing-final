@@ -16,7 +16,8 @@
   ],
   "rewrites": [
     { "source": "/api/:path*", "destination": "/api/:path*" },
-    { "source": "/animation", "destination": "/mesh-animation.html" }
+    { "source": "/animation", "destination": "/mesh-animation.html" },
+    { "source": "/mesh-animation", "destination": "/mesh-animation.html" }
   ],
   "headers": [
     {
