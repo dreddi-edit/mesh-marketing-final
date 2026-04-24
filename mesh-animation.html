@@ -465,11 +465,7 @@ function EndCard() {
 
   return (
     <div style={{ position:'absolute', inset:0, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', opacity, background: C.dark, gap:24 }}>
-      <pre style={{ fontFamily:'Geist Mono', fontSize:11, lineHeight:1.3, textAlign:'center', color:C.cyan }}>
-        <span style={{ color:C.magenta }}>{'‹ '}</span>
-        {LOGO_LINES.join('\n')}
-        <span style={{ color:C.magenta }}>{' ›'}</span>
-      </pre>
+      <img src="assets/brand/lockup-color.svg" alt="Mesh" style={{ width:220, height:'auto' }} />
       <div style={{ fontFamily:'DM Sans', fontSize:22, fontWeight:300, color:'rgba(255,255,255,0.35)', letterSpacing:'0.02em' }}>
         <span style={{ color:'rgba(255,255,255,0.75)' }}>Four surfaces.</span> One engine.
       </div>

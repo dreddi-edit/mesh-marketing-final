@@ -28,7 +28,8 @@
       backdrop-filter: blur(20px);
       border-bottom: 1px solid oklch(1 0 0 / 0.05);
     }
-    .nav-logo { font-family: var(--mono); font-size: 16px; color: var(--cyan); text-decoration: none; }
+    .nav-logo { display: inline-flex; align-items: center; text-decoration: none; }
+    .nav-logo img { display: block; width: auto; height: 25px; }
     .nav-right { display: flex; gap: 6px; }
     .nav-right a { font-size: 13px; color: oklch(1 0 0 / 0.38); text-decoration: none; padding: 6px 14px; border-radius: 6px; border: 1px solid transparent; transition: all 0.2s; }
     .nav-right a:hover { color: var(--white); border-color: oklch(1 0 0 / 0.12); }
@@ -202,8 +203,8 @@
       display: flex; align-items: center; justify-content: space-between;
       border-top: 1px solid oklch(1 0 0 / 0.05);
     }
-    .f-logo { font-family: var(--mono); font-size: 14px; color: oklch(1 0 0/0.28); }
-    .f-logo span { color: var(--cyan); }
+    .f-logo { display: inline-flex; align-items: center; text-decoration: none; }
+    .f-logo img { display: block; width: auto; height: 22px; }
     .f-links { display: flex; gap: 24px; }
     .f-links a { font-size: 13px; color: oklch(1 0 0/0.22); text-decoration: none; transition: color 0.2s; }
     .f-links a:hover { color: oklch(1 0 0/0.6); }
@@ -225,7 +226,7 @@
 </div>
 
 <nav>
-  <a class="nav-logo" href="index.html">mesh.</a>
+  <a class="nav-logo" href="index.html"><img src="assets/brand/lockup-color.svg" alt="Mesh"></a>
   <div class="nav-right">
     <a href="features.html">Features</a>
     <a href="quickstart.html" class="nav-active">Quickstart</a>
@@ -350,7 +351,7 @@
 </div>
 
 <footer>
-  <div class="f-logo">mesh<span>.</span></div>
+  <a class="f-logo" href="index.html"><img src="assets/brand/lockup-color.svg" alt="Mesh"></a>
   <div class="f-links">
     <a href="index.html">Home</a>
     <a href="features.html">Features</a>
