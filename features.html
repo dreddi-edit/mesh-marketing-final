@@ -71,13 +71,9 @@
 
     .site-nav {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
       padding: 22px 56px;
       background: oklch(0.078 0.038 200 / 0.82);
       backdrop-filter: blur(12px);
@@ -87,12 +83,9 @@
     .nav-logo img { display: block; width: auto; height: 25px; }
     .nav-right { display: flex; gap: 6px; align-items: center; }
     .nav-right a {
-      font-size: 13px;
-      color: oklch(1 0 0 / 0.42);
-      text-decoration: none;
-      padding: 6px 14px;
-      border-radius: 6px;
-      border: 1px solid transparent;
+      font-size: 13px; color: oklch(1 0 0 / 0.42);
+      text-decoration: none; padding: 6px 14px;
+      border-radius: 6px; border: 1px solid transparent;
       transition: color 0.2s, border-color 0.2s, background 0.2s;
     }
     .nav-right a:hover { color: var(--ink); border-color: oklch(1 0 0 / 0.12); }
@@ -114,7 +107,7 @@
       min-height: 100vh;
       padding-top: 132px;
       display: grid;
-      grid-template-columns: minmax(0, 1.02fr) minmax(340px, 0.78fr);
+      grid-template-columns: minmax(0, 1.1fr) minmax(340px, 0.8fr);
       gap: 64px;
       align-items: center;
       position: relative;
@@ -122,67 +115,48 @@
     
     .hero-word {
       font-family: var(--display);
-      font-style: italic;
-      font-weight: 900;
-      font-size: clamp(80px, 12vw, 150px);
-      line-height: 0.85;
+      font-style: italic; font-weight: 900;
+      font-size: clamp(60px, 9vw, 130px);
+      line-height: 0.9;
       letter-spacing: -0.03em;
       color: var(--white);
-      display: flex;
-      flex-wrap: wrap;
+      display: block;
       user-select: none;
+      overflow: visible;
     }
-    .hero-word span { color: var(--cyan); }
+    .hero-word div { display: flex; flex-wrap: nowrap; align-items: baseline; }
+    .hero-word .cyan-line { color: var(--cyan); }
     .hero-word .l {
       display: inline-block;
-      opacity: 0; transform: translateY(40px);
-      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1);
     }
     .hero-word .l.in { opacity: 1; transform: none; }
 
     .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-family: var(--mono);
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--cyan);
-      margin-bottom: 22px;
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: var(--mono); font-size: 11px;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--cyan); margin-bottom: 22px;
       opacity: 0; animation: up 0.8s 0.2s ease forwards;
     }
-    .eyebrow::before {
-      content: "";
-      width: 26px;
-      height: 1px;
-      background: var(--cyan);
-    }
+    .eyebrow::before { content: ""; width: 26px; height: 1px; background: var(--cyan); }
     @keyframes up { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:none} }
 
     .hero-copy {
-      margin-top: 30px;
-      max-width: 610px;
-      font-size: 19px;
-      font-weight: 300;
-      line-height: 1.72;
+      margin-top: 30px; max-width: 610px;
+      font-size: 18px; font-weight: 300; line-height: 1.7;
       color: var(--muted);
       opacity: 0; animation: up 0.8s 0.6s ease forwards;
     }
     .hero-copy strong { color: var(--ink); font-weight: 500; }
     .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 34px; opacity: 0; animation: up 0.8s 0.8s ease forwards; }
+
     .primary-btn, .secondary-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 44px;
-      padding: 0 18px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 700;
-      text-decoration: none;
-      border: 1px solid transparent;
-      cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center;
+      min-height: 44px; padding: 0 18px; border-radius: 8px;
+      font-size: 14px; font-weight: 700; text-decoration: none;
+      border: 1px solid transparent; cursor: pointer;
       font-family: var(--sans);
       transition: transform 0.2s, border-color 0.2s, background 0.2s;
     }
@@ -192,607 +166,121 @@
     .secondary-btn:hover { border-color: var(--line-strong); }
 
     .surface-map {
-      border: 1px solid var(--line);
-      border-radius: 8px;
+      border: 1px solid var(--line); border-radius: 8px;
       background: linear-gradient(180deg, oklch(0.13 0.05 200 / 0.92), oklch(0.08 0.04 200 / 0.92));
       box-shadow: 0 32px 90px oklch(0 0 0 / 0.28);
-      overflow: hidden;
-      position: relative;
-    }
-    .surface-map::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 68% 28%, var(--cyan-soft), transparent 42%);
-      pointer-events: none;
+      overflow: hidden; position: relative;
     }
     .map-top {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 18px;
-      border-bottom: 1px solid var(--line);
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--dim);
+      position: relative; display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 18px; border-bottom: 1px solid var(--line);
+      font-family: var(--mono); font-size: 10px; color: var(--dim);
     }
-    .map-pulse {
-      display: inline-flex;
-      gap: 6px;
-      align-items: center;
-      color: var(--green);
-    }
-    .map-pulse::before {
-      content: "";
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 18px var(--green);
-    }
-    .map-body {
-      position: relative;
-      padding: 28px 24px 24px;
-      display: grid;
-      gap: 12px;
-    }
+    .map-pulse { display: inline-flex; gap: 6px; align-items: center; color: var(--green); }
+    .map-pulse::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 18px var(--green); }
+    .map-body { position: relative; padding: 28px 24px 24px; display: grid; gap: 12px; }
     .map-row {
-      display: grid;
-      grid-template-columns: 48px 1fr auto;
-      gap: 14px;
-      align-items: center;
-      padding: 16px;
-      border: 1px solid oklch(1 0 0 / 0.07);
-      border-radius: 8px;
-      background: oklch(1 0 0 / 0.028);
+      display: grid; grid-template-columns: 48px 1fr auto; gap: 14px;
+      align-items: center; padding: 16px; border: 1px solid oklch(1 0 0 / 0.07);
+      border-radius: 8px; background: oklch(1 0 0 / 0.028);
+      position: relative; --x: 50%; --y: 50%;
     }
+    .map-row::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(300px circle at var(--x) var(--y), oklch(0.74 0.14 200 / 0.08), transparent 40%);
+      opacity: 0; transition: opacity 0.3s; pointer-events: none;
+    }
+    .map-row:hover::before { opacity: 1; }
     .map-num {
-      font-family: var(--display);
-      font-size: 35px;
-      font-style: italic;
-      font-weight: 900;
-      color: oklch(1 0 0 / 0.18);
-      line-height: 1;
+      width: 32px; height: 32px; display: grid; place-items: center;
+      border: 1px solid var(--line); border-radius: 50%;
+      color: var(--cyan); font-family: var(--mono); font-size: 12px;
     }
-    .map-title { font-size: 15px; font-weight: 700; }
-    .map-desc { margin-top: 3px; font-size: 12px; color: var(--dim); line-height: 1.45; }
-    .map-chip {
-      font-family: var(--mono);
-      font-size: 10px;
-      color: var(--cyan);
-      padding: 5px 8px;
-      border: 1px solid var(--line-strong);
-      border-radius: 999px;
-      background: var(--cyan-soft);
-      white-space: nowrap;
+    .map-title { color: var(--ink); font-size: 15px; font-weight: 700; }
+    .map-copy { margin-top: 4px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .map-badge {
+      padding: 5px 9px; border-radius: 999px; background: oklch(1 0 0 / 0.035);
+      border: 1px solid var(--line); color: var(--dim);
+      font-family: var(--mono); font-size: 10px; white-space: nowrap;
     }
 
-    .engine-band {
-      margin: 24px auto 0;
-      border-top: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-      background:
-        linear-gradient(90deg, oklch(0.10 0.042 200 / 0.95), oklch(0.075 0.038 200 / 0.95)),
-        radial-gradient(circle at 76% 45%, oklch(0.74 0.14 200 / 0.10), transparent 32rem);
-    }
-    .engine-inner {
-      width: min(1180px, calc(100% - 64px));
-      margin: 0 auto;
-      padding: 84px 0;
-      display: grid;
-      grid-template-columns: 0.82fr 1.18fr;
-      gap: 58px;
-      align-items: center;
-    }
-    .section-kicker {
-      font-family: var(--mono);
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--cyan);
-      margin-bottom: 16px;
-    }
-    h2 {
-      font-family: var(--display);
-      font-size: 74px;
-      font-style: italic;
-      font-weight: 900;
-      line-height: 0.92;
-    }
-    .section-copy {
-      margin-top: 22px;
-      color: var(--muted);
-      font-size: 16px;
-      font-weight: 300;
-      line-height: 1.75;
-    }
-    .section-copy strong { color: var(--ink); font-weight: 500; }
-    .compression-visual {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-    }
-    .code-panel, .capsule-panel {
-      min-height: 330px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: oklch(0.045 0.032 204 / 0.84);
-      overflow: hidden;
-    }
-    .panel-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 13px 14px;
-      border-bottom: 1px solid var(--line);
-      font-family: var(--mono);
-      font-size: 10px;
-      color: var(--dim);
-    }
-    .panel-body {
-      padding: 18px;
-      font-family: var(--mono);
-      font-size: 12px;
-      line-height: 1.9;
-      color: oklch(1 0 0 / 0.56);
-    }
-    .code-line { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .ghost { color: oklch(1 0 0 / 0.20); }
-    .cyan { color: var(--cyan); }
-    .green { color: var(--green); }
-    .amber { color: var(--amber); }
-    .capsule-panel .panel-body { display: grid; gap: 12px; }
-    .capsule-row {
-      padding: 12px;
-      border: 1px solid oklch(0.74 0.14 200 / 0.16);
-      border-radius: 7px;
-      background: oklch(0.74 0.14 200 / 0.055);
-    }
-    .capsule-label { font-size: 10px; color: var(--cyan); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 5px; }
-    .capsule-text { color: oklch(1 0 0 / 0.68); }
-    .metric-strip {
-      grid-column: 1 / -1;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-    }
-    .metric {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 18px;
-      background: oklch(1 0 0 / 0.025);
-    }
-    .metric-value {
-      font-family: var(--display);
-      font-size: 48px;
-      font-style: italic;
-      font-weight: 900;
-      line-height: 1;
-      color: var(--cyan);
-    }
-    .metric-label { margin-top: 6px; font-size: 12px; color: var(--dim); }
-
-    .surface-nav {
-      width: min(1180px, calc(100% - 64px));
-      margin: 46px auto 0;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-    }
-    .surface-link {
-      padding: 14px 16px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: oklch(1 0 0 / 0.026);
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 13px;
-      transition: border-color 0.2s, background 0.2s, color 0.2s;
-    }
-    .surface-link strong {
-      display: block;
-      margin-bottom: 4px;
-      color: var(--ink);
-      font-family: var(--mono);
-      font-size: 11px;
-    }
-    .surface-link:hover { border-color: var(--line-strong); background: var(--cyan-soft); color: var(--ink); }
-
+    .surfaces-section { padding: 100px 0; }
     .feature-surface {
-      width: min(1180px, calc(100% - 64px));
-      margin: 28px auto 0;
-      padding: 58px;
-      display: grid;
-      grid-template-columns: 0.86fr 1.14fr;
-      gap: 54px;
-      align-items: center;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background:
-        linear-gradient(135deg, oklch(1 0 0 / 0.052), transparent 44%),
-        oklch(0.10 0.042 200 / 0.78);
-      box-shadow: 0 28px 100px oklch(0 0 0 / 0.18);
-      opacity: 0;
-      transform: translateY(26px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
+      width: min(1180px, calc(100% - 64px)); margin: 0 auto 64px;
+      border: 1px solid var(--line); border-radius: 12px;
+      background: oklch(0.10 0.046 200 / 0.6);
+      display: grid; grid-template-columns: 1fr 1fr; overflow: hidden;
+      opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16,1,0.3,1);
     }
     .feature-surface.visible { opacity: 1; transform: none; }
-    .surface-copy h3 {
-      font-family: var(--display);
-      font-size: 72px;
-      font-style: italic;
-      font-weight: 900;
-      line-height: 0.92;
-      margin-bottom: 22px;
-    }
-    .surface-copy p {
-      color: var(--muted);
-      font-size: 16px;
-      font-weight: 300;
-      line-height: 1.75;
-    }
-    .surface-copy p strong { color: var(--ink); font-weight: 500; }
-    .feature-points { display: grid; gap: 10px; margin-top: 26px; }
-    .point {
-      display: grid;
-      grid-template-columns: 9px 1fr;
-      gap: 12px;
-      align-items: start;
-      color: oklch(1 0 0 / 0.72);
-      font-size: 14px;
-      line-height: 1.55;
-    }
-    .point::before {
-      content: "";
-      width: 9px;
-      height: 9px;
-      margin-top: 7px;
-      border-radius: 50%;
-      background: var(--cyan);
-      box-shadow: 0 0 16px oklch(0.74 0.14 200 / 0.6);
-    }
-    .surface-tag {
-      display: inline-flex;
-      margin-top: 26px;
-      padding: 8px 11px;
-      border-radius: 6px;
-      border: 1px solid var(--line-strong);
-      background: var(--cyan-soft);
-      color: var(--cyan);
-      font-family: var(--mono);
-      font-size: 11px;
+    .fs-content { padding: 64px; }
+    .fs-kicker { color: var(--cyan); font-family: var(--mono); font-size: 11px; text-transform: uppercase; margin-bottom: 16px; letter-spacing: 0.1em; }
+    .fs-title { font-family: var(--display); font-size: 64px; font-style: italic; font-weight: 900; line-height: 0.95; margin-bottom: 24px; }
+    .fs-copy { color: var(--muted); font-size: 17px; line-height: 1.7; margin-bottom: 32px; }
+    .fs-visual {
+      background: linear-gradient(135deg, oklch(0.12 0.05 200), oklch(0.06 0.03 204));
+      border-left: 1px solid var(--line); position: relative; display: grid; place-items: center;
     }
 
-    .surface-demo {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: oklch(0.046 0.034 204 / 0.88);
-      overflow: hidden;
-      min-height: 390px;
-      box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.04);
-    }
-    .window-bar {
-      height: 42px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 0 16px;
-      border-bottom: 1px solid var(--line);
-      background: oklch(1 0 0 / 0.035);
-      font-family: var(--mono);
-      font-size: 10px;
-      color: var(--dim);
-    }
-    .dot { width: 10px; height: 10px; border-radius: 50%; background: oklch(0.72 0.12 24); }
-    .dot:nth-child(2) { background: var(--amber); }
-    .dot:nth-child(3) { background: var(--green); }
-    .window-title { margin-left: auto; }
-
-    .terminal-body {
-      padding: 24px;
-      font-family: var(--mono);
-      font-size: 13px;
-      line-height: 1.85;
-      color: oklch(1 0 0 / 0.68);
-    }
     .ascii-logo {
-      margin-bottom: 24px;
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 13px;
-      line-height: 1;
-      letter-spacing: 0;
-      white-space: pre;
-      color: var(--cyan);
-      font-weight: bold;
+      margin-bottom: 24px; font-family: 'Courier New', Courier, monospace;
+      font-size: 13px; line-height: 1; letter-spacing: 0;
+      white-space: pre; color: var(--cyan); font-weight: bold;
     }
+
+    /* Terminal UI */
+    .terminal-visual {
+      width: 85%; background: #050b12; border: 1px solid var(--line); border-radius: 10px;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.5); overflow: hidden;
+    }
+    .window-bar { background: oklch(1 0 0 / 0.03); padding: 12px 16px; display: flex; gap: 7px; border-bottom: 1px solid var(--line); }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: #ff5f57; }
+    .dot:nth-child(2) { background: #febc2e; }
+    .dot:nth-child(3) { background: #28c840; }
+    .terminal-body { padding: 24px; font-family: var(--mono); font-size: 13px; line-height: 1.85; color: oklch(1 0 0 / 0.68); }
     .terminal-prompt { color: var(--cyan); }
     .terminal-muted { color: oklch(1 0 0 / 0.28); }
-    .terminal-success { color: var(--green); }
-    .terminal-error { color: oklch(0.70 0.11 25); }
-
-    .ide-body {
-      display: grid;
-      grid-template-columns: 150px 1fr 210px;
-      min-height: 348px;
-      font-family: var(--mono);
-      font-size: 11px;
-    }
-    .ide-sidebar {
-      border-right: 1px solid var(--line);
-      padding: 16px 12px;
-      color: var(--dim);
-      background: oklch(1 0 0 / 0.022);
-    }
-    .file-row {
-      padding: 6px 8px;
-      border-radius: 5px;
-      margin-bottom: 3px;
-      color: oklch(1 0 0 / 0.54);
-    }
-    .file-row.active { color: var(--cyan); background: var(--cyan-soft); }
-    .ide-editor {
-      padding: 18px;
-      line-height: 1.9;
-      border-right: 1px solid var(--line);
-      color: oklch(1 0 0 / 0.62);
-      overflow: hidden;
-    }
-    .ide-chat {
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      color: var(--muted);
-    }
-    .chat-bubble {
-      padding: 10px;
-      border-radius: 7px;
-      background: oklch(1 0 0 / 0.035);
-      border: 1px solid var(--line);
-      line-height: 1.5;
-    }
-    .chat-bubble.agent { border-color: var(--line-strong); color: oklch(1 0 0 / 0.72); }
-
-    .mcp-body {
-      padding: 22px;
-      font-family: var(--mono);
-      font-size: 12px;
-      line-height: 1.8;
-    }
-    .mcp-flow {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      gap: 16px;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    .mcp-box {
-      min-height: 98px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: oklch(1 0 0 / 0.026);
-      padding: 14px;
-    }
-    .mcp-arrow {
-      width: 48px;
-      height: 1px;
-      background: var(--cyan);
-      position: relative;
-    }
-    .mcp-arrow::after {
-      content: "";
-      position: absolute;
-      right: 0;
-      top: -4px;
-      width: 9px;
-      height: 9px;
-      border-top: 1px solid var(--cyan);
-      border-right: 1px solid var(--cyan);
-      transform: rotate(45deg);
-    }
-    .tool-list { display: grid; gap: 8px; }
-    .tool-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 12px;
-      padding: 10px 12px;
-      border-radius: 7px;
-      border: 1px solid oklch(0.74 0.14 200 / 0.14);
-      background: oklch(0.74 0.14 200 / 0.045);
-      color: oklch(1 0 0 / 0.68);
-    }
-    .tool-state { color: var(--cyan); }
-
-    .api-body {
-      display: grid;
-      grid-template-columns: 1fr 0.74fr;
-      min-height: 348px;
-      font-family: var(--mono);
-      font-size: 12px;
-      line-height: 1.75;
-    }
-    .api-code {
-      padding: 22px;
-      border-right: 1px solid var(--line);
-      overflow: hidden;
-    }
-    .api-result {
-      padding: 22px;
-      display: grid;
-      align-content: center;
-      gap: 12px;
-    }
-    .result-card {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 16px;
-      background: oklch(1 0 0 / 0.03);
-    }
-    .result-big {
-      font-family: var(--display);
-      font-size: 46px;
-      font-style: italic;
-      font-weight: 900;
-      line-height: 1;
-      color: var(--cyan);
-    }
-    .result-label { margin-top: 5px; color: var(--dim); font-size: 11px; }
-
-    .closing-cta {
-      width: min(1180px, calc(100% - 64px));
-      margin: 28px auto 88px;
-      padding: 52px 58px;
-      border: 1px solid var(--line-strong);
-      border-radius: 10px;
-      background:
-        radial-gradient(circle at 78% 40%, oklch(0.74 0.14 200 / 0.18), transparent 28rem),
-        oklch(0.105 0.045 200);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 34px;
-    }
-    .closing-cta h2 { font-size: 58px; max-width: 640px; }
-    .closing-cta p { margin-top: 14px; color: var(--muted); line-height: 1.65; max-width: 620px; }
 
     footer {
-      background: oklch(0.045 0.032 204);
-      padding: 44px 80px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-top: 1px solid var(--line);
+      background: oklch(0.045 0.032 204); padding: 44px 80px;
+      display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--line);
     }
     .f-logo { display: inline-flex; align-items: center; text-decoration: none; }
-    .f-logo img { display: block; width: auto; height: 22px; }
     .f-links { display: flex; gap: 24px; }
-    .f-links a { font-size: 13px; color: oklch(1 0 0 / 0.26); text-decoration: none; transition: color 0.2s; }
+    .f-links a { color: oklch(1 0 0 / 0.26); font-size: 13px; text-decoration: none; transition: color 0.2s; }
     .f-links a:hover { color: oklch(1 0 0 / 0.66); }
-    .f-copy { font-family: var(--mono); font-size: 11px; color: oklch(1 0 0 / 0.18); }
+    .f-copy { color: oklch(1 0 0 / 0.18); font-family: var(--mono); font-size: 11px; }
 
     .modal-bg {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.75);
-      z-index: 200;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s;
-      backdrop-filter: blur(8px);
+      position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.75); opacity: 0; pointer-events: none; transition: opacity 0.25s; backdrop-filter: blur(8px);
     }
     .modal-bg.open { opacity: 1; pointer-events: auto; }
     .modal {
-      position: relative;
-      background: var(--panel);
-      border: 1px solid oklch(1 0 0 / 0.1);
-      border-radius: 16px;
-      padding: 48px 52px;
-      max-width: 500px;
-      width: 90%;
+      position: relative; width: 90%; max-width: 500px; padding: 48px 52px;
+      border: 1px solid oklch(1 0 0 / 0.1); border-radius: 16px; background: var(--panel);
     }
-    .modal h3 {
-      font-family: var(--display);
-      font-style: italic;
-      font-weight: 900;
-      font-size: 52px;
-      line-height: 0.92;
-      color: var(--ink);
-      margin-bottom: 16px;
-    }
-    .modal p { font-size: 16px; color: var(--muted); line-height: 1.6; margin-bottom: 28px; }
+    .modal h3 { margin-bottom: 16px; font-family: var(--display); font-size: 52px; font-style: italic; font-weight: 900; line-height: 0.92; }
+    .modal p { margin-bottom: 28px; color: var(--muted); font-size: 16px; line-height: 1.6; }
     .modal input {
-      width: 100%;
-      padding: 14px 18px;
-      border-radius: 10px;
-      background: oklch(1 0 0 / 0.06);
-      border: 1px solid oklch(1 0 0 / 0.12);
-      color: var(--ink);
-      font-size: 15px;
-      font-family: var(--sans);
-      outline: none;
-      transition: border-color 0.2s;
+      width: 100%; padding: 14px 18px; border: 1px solid oklch(1 0 0 / 0.12); border-radius: 10px;
+      outline: none; background: oklch(1 0 0 / 0.06); color: var(--ink); font-family: var(--sans); font-size: 15px;
     }
-    .modal input:focus { border-color: oklch(0.74 0.14 200 / 0.5); }
-    .modal input::placeholder { color: oklch(1 0 0 / 0.25); }
     .modal-btn {
-      margin-top: 12px;
-      width: 100%;
-      padding: 14px;
-      border-radius: 10px;
-      background: var(--cyan);
-      color: var(--bg);
-      font-size: 15px;
-      font-weight: 700;
-      border: none;
-      cursor: pointer;
-      font-family: var(--sans);
-      transition: background 0.2s, opacity 0.2s;
+      width: 100%; margin-top: 12px; padding: 14px; border: none; border-radius: 10px;
+      background: var(--cyan); color: var(--bg); cursor: pointer; font-size: 15px; font-weight: 700;
     }
-    .modal-btn:hover { background: oklch(0.82 0.14 200); }
-    .modal-btn:disabled { cursor: wait; opacity: 0.65; }
-    .modal-close {
-      position: absolute;
-      top: 20px;
-      right: 24px;
-      background: none;
-      border: none;
-      color: oklch(1 0 0 / 0.35);
-      font-size: 22px;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-    .modal-close:hover { color: var(--ink); }
 
-    @media (max-width: 980px) {
+    @media (max-width: 1020px) {
       .site-nav { padding: 18px 24px; }
-      .nav-right { gap: 2px; }
-      .nav-right a { padding: 6px 9px; }
-      .page-shell, .engine-inner, .surface-nav, .feature-surface, .closing-cta { width: min(100% - 32px, 760px); }
-      .feature-hero, .engine-inner, .feature-surface, .closing-cta {
-        grid-template-columns: 1fr;
-      }
-      .feature-hero { min-height: auto; padding-top: 126px; padding-bottom: 56px; }
-      .feature-hero::after { display: none; }
-      h1 { font-size: 76px; }
-      h2, .surface-copy h3 { font-size: 58px; }
-      .surface-map { max-width: 620px; }
-      .surface-nav { grid-template-columns: repeat(2, 1fr); }
-      .feature-surface { padding: 34px; }
-      .compression-visual, .api-body { grid-template-columns: 1fr; }
-      .api-code { border-right: 0; border-bottom: 1px solid var(--line); }
-      .ide-body { grid-template-columns: 128px 1fr; }
-      .ide-chat { grid-column: 1 / -1; border-top: 1px solid var(--line); }
-      .closing-cta { display: grid; }
-      footer { padding: 38px 24px; gap: 26px; flex-wrap: wrap; }
-    }
-
-    @media (max-width: 640px) {
-      .site-nav { position: absolute; align-items: flex-start; gap: 18px; flex-direction: column; }
-      .nav-right { flex-wrap: wrap; }
-      .page-shell, .engine-inner, .surface-nav, .feature-surface, .closing-cta { width: calc(100% - 28px); }
-      .feature-hero { padding-top: 178px; }
-      h1 { font-size: 56px; }
-      h2, .surface-copy h3 { font-size: 46px; }
-      .hero-copy { font-size: 16px; }
-      .engine-inner { padding: 54px 0; }
-      .metric-strip, .surface-nav, .mcp-flow { grid-template-columns: 1fr; }
-      .mcp-arrow { width: 1px; height: 32px; margin: 0 auto; }
-      .mcp-arrow::after { right: -4px; top: auto; bottom: 0; transform: rotate(135deg); }
-      .feature-surface { padding: 24px; gap: 30px; }
-      .map-row { grid-template-columns: 40px 1fr; }
-      .map-chip { grid-column: 2; justify-self: start; }
-      .ide-body { grid-template-columns: 1fr; }
-      .ide-sidebar, .ide-editor { border-right: 0; border-bottom: 1px solid var(--line); }
-      .surface-demo { min-height: auto; }
-      .terminal-body, .mcp-body, .api-code, .api-result { padding: 18px; }
-      .ascii-logo { font-size: 9px; }
-      .closing-cta { padding: 34px 24px; }
-      .modal { padding: 38px 28px; }
-      .f-links { flex-wrap: wrap; gap: 14px; }
+      .feature-hero { grid-template-columns: 1fr; padding-top: 100px; text-align: center; }
+      .hero-word { margin: 0 auto; }
+      .hero-word div { justify-content: center; }
+      .hero-copy { margin-left: auto; margin-right: auto; }
+      .hero-actions { justify-content: center; }
+      .feature-surface { grid-template-columns: 1fr; }
+      .fs-visual { border-left: 0; border-top: 1px solid var(--line); padding: 48px 0; }
+      footer { padding: 38px 24px; flex-wrap: wrap; gap: 20px; }
     }
   </style>
 </head>
@@ -806,8 +294,8 @@
     <h3>Join the<br>waitlist.</h3>
     <p>Get early access + launch updates. No spam, ever.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-      <input type="text" id="wlFirst" placeholder="First name" />
-      <input type="text" id="wlLast" placeholder="Last name" />
+      <input type="text" id="wlFirst" placeholder="First name">
+      <input type="text" id="wlLast" placeholder="Last name">
     </div>
     <input type="email" id="wlEmail" placeholder="you@company.com">
     <button class="modal-btn" onclick="submitWaitlist()">Get early access →</button>
@@ -829,140 +317,56 @@
   <section class="page-shell feature-hero">
     <div>
       <div class="eyebrow">Features</div>
-      <div class="hero-word">
-        <span class="l">F</span><span class="l">o</span><span class="l">u</span><span class="l">r</span>&nbsp;<span class="l">s</span><span class="l">u</span><span class="l">r</span><span class="l">f</span><span class="l">a</span><span class="l">c</span><span class="l">e</span><span class="l">s</span><span class="l">.</span><br>
-        <span><span class="l">O</span><span class="l">n</span><span class="l">e</span>&nbsp;<span class="l">e</span><span class="l">n</span><span class="l">g</span><span class="l">i</span><span class="l">n</span><span class="l">e</span><span class="l">.</span></span>
-      </div>
-      <p class="hero-copy">Mesh gives agents the code context they need without flooding the model. Terminal, IDE, MCP, and API all run on the same <strong>capsule compression engine</strong>: structural search, targeted reads, exact span recovery, and resumable sessions.</p>
+      <h1 class="hero-word">
+        <div><span class="l">F</span><span class="l">o</span><span class="l">u</span><span class="l">r</span>&nbsp;<span class="l">s</span><span class="l">u</span><span class="l">r</span><span class="l">f</span><span class="l">a</span><span class="l">c</span><span class="l">e</span><span class="l">s</span><span class="l">.</span></div>
+        <div class="cyan-line"><span class="l">O</span><span class="l">n</span><span class="l">e</span>&nbsp;<span class="l">e</span><span class="l">n</span><span class="l">g</span><span class="l">i</span><span class="l">n</span><span class="l">e</span><span class="l">.</span></div>
+      </h1>
+      <p class="hero-copy">Mesh gives agents the code context they need without flooding the model. Terminal, IDE, MCP, and API all run on the same <strong>capsule compression engine</strong>.</p>
       <div class="hero-actions">
         <a class="primary-btn" onclick="openModal()">Join waitlist</a>
         <a class="secondary-btn" href="#surfaces">Explore surfaces</a>
       </div>
     </div>
 
-    <aside class="surface-map" aria-label="Mesh feature surfaces">
-      <div class="map-top">
-        <span>mesh/features</span>
-        <span class="map-pulse">indexed</span>
-      </div>
+    <div class="surface-map">
+      <div class="map-top"><span>mesh/features-manifest</span><span class="map-pulse">indexed</span></div>
       <div class="map-body">
         <div class="map-row">
           <div class="map-num">01</div>
-          <div>
-            <div class="map-title">Terminal CLI</div>
-            <div class="map-desc">Local-first agent loop with shell execution and session capsules.</div>
-          </div>
-          <div class="map-chip">perfect for devs</div>
+          <div><div class="map-title">Terminal CLI</div><div class="map-copy">Local-first agent loop with shell execution.</div></div>
+          <div class="map-badge">perfect for devs</div>
         </div>
         <div class="map-row">
           <div class="map-num">02</div>
-          <div>
-            <div class="map-title">Mesh IDE</div>
-            <div class="map-desc">VS Code-style browser workspace with Mesh branding and full context.</div>
-          </div>
-          <div class="map-chip">visual work</div>
+          <div><div class="map-title">Mesh IDE</div><div class="map-copy">VS Code-style workspace intelligence.</div></div>
+          <div class="map-badge">visual work</div>
         </div>
         <div class="map-row">
           <div class="map-num">03</div>
-          <div>
-            <div class="map-title">MCP Server</div>
-            <div class="map-desc">Claude Code, Codex, Cursor, and custom agents query Mesh from terminal.</div>
-          </div>
-          <div class="map-chip">bring your agent</div>
+          <div><div class="map-title">MCP Server</div><div class="map-copy">Connect Claude or Cursor to Mesh.</div></div>
+          <div class="map-badge">bring your agent</div>
         </div>
         <div class="map-row">
           <div class="map-num">04</div>
-          <div>
-            <div class="map-title">Gateway API</div>
-            <div class="map-desc">One programmable endpoint for indexed workspace intelligence.</div>
-          </div>
-          <div class="map-chip">build on Mesh</div>
-        </div>
-      </div>
-    </aside>
-  </section>
-
-  <section class="engine-band" id="engine">
-    <div class="engine-inner">
-      <div>
-        <div class="section-kicker">Core engine shared by all surfaces</div>
-        <h2>Capsule<br>compression.</h2>
-        <p class="section-copy">Tree-sitter parses your workspace into code structure. Mesh keeps exported symbols, signatures, imports, call-sites, and targeted spans while dropping token noise. <strong>A 2,881-token file can become a 55-token ultra capsule</strong> while still preserving the map an agent needs.</p>
-      </div>
-      <div class="compression-visual">
-        <div class="code-panel">
-          <div class="panel-top"><span>raw file</span><span>2,881 tokens</span></div>
-          <div class="panel-body">
-            <span class="code-line cyan">export async function submitWaitlist(email) {</span>
-            <span class="code-line ghost">  const normalized = email.trim().toLowerCase();</span>
-            <span class="code-line ghost">  const record = await createRecord(normalized);</span>
-            <span class="code-line ghost">  await sendConfirmation(record.email);</span>
-            <span class="code-line ghost">  return { ok: true, id: record.id };</span>
-            <span class="code-line cyan">}</span>
-            <span class="code-line ghost">...</span>
-            <span class="code-line ghost">hundreds of implementation lines omitted</span>
-          </div>
-        </div>
-        <div class="capsule-panel">
-          <div class="panel-top"><span>mesh capsule</span><span>55 tokens</span></div>
-          <div class="panel-body">
-            <div class="capsule-row">
-              <div class="capsule-label">export</div>
-              <div class="capsule-text">submitWaitlist(email): Promise&lt;SubscribeResult&gt;</div>
-            </div>
-            <div class="capsule-row">
-              <div class="capsule-label">calls</div>
-              <div class="capsule-text">createRecord -> sendConfirmation -> return result</div>
-            </div>
-            <div class="capsule-row">
-              <div class="capsule-label">recover</div>
-              <div class="capsule-text">exact source span on demand</div>
-            </div>
-          </div>
-        </div>
-        <div class="metric-strip">
-          <div class="metric">
-            <div class="metric-value">3.9x</div>
-            <div class="metric-label">more useful context per request</div>
-          </div>
-          <div class="metric">
-            <div class="metric-value green">84.7%</div>
-            <div class="metric-label">token savings on targeted opens</div>
-          </div>
-          <div class="metric">
-            <div class="metric-value amber">exact</div>
-            <div class="metric-label">span recovery when the agent needs code</div>
-          </div>
+          <div><div class="map-title">Gateway API</div><div class="map-copy">Programmable endpoint for indexing.</div></div>
+          <div class="map-badge">build on Mesh</div>
         </div>
       </div>
     </div>
   </section>
 
-  <nav class="surface-nav" id="surfaces" aria-label="Feature surface navigation">
-    <a class="surface-link" href="#terminal"><strong>01 / CLI</strong>Terminal-native Mesh</a>
-    <a class="surface-link" href="#ide"><strong>02 / IDE</strong>Branded VS Code-like workspace</a>
-    <a class="surface-link" href="#mcp"><strong>03 / MCP</strong>Use Mesh inside other agents</a>
-    <a class="surface-link" href="#api"><strong>04 / API</strong>Build products on the engine</a>
-  </nav>
-
-  <section class="feature-surface" id="terminal">
-    <div class="surface-copy">
-      <div class="section-kicker">Surface 01</div>
-      <h3>Terminal CLI</h3>
-      <p>The CLI stays low-noise and terminal-native. Install globally, run it in any repo, and let Mesh index the workspace before the agent touches files or commands.</p>
-      <div class="feature-points">
-        <div class="point">Auto-executes shell commands, reads failures, patches files, and retries until the loop is done.</div>
-        <div class="point">Session capsules preserve context, tool history, and file state across machines.</div>
-        <div class="point">Local Whisper voice mode keeps voice input offline when you want hands-free commands.</div>
+  <section id="surfaces" class="surfaces-section">
+    <div class="feature-surface">
+      <div class="fs-content">
+        <div class="fs-kicker">Surface 01</div>
+        <h2 class="fs-title">The CLI.</h2>
+        <p class="fs-copy">Install globally. Runs in any terminal. Local Whisper voice, auto-exec shell, no browser required. Just code.</p>
+        <button class="primary-btn" onclick="openModal()">Get started</button>
       </div>
-      <span class="surface-tag">npm i -g @edgarelmo/mesh-agent-cli</span>
-    </div>
-    <div class="surface-demo">
-      <div class="window-bar">
-        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-        <span class="window-title">mesh - ~/my-project</span>
-      </div>
-      <div class="terminal-body">
+      <div class="fs-visual">
+        <div class="terminal-visual">
+          <div class="window-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <div class="terminal-body">
 <pre class="ascii-logo">
 <span style="color:#c678dd">‹ </span>███╗   ███╗███████╗███████╗██╗  ██╗
 <span style="color:#c678dd">‹ </span>████╗ ████║██╔════╝██╔════╝██║  ██║
@@ -970,156 +374,13 @@
 <span style="color:#c678dd">‹ </span>██║╚██╔╝██║██╔══╝  ╚════██║██╔══██║
 <span style="color:#c678dd">‹ </span>██║ ╚═╝ ██║███████╗███████║██║  ██║
 <span style="color:#c678dd">‹ </span>╚═╝     ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝ <span style="color:#c678dd">›</span></pre>
-        <div><span class="terminal-muted">workspace:</span> <span class="cyan">mesh-agent-cli</span></div>
-        <div><span class="terminal-muted">model:</span> claude-sonnet-4-6</div>
-        <div><span class="terminal-muted">context:</span> <span class="green">135/200 files cached</span></div>
-        <br>
-        <div><span class="terminal-prompt">mesh/main &raquo;</span> run tests and fix the failing auth redirect</div>
-        <div class="terminal-muted">-> npm test</div>
-        <div class="terminal-error">FAIL auth.redirect.test.ts</div>
-        <div class="terminal-muted">-> patching src/auth/redirect.ts</div>
-        <div class="terminal-muted">-> npm test</div>
-        <div class="terminal-success">PASS 47/47</div>
-      </div>
-    </div>
-  </section>
-
-  <section class="feature-surface" id="ide">
-    <div class="surface-copy">
-      <div class="section-kicker">Surface 02</div>
-      <h3>Mesh IDE</h3>
-      <p>The IDE should feel familiar: a VS Code-style editor, file tree, terminal, and chat panel, but Mesh-branded and backed by the same compressed workspace memory.</p>
-      <div class="feature-points">
-        <div class="point">Monaco editor for real code editing, syntax highlighting, and fast file navigation.</div>
-        <div class="point">AI panel sees the indexed workspace and can recover exact spans when it edits.</div>
-        <div class="point">Upload a folder or watch a local path so the workspace stays current while you code.</div>
-      </div>
-      <span class="surface-tag">Monaco editor + PTY + Mesh context</span>
-    </div>
-    <div class="surface-demo">
-      <div class="window-bar">
-        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-        <span class="window-title">Mesh IDE</span>
-      </div>
-      <div class="ide-body">
-        <aside class="ide-sidebar">
-          <div style="color:var(--cyan);margin-bottom:12px">MESH WORKSPACE</div>
-          <div class="file-row active">src/agent.ts</div>
-          <div class="file-row">src/capsule.ts</div>
-          <div class="file-row">api/subscribe.js</div>
-          <div class="file-row">features.html</div>
-          <div class="file-row">package.json</div>
-        </aside>
-        <div class="ide-editor">
-          <div><span class="cyan">export async function</span> buildCapsule(file) {</div>
-          <div>&nbsp;&nbsp;<span class="ghost">const</span> ast = parse(file.source)</div>
-          <div>&nbsp;&nbsp;<span class="ghost">const</span> symbols = extractExports(ast)</div>
-          <div>&nbsp;&nbsp;<span class="green">return</span> compress(symbols, file.imports)</div>
-          <div>}</div>
-          <br>
-          <div class="ghost">// exact spans stay recoverable</div>
-        </div>
-        <aside class="ide-chat">
-          <div class="chat-bubble">Explain the blast radius before I change buildCapsule.</div>
-          <div class="chat-bubble agent">3 imports and 2 tests depend on it. Open targeted spans?</div>
-          <div class="chat-bubble">Yes, show only the affected call-sites.</div>
-        </aside>
-      </div>
-    </div>
-  </section>
-
-  <section class="feature-surface" id="mcp">
-    <div class="surface-copy">
-      <div class="section-kicker">Surface 03</div>
-      <h3>MCP Server</h3>
-      <p>Mesh can run as a local MCP server so other terminal agents use its context engine instead of guessing through raw files. Claude Code, Codex, Cursor, and custom clients can ask Mesh for structured code intelligence.</p>
-      <div class="feature-points">
-        <div class="point">Expose workspace status, structural search, targeted opens, and exact span recovery as MCP tools.</div>
-        <div class="point">Keep the user's preferred agent while improving the quality of context it receives.</div>
-        <div class="point">Tool profiles keep MCP manifests small and avoid noisy tool surfaces.</div>
-      </div>
-      <span class="surface-tag">mesh_search / mesh_open_targeted / mesh_recover_span</span>
-    </div>
-    <div class="surface-demo">
-      <div class="window-bar">
-        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-        <span class="window-title">Claude Code / Codex terminal using Mesh MCP</span>
-      </div>
-      <div class="mcp-body">
-        <div class="mcp-flow">
-          <div class="mcp-box">
-            <div class="cyan">codex terminal</div>
-            <div class="ghost">"Find the waitlist API and open only the relevant spans."</div>
-          </div>
-          <div class="mcp-arrow" aria-hidden="true"></div>
-          <div class="mcp-box">
-            <div class="cyan">mesh mcp</div>
-            <div class="ghost">workspace indexed, tools ready, capsules cached</div>
-          </div>
-        </div>
-        <div class="tool-list">
-          <div class="tool-row"><span>mesh_workspace_status</span><span class="tool-state">ready</span></div>
-          <div class="tool-row"><span>mesh_search(query: "subscribe waitlist")</span><span class="tool-state">12 hits</span></div>
-          <div class="tool-row"><span>mesh_open_targeted(api/subscribe.js)</span><span class="tool-state">84.7% saved</span></div>
-          <div class="tool-row"><span>mesh_recover_span(sendConfirmation)</span><span class="tool-state">exact</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="feature-surface" id="api">
-    <div class="surface-copy">
-      <div class="section-kicker">Surface 04</div>
-      <h3>Gateway API</h3>
-      <p>The Gateway API is the programmable version of Mesh: send a task and workspace reference, receive agent output plus token accounting and source-grounded evidence.</p>
-      <div class="feature-points">
-        <div class="point">One REST endpoint for workspace Q&A, PR summaries, migration audits, and product workflows.</div>
-        <div class="point">BYOK model routing across Anthropic, OpenAI, Google Gemini, or Mesh-managed Bedrock.</div>
-        <div class="point">Stateless calls with explicit token savings and recoverable source references.</div>
-      </div>
-      <span class="surface-tag">POST /agent</span>
-    </div>
-    <div class="surface-demo">
-      <div class="window-bar">
-        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-        <span class="window-title">Gateway API</span>
-      </div>
-      <div class="api-body">
-        <div class="api-code">
-          <div class="ghost">// POST https://api.try-mesh.com/agent</div>
-          <br>
-          <div>{</div>
-          <div>&nbsp;&nbsp;<span class="cyan">"task"</span>: <span class="amber">"summarize changed symbols in PR #204"</span>,</div>
-          <div>&nbsp;&nbsp;<span class="cyan">"workspace"</span>: <span class="amber">"my-org/api-repo"</span>,</div>
-          <div>&nbsp;&nbsp;<span class="cyan">"tools"</span>: [<span class="amber">"github"</span>, <span class="amber">"linear"</span>],</div>
-          <div>&nbsp;&nbsp;<span class="cyan">"model"</span>: <span class="amber">"claude-sonnet-4-6"</span></div>
-          <div>}</div>
-        </div>
-        <div class="api-result">
-          <div class="result-card">
-            <div class="result-big">1.4s</div>
-            <div class="result-label">response time</div>
-          </div>
-          <div class="result-card">
-            <div class="result-big green">8,621</div>
-            <div class="result-label">tokens saved</div>
-          </div>
-          <div class="result-card">
-            <div class="result-big amber">refs</div>
-            <div class="result-label">source-grounded spans returned</div>
+            <div><span class="terminal-prompt">$</span> mesh</div>
+            <div class="terminal-muted">-> Indexed 247 files (1.1s)</div>
+            <div>mesh » fix broken auth</div>
           </div>
         </div>
       </div>
     </div>
-  </section>
-
-  <section class="closing-cta">
-    <div>
-      <div class="section-kicker">Built for code agents</div>
-      <h2>Less token noise. More useful work.</h2>
-      <p>Start in the terminal, open the IDE when you need visuals, connect your existing agents through MCP, or build directly on the Gateway API.</p>
-    </div>
-    <a class="primary-btn" onclick="openModal()">Get early access</a>
   </section>
 </main>
 
@@ -1135,48 +396,38 @@
 </footer>
 
 <script>
-/* ── CANVAS PARTICLE MESH ── */
 const canvas = document.getElementById('mesh-canvas');
 const ctx = canvas.getContext('2d');
 let W, H, pts;
 const mouse = { x: -9999, y: -9999 };
 const LINK = 155;
 
-function resize() {
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-}
+function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
 function mkPts() {
-  const n = Math.min(90, Math.floor(W * H / 10000));
+  const n = Math.min(80, Math.floor(W * H / 12000));
   pts = Array.from({length: n}, () => ({
     x: Math.random() * W, y: Math.random() * H,
-    vx: (Math.random() - 0.5) * 0.45,
-    vy: (Math.random() - 0.5) * 0.45,
+    vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4
   }));
 }
 function raf() {
   ctx.clearRect(0, 0, W, H);
   pts.forEach(p => {
     p.x += p.vx; p.y += p.vy;
-    if (p.x < 0 || p.x > W) p.vx *= -1;
-    if (p.y < 0 || p.y > H) p.vy *= -1;
+    if (p.x < 0 || p.x > W) p.vx *= -1; if (p.y < 0 || p.y > H) p.vy *= -1;
     const dx = p.x - mouse.x, dy = p.y - mouse.y, d = Math.hypot(dx, dy);
-    if (d < 110) { p.vx += dx / d * 0.025; p.vy += dy / d * 0.025; }
-    const sp = Math.hypot(p.vx, p.vy);
-    if (sp > 1.1) { p.vx *= 0.97; p.vy *= 0.97; }
+    if (d < 100) { p.vx += dx / d * 0.02; p.vy += dy / d * 0.02; }
   });
   for (let i = 0; i < pts.length; i++) {
     for (let j = i+1; j < pts.length; j++) {
-      const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
-      const d = Math.hypot(dx, dy);
+      const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y, d = Math.hypot(dx, dy);
       if (d < LINK) {
-        ctx.strokeStyle = `rgba(0,180,200,${(1 - d / LINK) * 0.3})`;
-        ctx.lineWidth = 0.7;
-        ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y); ctx.stroke();
+        ctx.strokeStyle = `rgba(0,180,200,${(1 - d / LINK) * 0.25})`;
+        ctx.lineWidth = 0.6; ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y); ctx.stroke();
       }
     }
-    ctx.fillStyle = 'rgba(0,212,232,0.55)';
-    ctx.beginPath(); ctx.arc(pts[i].x, pts[i].y, 1.8, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = 'rgba(0,212,232,0.45)';
+    ctx.beginPath(); ctx.arc(pts[i].x, pts[i].y, 1.6, 0, Math.PI*2); ctx.fill();
   }
   requestAnimationFrame(raf);
 }
@@ -1184,21 +435,11 @@ resize(); mkPts(); raf();
 window.addEventListener('resize', () => { resize(); mkPts(); });
 window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; }, {passive:true});
 
-/* canvas fades after hero */
-window.addEventListener('scroll', () => {
-  const t = Math.max(0, Math.min(1, 1 - window.scrollY / window.innerHeight));
-  canvas.style.opacity = 0.2 + t * 0.5;
-}, {passive:true});
-
-/* ── HERO LETTERS ── */
 setTimeout(() => {
-  document.querySelectorAll('.hero-word .l').forEach((el, i) =>
-    setTimeout(() => el.classList.add('in'), i * 80 + 100)
-  );
+  document.querySelectorAll('.hero-word .l').forEach((el, i) => setTimeout(() => el.classList.add('in'), i * 60 + 50));
 }, 50);
 
-/* ── SPOTLIGHT EFFECT ── */
-const spotlightElements = document.querySelectorAll('.map-row, .surface-link, .feature-surface');
+const spotlightElements = document.querySelectorAll('.map-row');
 spotlightElements.forEach(el => {
   el.addEventListener('mousemove', e => {
     const r = el.getBoundingClientRect();
@@ -1207,10 +448,7 @@ spotlightElements.forEach(el => {
   }, {passive:true});
 });
 
-function openModal() {
-  document.getElementById('modalBg').classList.add('open');
-}
-
+function openModal() { document.getElementById('modalBg').classList.add('open'); }
 function closeModal(event) {
   const modalBg = document.getElementById('modalBg');
   if (!event || event.target === modalBg || event.currentTarget?.classList?.contains('modal-close')) {
@@ -1222,52 +460,25 @@ async function submitWaitlist() {
   const emailInput = document.getElementById('wlEmail');
   const firstInput = document.getElementById('wlFirst');
   const lastInput = document.getElementById('wlLast');
-  const button = document.querySelector('#modalBg .modal-btn');
   const msg = document.getElementById('wlMsg');
-  
   const email = emailInput.value.trim();
-  const firstName = firstInput.value.trim();
-  const lastName = lastInput.value.trim();
-
-  if (!/^\S+@\S+\.\S+$/.test(email)) {
-    msg.textContent = 'Please enter a valid email address.';
-    return;
-  }
-
-  button.disabled = true;
+  if (!/^\S+@\S+\.\S+$/.test(email)) { msg.textContent = 'Please enter a valid email address.'; return; }
   msg.textContent = 'Submitting...';
-
   try {
     const response = await fetch('/api/subscribe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, firstName, lastName })
+      body: JSON.stringify({ email, firstName: firstInput.value, lastName: lastInput.value })
     });
     const payload = await response.json();
-    if (!response.ok || !payload.ok) {
-      throw new Error(payload.message || 'Subscription failed.');
-    }
-    msg.textContent = payload.message || `Thanks, ${email}. You are now on the waitlist.`;
-    emailInput.value = '';
-    firstInput.value = '';
-    lastInput.value = '';
-  } catch (error) {
-    msg.textContent = error instanceof Error ? error.message : 'Subscription failed.';
-  } finally {
-    button.disabled = false;
-  }
+    msg.textContent = payload.message || `Thanks. You are now on the waitlist.`;
+  } catch (error) { msg.textContent = 'Subscription failed.'; }
 }
 
 const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      revealObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.16 });
-
-document.querySelectorAll('.feature-surface, .compression-visual, .engine-inner > div').forEach((section) => revealObserver.observe(section));
+  entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('visible'); revealObserver.unobserve(entry.target); } });
+}, { threshold: 0.15 });
+document.querySelectorAll('.feature-surface').forEach((section) => revealObserver.observe(section));
 </script>
 </body>
 </html>

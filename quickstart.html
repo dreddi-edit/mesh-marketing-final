@@ -64,607 +64,156 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* CANVAS */
     #mesh-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-
     a { color: inherit; }
     code { color: var(--cyan); font-family: var(--mono); }
-    .cyan { color: var(--cyan); }
 
     .site-nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 22px 56px;
-      background: oklch(0.078 0.038 200 / 0.82);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--line);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 56px; background: oklch(0.078 0.038 200 / 0.82);
+      backdrop-filter: blur(12px); border-bottom: 1px solid var(--line);
     }
     .nav-logo { display: inline-flex; align-items: center; text-decoration: none; }
     .nav-logo img { display: block; width: auto; height: 25px; }
     .nav-right { display: flex; gap: 6px; align-items: center; }
     .nav-right a {
-      font-size: 13px;
-      color: oklch(1 0 0 / 0.42);
-      text-decoration: none;
-      padding: 6px 14px;
-      border-radius: 6px;
-      border: 1px solid transparent;
-      transition: color 0.2s, border-color 0.2s, background 0.2s;
+      font-size: 13px; color: oklch(1 0 0 / 0.42); text-decoration: none;
+      padding: 6px 14px; border-radius: 6px; border: 1px solid transparent;
+      transition: all 0.2s;
     }
     .nav-right a:hover { color: var(--ink); border-color: oklch(1 0 0 / 0.12); }
     .nav-active { color: var(--ink) !important; }
-    .nav-waitlist {
-      background: var(--cyan-soft) !important;
-      border-color: var(--line-strong) !important;
-      color: var(--cyan) !important;
-      cursor: pointer;
-    }
+    .nav-waitlist { background: var(--cyan-soft) !important; border-color: var(--line-strong) !important; color: var(--cyan) !important; cursor: pointer; }
 
-    .page-shell {
-      width: min(1180px, calc(100% - 64px));
-      margin: 0 auto;
-      position: relative; z-index: 1;
-    }
+    .page-shell { width: min(1180px, calc(100% - 64px)); margin: 0 auto; position: relative; z-index: 1; }
 
     .hero {
-      min-height: 100vh;
-      padding-top: 128px;
-      display: grid;
-      grid-template-columns: minmax(0, 0.85fr) minmax(380px, 1fr);
-      gap: 68px;
-      align-items: center;
-      position: relative;
+      min-height: 100vh; padding-top: 128px;
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(380px, 1fr);
+      gap: 68px; align-items: center; position: relative;
     }
     
     .hero-word {
-      font-family: var(--display);
-      font-style: italic;
-      font-weight: 900;
-      font-size: clamp(80px, 12vw, 150px);
-      line-height: 0.85;
-      letter-spacing: -0.03em;
-      color: var(--white);
-      display: flex;
-      flex-wrap: wrap;
-      user-select: none;
+      font-family: var(--display); font-style: italic; font-weight: 900;
+      font-size: clamp(60px, 9vw, 130px); line-height: 0.9;
+      letter-spacing: -0.03em; color: var(--white);
+      display: block; user-select: none; overflow: visible;
     }
-    .hero-word span { color: var(--cyan); }
+    .hero-word div { display: flex; flex-wrap: nowrap; align-items: baseline; }
+    .hero-word .cyan-line { color: var(--cyan); display: flex; flex-wrap: nowrap; }
     .hero-word .l {
-      display: inline-block;
-      opacity: 0; transform: translateY(40px);
-      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+      display: inline-block; opacity: 0; transform: translateY(30px);
+      transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1);
     }
     .hero-word .l.in { opacity: 1; transform: none; }
 
     .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 22px;
-      color: var(--cyan);
-      font-family: var(--mono);
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
+      display: inline-flex; align-items: center; gap: 10px;
+      margin-bottom: 22px; color: var(--cyan); font-family: var(--mono);
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em;
       opacity: 0; animation: up 0.8s 0.2s ease forwards;
     }
-    .eyebrow::before {
-      content: "";
-      width: 26px;
-      height: 1px;
-      background: var(--cyan);
-    }
+    .eyebrow::before { content: ""; width: 26px; height: 1px; background: var(--cyan); }
     @keyframes up { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:none} }
 
-    .hero-copy {
-      margin-top: 30px;
-      max-width: 560px;
-      color: var(--muted);
-      font-size: 18px;
-      font-weight: 300;
-      line-height: 1.72;
-      opacity: 0; animation: up 0.8s 0.6s ease forwards;
-    }
+    .hero-copy { margin-top: 30px; max-width: 560px; color: var(--muted); font-size: 18px; font-weight: 300; line-height: 1.7; opacity: 0; animation: up 0.8s 0.6s ease forwards; }
     .hero-copy strong { color: var(--ink); font-weight: 500; }
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 34px;
-      opacity: 0; animation: up 0.8s 0.8s ease forwards;
-    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; opacity: 0; animation: up 0.8s 0.8s ease forwards; }
 
-    .quick-card, .command-card, .flow-row {
-      --x: 50%; --y: 50%;
-      position: relative;
-    }
-    .quick-card::before, .command-card::after, .flow-row::before {
-      content: ''; position: absolute; inset: 0;
-      background: radial-gradient(400px circle at var(--x) var(--y),
-        oklch(0.74 0.14 200 / 0.1),
-        transparent 45%);
-      opacity: 0; transition: opacity 0.4s;
-      pointer-events: none; z-index: 0;
-    }
-    .quick-card:hover::before, .command-card:hover::after, .flow-row:hover::before { opacity: 1; }
     .primary-btn, .secondary-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 44px;
-...
-    .primary-btn, .secondary-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 44px;
-      padding: 0 18px;
-      border: 1px solid transparent;
-      border-radius: 8px;
-      cursor: pointer;
-      font-family: var(--sans);
-      font-size: 14px;
-      font-weight: 700;
-      text-decoration: none;
-      transition: transform 0.2s, border-color 0.2s, background 0.2s;
+      display: inline-flex; align-items: center; justify-content: center;
+      min-height: 44px; padding: 0 18px; border-radius: 8px;
+      font-size: 14px; font-weight: 700; text-decoration: none;
+      border: 1px solid transparent; cursor: pointer;
+      font-family: var(--sans); transition: all 0.2s;
     }
     .primary-btn { background: var(--cyan); color: var(--bg-deep); }
     .secondary-btn { background: oklch(1 0 0 / 0.035); border-color: var(--line); color: var(--ink); }
     .primary-btn:hover, .secondary-btn:hover { transform: translateY(-2px); }
-    .secondary-btn:hover { border-color: var(--line-strong); }
 
     .launch-console {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at 72% 18%, oklch(0.74 0.14 200 / 0.14), transparent 16rem),
-        linear-gradient(180deg, oklch(0.13 0.052 200 / 0.95), oklch(0.052 0.034 204 / 0.95));
+      border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
+      background: radial-gradient(circle at 72% 18%, oklch(0.74 0.14 200 / 0.14), transparent 16rem), linear-gradient(180deg, oklch(0.13 0.052 200 / 0.95), oklch(0.052 0.034 204 / 0.95));
       box-shadow: 0 34px 110px oklch(0 0 0 / 0.28);
     }
-    .console-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      min-height: 44px;
-      padding: 0 16px;
-      border-bottom: 1px solid var(--line);
-      color: var(--dim);
-      font-family: var(--mono);
-      font-size: 10px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-    .console-live {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      color: var(--green);
-    }
-    .console-live::before {
-      content: "";
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 16px var(--green);
-    }
-    .console-grid {
-      display: grid;
-      grid-template-columns: 0.78fr 1fr;
-      min-height: 500px;
-    }
-    .command-stack {
-      padding: 24px;
-      border-right: 1px solid var(--line);
-      display: grid;
-      gap: 12px;
-      align-content: center;
-      background: oklch(0.046 0.034 204 / 0.72);
-    }
+    .console-top { display: flex; align-items: center; justify-content: space-between; height: 44px; padding: 0 16px; border-bottom: 1px solid var(--line); color: var(--dim); font-family: var(--mono); font-size: 10px; text-transform: uppercase; }
+    .console-live { display: inline-flex; align-items: center; gap: 7px; color: var(--green); }
+    .console-live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 16px var(--green); }
+    .console-grid { display: grid; grid-template-columns: 0.78fr 1fr; min-height: 500px; }
+    .command-stack { padding: 24px; border-right: 1px solid var(--line); display: grid; gap: 12px; align-content: center; background: oklch(0.046 0.034 204 / 0.72); }
     .command-card {
-      position: relative;
-      padding: 18px 16px 18px 54px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: oklch(1 0 0 / 0.028);
-      opacity: 0;
-      transform: translateY(16px);
-      transition: opacity 0.65s ease, transform 0.65s ease, border-color 0.2s, background 0.2s;
+      position: relative; padding: 18px 16px 18px 54px; border: 1px solid var(--line); border-radius: 8px;
+      background: oklch(1 0 0 / 0.028); opacity: 0; transform: translateY(16px);
+      transition: all 0.6s ease; --x: 50%; --y: 50%;
     }
     .command-card.visible { opacity: 1; transform: none; }
-    .command-card:hover { border-color: var(--line-strong); background: var(--cyan-soft); }
-    .command-num {
-      position: absolute;
-      left: 16px;
-      top: 17px;
-      width: 24px;
-      height: 24px;
-      display: grid;
-      place-items: center;
-      border: 1px solid var(--line);
-      border-radius: 50%;
-      color: var(--cyan);
-      font-family: var(--mono);
-      font-size: 11px;
-    }
-    .command-label {
-      margin-bottom: 7px;
-      color: var(--dim);
-      font-family: var(--mono);
-      font-size: 10px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
+    .command-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(300px circle at var(--x) var(--y), oklch(0.74 0.14 200 / 0.08), transparent 40%); opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+    .command-card:hover::before { opacity: 1; }
+    .command-num { position: absolute; left: 16px; top: 17px; width: 24px; height: 24px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; color: var(--cyan); font-family: var(--mono); font-size: 11px; }
     .command-title { color: var(--ink); font-size: 15px; font-weight: 700; }
-    .copy-line {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      width: 100%;
-      margin-top: 11px;
-      padding: 10px 11px;
-      border: 1px solid var(--line);
-      border-radius: 7px;
-      background: oklch(0.045 0.032 204 / 0.72);
-      color: var(--ink);
-      cursor: pointer;
-      font-family: var(--mono);
-      font-size: 11px;
-      text-align: left;
-      transition: border-color 0.2s;
-    }
+    .copy-line { display: flex; align-items: center; gap: 8px; width: 100%; margin-top: 11px; padding: 10px 11px; border: 1px solid var(--line); border-radius: 7px; background: oklch(0.045 0.032 204 / 0.72); color: var(--ink); cursor: pointer; font-family: var(--mono); font-size: 11px; text-align: left; transition: all 0.2s; }
     .copy-line:hover { border-color: var(--line-strong); }
-    .copy-line .prompt { color: var(--cyan); }
-    .copy-line .copy-state { margin-left: auto; color: var(--dim); font-size: 10px; }
 
-    .terminal-wrap {
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
-    .terminal-bar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-height: 42px;
-      padding: 0 16px;
-      border-bottom: 1px solid var(--line);
-      background: oklch(1 0 0 / 0.025);
-    }
+    .terminal-wrap { display: flex; flex-direction: column; min-width: 0; }
+    .terminal-bar { display: flex; align-items: center; gap: 8px; height: 42px; padding: 0 16px; border-bottom: 1px solid var(--line); background: oklch(1 0 0 / 0.025); }
     .dot { width: 10px; height: 10px; border-radius: 50%; background: oklch(0.72 0.12 24); }
     .dot:nth-child(2) { background: var(--amber); }
     .dot:nth-child(3) { background: var(--green); }
-    .terminal-title {
-      margin-left: auto;
-      color: var(--dim);
-      font-family: var(--mono);
-      font-size: 10px;
-    }
-    .terminal-body {
-      min-height: 458px;
-      padding: 24px;
-      color: oklch(1 0 0 / 0.70);
-      font-family: var(--mono);
-      font-size: 13px;
-      line-height: 1.9;
-      overflow: hidden;
-    }
+    .terminal-body { min-height: 458px; padding: 24px; color: oklch(1 0 0 / 0.70); font-family: var(--mono); font-size: 13px; line-height: 1.9; overflow: hidden; }
     .t-cyan { color: var(--cyan); }
     .t-green { color: var(--green); }
-    .t-dim { color: var(--dim); }
-    .t-red { color: var(--red); }
-    .t-ink { color: var(--ink); }
-    .cursor {
-      display: inline-block;
-      width: 8px;
-      height: 15px;
-      margin-left: 3px;
-      background: var(--cyan);
-      vertical-align: -2px;
-      animation: blink 1s infinite;
-    }
-    .session-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      padding: 0 24px 24px;
-    }
-    .session-pill {
-      padding: 6px 11px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      color: var(--dim);
-      font-family: var(--mono);
-      font-size: 10px;
-      transition: border-color 0.2s, color 0.2s, background 0.2s;
-    }
-    .session-pill.active {
-      border-color: var(--line-strong);
-      background: var(--cyan-soft);
-      color: var(--cyan);
-    }
+    .cursor { display: inline-block; width: 8px; height: 15px; margin-left: 3px; background: var(--cyan); vertical-align: -2px; animation: blink 1s infinite; }
+    @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
 
-    .quick-grid {
-      width: min(1180px, calc(100% - 64px));
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-    }
+    .quick-grid { width: min(1180px, calc(100% - 64px)); margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
     .quick-card {
-      min-height: 190px;
-      padding: 24px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: oklch(0.10 0.042 200 / 0.74);
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.65s ease, transform 0.65s ease, border-color 0.2s, background 0.2s;
+      min-height: 190px; padding: 24px; border: 1px solid var(--line); border-radius: 10px;
+      background: oklch(0.10 0.042 200 / 0.74); opacity: 0; transform: translateY(20px);
+      transition: all 0.6s ease; position: relative; --x: 50%; --y: 50%;
     }
     .quick-card.visible { opacity: 1; transform: none; }
-    .quick-card:hover { border-color: var(--line-strong); background: oklch(0.74 0.14 200 / 0.055); }
-    .quick-label {
-      margin-bottom: 14px;
-      color: var(--cyan);
-      font-family: var(--mono);
-      font-size: 10px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-    .quick-card h3 {
-      font-family: var(--display);
-      font-size: 34px;
-      font-weight: 800;
-      line-height: 1;
-      margin-bottom: 14px;
-    }
-    .quick-card p {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.62;
-    }
-    .quick-card .copy-line { margin-top: 18px; }
+    .quick-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(400px circle at var(--x) var(--y), oklch(0.74 0.14 200 / 0.1), transparent 45%); opacity: 0; transition: opacity 0.4s; pointer-events: none; }
+    .quick-card:hover::before { opacity: 1; }
+    .quick-card h3 { font-family: var(--display); font-size: 34px; font-weight: 800; line-height: 1; margin-bottom: 14px; }
+    .quick-card p { color: var(--muted); font-size: 14px; line-height: 1.6; }
 
-    .flow-section {
-      width: min(1180px, calc(100% - 64px));
-      margin: 30px auto 0;
-      padding: 66px 0;
-    }
-    .section-grid {
-      display: grid;
-      grid-template-columns: 0.72fr 1.28fr;
-      gap: 58px;
-      align-items: center;
-    }
-    .section-kicker {
-      margin-bottom: 16px;
-      color: var(--cyan);
-      font-family: var(--mono);
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-    h2 {
-      font-family: var(--display);
-      font-size: 72px;
-      font-style: italic;
-      font-weight: 900;
-      line-height: 0.92;
-    }
-    .section-copy {
-      margin-top: 22px;
-      color: var(--muted);
-      font-size: 16px;
-      font-weight: 300;
-      line-height: 1.75;
-    }
-    .section-copy strong { color: var(--ink); font-weight: 500; }
-    .flow-board {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: oklch(0.10 0.042 200 / 0.72);
-      overflow: hidden;
-    }
+    .flow-section { width: min(1180px, calc(100% - 64px)); margin: 30px auto 0; padding: 66px 0; }
+    .section-grid { display: grid; grid-template-columns: 0.72fr 1.28fr; gap: 58px; align-items: center; }
+    h2 { font-family: var(--display); font-size: 72px; font-style: italic; font-weight: 900; line-height: 0.92; }
+    .flow-board { border: 1px solid var(--line); border-radius: 10px; background: oklch(0.10 0.042 200 / 0.72); overflow: hidden; }
     .flow-row {
-      display: grid;
-      grid-template-columns: 58px 1fr auto;
-      gap: 18px;
-      align-items: center;
-      padding: 20px 22px;
-      border-bottom: 1px solid var(--line);
-      opacity: 0;
-      transform: translateX(18px);
-      transition: opacity 0.65s ease, transform 0.65s ease;
+      display: grid; grid-template-columns: 58px 1fr auto; gap: 18px; align-items: center;
+      padding: 20px 22px; border-bottom: 1px solid var(--line); opacity: 0; transform: translateX(18px);
+      transition: all 0.6s ease; position: relative; --x: 50%; --y: 50%;
     }
-    .flow-row:last-child { border-bottom: 0; }
     .flow-row.visible { opacity: 1; transform: none; }
-    .flow-num {
-      width: 38px;
-      height: 38px;
-      display: grid;
-      place-items: center;
-      border: 1px solid var(--line-strong);
-      border-radius: 50%;
-      color: var(--cyan);
-      font-family: var(--mono);
-      font-size: 12px;
-    }
-    .flow-title { color: var(--ink); font-size: 16px; font-weight: 700; }
-    .flow-copy { margin-top: 4px; color: var(--muted); font-size: 13px; line-height: 1.5; }
-    .flow-chip {
-      padding: 7px 9px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      color: var(--dim);
-      font-family: var(--mono);
-      font-size: 10px;
-      white-space: nowrap;
-    }
+    .flow-row::before { content: ''; position: absolute; inset: 0; background: radial-gradient(400px circle at var(--x) var(--y), oklch(0.74 0.14 200 / 0.08), transparent 40%); opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+    .flow-row:hover::before { opacity: 1; }
+    .flow-num { width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid var(--line-strong); border-radius: 50%; color: var(--cyan); font-family: var(--mono); font-size: 12px; }
 
-    .closing-cta {
-      width: min(1180px, calc(100% - 64px));
-      margin: 28px auto 88px;
-      padding: 52px 58px;
-      border: 1px solid var(--line-strong);
-      border-radius: 10px;
-      background:
-        radial-gradient(circle at 78% 40%, oklch(0.74 0.14 200 / 0.18), transparent 28rem),
-        oklch(0.105 0.045 200);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 34px;
-    }
-    .closing-cta h2 { font-size: 58px; max-width: 660px; }
-    .closing-cta p { margin-top: 14px; color: var(--muted); line-height: 1.65; max-width: 620px; }
+    .closing-cta { width: min(1180px, calc(100% - 64px)); margin: 28px auto 88px; padding: 52px 58px; border: 1px solid var(--line-strong); border-radius: 10px; background: radial-gradient(circle at 78% 40%, oklch(0.74 0.14 200 / 0.18), transparent 28rem), oklch(0.105 0.045 200); display: flex; align-items: center; justify-content: space-between; gap: 34px; }
 
-    footer {
-      background: oklch(0.045 0.032 204);
-      padding: 44px 80px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-top: 1px solid var(--line);
-    }
-    .f-logo { display: inline-flex; align-items: center; text-decoration: none; }
-    .f-logo img { display: block; width: auto; height: 22px; }
+    footer { background: oklch(0.045 0.032 204); padding: 44px 80px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--line); }
     .f-links { display: flex; gap: 24px; }
     .f-links a { color: oklch(1 0 0 / 0.26); font-size: 13px; text-decoration: none; transition: color 0.2s; }
     .f-links a:hover { color: oklch(1 0 0 / 0.66); }
-    .f-copy { color: oklch(1 0 0 / 0.18); font-family: var(--mono); font-size: 11px; }
 
-    .modal-bg {
-      position: fixed;
-      inset: 0;
-      z-index: 200;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.75);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s;
-      backdrop-filter: blur(8px);
-    }
+    .modal-bg { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.75); opacity: 0; pointer-events: none; transition: opacity 0.25s; backdrop-filter: blur(8px); }
     .modal-bg.open { opacity: 1; pointer-events: auto; }
-    .modal {
-      position: relative;
-      width: 90%;
-      max-width: 500px;
-      padding: 48px 52px;
-      border: 1px solid oklch(1 0 0 / 0.1);
-      border-radius: 16px;
-      background: var(--panel);
-    }
-    .modal h3 {
-      margin-bottom: 16px;
-      color: var(--ink);
-      font-family: var(--display);
-      font-size: 52px;
-      font-style: italic;
-      font-weight: 900;
-      line-height: 0.92;
-    }
-    .modal p { margin-bottom: 28px; color: var(--muted); font-size: 16px; line-height: 1.6; }
-    .modal input {
-      width: 100%;
-      padding: 14px 18px;
-      border: 1px solid oklch(1 0 0 / 0.12);
-      border-radius: 10px;
-      outline: none;
-      background: oklch(1 0 0 / 0.06);
-      color: var(--ink);
-      font-family: var(--sans);
-      font-size: 15px;
-      transition: border-color 0.2s;
-    }
-    .modal input:focus { border-color: oklch(0.74 0.14 200 / 0.5); }
-    .modal input::placeholder { color: oklch(1 0 0 / 0.25); }
-    .modal-btn {
-      width: 100%;
-      margin-top: 12px;
-      padding: 14px;
-      border: none;
-      border-radius: 10px;
-      background: var(--cyan);
-      color: var(--bg);
-      cursor: pointer;
-      font-family: var(--sans);
-      font-size: 15px;
-      font-weight: 700;
-      transition: background 0.2s, opacity 0.2s;
-    }
-    .modal-btn:hover { background: oklch(0.82 0.14 200); }
-    .modal-btn:disabled { cursor: wait; opacity: 0.65; }
-    .modal-close {
-      position: absolute;
-      top: 20px;
-      right: 24px;
-      border: none;
-      background: none;
-      color: oklch(1 0 0 / 0.35);
-      cursor: pointer;
-      font-size: 22px;
-      transition: color 0.2s;
-    }
-    .modal-close:hover { color: var(--ink); }
-
-    @keyframes blink {
-      0%, 49% { opacity: 1; }
-      50%, 100% { opacity: 0; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.001ms !important;
-        animation-iteration-count: 1 !important;
-        scroll-behavior: auto !important;
-        transition-duration: 0.001ms !important;
-      }
-    }
+    .modal { position: relative; width: 90%; max-width: 500px; padding: 48px 52px; border: 1px solid oklch(1 0 0 / 0.1); border-radius: 16px; background: var(--panel); }
+    .modal h3 { margin-bottom: 16px; font-family: var(--display); font-size: 52px; font-style: italic; font-weight: 900; line-height: 0.92; }
 
     @media (max-width: 1040px) {
       .site-nav { padding: 18px 24px; }
-      .nav-right { gap: 2px; }
-      .nav-right a { padding: 6px 9px; }
       .page-shell, .quick-grid, .flow-section, .closing-cta { width: min(100% - 32px, 760px); }
-      .hero, .console-grid, .section-grid, .closing-cta {
-        grid-template-columns: 1fr;
-      }
-      .hero { min-height: auto; padding-top: 126px; padding-bottom: 54px; }
-      .hero::after { display: none; }
-      h1 { font-size: 76px; }
-      h2 { font-size: 58px; }
+      .hero, .console-grid, .section-grid, .closing-cta { grid-template-columns: 1fr; }
+      .hero { min-height: auto; padding-top: 126px; padding-bottom: 54px; text-align: center; }
+      .hero-word div, .hero-word span.cyan-line { justify-content: center; }
+      .hero-copy, .hero-actions { margin-left: auto; margin-right: auto; justify-content: center; }
       .command-stack { border-right: 0; border-bottom: 1px solid var(--line); }
-      .terminal-body { min-height: 360px; }
       .quick-grid { grid-template-columns: repeat(2, 1fr); }
       footer { padding: 38px 24px; gap: 26px; flex-wrap: wrap; }
-    }
-
-    @media (max-width: 640px) {
-      .site-nav { position: absolute; align-items: flex-start; flex-direction: column; gap: 18px; }
-      .nav-right { flex-wrap: wrap; }
-      .page-shell, .quick-grid, .flow-section, .closing-cta { width: calc(100% - 28px); }
-      .hero { padding-top: 178px; }
-      h1 { font-size: 56px; }
-      h2 { font-size: 46px; }
-      .hero-copy { font-size: 16px; }
-      .command-stack, .terminal-body, .quick-card { padding: 20px; }
-      .copy-line { overflow-x: auto; }
-      .quick-grid { grid-template-columns: 1fr; }
-      .flow-section { padding: 48px 0; }
-      .flow-row { grid-template-columns: 42px 1fr; }
-      .flow-chip { grid-column: 2; justify-self: start; }
-      .closing-cta { padding: 34px 24px; display: grid; }
-      .modal { padding: 38px 28px; }
-      .f-links { flex-wrap: wrap; gap: 14px; }
     }
   </style>
 </head>
@@ -674,15 +223,15 @@
 
 <div class="modal-bg" id="modalBg" onclick="closeModal(event)">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal()">×</button>
+    <button class="modal-close" onclick="closeModal()" style="position:absolute; top:20px; right:24px; border:none; background:none; color:rgba(255,255,255,0.3); cursor:pointer; font-size:22px;">×</button>
     <h3>Join the<br>waitlist.</h3>
     <p>Get early access + launch updates. No spam, ever.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-      <input type="text" id="wlFirst" placeholder="First name" />
-      <input type="text" id="wlLast" placeholder="Last name" />
+      <input type="text" id="wlFirst" placeholder="First name" style="width:100%; padding:14px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.05); color:#fff; outline:none;">
+      <input type="text" id="wlLast" placeholder="Last name" style="width:100%; padding:14px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.05); color:#fff; outline:none;">
     </div>
-    <input type="email" id="wlEmail" placeholder="you@company.com">
-    <button class="modal-btn" onclick="submitWaitlist()">Get early access →</button>
+    <input type="email" id="wlEmail" placeholder="you@company.com" style="width:100%; padding:14px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.05); color:#fff; outline:none; margin-bottom:12px;">
+    <button class="modal-btn" onclick="submitWaitlist()" style="width:100%; padding:14px; border:none; border-radius:10px; background:var(--cyan); color:#000; font-weight:700; cursor:pointer;">Get early access →</button>
     <p id="wlMsg" style="margin-top:12px;font-size:13px;color:var(--cyan);text-align:center;min-height:18px"></p>
   </div>
 </div>
@@ -690,9 +239,9 @@
 <nav class="site-nav">
   <a class="nav-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg" aria-label="Mesh"><path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text></svg></a>
   <div class="nav-right">
-    <a href="/features.html">Features</a>
-    <a href="/quickstart.html" class="nav-active">Quickstart</a>
-    <a href="/benchmarks.html">Benchmarks</a>
+    <a href="/features">Features</a>
+    <a href="/quickstart" class="nav-active">Quickstart</a>
+    <a href="/benchmarks">Benchmarks</a>
     <a onclick="openModal()" class="nav-waitlist">Waitlist</a>
   </div>
 </nav>
@@ -701,124 +250,43 @@
   <section class="page-shell hero">
     <div>
       <div class="eyebrow">Quickstart</div>
-      <div class="hero-word">
-        <span class="l">S</span><span class="l">t</span><span class="l">a</span><span class="l">r</span><span class="l">t</span>&nbsp;<span class="l">M</span><span class="l">e</span><span class="l">s</span><span class="l">h</span><br>
-        <span><span class="l">i</span><span class="l">n</span>&nbsp;<span class="l">3</span><span class="l">0</span>&nbsp;<span class="l">s</span><span class="l">e</span><span class="l">c</span><span class="l">o</span><span class="l">n</span><span class="l">d</span><span class="l">s</span><span class="l">.</span></span>
-      </div>
-      <p class="hero-copy">Install the CLI, open any repo, and let Mesh index the workspace before the agent acts. No long setup wizard. No account wall before you can see it work.</p>
+      <h1 class="hero-word">
+        <div><span class="l">S</span><span class="l">t</span><span class="l">a</span><span class="l">r</span><span class="l">t</span>&nbsp;<span class="l">M</span><span class="l">e</span><span class="l">s</span><span class="l">h</span></div>
+        <span class="cyan-line"><span class="l">i</span><span class="l">n</span>&nbsp;<span class="l">3</span><span class="l">0</span>&nbsp;<span class="l">s</span><span class="l">e</span><span class="l">c</span><span class="l">o</span><span class="l">n</span><span class="l">d</span><span class="l">s</span><span class="l">.</span></span>
+      </h1>
+      <p class="hero-copy">Install the CLI, open any repo, and let Mesh index the workspace before the agent acts. No long setup wizard.</p>
       <div class="hero-actions">
         <a class="primary-btn" href="#install">Install now</a>
-        <button class="secondary-btn" onclick="copyCommand('npm i -g @edgarelmo/mesh-agent-cli')">Copy npm command</button>
+        <button class="secondary-btn" onclick="copyCommand('npm i -g @edgarelmo/mesh-agent-cli')">Copy command</button>
       </div>
     </div>
 
-    <aside class="launch-console" id="install" aria-label="Mesh quickstart console">
+    <aside class="launch-console" id="install">
       <div class="console-top"><span>mesh/launch-console</span><span class="console-live">ready</span></div>
       <div class="console-grid">
         <div class="command-stack">
           <div class="command-card">
             <div class="command-num">1</div>
-            <div class="command-label">Install</div>
             <div class="command-title">Add Mesh globally</div>
-            <button class="copy-line" onclick="copyFromButton(this, 'npm i -g @edgarelmo/mesh-agent-cli')"><span class="prompt">$</span><span>npm i -g @edgarelmo/mesh-agent-cli</span><span class="copy-state">copy</span></button>
+            <button class="copy-line" onclick="copyFromButton(this, 'npm i -g @edgarelmo/mesh-agent-cli')"><span class="prompt">$</span><span>npm i -g ...</span></button>
           </div>
           <div class="command-card">
             <div class="command-num">2</div>
-            <div class="command-label">Open repo</div>
-            <div class="command-title">Move into your project</div>
-            <button class="copy-line" onclick="copyFromButton(this, 'cd your-project')"><span class="prompt">$</span><span>cd your-project</span><span class="copy-state">copy</span></button>
+            <div class="command-title">Move into repo</div>
+            <button class="copy-line" onclick="copyFromButton(this, 'cd my-project')"><span class="prompt">$</span><span>cd ...</span></button>
           </div>
           <div class="command-card">
             <div class="command-num">3</div>
-            <div class="command-label">Launch</div>
-            <div class="command-title">Start the Mesh agent</div>
-            <button class="copy-line" onclick="copyFromButton(this, 'mesh')"><span class="prompt">$</span><span>mesh</span><span class="copy-state">copy</span></button>
+            <div class="command-title">Launch agent</div>
+            <button class="copy-line" onclick="copyFromButton(this, 'mesh')"><span class="prompt">$</span><span>mesh</span></button>
           </div>
         </div>
-
         <div class="terminal-wrap">
-          <div class="terminal-bar">
-            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-            <span class="terminal-title">zsh - ~/my-project</span>
-          </div>
+          <div class="terminal-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
           <div class="terminal-body" id="terminalOutput"></div>
-          <div class="session-pills">
-            <span class="session-pill active" data-pill="launch">launch</span>
-            <span class="session-pill" data-pill="auto">auto-exec</span>
-            <span class="session-pill" data-pill="mcp">mcp</span>
-            <span class="session-pill" data-pill="voice">voice</span>
-          </div>
         </div>
       </div>
     </aside>
-  </section>
-
-  <section class="quick-grid" aria-label="Quick actions after install">
-    <div class="quick-card">
-      <div class="quick-label">MCP</div>
-      <h3>Connect tools.</h3>
-      <p>Expose GitHub, Linear, Postgres, and local workspace tools through Mesh.</p>
-      <button class="copy-line" onclick="copyFromButton(this, 'mesh connect --mcp')"><span class="prompt">$</span><span>mesh connect --mcp</span><span class="copy-state">copy</span></button>
-    </div>
-    <div class="quick-card">
-      <div class="quick-label">Voice</div>
-      <h3>Go hands-free.</h3>
-      <p>Install local Whisper dependencies and speak commands from the terminal.</p>
-      <button class="copy-line" onclick="copyFromButton(this, 'mesh doctor voice fix')"><span class="prompt">$</span><span>mesh doctor voice fix</span><span class="copy-state">copy</span></button>
-    </div>
-    <div class="quick-card">
-      <div class="quick-label">Resume</div>
-      <h3>Keep context.</h3>
-      <p>Continue a previous agent session with capsules, tool history, and file state.</p>
-      <button class="copy-line" onclick="copyFromButton(this, 'mesh resume')"><span class="prompt">$</span><span>mesh resume</span><span class="copy-state">copy</span></button>
-    </div>
-    <div class="quick-card">
-      <div class="quick-label">Doctor</div>
-      <h3>Check setup.</h3>
-      <p>Verify Node, model routing, voice dependencies, and local environment state.</p>
-      <button class="copy-line" onclick="copyFromButton(this, 'mesh doctor')"><span class="prompt">$</span><span>mesh doctor</span><span class="copy-state">copy</span></button>
-    </div>
-  </section>
-
-  <section class="flow-section">
-    <div class="section-grid">
-      <div>
-        <div class="section-kicker">What happens after launch</div>
-        <h2>Mesh prepares context before it acts.</h2>
-        <p class="section-copy">The first run indexes your workspace, compresses files into capsules, and makes targeted source recovery available to the agent. That means fewer raw tokens, better file coverage, and less guessing.</p>
-      </div>
-      <div class="flow-board" id="flowBoard">
-        <div class="flow-row">
-          <div class="flow-num">01</div>
-          <div><div class="flow-title">Workspace scan</div><div class="flow-copy">Mesh walks the repo, ignores noise, and builds a project map.</div></div>
-          <div class="flow-chip">files</div>
-        </div>
-        <div class="flow-row">
-          <div class="flow-num">02</div>
-          <div><div class="flow-title">Tree-sitter parse</div><div class="flow-copy">Code structure is extracted as symbols, imports, signatures, and calls.</div></div>
-          <div class="flow-chip">AST</div>
-        </div>
-        <div class="flow-row">
-          <div class="flow-num">03</div>
-          <div><div class="flow-title">Capsule compression</div><div class="flow-copy">The model receives structure first and opens exact source spans only when needed.</div></div>
-          <div class="flow-chip">3.9x</div>
-        </div>
-        <div class="flow-row">
-          <div class="flow-num">04</div>
-          <div><div class="flow-title">Agent loop</div><div class="flow-copy">Ask questions, run commands, connect tools, fix failures, and resume later.</div></div>
-          <div class="flow-chip">ready</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="closing-cta">
-    <div>
-      <div class="section-kicker">Use your own model stack</div>
-      <h2>Claude, OpenAI, Gemini, Bedrock, or local.</h2>
-      <p>Mesh is a context engine and terminal agent. Bring your provider keys, use managed Bedrock where available, or route to local models depending on your setup.</p>
-    </div>
-    <a class="primary-btn" onclick="openModal()">Join waitlist</a>
   </section>
 </main>
 
@@ -827,55 +295,44 @@
   <div class="f-links">
     <a href="https://docs.try-mesh.com">Docs</a>
     <a href="https://github.com/dreddi-edit/homebrew-mesh.git">GitHub</a>
-    <a href="https://www.npmjs.com/package/@edgarelmo/mesh-agent-cli">npm</a>
     <a href="https://twitter.com">Twitter</a>
   </div>
   <div class="f-copy">© 2026 Mesh Intelligence</div>
 </footer>
 
 <script>
-/* ── CANVAS PARTICLE MESH ── */
 const canvas = document.getElementById('mesh-canvas');
 const ctx = canvas.getContext('2d');
 let W, H, pts;
 const mouse = { x: -9999, y: -9999 };
 const LINK = 155;
 
-function resize() {
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-}
+function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
 function mkPts() {
-  const n = Math.min(90, Math.floor(W * H / 10000));
+  const n = Math.min(80, Math.floor(W * H / 12000));
   pts = Array.from({length: n}, () => ({
     x: Math.random() * W, y: Math.random() * H,
-    vx: (Math.random() - 0.5) * 0.45,
-    vy: (Math.random() - 0.5) * 0.45,
+    vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4
   }));
 }
 function raf() {
   ctx.clearRect(0, 0, W, H);
   pts.forEach(p => {
     p.x += p.vx; p.y += p.vy;
-    if (p.x < 0 || p.x > W) p.vx *= -1;
-    if (p.y < 0 || p.y > H) p.vy *= -1;
+    if (p.x < 0 || p.x > W) p.vx *= -1; if (p.y < 0 || p.y > H) p.vy *= -1;
     const dx = p.x - mouse.x, dy = p.y - mouse.y, d = Math.hypot(dx, dy);
-    if (d < 110) { p.vx += dx / d * 0.025; p.vy += dy / d * 0.025; }
-    const sp = Math.hypot(p.vx, p.vy);
-    if (sp > 1.1) { p.vx *= 0.97; p.vy *= 0.97; }
+    if (d < 100) { p.vx += dx / d * 0.02; p.vy += dy / d * 0.02; }
   });
   for (let i = 0; i < pts.length; i++) {
     for (let j = i+1; j < pts.length; j++) {
-      const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
-      const d = Math.hypot(dx, dy);
+      const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y, d = Math.hypot(dx, dy);
       if (d < LINK) {
-        ctx.strokeStyle = `rgba(0,180,200,${(1 - d / LINK) * 0.3})`;
-        ctx.lineWidth = 0.7;
-        ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y); ctx.stroke();
+        ctx.strokeStyle = `rgba(0,180,200,${(1 - d / LINK) * 0.25})`;
+        ctx.lineWidth = 0.6; ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y); ctx.stroke();
       }
     }
-    ctx.fillStyle = 'rgba(0,212,232,0.55)';
-    ctx.beginPath(); ctx.arc(pts[i].x, pts[i].y, 1.8, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = 'rgba(0,212,232,0.45)';
+    ctx.beginPath(); ctx.arc(pts[i].x, pts[i].y, 1.6, 0, Math.PI*2); ctx.fill();
   }
   requestAnimationFrame(raf);
 }
@@ -883,20 +340,10 @@ resize(); mkPts(); raf();
 window.addEventListener('resize', () => { resize(); mkPts(); });
 window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; }, {passive:true});
 
-/* canvas fades after hero */
-window.addEventListener('scroll', () => {
-  const t = Math.max(0, Math.min(1, 1 - window.scrollY / window.innerHeight));
-  canvas.style.opacity = 0.2 + t * 0.5;
-}, {passive:true});
-
-/* ── HERO LETTERS ── */
 setTimeout(() => {
-  document.querySelectorAll('.hero-word .l').forEach((el, i) =>
-    setTimeout(() => el.classList.add('in'), i * 80 + 100)
-  );
+  document.querySelectorAll('.hero-word .l').forEach((el, i) => setTimeout(() => el.classList.add('in'), i * 60 + 50));
 }, 50);
 
-/* ── SPOTLIGHT EFFECT ── */
 const spotlightElements = document.querySelectorAll('.quick-card, .command-card, .flow-row');
 spotlightElements.forEach(el => {
   el.addEventListener('mousemove', e => {
@@ -906,10 +353,7 @@ spotlightElements.forEach(el => {
   }, {passive:true});
 });
 
-function openModal() {
-  document.getElementById('modalBg').classList.add('open');
-}
-
+function openModal() { document.getElementById('modalBg').classList.add('open'); }
 function closeModal(event) {
   const modalBg = document.getElementById('modalBg');
   if (!event || event.target === modalBg || event.currentTarget?.classList?.contains('modal-close')) {
@@ -919,212 +363,53 @@ function closeModal(event) {
 
 async function submitWaitlist() {
   const emailInput = document.getElementById('wlEmail');
-  const firstInput = document.getElementById('wlFirst');
-  const lastInput = document.getElementById('wlLast');
-  const button = document.querySelector('#modalBg .modal-btn');
   const msg = document.getElementById('wlMsg');
-  
   const email = emailInput.value.trim();
-  const firstName = firstInput.value.trim();
-  const lastName = lastInput.value.trim();
-
-  if (!/^\S+@\S+\.\S+$/.test(email)) {
-    msg.textContent = 'Please enter a valid email address.';
-    return;
-  }
-
-  button.disabled = true;
+  if (!/^\S+@\S+\.\S+$/.test(email)) { msg.textContent = 'Please enter a valid email address.'; return; }
   msg.textContent = 'Submitting...';
-
   try {
     const response = await fetch('/api/subscribe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, firstName, lastName })
+      body: JSON.stringify({ email })
     });
     const payload = await response.json();
-    if (!response.ok || !payload.ok) {
-      throw new Error(payload.message || 'Subscription failed.');
-    }
-    msg.textContent = payload.message || `Thanks, ${email}. You are now on the waitlist.`;
-    emailInput.value = '';
-    firstInput.value = '';
-    lastInput.value = '';
-  } catch (error) {
-    msg.textContent = error instanceof Error ? error.message : 'Subscription failed.';
-  } finally {
-    button.disabled = false;
-  }
+    msg.textContent = payload.message || `Thanks. You are now on the waitlist.`;
+  } catch (error) { msg.textContent = 'Subscription failed.'; }
 }
 
-function copyCommand(text) {
-  return navigator.clipboard.writeText(text);
-}
-
-function copyFromButton(button, text) {
-  copyCommand(text).then(() => {
-    const state = button.querySelector('.copy-state');
-    if (!state) return;
-    state.textContent = 'copied';
-    state.style.color = 'var(--cyan)';
-    setTimeout(() => {
-      state.textContent = 'copy';
-      state.style.color = '';
-    }, 1600);
-  });
-}
-
-function observeOnce(selector, callback, threshold = 0.16) {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        callback(entry.target);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold });
-  document.querySelectorAll(selector).forEach((element) => observer.observe(element));
-}
-
-observeOnce('.launch-console', () => {
-  document.querySelectorAll('.command-card').forEach((card, index) => {
-    setTimeout(() => card.classList.add('visible'), index * 120);
-  });
-}, 0.2);
-
-observeOnce('.quick-grid', () => {
-  document.querySelectorAll('.quick-card').forEach((card, index) => {
-    setTimeout(() => card.classList.add('visible'), index * 90);
-  });
-}, 0.12);
-
-observeOnce('#flowBoard', () => {
-  document.querySelectorAll('.flow-row').forEach((row, index) => {
-    setTimeout(() => row.classList.add('visible'), index * 110);
-  });
-}, 0.18);
+function copyCommand(text) { navigator.clipboard.writeText(text); }
+function copyFromButton(button, text) { copyCommand(text); button.querySelector('span:last-child').textContent = 'copied'; setTimeout(() => button.querySelector('span:last-child').textContent = '...', 1600); }
 
 const terminal = document.getElementById('terminalOutput');
-const pills = document.querySelectorAll('.session-pill');
-const sessions = [
-  {
-    key: 'launch',
-    lines: [
-      ['prompt', 'npm i -g @edgarelmo/mesh-agent-cli'],
-      ['ok', 'added 1 package in 3.1s'],
-      ['blank', ''],
-      ['prompt', 'cd my-project && mesh'],
-      ['cyan', 'Mesh v1.0'],
-      ['ok', 'workspace indexed successfully'],
-      ['dim', '135/200 files cached - model claude-sonnet-4-6'],
-      ['prompt2', 'fix the broken login redirect'],
-      ['dim', 'reading src/routes/auth.ts'],
-      ['ok', 'fixed missing return after redirect']
-    ]
-  },
-  {
-    key: 'auto',
-    lines: [
-      ['prompt2', 'run tests and fix failures'],
-      ['dim', 'running npm test'],
-      ['bad', 'FAIL auth.redirect.test.ts'],
-      ['dim', 'analyzing failure output'],
-      ['dim', 'patching tests/setup.ts'],
-      ['dim', 'running npm test'],
-      ['ok', 'PASS 47/47']
-    ]
-  },
-  {
-    key: 'mcp',
-    lines: [
-      ['prompt2', 'connect --mcp'],
-      ['dim', 'scanning local environment'],
-      ['ok', 'github connected'],
-      ['ok', 'linear connected'],
-      ['ok', 'postgres connected'],
-      ['prompt2', 'create a ticket for this bug'],
-      ['dim', 'calling linear.create_issue'],
-      ['ok', 'created ticket MESH-509']
-    ]
-  },
-  {
-    key: 'voice',
-    lines: [
-      ['prompt', 'mesh doctor voice fix'],
-      ['dim', 'checking Homebrew'],
-      ['dim', 'installing whisper'],
-      ['ok', 'voice dependencies ready'],
-      ['prompt', 'mesh'],
-      ['cyan', 'voice mode enabled'],
-      ['dim', 'transcribed: show me all TODOs'],
-      ['ok', 'found 12 TODOs across 6 files']
-    ]
-  }
+const lines = [
+  ['cyan', '$ mesh'],
+  ['dim', 'indexing workspace...'],
+  ['ok', '✓ SUCCESS'],
+  ['white', 'mesh > fix the login bug'],
+  ['dim', 'reading src/auth.ts...'],
+  ['ok', '✓ PATCHED']
 ];
 
-function setActivePill(key) {
-  pills.forEach((pill) => pill.classList.toggle('active', pill.dataset.pill === key));
-}
-
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-async function typeText(element, text, delay) {
-  for (const char of text) {
-    element.textContent += char;
-    await sleep(delay);
-  }
-}
-
-async function runSession(session) {
-  setActivePill(session.key);
+async function runTerminal() {
   terminal.innerHTML = '';
-
-  for (const [type, value] of session.lines) {
-    if (type === 'blank') {
-      const spacer = document.createElement('div');
-      spacer.innerHTML = '&nbsp;';
-      terminal.appendChild(spacer);
-      await sleep(120);
-      continue;
-    }
-
-    const row = document.createElement('div');
-    terminal.appendChild(row);
-
-    if (type === 'prompt' || type === 'prompt2') {
-      const prompt = document.createElement('span');
-      prompt.className = type === 'prompt' ? 't-cyan' : 't-cyan';
-      prompt.textContent = type === 'prompt' ? '$ ' : 'mesh > ';
-      const text = document.createElement('span');
-      text.className = 't-ink';
-      row.appendChild(prompt);
-      row.appendChild(text);
-      await typeText(text, value, type === 'prompt' ? 26 : 22);
-    } else {
-      row.className = type === 'ok' ? 't-green' : type === 'bad' ? 't-red' : type === 'cyan' ? 't-cyan' : 't-dim';
-      row.textContent = type === 'ok' ? `OK ${value}` : value;
-    }
-
-    await sleep(type === 'prompt' || type === 'prompt2' ? 190 : 95);
+  for (const [type, txt] of lines) {
+    const div = document.createElement('div');
+    div.className = 't-' + type;
+    div.textContent = txt;
+    terminal.appendChild(div);
+    await new Promise(r => setTimeout(r, 600));
   }
-
   const cursor = document.createElement('span');
   cursor.className = 'cursor';
   terminal.appendChild(cursor);
-  await sleep(2400);
 }
+runTerminal();
 
-async function terminalLoop() {
-  let index = 0;
-  while (true) {
-    await runSession(sessions[index % sessions.length]);
-    index += 1;
-  }
-}
-
-terminalLoop();
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('visible'); revealObserver.unobserve(entry.target); } });
+}, { threshold: 0.15 });
+document.querySelectorAll('.command-card, .quick-card, .flow-row').forEach(el => revealObserver.observe(el));
 </script>
 </body>
 </html>

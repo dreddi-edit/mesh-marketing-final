@@ -73,13 +73,9 @@
 
     .site-nav {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
       padding: 22px 56px;
       background: oklch(0.078 0.038 200 / 0.82);
       backdrop-filter: blur(12px);
@@ -89,12 +85,9 @@
     .nav-logo img { display: block; width: auto; height: 25px; }
     .nav-right { display: flex; gap: 6px; align-items: center; }
     .nav-right a {
-      font-size: 13px;
-      color: oklch(1 0 0 / 0.42);
-      text-decoration: none;
-      padding: 6px 14px;
-      border-radius: 6px;
-      border: 1px solid transparent;
+      font-size: 13px; color: oklch(1 0 0 / 0.42);
+      text-decoration: none; padding: 6px 14px;
+      border-radius: 6px; border: 1px solid transparent;
       transition: color 0.2s, border-color 0.2s, background 0.2s;
     }
     .nav-right a:hover { color: var(--ink); border-color: oklch(1 0 0 / 0.12); }
@@ -116,7 +109,7 @@
       min-height: 100vh;
       padding-top: 128px;
       display: grid;
-      grid-template-columns: minmax(0, 0.95fr) minmax(360px, 0.85fr);
+      grid-template-columns: minmax(0, 1fr) minmax(360px, 0.8fr);
       gap: 70px;
       align-items: center;
       position: relative;
@@ -124,87 +117,61 @@
     
     .hero-word {
       font-family: var(--display);
-      font-style: italic;
-      font-weight: 900;
-      font-size: clamp(80px, 12vw, 150px);
-      line-height: 0.85;
+      font-style: italic; font-weight: 900;
+      font-size: clamp(60px, 9vw, 130px);
+      line-height: 0.9;
       letter-spacing: -0.03em;
       color: var(--white);
-      display: flex;
-      flex-wrap: wrap;
+      display: block;
       user-select: none;
+      overflow: visible;
     }
-    .hero-word span { color: var(--cyan); }
+    .hero-word div { display: flex; flex-wrap: nowrap; align-items: baseline; }
+    .hero-word .cyan-line { color: var(--cyan); }
     .hero-word .l {
       display: inline-block;
-      opacity: 0; transform: translateY(40px);
-      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1);
     }
     .hero-word .l.in { opacity: 1; transform: none; }
 
     .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 22px;
-      color: var(--cyan);
-      font-family: var(--mono);
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
+      display: inline-flex; align-items: center; gap: 10px;
+      margin-bottom: 22px; color: var(--cyan);
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: 0.12em; text-transform: uppercase;
       opacity: 0; animation: up 0.8s 0.2s ease forwards;
     }
-    .eyebrow::before {
-      content: "";
-      width: 26px;
-      height: 1px;
-      background: var(--cyan);
-    }
+    .eyebrow::before { content: ""; width: 26px; height: 1px; background: var(--cyan); }
     @keyframes up { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:none} }
 
     .hero-copy {
-      margin-top: 30px;
-      max-width: 620px;
-      color: var(--muted);
-      font-size: 18px;
-      font-weight: 300;
-      line-height: 1.72;
+      margin-top: 30px; max-width: 620px;
+      color: var(--muted); font-size: 18px;
+      font-weight: 300; line-height: 1.7;
       opacity: 0; animation: up 0.8s 0.6s ease forwards;
     }
     .hero-copy strong { color: var(--ink); font-weight: 500; }
     .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 34px;
+      display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px;
       opacity: 0; animation: up 0.8s 0.8s ease forwards;
     }
 
     .score-card, .method-card, .budget-card, .lab-card, .proof-cell {
-      --x: 50%; --y: 50%;
-      position: relative;
+      --x: 50%; --y: 50%; position: relative;
     }
     .score-card::before, .method-card::before, .budget-card::after, .lab-card::before {
       content: ''; position: absolute; inset: 0;
-      background: radial-gradient(400px circle at var(--x) var(--y),
-        oklch(0.74 0.14 200 / 0.1),
-        transparent 45%);
-      opacity: 0; transition: opacity 0.4s;
-      pointer-events: none; z-index: 0;
+      background: radial-gradient(400px circle at var(--x) var(--y), oklch(0.74 0.14 200 / 0.1), transparent 45%);
+      opacity: 0; transition: opacity 0.4s; pointer-events: none; z-index: 0;
     }
     .score-card:hover::before, .method-card:hover::before, .budget-card:hover::after, .lab-card:hover::before { opacity: 1; }
+
     .primary-btn, .secondary-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 44px;
-      padding: 0 18px;
-      border-radius: 8px;
-      border: 1px solid transparent;
-      cursor: pointer;
-      font-family: var(--sans);
-      font-size: 14px;
-      font-weight: 700;
+      display: inline-flex; align-items: center; justify-content: center;
+      min-height: 44px; padding: 0 18px; border-radius: 8px;
+      border: 1px solid transparent; cursor: pointer;
+      font-family: var(--sans); font-size: 14px; font-weight: 700;
       text-decoration: none;
       transition: transform 0.2s, border-color 0.2s, background 0.2s;
     }
@@ -214,798 +181,115 @@
     .secondary-btn:hover { border-color: var(--line-strong); }
 
     .observatory {
-      position: relative;
-      min-height: 520px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at 50% 44%, oklch(0.74 0.14 200 / 0.17), transparent 16rem),
-        linear-gradient(180deg, oklch(0.13 0.052 200 / 0.95), oklch(0.052 0.034 204 / 0.95));
+      position: relative; min-height: 520px; border: 1px solid var(--line); border-radius: 10px;
+      overflow: hidden; background: radial-gradient(circle at 50% 44%, oklch(0.74 0.14 200 / 0.17), transparent 16rem), linear-gradient(180deg, oklch(0.13 0.052 200 / 0.95), oklch(0.052 0.034 204 / 0.95));
       box-shadow: 0 34px 110px oklch(0 0 0 / 0.28);
     }
     .obs-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 44px;
-      padding: 0 16px;
-      border-bottom: 1px solid var(--line);
-      color: var(--dim);
-      font-family: var(--mono);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
+      display: flex; align-items: center; justify-content: space-between; height: 44px;
+      padding: 0 16px; border-bottom: 1px solid var(--line);
+      color: var(--dim); font-family: var(--mono); font-size: 10px;
+      text-transform: uppercase; letter-spacing: 0.08em;
     }
-    .obs-live {
-      display: inline-flex;
-      gap: 7px;
-      align-items: center;
-      color: var(--green);
-    }
-    .obs-live::before {
-      content: "";
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 16px var(--green);
-    }
-    .orbit {
-      position: absolute;
-      left: 50%;
-      top: 54%;
-      width: 340px;
-      height: 340px;
-      transform: translate(-50%, -50%);
-      border: 1px solid oklch(0.74 0.14 200 / 0.22);
-      border-radius: 50%;
-      animation: rotateOrbit 20s linear infinite;
-    }
-    .orbit::before, .orbit::after {
-      content: "";
-      position: absolute;
-      inset: 48px;
-      border: 1px solid oklch(1 0 0 / 0.08);
-      border-radius: 50%;
-    }
+    .obs-live { display: inline-flex; gap: 7px; align-items: center; color: var(--green); }
+    .obs-live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 16px var(--green); }
+    .orbit { position: absolute; left: 50%; top: 54%; width: 340px; height: 340px; transform: translate(-50%, -50%); border: 1px solid oklch(0.74 0.14 200 / 0.22); border-radius: 50%; animation: rotateOrbit 20s linear infinite; }
+    .orbit::before, .orbit::after { content: ""; position: absolute; inset: 48px; border: 1px solid oklch(1 0 0 / 0.08); border-radius: 50%; }
     .orbit::after { inset: 104px; border-color: oklch(0.74 0.14 200 / 0.18); }
-    .needle {
-      position: absolute;
-      right: 54px;
-      top: 72px;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--cyan);
-      box-shadow: 0 0 20px var(--cyan), 0 0 70px oklch(0.74 0.14 200 / 0.8);
-    }
-    .scanline {
-      position: absolute;
-      left: 50%;
-      top: 54%;
-      width: 2px;
-      height: 245px;
-      transform-origin: top center;
-      background: linear-gradient(to bottom, var(--cyan), transparent);
-      animation: sweep 5.2s linear infinite;
-      opacity: 0.8;
-    }
-    .hero-score {
-      position: absolute;
-      inset: auto 26px 26px 26px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    .hero-metric {
-      min-height: 118px;
-      padding: 16px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: oklch(0.048 0.034 204 / 0.68);
-      backdrop-filter: blur(10px);
-    }
-    .hero-metric strong {
-      display: block;
-      font-family: var(--display);
-      font-size: 50px;
-      font-style: italic;
-      font-weight: 900;
-      line-height: 0.9;
-      color: var(--cyan);
-    }
-    .hero-metric span {
-      display: block;
-      margin-top: 8px;
-      color: var(--dim);
-      font-size: 12px;
-      line-height: 1.45;
-    }
-    .model-cloud {
-      position: absolute;
-      left: 24px;
-      top: 66px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .model-chip {
-      width: max-content;
-      padding: 8px 10px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: oklch(0.048 0.034 204 / 0.72);
-      color: oklch(1 0 0 / 0.62);
-      font-family: var(--mono);
-      font-size: 10px;
-      backdrop-filter: blur(10px);
-      animation: drift 5s ease-in-out infinite;
-    }
+    .needle { position: absolute; right: 54px; top: 72px; width: 10px; height: 10px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 20px var(--cyan), 0 0 70px oklch(0.74 0.14 200 / 0.8); }
+    .scanline { position: absolute; left: 50%; top: 54%; width: 2px; height: 245px; transform-origin: top center; background: linear-gradient(to bottom, var(--cyan), transparent); animation: sweep 5.2s linear infinite; opacity: 0.8; }
+    .hero-score { position: absolute; inset: auto 26px 26px 26px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .hero-metric { min-height: 118px; padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: oklch(0.048 0.034 204 / 0.68); backdrop-filter: blur(10px); }
+    .hero-metric strong { display: block; font-family: var(--display); font-size: 50px; font-style: italic; font-weight: 900; line-height: 0.9; color: var(--cyan); }
+    .hero-metric span { display: block; margin-top: 8px; color: var(--dim); font-size: 12px; line-height: 1.45; }
+    .model-cloud { position: absolute; left: 24px; top: 66px; display: flex; flex-direction: column; gap: 8px; }
+    .model-chip { width: max-content; padding: 8px 10px; border: 1px solid var(--line); border-radius: 999px; background: oklch(0.048 0.034 204 / 0.72); color: oklch(1 0 0 / 0.62); font-family: var(--mono); font-size: 10px; backdrop-filter: blur(10px); animation: drift 5s ease-in-out infinite; }
     .model-chip:nth-child(2) { margin-left: 34px; animation-delay: 0.7s; }
     .model-chip:nth-child(3) { margin-left: 10px; animation-delay: 1.4s; }
     .model-chip:nth-child(4) { margin-left: 52px; animation-delay: 2.1s; }
     .model-chip:nth-child(5) { margin-left: 20px; animation-delay: 2.8s; }
 
-    .proof-strip {
-      width: min(1180px, calc(100% - 64px));
-      margin: -18px auto 0;
-      position: relative;
-      z-index: 5;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      overflow: hidden;
-      background: oklch(0.07 0.036 204 / 0.86);
-      backdrop-filter: blur(16px);
-    }
-    .proof-cell {
-      min-height: 172px;
-      padding: 28px;
-      border-right: 1px solid var(--line);
-      opacity: 0;
-      transform: translateY(18px);
-      transition: opacity 0.65s ease, transform 0.65s ease;
-    }
-    .proof-cell:last-child { border-right: 0; }
+    .proof-strip { width: min(1180px, calc(100% - 64px)); margin: -18px auto 0; position: relative; z-index: 5; display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: oklch(0.07 0.036 204 / 0.86); backdrop-filter: blur(16px); }
+    .proof-cell { min-height: 172px; padding: 28px; border-right: 1px solid var(--line); opacity: 0; transform: translateY(18px); transition: all 0.6s ease; }
     .proof-cell.visible { opacity: 1; transform: none; }
-    .proof-number {
-      display: flex;
-      align-items: flex-start;
-      gap: 3px;
-      font-family: var(--display);
-      font-size: 72px;
-      font-style: italic;
-      font-weight: 900;
-      line-height: 0.9;
-    }
-    .proof-number sup {
-      margin-top: 9px;
-      color: var(--cyan);
-      font-size: 0.38em;
-    }
+    .proof-number { display: flex; align-items: flex-start; gap: 3px; font-family: var(--display); font-size: 72px; font-style: italic; font-weight: 900; line-height: 0.9; }
+    .proof-number sup { margin-top: 9px; color: var(--cyan); font-size: 0.38em; }
     .proof-label { margin-top: 12px; color: var(--muted); font-size: 13px; line-height: 1.5; }
-    .proof-badge {
-      display: inline-flex;
-      margin-top: 12px;
-      padding: 5px 8px;
-      border-radius: 999px;
-      background: var(--cyan-soft);
-      color: var(--cyan);
-      font-family: var(--mono);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
+    .proof-badge { display: inline-flex; margin-top: 12px; padding: 5px 8px; border-radius: 999px; background: var(--cyan-soft); color: var(--cyan); font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; }
 
-    .bench-section {
-      width: min(1180px, calc(100% - 64px));
-      margin: 30px auto 0;
-      padding: 64px 0;
-    }
-    .section-grid {
-      display: grid;
-      grid-template-columns: 0.75fr 1.25fr;
-      gap: 58px;
-      align-items: center;
-    }
-    .section-kicker {
-      margin-bottom: 16px;
-      color: var(--cyan);
-      font-family: var(--mono);
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-    h2 {
-      font-family: var(--display);
-      font-size: 74px;
-      font-style: italic;
-      font-weight: 900;
-      line-height: 0.92;
-    }
-    .section-copy {
-      margin-top: 22px;
-      color: var(--muted);
-      font-size: 16px;
-      font-weight: 300;
-      line-height: 1.75;
-    }
+    .bench-section { width: min(1180px, calc(100% - 64px)); margin: 30px auto 0; padding: 64px 0; }
+    .section-grid { display: grid; grid-template-columns: 0.75fr 1.25fr; gap: 58px; align-items: center; }
+    .section-kicker { margin-bottom: 16px; color: var(--cyan); font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
+    h2 { font-family: var(--display); font-size: 74px; font-style: italic; font-weight: 900; line-height: 0.92; }
+    .section-copy { margin-top: 22px; color: var(--muted); font-size: 16px; font-weight: 300; line-height: 1.75; }
     .section-copy strong { color: var(--ink); font-weight: 500; }
-    .section-note {
-      margin-top: 18px;
-      color: var(--dim);
-      font-family: var(--mono);
-      font-size: 11px;
-      line-height: 1.7;
-    }
 
-    .lab-card {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: oklch(0.10 0.042 200 / 0.76);
-      overflow: hidden;
-      box-shadow: 0 28px 90px oklch(0 0 0 / 0.16);
-    }
-    .lab-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      min-height: 42px;
-      padding: 0 15px;
-      border-bottom: 1px solid var(--line);
-      color: var(--dim);
-      font-family: var(--mono);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      background: oklch(1 0 0 / 0.025);
-    }
+    .lab-card { border: 1px solid var(--line); border-radius: 10px; background: oklch(0.10 0.042 200 / 0.76); overflow: hidden; box-shadow: 0 28px 90px oklch(0 0 0 / 0.16); }
+    .lab-top { display: flex; align-items: center; justify-content: space-between; min-height: 42px; padding: 0 15px; border-bottom: 1px solid var(--line); color: var(--dim); font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; background: oklch(1 0 0 / 0.025); }
 
-    .needle-visual {
-      display: grid;
-      grid-template-columns: 0.92fr 1.08fr;
-      min-height: 420px;
-    }
-    .haystack {
-      position: relative;
-      border-right: 1px solid var(--line);
-      overflow: hidden;
-      background:
-        radial-gradient(circle at 58% 40%, oklch(0.74 0.14 200 / 0.10), transparent 15rem),
-        oklch(0.046 0.034 204 / 0.88);
-    }
-    .hay-dot {
-      position: absolute;
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: oklch(1 0 0 / 0.16);
-    }
-    .hay-dot.needle-dot {
-      width: 10px;
-      height: 10px;
-      background: var(--cyan);
-      box-shadow: 0 0 22px var(--cyan);
-      animation: pulseNeedle 1.7s ease-in-out infinite;
-    }
-    .search-beam {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(112deg, transparent 0 42%, oklch(0.74 0.14 200 / 0.16) 48%, transparent 58%);
-      animation: beamSweep 4.8s ease-in-out infinite;
-    }
-    .chart-stack {
-      padding: 24px;
-      display: grid;
-      gap: 16px;
-      align-content: center;
-    }
-    .chart-row {
-      opacity: 0;
-      transform: translateX(16px);
-      transition: opacity 0.65s ease, transform 0.65s ease;
-    }
+    .needle-visual { display: grid; grid-template-columns: 0.92fr 1.08fr; min-height: 420px; }
+    .haystack { position: relative; border-right: 1px solid var(--line); overflow: hidden; background: radial-gradient(circle at 58% 40%, oklch(0.74 0.14 200 / 0.10), transparent 15rem), oklch(0.046 0.034 204 / 0.88); }
+    .hay-dot { position: absolute; width: 5px; height: 5px; border-radius: 50%; background: oklch(1 0 0 / 0.16); }
+    .hay-dot.needle-dot { width: 10px; height: 10px; background: var(--cyan); box-shadow: 0 0 22px var(--cyan); animation: pulseNeedle 1.7s ease-in-out infinite; }
+    .search-beam { position: absolute; inset: 0; background: linear-gradient(112deg, transparent 0 42%, oklch(0.74 0.14 200 / 0.16) 48%, transparent 58%); animation: beamSweep 4.8s ease-in-out infinite; }
+    .chart-stack { padding: 24px; display: grid; gap: 16px; align-content: center; }
+    .chart-row { opacity: 0; transform: translateX(16px); transition: all 0.6s ease; }
     .chart-row.visible { opacity: 1; transform: none; }
-    .chart-title {
-      display: flex;
-      justify-content: space-between;
-      gap: 14px;
-      margin-bottom: 9px;
-      color: var(--muted);
-      font-family: var(--mono);
-      font-size: 11px;
-    }
+    .chart-title { display: flex; justify-content: space-between; gap: 14px; margin-bottom: 9px; color: var(--muted); font-family: var(--mono); font-size: 11px; }
     .bar-pair { display: grid; gap: 6px; }
-    .bar-line {
-      display: grid;
-      grid-template-columns: 44px 1fr 54px;
-      align-items: center;
-      gap: 8px;
-      color: var(--dim);
-      font-family: var(--mono);
-      font-size: 10px;
-    }
-    .track {
-      height: 9px;
-      border-radius: 999px;
-      background: oklch(1 0 0 / 0.06);
-      overflow: hidden;
-    }
-    .fill {
-      height: 100%;
-      width: 0;
-      border-radius: 999px;
-      transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-    }
+    .bar-line { display: grid; grid-template-columns: 44px 1fr 54px; align-items: center; gap: 8px; color: var(--dim); font-family: var(--mono); font-size: 10px; }
+    .track { height: 9px; border-radius: 999px; background: oklch(1 0 0 / 0.06); overflow: hidden; }
+    .fill { height: 100%; width: 0; border-radius: 999px; transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
     .fill.mesh { background: linear-gradient(90deg, oklch(0.38 0.09 198), var(--cyan)); }
     .fill.raw { background: oklch(1 0 0 / 0.16); }
-    .bar-line.mesh { color: var(--cyan); }
 
-    .budget-panel {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-    .budget-card {
-      min-height: 360px;
-      padding: 28px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: oklch(0.10 0.042 200 / 0.72);
-      position: relative;
-      overflow: hidden;
-    }
+    .budget-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .budget-card { min-height: 360px; padding: 28px; border: 1px solid var(--line); border-radius: 10px; background: oklch(0.10 0.042 200 / 0.72); position: relative; overflow: hidden; }
     .budget-card.mesh { border-color: var(--line-strong); }
-    .budget-card::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: var(--fill, 0%);
-      background: linear-gradient(180deg, transparent, oklch(0.74 0.14 200 / 0.16));
-      transition: height 1.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .budget-label {
-      position: relative;
-      color: var(--dim);
-      font-family: var(--mono);
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 18px;
-    }
-    .budget-number {
-      position: relative;
-      font-family: var(--display);
-      font-size: 82px;
-      font-style: italic;
-      font-weight: 900;
-      line-height: 0.9;
-    }
+    .budget-number { position: relative; font-family: var(--display); font-size: 82px; font-style: italic; font-weight: 900; line-height: 0.9; }
     .budget-card.mesh .budget-number { color: var(--cyan); }
-    .budget-copy {
-      position: relative;
-      margin-top: 18px;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
-    }
-    .budget-track {
-      position: relative;
-      margin-top: 28px;
-      height: 8px;
-      border-radius: 999px;
-      background: oklch(1 0 0 / 0.07);
-      overflow: hidden;
-    }
-    .budget-track span {
-      display: block;
-      width: 0;
-      height: 100%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, oklch(0.38 0.09 198), var(--cyan));
-      transition: width 1.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .budget-card.raw .budget-track span { background: oklch(1 0 0 / 0.18); }
+    .budget-track { position: relative; margin-top: 28px; height: 8px; border-radius: 999px; background: oklch(1 0 0 / 0.07); overflow: hidden; }
+    .budget-track span { display: block; width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, oklch(0.38 0.09 198), var(--cyan)); transition: width 1.4s cubic-bezier(0.16, 1, 0.3, 1); }
 
-    .atlas {
-      display: grid;
-      grid-template-columns: 0.9fr 1.1fr;
-      gap: 18px;
-      align-items: stretch;
-    }
-    .capsule-picture {
-      min-height: 500px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background:
-        radial-gradient(circle at 50% 44%, oklch(0.74 0.14 200 / 0.16), transparent 13rem),
-        oklch(0.046 0.034 204 / 0.86);
-      position: relative;
-      overflow: hidden;
-    }
-    .capsule-core {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 170px;
-      height: 170px;
-      transform: translate(-50%, -50%);
-      border: 1px solid var(--line-strong);
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      color: var(--cyan);
-      font-family: var(--display);
-      font-size: 56px;
-      font-style: italic;
-      font-weight: 900;
-      background: oklch(0.06 0.035 204 / 0.86);
-      box-shadow: 0 0 80px oklch(0.74 0.14 200 / 0.14);
-    }
-    .capsule-ring {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      border: 1px solid oklch(0.74 0.14 200 / 0.16);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      animation: rotateOrbit 28s linear infinite;
-    }
-    .capsule-ring.r1 { width: 270px; height: 270px; }
-    .capsule-ring.r2 { width: 390px; height: 390px; animation-direction: reverse; }
-    .capsule-node {
-      position: absolute;
-      width: 98px;
-      padding: 9px 10px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: oklch(0.08 0.038 200 / 0.82);
-      color: var(--muted);
-      font-family: var(--mono);
-      font-size: 10px;
-      line-height: 1.35;
-    }
-    .capsule-node strong { color: var(--cyan); font-weight: 600; }
-    .capsule-node.n1 { left: 44px; top: 72px; }
-    .capsule-node.n2 { right: 42px; top: 116px; }
-    .capsule-node.n3 { left: 70px; bottom: 108px; }
-    .capsule-node.n4 { right: 72px; bottom: 74px; }
-    .compression-table {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      overflow: hidden;
-      background: oklch(0.10 0.042 200 / 0.72);
-    }
-    .table-row {
-      display: grid;
-      grid-template-columns: 0.7fr 0.55fr 0.75fr 0.82fr 0.95fr;
-      align-items: center;
-      border-bottom: 1px solid var(--line);
-      font-family: var(--mono);
-      font-size: 12px;
-    }
-    .table-row:last-child { border-bottom: 0; }
-    .table-row.header {
-      color: var(--dim);
-      font-size: 10px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      background: oklch(1 0 0 / 0.026);
-    }
-    .table-cell { padding: 13px 14px; }
-    .table-row:not(.header) .table-cell:first-child { color: var(--ink); }
-    .table-highlight { color: var(--cyan); }
-    .mini-track {
-      height: 7px;
-      border-radius: 999px;
-      background: oklch(1 0 0 / 0.07);
-      overflow: hidden;
-    }
-    .mini-track span {
-      display: block;
-      width: var(--w);
-      height: 100%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, oklch(0.38 0.09 198), var(--cyan));
-    }
-
-    .score-wall {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-    }
-    .score-card {
-      min-height: 190px;
-      padding: 24px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: oklch(0.10 0.042 200 / 0.74);
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.65s ease, transform 0.65s ease;
-    }
+    .score-wall { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .score-card { min-height: 190px; padding: 24px; border: 1px solid var(--line); border-radius: 10px; background: oklch(0.10 0.042 200 / 0.74); opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
     .score-card.visible { opacity: 1; transform: none; }
     .score-card.large { grid-column: span 2; min-height: 250px; }
-    .score-label {
-      color: var(--dim);
-      font-family: var(--mono);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      line-height: 1.45;
-    }
-    .score-value {
-      margin-top: 16px;
-      font-family: var(--display);
-      font-size: 78px;
-      font-style: italic;
-      font-weight: 900;
-      line-height: 0.88;
-    }
-    .score-card.large .score-value { font-size: 122px; color: var(--cyan); }
-    .score-sub {
-      margin-top: 12px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.55;
-    }
-    .model-list {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 8px;
-      margin-top: 18px;
-    }
-    .model-pill {
-      padding: 10px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: oklch(1 0 0 / 0.026);
-      color: var(--muted);
-      font-family: var(--mono);
-      font-size: 10px;
-      text-align: center;
-    }
+    .score-value { margin-top: 16px; font-family: var(--display); font-size: 78px; font-style: italic; font-weight: 900; line-height: 0.88; }
+    .score-card.large .score-value { font-size: 110px; color: var(--cyan); }
 
-    .method-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-    .method-card {
-      padding: 32px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: oklch(0.10 0.042 200 / 0.72);
-    }
-    .method-card h3 {
-      margin-bottom: 14px;
-      font-family: var(--display);
-      font-size: 36px;
-      font-weight: 800;
-      line-height: 1;
-    }
-    .method-card p {
-      color: var(--muted);
-      font-size: 15px;
-      font-weight: 300;
-      line-height: 1.7;
-    }
-    .method-card strong { color: var(--ink); font-weight: 500; }
-
-    .closing-cta {
-      width: min(1180px, calc(100% - 64px));
-      margin: 28px auto 88px;
-      padding: 52px 58px;
-      border: 1px solid var(--line-strong);
-      border-radius: 10px;
-      background:
-        radial-gradient(circle at 78% 40%, oklch(0.74 0.14 200 / 0.18), transparent 28rem),
-        oklch(0.105 0.045 200);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 34px;
-    }
+    .closing-cta { width: min(1180px, calc(100% - 64px)); margin: 28px auto 88px; padding: 52px 58px; border: 1px solid var(--line-strong); border-radius: 10px; background: radial-gradient(circle at 78% 40%, oklch(0.74 0.14 200 / 0.18), transparent 28rem), oklch(0.105 0.045 200); display: flex; align-items: center; justify-content: space-between; gap: 34px; }
     .closing-cta h2 { font-size: 58px; max-width: 640px; }
-    .closing-cta p { margin-top: 14px; color: var(--muted); line-height: 1.65; max-width: 620px; }
-    .install-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      min-height: 46px;
-      padding: 0 18px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: oklch(1 0 0 / 0.04);
-      color: var(--ink);
-      cursor: pointer;
-      font-family: var(--mono);
-      font-size: 13px;
-      white-space: nowrap;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-    .install-btn:hover { transform: translateY(-2px); border-color: var(--line-strong); }
-    .install-btn .prompt { color: var(--cyan); }
 
-    footer {
-      background: oklch(0.045 0.032 204);
-      padding: 44px 80px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-top: 1px solid var(--line);
-    }
+    footer { background: oklch(0.045 0.032 204); padding: 44px 80px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--line); }
     .f-logo { display: inline-flex; align-items: center; text-decoration: none; }
-    .f-logo img { display: block; width: auto; height: 22px; }
     .f-links { display: flex; gap: 24px; }
     .f-links a { color: oklch(1 0 0 / 0.26); font-size: 13px; text-decoration: none; transition: color 0.2s; }
     .f-links a:hover { color: oklch(1 0 0 / 0.66); }
     .f-copy { color: oklch(1 0 0 / 0.18); font-family: var(--mono); font-size: 11px; }
 
-    .modal-bg {
-      position: fixed;
-      inset: 0;
-      z-index: 200;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.75);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s;
-      backdrop-filter: blur(8px);
-    }
+    .modal-bg { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.75); opacity: 0; pointer-events: none; transition: opacity 0.25s; backdrop-filter: blur(8px); }
     .modal-bg.open { opacity: 1; pointer-events: auto; }
-    .modal {
-      position: relative;
-      width: 90%;
-      max-width: 500px;
-      padding: 48px 52px;
-      border: 1px solid oklch(1 0 0 / 0.1);
-      border-radius: 16px;
-      background: var(--panel);
-    }
-    .modal h3 {
-      margin-bottom: 16px;
-      color: var(--ink);
-      font-family: var(--display);
-      font-size: 52px;
-      font-style: italic;
-      font-weight: 900;
-      line-height: 0.92;
-    }
-    .modal p { margin-bottom: 28px; color: var(--muted); font-size: 16px; line-height: 1.6; }
-    .modal input {
-      width: 100%;
-      padding: 14px 18px;
-      border: 1px solid oklch(1 0 0 / 0.12);
-      border-radius: 10px;
-      outline: none;
-      background: oklch(1 0 0 / 0.06);
-      color: var(--ink);
-      font-family: var(--sans);
-      font-size: 15px;
-      transition: border-color 0.2s;
-    }
-    .modal input:focus { border-color: oklch(0.74 0.14 200 / 0.5); }
-    .modal input::placeholder { color: oklch(1 0 0 / 0.25); }
-    .modal-btn {
-      width: 100%;
-      margin-top: 12px;
-      padding: 14px;
-      border: none;
-      border-radius: 10px;
-      background: var(--cyan);
-      color: var(--bg);
-      cursor: pointer;
-      font-family: var(--sans);
-      font-size: 15px;
-      font-weight: 700;
-      transition: background 0.2s, opacity 0.2s;
-    }
-    .modal-btn:hover { background: oklch(0.82 0.14 200); }
-    .modal-btn:disabled { cursor: wait; opacity: 0.65; }
-    .modal-close {
-      position: absolute;
-      top: 20px;
-      right: 24px;
-      border: none;
-      background: none;
-      color: oklch(1 0 0 / 0.35);
-      cursor: pointer;
-      font-size: 22px;
-      transition: color 0.2s;
-    }
-    .modal-close:hover { color: var(--ink); }
+    .modal { position: relative; width: 90%; max-width: 500px; padding: 48px 52px; border: 1px solid oklch(1 0 0 / 0.1); border-radius: 16px; background: var(--panel); }
+    .modal h3 { margin-bottom: 16px; font-family: var(--display); font-size: 52px; font-style: italic; font-weight: 900; line-height: 0.92; }
 
-    @keyframes rotateOrbit {
-      to { transform: translate(-50%, -50%) rotate(360deg); }
-    }
-    @keyframes sweep {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    @keyframes drift {
-      0%, 100% { transform: translate3d(0, 0, 0); }
-      50% { transform: translate3d(8px, -6px, 0); }
-    }
-    @keyframes beamSweep {
-      0%, 100% { transform: translateX(-65%); opacity: 0.1; }
-      50% { transform: translateX(65%); opacity: 0.9; }
-    }
-    @keyframes pulseNeedle {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.55); }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.001ms !important;
-        animation-iteration-count: 1 !important;
-        scroll-behavior: auto !important;
-        transition-duration: 0.001ms !important;
-      }
-    }
+    @keyframes rotateOrbit { to { transform: translate(-50%, -50%) rotate(360deg); } }
+    @keyframes sweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes beamSweep { 0%, 100% { transform: translateX(-65%); opacity: 0.1; } 50% { transform: translateX(65%); opacity: 0.9; } }
+    @keyframes pulseNeedle { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.55); } }
 
     @media (max-width: 1020px) {
       .site-nav { padding: 18px 24px; }
-      .nav-right { gap: 2px; }
-      .nav-right a { padding: 6px 9px; }
       .page-shell, .proof-strip, .bench-section, .closing-cta { width: min(100% - 32px, 760px); }
-      .hero, .section-grid, .needle-visual, .budget-panel, .atlas, .method-grid, .closing-cta {
-        grid-template-columns: 1fr;
-      }
-      .hero { min-height: auto; padding-top: 126px; padding-bottom: 54px; }
-      .hero::after { display: none; }
-      h1 { font-size: 76px; }
-      h2 { font-size: 58px; }
-      .observatory { min-height: 480px; }
-      .proof-strip { grid-template-columns: repeat(2, 1fr); margin-top: 0; }
-      .proof-cell:nth-child(2) { border-right: 0; }
-      .proof-cell:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
-      .haystack { min-height: 300px; border-right: 0; border-bottom: 1px solid var(--line); }
+      .hero { grid-template-columns: 1fr; padding-top: 100px; text-align: center; }
+      .hero-word { margin: 0 auto; }
+      .hero-word div { justify-content: center; }
+      .hero-copy { margin-left: auto; margin-right: auto; }
+      .hero-actions { justify-content: center; }
+      .section-grid, .needle-visual, .budget-panel, .atlas, .method-grid, .closing-cta { grid-template-columns: 1fr; }
+      .proof-strip { grid-template-columns: repeat(2, 1fr); }
       .score-wall { grid-template-columns: repeat(2, 1fr); }
-      .model-list { grid-template-columns: repeat(3, 1fr); }
-      footer { padding: 38px 24px; gap: 26px; flex-wrap: wrap; }
-    }
-
-    @media (max-width: 640px) {
-      .site-nav { position: absolute; align-items: flex-start; flex-direction: column; gap: 18px; }
-      .nav-right { flex-wrap: wrap; }
-      .page-shell, .proof-strip, .bench-section, .closing-cta { width: calc(100% - 28px); }
-      .hero { padding-top: 178px; }
-      h1 { font-size: 56px; }
-      h2 { font-size: 46px; }
-      .hero-copy { font-size: 16px; }
-      .observatory { min-height: 530px; }
-      .orbit { width: 270px; height: 270px; }
-      .hero-score, .proof-strip, .score-wall, .model-list { grid-template-columns: 1fr; }
-      .proof-cell { border-right: 0; border-bottom: 1px solid var(--line); }
-      .proof-cell:last-child { border-bottom: 0; }
-      .bench-section { padding: 44px 0; }
-      .needle-visual { min-height: auto; }
-      .chart-stack, .budget-card, .method-card { padding: 22px; }
-      .table-row {
-        grid-template-columns: 1fr 1fr;
-        gap: 0;
-      }
-      .table-row.header { display: none; }
-      .table-cell { border-bottom: 1px solid oklch(1 0 0 / 0.04); }
-      .table-cell:nth-child(1)::before { content: "Type: "; color: var(--dim); }
-      .table-cell:nth-child(2)::before { content: "Size: "; color: var(--dim); }
-      .table-cell:nth-child(3)::before { content: "Raw: "; color: var(--dim); }
-      .table-cell:nth-child(4)::before { content: "Capsule: "; color: var(--dim); }
-      .table-cell:nth-child(5)::before { content: "Savings: "; color: var(--dim); }
-      .score-card.large { grid-column: span 1; }
-      .score-card.large .score-value, .score-value { font-size: 72px; }
-      .closing-cta { padding: 34px 24px; display: grid; }
-      .install-btn { white-space: normal; justify-content: flex-start; }
-      .modal { padding: 38px 28px; }
-      .f-links { flex-wrap: wrap; gap: 14px; }
+      footer { padding: 38px 24px; flex-wrap: wrap; gap: 20px; }
     }
   </style>
 </head>
@@ -1017,10 +301,10 @@
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">×</button>
     <h3>Join the<br>waitlist.</h3>
-    <p>Get early access and launch updates. No spam, ever.</p>
+    <p>Get early access + launch updates. No spam, ever.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-      <input type="text" id="wlFirst" placeholder="First name" />
-      <input type="text" id="wlLast" placeholder="Last name" />
+      <input type="text" id="wlFirst" placeholder="First name">
+      <input type="text" id="wlLast" placeholder="Last name">
     </div>
     <input type="email" id="wlEmail" placeholder="you@company.com">
     <button class="modal-btn" onclick="submitWaitlist()">Get early access →</button>
@@ -1031,9 +315,9 @@
 <nav class="site-nav">
   <a class="nav-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg" aria-label="Mesh"><path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text></svg></a>
   <div class="nav-right">
-    <a href="/features.html">Features</a>
-    <a href="/quickstart.html">Quickstart</a>
-    <a href="/benchmarks.html" class="nav-active">Benchmarks</a>
+    <a href="/features">Features</a>
+    <a href="/quickstart">Quickstart</a>
+    <a href="/benchmarks" class="nav-active">Benchmarks</a>
     <a onclick="openModal()" class="nav-waitlist">Waitlist</a>
   </div>
 </nav>
@@ -1042,242 +326,55 @@
   <section class="page-shell hero">
     <div>
       <div class="eyebrow">Benchmarks - last run 2026-04-20</div>
-      <div class="hero-word">
-        <span class="l">P</span><span class="l">r</span><span class="l">o</span><span class="l">o</span><span class="l">f</span>&nbsp;<span class="l">b</span><span class="l">e</span><span class="l">a</span><span class="l">t</span><span class="l">s</span><br>
-        <span><span class="l">p</span><span class="l">r</span><span class="l">o</span><span class="l">m</span><span class="l">p</span><span class="l">t</span>&nbsp;<span class="l">v</span><span class="l">i</span><span class="l">b</span><span class="l">e</span><span class="l">s</span><span class="l">.</span></span>
-      </div>
-      <p class="hero-copy">Mesh is benchmarked on real code-agent tasks: needle finding, multi-hop reasoning, edit precision, hallucination refusal, compression ratio, and targeted reads. <strong>Same token budgets. Same prompts. Real inference calls where it matters.</strong></p>
+      <h1 class="hero-word">
+        <div><span class="l">P</span><span class="l">r</span><span class="l">o</span><span class="l">o</span><span class="l">f</span>&nbsp;<span class="l">b</span><span class="l">e</span><span class="l">a</span><span class="l">t</span><span class="l">s</span></div>
+        <div class="cyan-line"><span class="l">p</span><span class="l">r</span><span class="l">o</span><span class="l">m</span><span class="l">p</span><span class="l">t</span>&nbsp;<span class="l">v</span><span class="l">i</span><span class="l">b</span><span class="l">e</span><span class="l">s</span><span class="l">.</span></div>
+      </h1>
+      <p class="hero-copy">Mesh is benchmarked on real code-agent tasks: needle finding, multi-hop reasoning, and targeted reads. <strong>Real inference calls where it matters.</strong></p>
       <div class="hero-actions">
-        <a class="primary-btn" href="#needle">See the results</a>
-        <button class="secondary-btn" onclick="copyInstall()">Copy install command</button>
+        <a class="primary-btn" href="#needle">See results</a>
+        <button class="secondary-btn" onclick="copyInstall()">Copy install</button>
       </div>
     </div>
 
-    <aside class="observatory" aria-label="Animated benchmark observatory">
-      <div class="obs-top"><span>mesh/benchmark-observatory</span><span class="obs-live">verified</span></div>
+    <aside class="observatory">
+      <div class="obs-top"><span>mesh/bench-obs</span><span class="obs-live">verified</span></div>
       <div class="model-cloud">
         <div class="model-chip">claude-sonnet-4-6</div>
-        <div class="model-chip">claude-opus-4-6</div>
         <div class="model-chip">gpt-oss-20b</div>
-        <div class="model-chip">gemma-3-4b</div>
         <div class="model-chip">llama-3.3-70b</div>
       </div>
-      <div class="orbit" aria-hidden="true"></div>
-      <div class="scanline" aria-hidden="true"></div>
-      <div class="needle" aria-hidden="true"></div>
+      <div class="orbit"></div>
+      <div class="scanline"></div>
+      <div class="needle"></div>
       <div class="hero-score">
-        <div class="hero-metric"><strong>3.9x</strong><span>more files per token budget</span></div>
-        <div class="hero-metric"><strong>0%</strong><span>hallucination rate across tested models</span></div>
-        <div class="hero-metric"><strong>100%</strong><span>standard NIAH recall</span></div>
-        <div class="hero-metric"><strong>5x</strong><span>less budget for full coverage</span></div>
+        <div class="hero-metric"><strong>3.9x</strong><span>more context gain</span></div>
+        <div class="hero-metric"><strong>100%</strong><span>standard NIAH</span></div>
       </div>
     </aside>
   </section>
 
-  <section class="proof-strip" id="proofStrip" aria-label="Benchmark summary">
+  <section class="proof-strip" id="proofStrip">
     <div class="proof-cell">
       <div class="proof-number"><span class="count" data-target="39" data-decimal="true">0</span><sup>x</sup></div>
-      <div class="proof-label">more files per token budget through capsule compression.</div>
-      <div class="proof-badge">context gain</div>
+      <div class="proof-label">more files per budget.</div>
+      <div class="proof-badge">gain</div>
     </div>
     <div class="proof-cell">
       <div class="proof-number"><span class="count" data-target="100">0</span><sup>%</sup></div>
-      <div class="proof-label">NIAH recall on standard difficulty across tested configs.</div>
-      <div class="proof-badge">vs 40% raw</div>
+      <div class="proof-label">NIAH recall standard.</div>
+      <div class="proof-badge">accuracy</div>
     </div>
     <div class="proof-cell">
       <div class="proof-number"><span class="count" data-target="5">0</span><sup>x</sup></div>
-      <div class="proof-label">fewer tokens for full 80-file coverage.</div>
-      <div class="proof-badge">4,500T vs 24,000T</div>
+      <div class="proof-label">fewer tokens used.</div>
+      <div class="proof-badge">savings</div>
     </div>
     <div class="proof-cell">
       <div class="proof-number"><span class="count" data-target="0">0</span><sup>%</sup></div>
-      <div class="proof-label">hallucination rate on absent-needle tests.</div>
-      <div class="proof-badge">zero invented answers</div>
+      <div class="proof-label">hallucination rate.</div>
+      <div class="proof-badge">stable</div>
     </div>
-  </section>
-
-  <section class="bench-section" id="needle">
-    <div class="section-grid">
-      <div>
-        <div class="section-kicker">A1 - Needle in a Haystack</div>
-        <h2>Can the model find the right file?</h2>
-        <p class="section-copy">A planted constant, <code>SESSION_SECRET</code>, is hidden in one of 10 to 120 files. Raw context runs out before the needle appears. Mesh keeps the full map in budget, then recovers exact spans when the model needs source.</p>
-        <p class="section-note">Tested on Sonnet, Opus, GPT-OSS-20B, Gemma 3 4B, and Llama 3.3 70B. Same task, same token budget, same prompt.</p>
-      </div>
-      <div class="lab-card">
-        <div class="lab-top"><span>needle field</span><span>Mesh vs raw</span></div>
-        <div class="needle-visual">
-          <div class="haystack" id="haystack" aria-label="Animated haystack of files">
-            <div class="search-beam"></div>
-          </div>
-          <div class="chart-stack" id="needleChart">
-            <div class="chart-row">
-              <div class="chart-title"><span>Standard difficulty</span><span>6,000T</span></div>
-              <div class="bar-pair">
-                <div class="bar-line mesh"><span>Mesh</span><div class="track"><div class="fill mesh" data-width="100"></div></div><span>100%</span></div>
-                <div class="bar-line"><span>Raw</span><div class="track"><div class="fill raw" data-width="40"></div></div><span>40%</span></div>
-              </div>
-            </div>
-            <div class="chart-row">
-              <div class="chart-title"><span>Hard difficulty</span><span>8,000T</span></div>
-              <div class="bar-pair">
-                <div class="bar-line mesh"><span>Mesh</span><div class="track"><div class="fill mesh" data-width="80"></div></div><span>80%</span></div>
-                <div class="bar-line"><span>Raw</span><div class="track"><div class="fill raw" data-width="20"></div></div><span>20%</span></div>
-              </div>
-            </div>
-            <div class="chart-row">
-              <div class="chart-title"><span>Multi-hop chains</span><span>12 tasks</span></div>
-              <div class="bar-pair">
-                <div class="bar-line mesh"><span>Mesh</span><div class="track"><div class="fill mesh" data-width="100"></div></div><span>100%</span></div>
-                <div class="bar-line"><span>Raw</span><div class="track"><div class="fill raw" data-width="25"></div></div><span>25%</span></div>
-              </div>
-            </div>
-            <div class="chart-row">
-              <div class="chart-title"><span>Edit precision</span><span>exact file + value</span></div>
-              <div class="bar-pair">
-                <div class="bar-line mesh"><span>Mesh</span><div class="track"><div class="fill mesh" data-width="100"></div></div><span>100%</span></div>
-                <div class="bar-line"><span>Raw</span><div class="track"><div class="fill raw" data-width="83"></div></div><span>83%</span></div>
-              </div>
-            </div>
-            <div class="chart-row">
-              <div class="chart-title"><span>Absent needle refusal</span><span>4 models</span></div>
-              <div class="bar-pair">
-                <div class="bar-line mesh"><span>Mesh</span><div class="track"><div class="fill mesh" data-width="1"></div></div><span>0%</span></div>
-                <div class="bar-line"><span>Raw</span><div class="track"><div class="fill raw" data-width="15"></div></div><span>12-18%</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="bench-section" id="budget">
-    <div class="section-grid">
-      <div>
-        <div class="section-kicker">A3 - Budget Saturation</div>
-        <h2>Full coverage at a fraction of the budget.</h2>
-        <p class="section-copy">Fixed 80-file workspace. Mesh saturates the whole workspace at <strong>4,500 tokens</strong>. Raw source requires <strong>24,000 tokens</strong> before it finally reaches the same file coverage.</p>
-      </div>
-      <div class="budget-panel" id="budgetPanel">
-        <div class="budget-card mesh" data-fill="19">
-          <div class="budget-label">Mesh capsules</div>
-          <div class="budget-number"><span class="budget-count" data-target="4500">0</span>T</div>
-          <p class="budget-copy">Ultra capsules compress 80 files to 3,347 tokens. Needle and multi-hop pass with 80/80 files in context.</p>
-          <div class="budget-track"><span data-width="19"></span></div>
-        </div>
-        <div class="budget-card raw" data-fill="100">
-          <div class="budget-label">Raw source</div>
-          <div class="budget-number"><span class="budget-count" data-target="24000">0</span>T</div>
-          <p class="budget-copy">Raw source exhausts smaller budgets around 22 files. It needs the full 24,000T equivalent to cover all 80.</p>
-          <div class="budget-track"><span data-width="100"></span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="bench-section" id="compression">
-    <div class="section-kicker">B1 - Capsule Compression Ratio</div>
-    <div class="atlas">
-      <div>
-        <h2>Tokens the AI actually sees.</h2>
-        <p class="section-copy">Ultra-tier capsules preserve names, signatures, exports, imports, and recoverable source locations. The average compression result is <strong>25.5% of raw source</strong>, which produces the 3.9x file coverage gain.</p>
-        <div class="capsule-picture" aria-label="Capsule compression illustration">
-          <div class="capsule-ring r1"></div>
-          <div class="capsule-ring r2"></div>
-          <div class="capsule-core">25.5%</div>
-          <div class="capsule-node n1"><strong>exports</strong><br>symbols</div>
-          <div class="capsule-node n2"><strong>imports</strong><br>edges</div>
-          <div class="capsule-node n3"><strong>calls</strong><br>chains</div>
-          <div class="capsule-node n4"><strong>spans</strong><br>exact</div>
-        </div>
-      </div>
-      <div class="compression-table">
-        <div class="table-row header">
-          <div class="table-cell">File type</div>
-          <div class="table-cell">Size</div>
-          <div class="table-cell">Raw tokens</div>
-          <div class="table-cell">Ultra capsule</div>
-          <div class="table-cell">Savings</div>
-        </div>
-        <div class="table-row"><div class="table-cell">Code</div><div class="table-cell">Large</div><div class="table-cell">2,881</div><div class="table-cell table-highlight">1.9%</div><div class="table-cell"><div class="mini-track" style="--w:98%"><span></span></div></div></div>
-        <div class="table-row"><div class="table-cell">Code</div><div class="table-cell">XL</div><div class="table-cell">7,694</div><div class="table-cell table-highlight">0.7%</div><div class="table-cell"><div class="mini-track" style="--w:99%"><span></span></div></div></div>
-        <div class="table-row"><div class="table-cell">Code</div><div class="table-cell">XXL</div><div class="table-cell">19,394</div><div class="table-cell table-highlight">0.3%</div><div class="table-cell"><div class="mini-track" style="--w:100%"><span></span></div></div></div>
-        <div class="table-row"><div class="table-cell">Config</div><div class="table-cell">Large</div><div class="table-cell">1,439</div><div class="table-cell table-highlight">1.8%</div><div class="table-cell"><div class="mini-track" style="--w:98%"><span></span></div></div></div>
-        <div class="table-row"><div class="table-cell">SQL</div><div class="table-cell">Large</div><div class="table-cell">2,487</div><div class="table-cell table-highlight">1.7%</div><div class="table-cell"><div class="mini-track" style="--w:98%"><span></span></div></div></div>
-        <div class="table-row"><div class="table-cell">Markup</div><div class="table-cell">Large</div><div class="table-cell">2,059</div><div class="table-cell table-highlight">1.1%</div><div class="table-cell"><div class="mini-track" style="--w:99%"><span></span></div></div></div>
-        <div class="table-row"><div class="table-cell">Docs</div><div class="table-cell">Large</div><div class="table-cell">2,607</div><div class="table-cell table-highlight">0.9%</div><div class="table-cell"><div class="mini-track" style="--w:99%"><span></span></div></div></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="bench-section" id="scorecard">
-    <div class="section-kicker">Full scorecard - 12 benchmarks</div>
-    <div class="score-wall">
-      <div class="score-card large">
-        <div class="score-label">NIAH recall - standard difficulty</div>
-        <div class="score-value">100%</div>
-        <div class="score-sub">5/5 configs across Sonnet, GPT-OSS-20B, and Gemma 3 4B. Raw baseline: 40%.</div>
-      </div>
-      <div class="score-card large">
-        <div class="score-label">Multi-hop cross-file reasoning</div>
-        <div class="score-value">100%</div>
-        <div class="score-sub">12/12 chains resolved using compressed workspace structure. Raw baseline: 25%.</div>
-      </div>
-      <div class="score-card">
-        <div class="score-label">Budget saturation</div>
-        <div class="score-value">5x</div>
-        <div class="score-sub">4,500T vs 24,000T.</div>
-      </div>
-      <div class="score-card">
-        <div class="score-label">Hallucination rate</div>
-        <div class="score-value cyan">0%</div>
-        <div class="score-sub">Absent needle accuracy across 4 models.</div>
-      </div>
-      <div class="score-card">
-        <div class="score-label">Edit precision</div>
-        <div class="score-value">100%</div>
-        <div class="score-sub">12/12 exact file and value targets.</div>
-      </div>
-      <div class="score-card">
-        <div class="score-label">Targeted read recall</div>
-        <div class="score-value">84.7%</div>
-        <div class="score-sub">Token savings with exact source recovery.</div>
-      </div>
-    </div>
-    <div class="model-list" aria-label="Models tested">
-      <div class="model-pill">claude-sonnet-4-6</div>
-      <div class="model-pill">claude-opus-4-6</div>
-      <div class="model-pill">gpt-oss-20b</div>
-      <div class="model-pill">gemma-3-4b</div>
-      <div class="model-pill">llama-3.3-70b</div>
-    </div>
-  </section>
-
-  <section class="bench-section" id="methodology">
-    <div class="section-kicker">Methodology</div>
-    <div class="method-grid">
-      <div class="method-card">
-        <h3>Part A - live LLM evals</h3>
-        <p>Needle, hard needle, multi-hop, edit precision, and hallucination checks are <strong>real inference calls</strong> through AWS Bedrock. Same prompt, same token budget, Mesh vs raw side-by-side.</p>
-        <p class="section-note">Run: 2026-04-20. Models: Sonnet 4.6, Opus 4.6, GPT-OSS-20B, Gemma 3 4B, Llama 3.3 70B.</p>
-      </div>
-      <div class="method-card">
-        <h3>Part B - deterministic pipeline</h3>
-        <p>Compression ratios, symbol extraction, capsule determinism, targeted reads, and file-role classification are <strong>deterministic CI benchmarks</strong>. No LLM calls, no retries, reproducible outputs.</p>
-        <p class="section-note">Source: <code>benchmarks/run-all-benchmarks.js</code>. Stack: Node.js 22+, Tree-sitter, Brotli-9, zstd-chunked transport.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="closing-cta">
-    <div>
-      <div class="section-kicker">Reproduce the loop</div>
-      <h2>Run Mesh on your own codebase.</h2>
-      <p>Install the CLI, index a workspace, and compare what your model can do with structured context instead of raw token floods.</p>
-    </div>
-    <button class="install-btn" onclick="copyInstall()"><span class="prompt">$</span><span id="installCmd">npm i -g @edgarelmo/mesh-agent-cli</span></button>
   </section>
 </main>
 
@@ -1293,48 +390,38 @@
 </footer>
 
 <script>
-/* ── CANVAS PARTICLE MESH ── */
 const canvas = document.getElementById('mesh-canvas');
 const ctx = canvas.getContext('2d');
 let W, H, pts;
 const mouse = { x: -9999, y: -9999 };
 const LINK = 155;
 
-function resize() {
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-}
+function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
 function mkPts() {
-  const n = Math.min(90, Math.floor(W * H / 10000));
+  const n = Math.min(80, Math.floor(W * H / 12000));
   pts = Array.from({length: n}, () => ({
     x: Math.random() * W, y: Math.random() * H,
-    vx: (Math.random() - 0.5) * 0.45,
-    vy: (Math.random() - 0.5) * 0.45,
+    vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4
   }));
 }
 function raf() {
   ctx.clearRect(0, 0, W, H);
   pts.forEach(p => {
     p.x += p.vx; p.y += p.vy;
-    if (p.x < 0 || p.x > W) p.vx *= -1;
-    if (p.y < 0 || p.y > H) p.vy *= -1;
+    if (p.x < 0 || p.x > W) p.vx *= -1; if (p.y < 0 || p.y > H) p.vy *= -1;
     const dx = p.x - mouse.x, dy = p.y - mouse.y, d = Math.hypot(dx, dy);
-    if (d < 110) { p.vx += dx / d * 0.025; p.vy += dy / d * 0.025; }
-    const sp = Math.hypot(p.vx, p.vy);
-    if (sp > 1.1) { p.vx *= 0.97; p.vy *= 0.97; }
+    if (d < 100) { p.vx += dx / d * 0.02; p.vy += dy / d * 0.02; }
   });
   for (let i = 0; i < pts.length; i++) {
     for (let j = i+1; j < pts.length; j++) {
-      const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
-      const d = Math.hypot(dx, dy);
+      const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y, d = Math.hypot(dx, dy);
       if (d < LINK) {
-        ctx.strokeStyle = `rgba(0,180,200,${(1 - d / LINK) * 0.3})`;
-        ctx.lineWidth = 0.7;
-        ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y); ctx.stroke();
+        ctx.strokeStyle = `rgba(0,180,200,${(1 - d / LINK) * 0.25})`;
+        ctx.lineWidth = 0.6; ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y); ctx.stroke();
       }
     }
-    ctx.fillStyle = 'rgba(0,212,232,0.55)';
-    ctx.beginPath(); ctx.arc(pts[i].x, pts[i].y, 1.8, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = 'rgba(0,212,232,0.45)';
+    ctx.beginPath(); ctx.arc(pts[i].x, pts[i].y, 1.6, 0, Math.PI*2); ctx.fill();
   }
   requestAnimationFrame(raf);
 }
@@ -1342,20 +429,10 @@ resize(); mkPts(); raf();
 window.addEventListener('resize', () => { resize(); mkPts(); });
 window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; }, {passive:true});
 
-/* canvas fades after hero */
-window.addEventListener('scroll', () => {
-  const t = Math.max(0, Math.min(1, 1 - window.scrollY / window.innerHeight));
-  canvas.style.opacity = 0.2 + t * 0.5;
-}, {passive:true});
-
-/* ── HERO LETTERS ── */
 setTimeout(() => {
-  document.querySelectorAll('.hero-word .l').forEach((el, i) =>
-    setTimeout(() => el.classList.add('in'), i * 80 + 100)
-  );
+  document.querySelectorAll('.hero-word .l').forEach((el, i) => setTimeout(() => el.classList.add('in'), i * 60 + 50));
 }, 50);
 
-/* ── SPOTLIGHT EFFECT ── */
 const spotlightElements = document.querySelectorAll('.score-card, .method-card, .budget-card, .lab-card, .proof-cell');
 spotlightElements.forEach(el => {
   el.addEventListener('mousemove', e => {
@@ -1365,10 +442,7 @@ spotlightElements.forEach(el => {
   }, {passive:true});
 });
 
-function openModal() {
-  document.getElementById('modalBg').classList.add('open');
-}
-
+function openModal() { document.getElementById('modalBg').classList.add('open'); }
 function closeModal(event) {
   const modalBg = document.getElementById('modalBg');
   if (!event || event.target === modalBg || event.currentTarget?.classList?.contains('modal-close')) {
@@ -1380,131 +454,45 @@ async function submitWaitlist() {
   const emailInput = document.getElementById('wlEmail');
   const firstInput = document.getElementById('wlFirst');
   const lastInput = document.getElementById('wlLast');
-  const button = document.querySelector('#modalBg .modal-btn');
   const msg = document.getElementById('wlMsg');
-  
   const email = emailInput.value.trim();
-  const firstName = firstInput.value.trim();
-  const lastName = lastInput.value.trim();
-
-  if (!/^\S+@\S+\.\S+$/.test(email)) {
-    msg.textContent = 'Please enter a valid email address.';
-    return;
-  }
-
-  button.disabled = true;
+  if (!/^\S+@\S+\.\S+$/.test(email)) { msg.textContent = 'Please enter a valid email address.'; return; }
   msg.textContent = 'Submitting...';
-
   try {
     const response = await fetch('/api/subscribe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, firstName, lastName })
+      body: JSON.stringify({ email, firstName: firstInput.value, lastName: lastInput.value })
     });
     const payload = await response.json();
-    if (!response.ok || !payload.ok) {
-      throw new Error(payload.message || 'Subscription failed.');
-    }
-    msg.textContent = payload.message || `Thanks, ${email}. You are now on the waitlist.`;
-    emailInput.value = '';
-    firstInput.value = '';
-    lastInput.value = '';
-  } catch (error) {
-    msg.textContent = error instanceof Error ? error.message : 'Subscription failed.';
-  } finally {
-    button.disabled = false;
-  }
-}
-
-function copyInstall() {
-  navigator.clipboard.writeText('npm i -g @edgarelmo/mesh-agent-cli').then(() => {
-    const el = document.getElementById('installCmd');
-    if (!el) return;
-    const old = el.textContent;
-    el.textContent = 'copied';
-    setTimeout(() => {
-      el.textContent = old;
-    }, 1700);
-  });
-}
-
-function observeOnce(selector, callback, threshold = 0.16) {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        callback(entry.target);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold });
-  document.querySelectorAll(selector).forEach((element) => observer.observe(element));
+    msg.textContent = payload.message || `Thanks. You are now on the waitlist.`;
+  } catch (error) { msg.textContent = 'Subscription failed.'; }
 }
 
 function animateCount(element) {
   const target = Number(element.dataset.target);
   const decimal = element.dataset.decimal === 'true';
-  const steps = 42;
-  let frame = 0;
+  const steps = 40; let frame = 0;
   const timer = setInterval(() => {
-    frame += 1;
-    const progress = Math.min(frame / steps, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    const value = target * eased;
-    element.textContent = decimal ? (value / 10).toFixed(1) : Math.round(value).toLocaleString();
+    frame += 1; const progress = Math.min(frame / steps, 1); const eased = 1 - Math.pow(1 - progress, 3);
+    const value = target * eased; element.textContent = decimal ? (value / 10).toFixed(1) : Math.round(value).toLocaleString();
     if (progress === 1) clearInterval(timer);
-  }, 24);
+  }, 25);
 }
 
-observeOnce('#proofStrip', () => {
-  document.querySelectorAll('.proof-cell').forEach((cell, index) => {
-    setTimeout(() => cell.classList.add('visible'), index * 110);
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => { 
+    if (entry.isIntersecting) { 
+      entry.target.classList.add('visible'); 
+      if (entry.target.id === 'proofStrip') document.querySelectorAll('.count').forEach(animateCount);
+      revealObserver.unobserve(entry.target); 
+    } 
   });
-  document.querySelectorAll('.count').forEach(animateCount);
-}, 0.2);
+}, { threshold: 0.15 });
+document.querySelectorAll('.proof-cell, .score-card, #proofStrip').forEach(el => revealObserver.observe(el));
 
-observeOnce('#needleChart', () => {
-  document.querySelectorAll('.chart-row').forEach((row, index) => {
-    setTimeout(() => {
-      row.classList.add('visible');
-      row.querySelectorAll('.fill').forEach((fill) => {
-        fill.style.width = `${fill.dataset.width}%`;
-      });
-    }, index * 120);
-  });
-}, 0.2);
-
-observeOnce('#budgetPanel', () => {
-  document.querySelectorAll('.budget-card').forEach((card) => {
-    card.style.setProperty('--fill', `${card.dataset.fill}%`);
-  });
-  document.querySelectorAll('.budget-track span').forEach((fill) => {
-    fill.style.width = `${fill.dataset.width}%`;
-  });
-  document.querySelectorAll('.budget-count').forEach(animateCount);
-}, 0.24);
-
-observeOnce('#scorecard', () => {
-  document.querySelectorAll('.score-card').forEach((card, index) => {
-    setTimeout(() => card.classList.add('visible'), index * 90);
-  });
-}, 0.12);
-
-const haystack = document.getElementById('haystack');
-if (haystack) {
-  const points = [
-    [11, 18], [23, 12], [37, 20], [52, 15], [72, 19], [86, 14],
-    [18, 32], [31, 38], [46, 31], [62, 34], [78, 36], [90, 30],
-    [8, 51], [24, 55], [39, 49], [58, 52], [74, 48], [88, 56],
-    [14, 70], [30, 74], [45, 66], [64, 72], [80, 68], [92, 76],
-    [21, 88], [38, 84], [54, 90], [70, 86]
-  ];
-  points.forEach(([left, top], index) => {
-    const dot = document.createElement('span');
-    dot.className = index === 16 ? 'hay-dot needle-dot' : 'hay-dot';
-    dot.style.left = `${left}%`;
-    dot.style.top = `${top}%`;
-    haystack.appendChild(dot);
-  });
+function copyInstall() {
+  navigator.clipboard.writeText('npm i -g @edgarelmo/mesh-agent-cli').then(() => alert('Copied to clipboard'));
 }
 </script>
 </body>
