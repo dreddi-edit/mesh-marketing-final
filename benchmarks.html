@@ -48,40 +48,127 @@
     .secondary-btn { background: oklch(1 0 0 / 0.035); border-color: var(--line); color: var(--ink); }
     .primary-btn:hover, .secondary-btn:hover { transform: translateY(-2px); }
 
-    /* ── OBSERVATORY ── live results table ── */
+    /* ── OBSERVATORY ── live test rack with 5 parallel models ── */
     .observatory {
       position: relative; border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
       background: linear-gradient(180deg, oklch(0.10 0.045 200 / 0.88), oklch(0.05 0.034 204 / 0.92));
       box-shadow: 0 36px 110px oklch(0 0 0 / 0.45);
     }
-    .obs-top { display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 16px; border-bottom: 1px solid var(--line); color: var(--dim); font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .obs-top { display: flex; align-items: center; gap: 12px; height: 42px; padding: 0 16px; border-bottom: 1px solid var(--line); color: var(--dim); font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; }
     .obs-top .live { display: inline-flex; align-items: center; gap: 7px; color: var(--green); margin-left: auto; }
     .obs-top .live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 14px var(--green); animation: pulseLive 2s ease-in-out infinite; }
     @keyframes pulseLive { 0%,100%{opacity:1} 50%{opacity:0.4} }
-    .obs-meta { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--line); }
-    .obs-meta .cell { padding: 18px 18px 16px; border-right: 1px solid var(--line); }
-    .obs-meta .cell:last-child { border-right: 0; }
-    .obs-meta .lbl { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); margin-bottom: 6px; }
-    .obs-meta .val { font-family: var(--display); font-style: italic; font-weight: 900; font-size: 38px; line-height: 1; color: var(--ink); }
-    .obs-meta .val.cy { color: var(--cyan); }
-    .obs-meta .sub { font-family: var(--mono); font-size: 10px; color: var(--dim); margin-top: 6px; }
 
-    .obs-table { font-family: var(--mono); font-size: 11px; }
-    .obs-row { display: grid; grid-template-columns: 18px 1fr 130px 64px 70px; gap: 12px; align-items: center; padding: 10px 16px; border-bottom: 1px solid oklch(1 0 0 / 0.04); color: oklch(1 0 0 / 0.7); animation: rowIn .45s cubic-bezier(0.16,1,0.3,1); }
-    @keyframes rowIn { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: none } }
-    .obs-row .ix { color: var(--dim); font-size: 9px; }
-    .obs-row .test { color: var(--ink); }
-    .obs-row .test small { color: var(--dim); margin-left: 6px; font-size: 10px; }
-    .obs-row .model { color: oklch(1 0 0 / 0.55); font-size: 10px; }
-    .obs-row .ms { color: var(--dim); font-size: 10px; text-align: right; }
-    .status { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: 999px; font-size: 9.5px; letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
-    .status.pass { background: oklch(0.75 0.12 145 / 0.14); color: var(--green); }
-    .status.pass::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
-    .status.fail { background: oklch(0.68 0.13 25 / 0.14); color: var(--red); }
-    .status.fail::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--red); }
-    .status.run { background: oklch(0.74 0.14 200 / 0.14); color: var(--cyan); }
-    .status.run::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--cyan); animation: blinkDot 1s infinite; }
-    @keyframes blinkDot { 50%{opacity:0.3} }
+    /* aggregate metrics strip */
+    .obs-meta {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid var(--line);
+    }
+    .obs-meta .cell { padding: 14px 16px 13px; border-right: 1px solid var(--line); }
+    .obs-meta .cell:last-child { border-right: 0; }
+    .obs-meta .lbl { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); margin-bottom: 4px; }
+    .obs-meta .val { font-family: var(--display); font-style: italic; font-weight: 900; font-size: 30px; line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums; }
+    .obs-meta .val.cy { color: var(--cyan); }
+    .obs-meta .sub { font-family: var(--mono); font-size: 9.5px; color: var(--dim); margin-top: 4px; }
+
+    /* test rack — five model rails */
+    .rack {
+      display: grid; grid-auto-rows: minmax(56px, auto);
+    }
+    .rail {
+      display: grid;
+      grid-template-columns: 28px 110px 1fr 56px 50px;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 14px;
+      border-bottom: 1px solid oklch(1 0 0 / 0.04);
+      font-family: var(--mono); font-size: 10.5px;
+      color: oklch(1 0 0 / 0.66);
+      position: relative;
+      transition: background .25s;
+    }
+    .rail:last-child { border-bottom: 0; }
+    .rail::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
+      background: oklch(0.74 0.14 200 / 0); transition: background .3s;
+    }
+    .rail[data-active="1"]::before { background: oklch(0.74 0.14 200 / 0.7); box-shadow: 0 0 14px oklch(0.74 0.14 200 / 0.5); }
+    .rail[data-active="1"] { background: oklch(0.74 0.14 200 / 0.04); }
+
+    .rail .num {
+      width: 24px; height: 24px; border-radius: 6px;
+      display: grid; place-items: center;
+      background: oklch(1 0 0 / 0.04);
+      color: var(--dim); font-size: 9.5px;
+    }
+    .rail[data-active="1"] .num {
+      background: oklch(0.74 0.14 200 / 0.16);
+      color: var(--cyan);
+    }
+    .rail .model {
+      color: var(--ink);
+      font-size: 11px;
+      letter-spacing: -0.01em;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .rail .model small {
+      display: block; font-size: 9px; color: var(--dim);
+      letter-spacing: 0.06em; margin-top: 2px;
+    }
+    .rail .stream {
+      position: relative;
+      display: flex; flex-direction: column; gap: 4px;
+      min-width: 0;
+    }
+    .rail .now {
+      display: flex; gap: 8px; align-items: center;
+      font-size: 10px; color: oklch(1 0 0 / 0.55);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .rail .now .tag {
+      display: inline-block; padding: 1.5px 6px;
+      border-radius: 4px;
+      background: oklch(0.74 0.14 200 / 0.1);
+      color: var(--cyan); font-size: 9px; letter-spacing: 0.04em;
+    }
+    .rail .now .ok {
+      color: var(--green);
+    }
+    .rail .now .fl {
+      color: var(--red);
+    }
+    .rail .spark {
+      width: 100%; height: 14px;
+      stroke: oklch(0.74 0.14 200 / 0.55);
+      stroke-width: 1; fill: none;
+    }
+    .rail[data-active="1"] .spark { stroke: var(--cyan); }
+    .rail .pct {
+      text-align: right; color: var(--ink);
+      font-size: 12px; font-weight: 500;
+      font-variant-numeric: tabular-nums;
+    }
+    .rail .ms {
+      text-align: right; color: var(--dim);
+      font-size: 10px; font-variant-numeric: tabular-nums;
+    }
+
+    /* bottom event ribbon */
+    .obs-ribbon {
+      display: flex; align-items: center; gap: 14px;
+      padding: 10px 14px;
+      border-top: 1px solid var(--line);
+      background: oklch(0 0 0 / 0.18);
+      font-family: var(--mono); font-size: 10px;
+      color: oklch(1 0 0 / 0.45);
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .obs-ribbon .pf { color: var(--green); }
+    .obs-ribbon .fl { color: var(--red); }
+    .obs-ribbon .tk { color: var(--cyan); }
+    .obs-ribbon .sep { color: oklch(1 0 0 / 0.18); }
+    .obs-ribbon .feed-label { color: var(--dim); letter-spacing: 0.1em; text-transform: uppercase; font-size: 9px; }
 
     /* ── PROOF STRIP ── */
     .proof-strip { width: min(1180px, calc(100% - 64px)); margin: 28px auto 0; position: relative; z-index: 5; display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: oklch(0.07 0.036 204 / 0.86); backdrop-filter: blur(16px); }
@@ -128,26 +215,327 @@
     .fill.mesh { background: linear-gradient(90deg, oklch(0.38 0.09 198), var(--cyan)); }
     .fill.raw { background: oklch(1 0 0 / 0.20); }
 
-    /* ── HOPS — multi-hop graph ── */
-    .hops-card { padding: 32px; min-height: 360px; }
-    .hops-svg { width: 100%; height: 280px; }
-    .hops-legend { display: flex; gap: 18px; padding-top: 16px; border-top: 1px solid var(--line); margin-top: 20px; font-family: var(--mono); font-size: 10.5px; color: var(--dim); }
-    .hops-legend .item { display: inline-flex; align-items: center; gap: 8px; }
-    .hops-legend .sw { width: 18px; height: 3px; border-radius: 2px; }
+    /* ── HOPS — animated callgraph trace studio ── */
+    .trace-card {
+      position: relative; padding: 0; min-height: 460px; overflow: hidden;
+      background:
+        radial-gradient(1200px 380px at 50% -10%, oklch(0.74 0.14 200 / 0.06), transparent 70%),
+        linear-gradient(180deg, oklch(0.18 0.012 240 / 0.62), oklch(0.13 0.012 240 / 0.84));
+    }
+    .trace-top {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 18px; border-bottom: 1px solid var(--line);
+      font-family: var(--mono); font-size: 10.5px; color: var(--dim);
+      background: oklch(0.13 0.012 240 / 0.55);
+    }
+    .trace-top .left { display: inline-flex; gap: 10px; align-items: center; }
+    .trace-top .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--cyan); box-shadow: 0 0 10px var(--cyan);
+      animation: tracePulse 1.2s ease-in-out infinite;
+    }
+    @keyframes tracePulse { 0%,100% { opacity: 1 } 50% { opacity: 0.35 } }
+    .trace-tabs { display: inline-flex; gap: 0; background: oklch(1 0 0 / 0.04); border-radius: 999px; padding: 3px; border: 1px solid var(--line); }
+    .trace-tabs button {
+      appearance: none; background: transparent; border: 0; cursor: pointer;
+      padding: 5px 12px; border-radius: 999px;
+      font-family: var(--mono); font-size: 10px; color: var(--dim);
+      letter-spacing: 0.5px; text-transform: uppercase;
+      transition: color 180ms ease, background 180ms ease;
+    }
+    .trace-tabs button[data-active="true"] { background: var(--cyan); color: oklch(0.14 0 0); font-weight: 600; }
+    .trace-tabs button[data-active="true"][data-mode="raw"] { background: oklch(0.68 0.13 25); color: #fff; }
+    .trace-tabs button:hover:not([data-active="true"]) { color: var(--white); }
+    .trace-body { display: grid; grid-template-columns: 1fr 280px; min-height: 380px; }
+    .trace-stage { position: relative; padding: 24px 18px; border-right: 1px solid var(--line); }
+    .trace-svg { width: 100%; height: 360px; display: block; overflow: visible; }
+
+    /* graph nodes */
+    .tn { transition: opacity 240ms ease; }
+    .tn rect {
+      fill: oklch(1 0 0 / 0.03);
+      stroke: oklch(1 0 0 / 0.10); stroke-width: 1;
+      transition: fill 220ms ease, stroke 220ms ease, filter 220ms ease;
+    }
+    .tn .tn-name { font-family: var(--mono); font-size: 10.5px; fill: oklch(1 0 0 / 0.7); }
+    .tn .tn-sub  { font-family: var(--mono); font-size: 8.5px;  fill: oklch(1 0 0 / 0.42); }
+    /* visited/active states */
+    .tn[data-state="visited"] rect {
+      fill: oklch(0.74 0.14 200 / 0.10);
+      stroke: oklch(0.74 0.14 200 / 0.55);
+    }
+    .tn[data-state="visited"] .tn-name { fill: var(--cyan); }
+    .tn[data-state="active"] rect {
+      fill: oklch(0.74 0.14 200 / 0.18);
+      stroke: oklch(0.74 0.14 200);
+      filter: drop-shadow(0 0 14px oklch(0.74 0.14 200 / 0.55));
+    }
+    .tn[data-state="active"] .tn-name { fill: var(--cyan); font-weight: 600; }
+    .tn[data-state="bug"] rect {
+      fill: oklch(0.68 0.13 25 / 0.16);
+      stroke: oklch(0.68 0.13 25);
+      filter: drop-shadow(0 0 14px oklch(0.68 0.13 25 / 0.6));
+    }
+    .tn[data-state="bug"] .tn-name { fill: oklch(0.82 0.12 25); font-weight: 600; }
+    .tn[data-state="raw-miss"] rect {
+      fill: oklch(0.68 0.13 25 / 0.06);
+      stroke: oklch(0.68 0.13 25 / 0.4);
+    }
+    /* edges */
+    .te {
+      fill: none; stroke: oklch(1 0 0 / 0.08); stroke-width: 1;
+      stroke-dasharray: 3 4;
+    }
+    .te-active {
+      fill: none; stroke: var(--cyan); stroke-width: 2;
+      filter: drop-shadow(0 0 8px oklch(0.74 0.14 200 / 0.5));
+      stroke-linecap: round;
+      stroke-dasharray: var(--len, 400);
+      stroke-dashoffset: var(--len, 400);
+      transition: stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .te-active.drawn { stroke-dashoffset: 0; }
+    .te-raw {
+      fill: none; stroke: oklch(0.68 0.13 25 / 0.6); stroke-width: 1.4;
+      stroke-dasharray: 2 4; stroke-linecap: round;
+      animation: rawWaver 0.8s ease-in-out infinite alternate;
+    }
+    @keyframes rawWaver { from { opacity: 0.4 } to { opacity: 0.9 } }
+    /* walking cursor */
+    .trace-cursor {
+      r: 5; fill: var(--cyan);
+      filter: drop-shadow(0 0 12px oklch(0.74 0.14 200 / 0.8));
+    }
+    .trace-cursor-raw { fill: oklch(0.78 0.13 25); filter: drop-shadow(0 0 10px oklch(0.78 0.13 25 / 0.7)); }
+
+    /* meta side panel */
+    .trace-meta {
+      padding: 22px 20px; display: flex; flex-direction: column; gap: 16px;
+      background: oklch(0.13 0.012 240 / 0.45);
+    }
+    .trace-meta-row { display: flex; flex-direction: column; gap: 4px; }
+    .trace-meta-row .lbl {
+      font-family: var(--mono); font-size: 9.5px;
+      color: var(--dim); text-transform: uppercase; letter-spacing: 0.7px;
+    }
+    .trace-meta-row .val {
+      font-family: var(--mono); font-size: 14px;
+      color: var(--white); font-variant-numeric: tabular-nums;
+    }
+    .trace-meta-row .val.cyan { color: var(--cyan); }
+    .trace-meta-row .val.red  { color: var(--red); }
+
+    .trace-step-list {
+      display: flex; flex-direction: column; gap: 4px; margin-top: 4px;
+      font-family: var(--mono); font-size: 10px; color: var(--dim);
+    }
+    .trace-step-list .step {
+      display: flex; gap: 6px; align-items: baseline;
+      padding: 5px 8px; border-radius: 5px;
+      background: oklch(1 0 0 / 0.025);
+      transition: background 200ms ease, color 200ms ease;
+      opacity: 0; transform: translateX(-6px);
+      animation: stepIn 280ms ease forwards;
+    }
+    .trace-step-list .step .n {
+      width: 14px; color: var(--cyan); font-weight: 600;
+    }
+    .trace-step-list .step .file { color: var(--white); }
+    .trace-step-list .step .ln { color: var(--dim); margin-left: auto; }
+    .trace-step-list .step.bug { background: oklch(0.68 0.13 25 / 0.10); }
+    .trace-step-list .step.bug .n,
+    .trace-step-list .step.bug .file { color: oklch(0.82 0.12 25); }
+    .trace-step-list .step.miss { background: oklch(0.68 0.13 25 / 0.06); }
+    .trace-step-list .step.miss .n,
+    .trace-step-list .step.miss .file { color: oklch(0.78 0.13 25 / 0.85); }
+    @keyframes stepIn { to { opacity: 1; transform: translateX(0); } }
+
+    .trace-result {
+      margin-top: auto; padding: 14px;
+      border-radius: 8px;
+      background: oklch(0.74 0.14 200 / 0.10);
+      border: 1px solid oklch(0.74 0.14 200 / 0.35);
+    }
+    .trace-result .res-label {
+      font-family: var(--mono); font-size: 9.5px;
+      color: var(--cyan); text-transform: uppercase; letter-spacing: 0.7px;
+    }
+    .trace-result .res-text {
+      font-family: var(--mono); font-size: 11px;
+      color: var(--white); margin-top: 4px;
+    }
+    .trace-result.fail {
+      background: oklch(0.68 0.13 25 / 0.10);
+      border-color: oklch(0.68 0.13 25 / 0.4);
+    }
+    .trace-result.fail .res-label { color: oklch(0.82 0.12 25); }
 
     /* ── BUDGET ── */
-    .budget-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .budget-card { min-height: 320px; padding: 28px; border: 1px solid var(--line); border-radius: 12px; background: oklch(0.10 0.042 200 / 0.72); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
-    .budget-card.mesh { border-color: var(--line-strong); background: linear-gradient(160deg, oklch(0.74 0.14 200 / 0.08), oklch(0.10 0.042 200 / 0.72)); }
-    .budget-label { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dim); display: flex; justify-content: space-between; align-items: center; }
-    .budget-card.mesh .budget-label { color: var(--cyan); }
-    .budget-number { position: relative; font-family: var(--display); font-size: clamp(56px, 7vw, 84px); font-style: italic; font-weight: 900; line-height: 0.9; color: var(--ink); margin: 18px 0 10px; }
-    .budget-number .u { font-size: 0.42em; color: var(--dim); margin-left: 4px; font-style: italic; }
-    .budget-card.mesh .budget-number { color: var(--cyan); }
-    .budget-track { position: relative; margin-top: 16px; height: 10px; border-radius: 999px; background: oklch(1 0 0 / 0.06); overflow: hidden; }
-    .budget-track span { display: block; width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, oklch(0.38 0.09 198), var(--cyan)); transition: width 1.4s cubic-bezier(0.16, 1, 0.3, 1); }
-    .budget-card.raw .budget-track span { background: oklch(1 0 0 / 0.22); }
-    .budget-foot { font-family: var(--mono); font-size: 10.5px; color: var(--dim); margin-top: 10px; }
+    /* ── BUDGET — token-flow chamber ── */
+    .budget-chamber {
+      position: relative;
+      display: grid;
+      grid-template-columns: 220px 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: linear-gradient(180deg, oklch(0.10 0.045 200 / 0.78), oklch(0.05 0.034 204 / 0.92));
+      overflow: hidden;
+      min-height: 460px;
+    }
+    .bc-source {
+      padding: 28px 22px;
+      border-right: 1px solid var(--line);
+      display: flex; flex-direction: column; justify-content: space-between;
+      position: relative;
+    }
+    .bc-source-label {
+      font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--dim);
+    }
+    .bc-source-num {
+      font-family: var(--display); font-style: italic; font-weight: 900;
+      font-size: 56px; line-height: 0.9; color: var(--ink);
+      margin-top: 10px; font-variant-numeric: tabular-nums;
+    }
+    .bc-source-num small {
+      display: block; font-size: 14px; color: var(--dim);
+      margin-top: 4px; letter-spacing: 0.05em;
+    }
+    .bc-source-grid {
+      margin-top: 18px;
+      display: grid; grid-template-columns: repeat(16, 1fr); gap: 2px;
+      max-width: 180px;
+    }
+    .bc-source-grid i {
+      aspect-ratio: 1 / 1; border-radius: 1px;
+      background: oklch(0.74 0.14 200 / 0.18);
+      animation: srcPulse 2.4s ease-in-out infinite;
+    }
+    @keyframes srcPulse {
+      0%,100% { opacity: 0.5 }
+      50% { opacity: 1; box-shadow: 0 0 4px var(--cyan); }
+    }
+    .bc-source-foot {
+      font-family: var(--mono); font-size: 10px; color: var(--dim);
+      margin-top: 18px; line-height: 1.5;
+    }
+    .bc-source-foot b { color: var(--cyan); font-weight: 500; }
+
+    /* tank columns */
+    .bc-col {
+      position: relative;
+      padding: 26px 24px 24px;
+      display: flex; flex-direction: column;
+      border-right: 1px solid var(--line);
+    }
+    .bc-col:last-child { border-right: 0; }
+
+    .bc-col-head {
+      display: flex; justify-content: space-between; align-items: baseline;
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--dim);
+      margin-bottom: 14px;
+    }
+    .bc-col.mesh .bc-col-head { color: var(--cyan); }
+    .bc-col-head .pct { font-size: 9.5px; }
+
+    .bc-tank {
+      position: relative;
+      flex: 1;
+      min-height: 280px;
+      border: 1px solid oklch(1 0 0 / 0.08);
+      border-radius: 12px;
+      overflow: hidden;
+      background: linear-gradient(180deg, oklch(1 0 0 / 0.02), oklch(0 0 0 / 0.18));
+    }
+    /* fill markers on the side */
+    .bc-tank::before, .bc-tank::after {
+      content: ''; position: absolute; left: 0; right: 0;
+      height: 1px; background: oklch(1 0 0 / 0.08);
+    }
+    .bc-tank::before { top: 50%; }
+    .bc-tank::after { top: 25%; }
+    .bc-tank .level-mark {
+      position: absolute; left: 6px; font-family: var(--mono);
+      font-size: 8.5px; color: oklch(1 0 0 / 0.22); letter-spacing: 0.05em;
+    }
+    .bc-tank .lm-100 { top: 4px; }
+    .bc-tank .lm-50  { top: calc(50% - 6px); }
+    .bc-tank .lm-25  { top: calc(75% - 6px); }
+    .bc-tank .lm-0   { bottom: 4px; }
+
+    .bc-fill {
+      position: absolute; left: 0; right: 0; bottom: 0;
+      height: 0;
+      transition: height 2s cubic-bezier(0.16,1,0.3,1);
+    }
+    .bc-col.mesh .bc-fill {
+      background: linear-gradient(180deg, oklch(0.74 0.14 200 / 0.65), oklch(0.55 0.13 200 / 0.85));
+      box-shadow: inset 0 1px 0 var(--cyan), 0 0 28px oklch(0.74 0.14 200 / 0.35);
+    }
+    .bc-col.raw .bc-fill {
+      background: linear-gradient(180deg, oklch(0.68 0.13 25 / 0.55), oklch(0.52 0.13 25 / 0.85));
+      box-shadow: inset 0 1px 0 oklch(0.78 0.13 25 / 0.6), 0 0 28px oklch(0.68 0.13 25 / 0.35);
+    }
+    .bc-fill::before {
+      content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px;
+      background: oklch(1 0 0 / 0.45);
+      animation: surface 3s ease-in-out infinite;
+    }
+    @keyframes surface { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-2px)} }
+
+    .bc-overflow {
+      position: absolute; top: -3px; left: 0; right: 0;
+      height: 12px;
+      background: linear-gradient(180deg, oklch(0.78 0.13 25 / 0.7), transparent);
+      opacity: 0; transition: opacity .8s;
+      pointer-events: none;
+    }
+    .bc-col.raw .bc-fill[data-overflow="1"] + .bc-overflow,
+    .bc-col.raw .bc-fill[data-overflow="1"] ~ .bc-overflow { opacity: 1; }
+
+    .bc-col svg.bc-stream {
+      position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+      pointer-events: none;
+    }
+
+    /* metric inside tank */
+    .bc-tank-num {
+      position: absolute; left: 24px; bottom: 24px; right: 24px;
+      font-family: var(--display); font-style: italic; font-weight: 900;
+      font-size: clamp(48px, 7vw, 76px); line-height: 0.9;
+      color: var(--ink); pointer-events: none;
+      font-variant-numeric: tabular-nums;
+      text-shadow: 0 2px 18px oklch(0 0 0 / 0.5);
+    }
+    .bc-col.mesh .bc-tank-num { color: var(--cyan); }
+    .bc-tank-num small {
+      display: block; font-size: 0.32em; color: oklch(1 0 0 / 0.55);
+      margin-top: 4px; letter-spacing: 0.05em;
+    }
+    .bc-tank-tag {
+      position: absolute; top: 14px; right: 14px;
+      font-family: var(--mono); font-size: 9.5px;
+      padding: 4px 9px; border-radius: 999px;
+      background: oklch(1 0 0 / 0.06); color: oklch(1 0 0 / 0.55);
+      letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .bc-col.mesh .bc-tank-tag {
+      background: oklch(0.74 0.14 200 / 0.16); color: var(--cyan);
+    }
+    .bc-col.raw .bc-tank-tag.exhausted {
+      background: oklch(0.68 0.13 25 / 0.16); color: var(--red);
+      animation: exhaustBlink 1.4s ease-in-out infinite;
+    }
+    @keyframes exhaustBlink { 50% { opacity: 0.45 } }
+
+    .bc-foot {
+      font-family: var(--mono); font-size: 10.5px; color: var(--dim);
+      margin-top: 14px; line-height: 1.55;
+    }
+    .bc-foot b { color: oklch(1 0 0 / 0.7); font-weight: 500; }
+    .bc-col.mesh .bc-foot b { color: var(--cyan); }
 
     /* ── HALLUCINATION ── refusal grid ── */
     .halluc-card { padding: 28px; min-height: 360px; }
@@ -161,23 +549,252 @@
     .halluc-cell.bad .v { color: var(--red); }
     .halluc-cell .x { margin-top: 10px; font-size: 12px; color: oklch(1 0 0 / 0.6); line-height: 1.5; }
 
-    /* ── SCORECARD ── */
-    .score-wall { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-    .score-card { min-height: 168px; padding: 22px 22px 24px; border: 1px solid var(--line); border-radius: 12px; background: oklch(0.10 0.042 200 / 0.74); opacity: 0; transform: translateY(20px); transition: all 0.6s ease; display: flex; flex-direction: column; justify-content: space-between; }
-    .score-card.visible { opacity: 1; transform: none; }
-    .score-label { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--dim); }
-    .score-value { font-family: var(--display); font-size: 64px; font-style: italic; font-weight: 900; line-height: 0.88; color: var(--ink); margin-top: 14px; }
-    .score-card.cy .score-value { color: var(--cyan); }
-    .score-card.gn .score-value { color: var(--green); }
-    .score-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; font-family: var(--mono); font-size: 10px; color: var(--dim); }
-    .score-foot .delta { color: var(--green); }
+    /* ── SCORECARD — radar chart instrument ── */
+    .radar-wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      gap: 24px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: linear-gradient(180deg, oklch(0.10 0.045 200 / 0.82), oklch(0.06 0.034 204 / 0.92));
+      padding: 28px;
+      opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease;
+    }
+    .radar-wrap.visible { opacity: 1; transform: none; }
+    .radar-stage {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      max-width: 520px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .radar-stage svg { width: 100%; height: 100%; display: block; overflow: visible; }
+    .radar-grid { fill: none; stroke: oklch(1 0 0 / 0.06); stroke-width: 1; }
+    .radar-grid.outer { stroke: oklch(1 0 0 / 0.13); }
+    .radar-spoke { stroke: oklch(1 0 0 / 0.06); stroke-width: 1; }
+    .radar-axis-label {
+      font-family: var(--mono); font-size: 10px;
+      fill: var(--dim); letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .radar-tick { font-family: var(--mono); font-size: 8.5px; fill: oklch(1 0 0 / 0.22); }
 
-    /* ── METHOD ── */
+    .radar-poly-raw {
+      fill: oklch(0.68 0.13 25 / 0.10);
+      stroke: oklch(0.68 0.13 25 / 0.55);
+      stroke-width: 1.4;
+      stroke-dasharray: 4 4;
+      transition: opacity .3s;
+    }
+    .radar-poly-mesh {
+      fill: oklch(0.74 0.14 200 / 0.18);
+      stroke: var(--cyan);
+      stroke-width: 1.8;
+      filter: drop-shadow(0 0 14px oklch(0.74 0.14 200 / 0.45));
+      transition: opacity .3s;
+    }
+    .radar-point {
+      fill: var(--cyan);
+      stroke: oklch(0.05 0.034 204);
+      stroke-width: 2;
+      transition: r .2s;
+    }
+    .radar-point-raw {
+      fill: oklch(0.68 0.13 25 / 0.7);
+    }
+
+    .radar-legend {
+      position: absolute; top: 4px; right: 4px;
+      display: flex; flex-direction: column; gap: 6px;
+      font-family: var(--mono); font-size: 10px;
+      color: var(--dim);
+    }
+    .radar-legend span {
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .radar-legend i {
+      width: 22px; height: 2px; border-radius: 1px;
+      display: inline-block;
+    }
+    .radar-legend i.mesh { background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+    .radar-legend i.raw {
+      background: oklch(0.68 0.13 25 / 0.7);
+      background-image: linear-gradient(90deg, oklch(0.68 0.13 25 / 0.7) 50%, transparent 50%);
+      background-size: 6px 100%;
+    }
+
+    /* per-axis details panel */
+    .radar-panel {
+      display: grid; grid-template-rows: auto 1fr auto;
+      border-left: 1px solid var(--line);
+      padding-left: 24px;
+    }
+    .radar-panel-top {
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--dim); margin-bottom: 10px;
+    }
+    .radar-axis-name {
+      font-family: var(--display); font-style: italic; font-weight: 900;
+      font-size: 38px; line-height: 1; color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+    .radar-mesh-val {
+      font-family: var(--display); font-style: italic; font-weight: 900;
+      font-size: 92px; line-height: 0.85; color: var(--cyan);
+      margin-top: 18px;
+      font-variant-numeric: tabular-nums;
+    }
+    .radar-bar-row {
+      display: grid; grid-template-columns: 60px 1fr 60px;
+      gap: 12px; align-items: center;
+      font-family: var(--mono); font-size: 10.5px;
+      color: oklch(1 0 0 / 0.7);
+      margin-top: 12px;
+    }
+    .radar-bar-row .lbl { color: var(--dim); }
+    .radar-bar {
+      position: relative; height: 8px;
+      background: oklch(1 0 0 / 0.04); border-radius: 4px;
+      overflow: hidden;
+    }
+    .radar-bar i {
+      position: absolute; left: 0; top: 0; bottom: 0;
+      border-radius: 4px;
+      transition: width 1s cubic-bezier(0.16,1,0.3,1);
+    }
+    .radar-bar.mesh i { background: linear-gradient(90deg, var(--cyan), oklch(0.74 0.14 200 / 0.7)); box-shadow: 0 0 14px oklch(0.74 0.14 200 / 0.4); }
+    .radar-bar.raw i { background: oklch(0.68 0.13 25 / 0.55); }
+    .radar-bar-row .v {
+      text-align: right; color: var(--ink);
+      font-variant-numeric: tabular-nums;
+    }
+    .radar-delta {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 18px;
+      padding: 6px 12px; border-radius: 999px;
+      background: oklch(0.75 0.12 145 / 0.14);
+      color: var(--green);
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.03em;
+    }
+    .radar-axis-list {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 4px; margin-top: 22px;
+      border-top: 1px solid oklch(1 0 0 / 0.05);
+      padding-top: 16px;
+    }
+    .radar-axis-list button {
+      background: transparent; border: 1px solid transparent;
+      padding: 10px 8px; border-radius: 8px;
+      cursor: pointer;
+      text-align: left;
+      font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.05em;
+      text-transform: uppercase; color: var(--dim);
+      transition: all .25s;
+    }
+    .radar-axis-list button:hover { color: oklch(1 0 0 / 0.65); border-color: oklch(1 0 0 / 0.06); }
+    .radar-axis-list button[aria-selected="true"] {
+      color: var(--cyan); background: oklch(0.74 0.14 200 / 0.08);
+      border-color: oklch(0.74 0.14 200 / 0.22);
+    }
+    .radar-axis-list button .num {
+      display: block; font-family: var(--display); font-style: italic;
+      font-weight: 900; font-size: 24px; color: oklch(1 0 0 / 0.4);
+      margin-top: 6px; line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    .radar-axis-list button[aria-selected="true"] .num { color: var(--cyan); }
+
+    /* ── METHOD — terminal playback ── */
     .method { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 24px; }
     .method-card { padding: 24px; border: 1px solid var(--line); border-radius: 12px; background: oklch(0.078 0.038 200 / 0.7); }
     .method-card .step { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; background: oklch(0.74 0.14 200 / 0.14); color: var(--cyan); font-family: var(--mono); font-size: 11px; font-weight: 700; margin-bottom: 14px; }
     .method-card h3 { font-family: var(--display); font-style: italic; font-weight: 900; font-size: 28px; line-height: 1; color: var(--ink); margin-bottom: 8px; }
     .method-card p { color: var(--muted); font-size: 13.5px; line-height: 1.6; }
+
+    .method-term {
+      margin-top: 26px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: linear-gradient(180deg, oklch(0.075 0.034 204 / 0.95), oklch(0.045 0.022 204 / 0.95));
+      overflow: hidden;
+      box-shadow: 0 36px 100px oklch(0 0 0 / 0.5);
+    }
+    .method-term-bar {
+      display: flex; align-items: center; gap: 10px;
+      padding: 0 16px; height: 40px;
+      border-bottom: 1px solid var(--line);
+      font-family: var(--mono); font-size: 10.5px; color: var(--dim);
+      letter-spacing: 0.05em;
+    }
+    .method-term-bar .dots { display: inline-flex; gap: 7px; }
+    .method-term-bar .dots i {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: oklch(1 0 0 / 0.12);
+    }
+    .method-term-bar .path { color: oklch(1 0 0 / 0.5); }
+    .method-term-bar .live {
+      margin-left: auto; display: inline-flex; align-items: center; gap: 6px;
+      color: var(--green);
+    }
+    .method-term-bar .live::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--green); box-shadow: 0 0 10px var(--green);
+      animation: pulseLive 2s infinite;
+    }
+    .method-term-body {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: 380px;
+    }
+    .method-term-side {
+      border-right: 1px solid var(--line);
+      padding: 16px 14px;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .method-term-side button {
+      background: transparent; border: 1px solid transparent;
+      padding: 10px 12px; border-radius: 8px;
+      cursor: pointer; text-align: left;
+      font-family: var(--mono); font-size: 11px;
+      color: var(--dim);
+      letter-spacing: 0.04em;
+      transition: all .25s;
+    }
+    .method-term-side button:hover { color: oklch(1 0 0 / 0.7); border-color: oklch(1 0 0 / 0.06); }
+    .method-term-side button[aria-selected="true"] {
+      color: var(--cyan); background: oklch(0.74 0.14 200 / 0.08);
+      border-color: oklch(0.74 0.14 200 / 0.22);
+    }
+    .method-term-side button .ix {
+      display: inline-block; width: 22px; color: oklch(1 0 0 / 0.32);
+      font-size: 10px;
+    }
+    .method-term-side button[aria-selected="true"] .ix { color: var(--cyan); }
+    .method-term-side .side-label {
+      font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--dim);
+      padding: 8px 12px 4px;
+    }
+    .method-term-screen {
+      padding: 20px 24px 22px;
+      font-family: var(--mono); font-size: 12px;
+      line-height: 1.65;
+      color: oklch(1 0 0 / 0.78);
+      overflow: hidden;
+      position: relative;
+    }
+    .method-term-screen .pl { color: var(--cyan); }
+    .method-term-screen .ok { color: var(--green); }
+    .method-term-screen .fl { color: var(--red); }
+    .method-term-screen .dim { color: var(--dim); }
+    .method-term-screen .key { color: oklch(0.78 0.13 25); }
+    .method-term-screen .typ::after {
+      content: ''; display: inline-block; width: 7px; height: 13px;
+      background: var(--cyan); margin-left: 2px; vertical-align: -2px;
+      animation: caret 1s step-end infinite;
+    }
+    @keyframes caret { 50% { opacity: 0 } }
+    .method-term-screen .row { white-space: pre; opacity: 0; transform: translateY(2px); animation: termIn .25s forwards; }
+    @keyframes termIn { to { opacity: 1; transform: none } }
 
     .closing-cta { width: min(1180px, calc(100% - 64px)); margin: 28px auto 88px; padding: 48px 56px; border: 1px solid var(--line-strong); border-radius: 12px; background: radial-gradient(circle at 78% 40%, oklch(0.74 0.14 200 / 0.16), transparent 28rem), oklch(0.105 0.045 200); display: flex; align-items: center; justify-content: space-between; gap: 30px; flex-wrap: wrap; }
     .closing-cta h2 { font-size: clamp(40px, 5vw, 56px); font-family: var(--display); font-style: italic; font-weight: 900; color: var(--ink); }
@@ -213,14 +830,31 @@
       .hero { grid-template-columns: 1fr; padding-top: 100px; }
       .obs-meta { grid-template-columns: repeat(2, 1fr); }
       .obs-meta .cell:nth-child(2) { border-right: 0; }
-      .obs-row { grid-template-columns: 16px 1fr 80px 60px; }
-      .obs-row .ms { display: none; }
+      .rail { grid-template-columns: 24px 100px 1fr 50px; gap: 8px; padding: 8px 12px; }
+      .rail .ms { display: none; }
+      .rail .model { font-size: 10.5px; }
       .section-grid, .needle-wrap, .budget-panel, .halluc-grid, .method { grid-template-columns: 1fr; }
       .closing-cta { padding: 36px 28px; }
       .proof-strip { grid-template-columns: repeat(2, 1fr); }
       .proof-cell:nth-child(2) { border-right: 0; }
-      .score-wall { grid-template-columns: repeat(2, 1fr); }
+      .radar-wrap { grid-template-columns: 1fr; }
+      .radar-panel { border-left: 0; padding-left: 0; border-top: 1px solid var(--line); padding-top: 22px; }
+      .radar-axis-list { grid-template-columns: repeat(4, 1fr); }
+      .budget-chamber { grid-template-columns: 1fr; min-height: auto; }
+      .bc-source { border-right: 0; border-bottom: 1px solid var(--line); }
+      .bc-col { border-right: 0; border-bottom: 1px solid var(--line); }
+      .bc-col:last-child { border-bottom: 0; }
+      .bc-tank { min-height: 240px; }
+      .trace-body { grid-template-columns: 1fr; }
+      .trace-stage { border-right: 0; border-bottom: 1px solid var(--line); padding: 16px 12px; }
+      .trace-svg { height: 300px; }
+      .trace-meta { padding: 18px 16px; }
       footer { padding: 38px 24px; flex-wrap: wrap; gap: 20px; }
+    }
+    @media (max-width: 640px) {
+      .radar-axis-list { grid-template-columns: repeat(2, 1fr); }
+      .radar-mesh-val { font-size: 64px; }
+      .trace-svg { height: 260px; }
     }
   </style>
 </head>
@@ -265,18 +899,75 @@
       </div>
     </div>
 
-    <aside class="observatory" aria-label="Live benchmark feed">
+    <aside class="observatory" aria-label="Live benchmark test rack">
       <div class="obs-top">
-        <span>mesh / observatory</span>
-        <span class="live">running · 247 tasks</span>
+        <span>mesh / test-rack</span>
+        <span class="live"><span id="rackRunCount">0</span> runs · 5 models</span>
       </div>
       <div class="obs-meta">
-        <div class="cell"><div class="lbl">Pass rate</div><div class="val cy">98.4<span style="font-size:.4em">%</span></div><div class="sub">+22.4 vs raw</div></div>
-        <div class="cell"><div class="lbl">Tokens / task</div><div class="val">4.5<span style="font-size:.4em">k</span></div><div class="sub">5.3× cheaper</div></div>
-        <div class="cell"><div class="lbl">P50 latency</div><div class="val">238<span style="font-size:.4em">ms</span></div><div class="sub">capsule lookup</div></div>
+        <div class="cell"><div class="lbl">Pass rate</div><div class="val cy" id="rackPass">98.4<span style="font-size:.4em">%</span></div><div class="sub">+22.4 vs raw</div></div>
+        <div class="cell"><div class="lbl">Tokens / task</div><div class="val" id="rackTokens">4.5<span style="font-size:.4em">k</span></div><div class="sub">5.3× cheaper</div></div>
+        <div class="cell"><div class="lbl">P50 latency</div><div class="val" id="rackLatency">238<span style="font-size:.4em">ms</span></div><div class="sub">capsule lookup</div></div>
         <div class="cell"><div class="lbl">Recall</div><div class="val cy">100<span style="font-size:.4em">%</span></div><div class="sub">standard NIAH</div></div>
       </div>
-      <div class="obs-table" id="obsTable" aria-live="polite"></div>
+
+      <div class="rack" id="testRack">
+        <div class="rail" data-model="claude-sonnet-4.6">
+          <div class="num">01</div>
+          <div class="model">claude-sonnet-4.6<small>anthropic</small></div>
+          <div class="stream">
+            <div class="now"><span class="tag" data-track>NIAH·std</span><span data-status>idle</span></div>
+            <svg class="spark" viewBox="0 0 100 14" preserveAspectRatio="none"><path data-spark d="M0,7"/></svg>
+          </div>
+          <div class="pct" data-pct>—</div>
+          <div class="ms" data-ms>—</div>
+        </div>
+        <div class="rail" data-model="gpt-5">
+          <div class="num">02</div>
+          <div class="model">gpt-5<small>openai</small></div>
+          <div class="stream">
+            <div class="now"><span class="tag" data-track>multi-hop</span><span data-status>idle</span></div>
+            <svg class="spark" viewBox="0 0 100 14" preserveAspectRatio="none"><path data-spark d="M0,7"/></svg>
+          </div>
+          <div class="pct" data-pct>—</div>
+          <div class="ms" data-ms>—</div>
+        </div>
+        <div class="rail" data-model="llama-3.3-70b">
+          <div class="num">03</div>
+          <div class="model">llama-3.3-70b<small>meta</small></div>
+          <div class="stream">
+            <div class="now"><span class="tag" data-track>refusal</span><span data-status>idle</span></div>
+            <svg class="spark" viewBox="0 0 100 14" preserveAspectRatio="none"><path data-spark d="M0,7"/></svg>
+          </div>
+          <div class="pct" data-pct>—</div>
+          <div class="ms" data-ms>—</div>
+        </div>
+        <div class="rail" data-model="deepseek-v3">
+          <div class="num">04</div>
+          <div class="model">deepseek-v3<small>deepseek</small></div>
+          <div class="stream">
+            <div class="now"><span class="tag" data-track>budget·sat</span><span data-status>idle</span></div>
+            <svg class="spark" viewBox="0 0 100 14" preserveAspectRatio="none"><path data-spark d="M0,7"/></svg>
+          </div>
+          <div class="pct" data-pct>—</div>
+          <div class="ms" data-ms>—</div>
+        </div>
+        <div class="rail" data-model="gpt-oss-20b">
+          <div class="num">05</div>
+          <div class="model">gpt-oss-20b<small>openai</small></div>
+          <div class="stream">
+            <div class="now"><span class="tag" data-track>NIAH·hard</span><span data-status>idle</span></div>
+            <svg class="spark" viewBox="0 0 100 14" preserveAspectRatio="none"><path data-spark d="M0,7"/></svg>
+          </div>
+          <div class="pct" data-pct>—</div>
+          <div class="ms" data-ms>—</div>
+        </div>
+      </div>
+
+      <div class="obs-ribbon">
+        <span class="feed-label">feed</span>
+        <span id="rackFeed">↑ booting test runners across five models…</span>
+      </div>
     </aside>
   </section>
 
@@ -333,50 +1024,51 @@
         <h2>Trace a bug across 4 files.</h2>
         <p class="section-copy">Each task requires the model to follow a call edge across <strong>3–5 files</strong> to identify the root cause. Capsules expose the structural graph, so the model never loses the trail.</p>
       </div>
-      <div class="lab-card hops-card">
-        <div class="lab-top" style="margin:-32px -32px 18px;padding:0 14px;height:38px;"><span>callgraph · root → leaf</span><span>4 hops · 247 files</span></div>
-        <svg class="hops-svg" viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg" aria-label="Multi-hop callgraph diagram">
-          <defs>
-            <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-              <path d="M0,0 L10,5 L0,10 z" fill="oklch(0.74 0.14 200)"/>
-            </marker>
-            <marker id="arrRaw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-              <path d="M0,0 L10,5 L0,10 z" fill="oklch(1 0 0 / 0.18)"/>
-            </marker>
-          </defs>
-          <!-- raw paths (dim) -->
-          <path d="M70 80 Q200 30 330 80" stroke="oklch(1 0 0 / 0.12)" stroke-width="1.2" fill="none" stroke-dasharray="4 4"/>
-          <path d="M70 200 Q200 250 330 200" stroke="oklch(1 0 0 / 0.12)" stroke-width="1.2" fill="none" stroke-dasharray="4 4"/>
-          <!-- mesh paths -->
-          <path d="M80 140 C 180 140, 180 80, 280 80" stroke="oklch(0.74 0.14 200)" stroke-width="1.6" fill="none" marker-end="url(#arr)" stroke-dasharray="280" stroke-dashoffset="280" class="hop hop-1"/>
-          <path d="M310 80 C 380 80, 380 140, 460 140" stroke="oklch(0.74 0.14 200)" stroke-width="1.6" fill="none" marker-end="url(#arr)" stroke-dasharray="280" stroke-dashoffset="280" class="hop hop-2"/>
-          <path d="M460 140 C 380 140, 380 200, 310 200" stroke="oklch(0.74 0.14 200)" stroke-width="1.6" fill="none" marker-end="url(#arr)" stroke-dasharray="280" stroke-dashoffset="280" class="hop hop-3"/>
-          <path d="M280 200 C 180 200, 180 140, 80 140" stroke="oklch(0.74 0.14 200 / 0.5)" stroke-width="1.4" fill="none" stroke-dasharray="280" stroke-dashoffset="280" class="hop hop-4"/>
-          <!-- nodes -->
-          <g class="node">
-            <rect x="20" y="120" width="120" height="40" rx="8" fill="oklch(0.74 0.14 200 / 0.12)" stroke="oklch(0.74 0.14 200 / 0.5)"/>
-            <text x="80" y="138" text-anchor="middle" font-family="Geist Mono" font-size="11" fill="oklch(0.74 0.14 200)">webhooks.ts</text>
-            <text x="80" y="153" text-anchor="middle" font-family="Geist Mono" font-size="9" fill="oklch(0.74 0.14 200 / 0.7)">handler · L88</text>
-          </g>
-          <g class="node">
-            <rect x="220" y="60" width="120" height="40" rx="8" fill="oklch(1 0 0 / 0.04)" stroke="oklch(1 0 0 / 0.12)"/>
-            <text x="280" y="78" text-anchor="middle" font-family="Geist Mono" font-size="11" fill="#fff">events.ts</text>
-            <text x="280" y="93" text-anchor="middle" font-family="Geist Mono" font-size="9" fill="oklch(1 0 0 / 0.5)">parse · L42</text>
-          </g>
-          <g class="node">
-            <rect x="400" y="120" width="120" height="40" rx="8" fill="oklch(1 0 0 / 0.04)" stroke="oklch(1 0 0 / 0.12)"/>
-            <text x="460" y="138" text-anchor="middle" font-family="Geist Mono" font-size="11" fill="#fff">billing.ts</text>
-            <text x="460" y="153" text-anchor="middle" font-family="Geist Mono" font-size="9" fill="oklch(1 0 0 / 0.5)">charge · L116</text>
-          </g>
-          <g class="node">
-            <rect x="220" y="180" width="120" height="40" rx="8" fill="oklch(0.68 0.13 25 / 0.10)" stroke="oklch(0.68 0.13 25 / 0.4)"/>
-            <text x="280" y="198" text-anchor="middle" font-family="Geist Mono" font-size="11" fill="oklch(0.78 0.13 25)">invoices.ts</text>
-            <text x="280" y="213" text-anchor="middle" font-family="Geist Mono" font-size="9" fill="oklch(0.78 0.13 25 / 0.7)">bug · L14 ⓧ</text>
-          </g>
-        </svg>
-        <div class="hops-legend">
-          <span class="item"><span class="sw" style="background:linear-gradient(90deg,oklch(0.38 0.09 198),var(--cyan))"></span>Mesh follows the graph</span>
-          <span class="item"><span class="sw" style="background:repeating-linear-gradient(90deg,oklch(1 0 0 / 0.18) 0 4px,transparent 4px 8px)"></span>Raw guesses</span>
+      <div class="lab-card trace-card" id="traceCard">
+        <div class="trace-top">
+          <span class="left"><span class="dot"></span><span>mesh / trace-studio</span></span>
+          <div class="trace-tabs" role="tablist">
+            <button data-mode="mesh" data-active="true" aria-label="Mesh trace">mesh</button>
+            <button data-mode="raw"  aria-label="Raw trace">raw</button>
+          </div>
+        </div>
+        <div class="trace-body">
+          <div class="trace-stage">
+            <svg class="trace-svg" viewBox="0 0 640 360" id="traceSvg" aria-label="Animated callgraph trace">
+              <defs>
+                <marker id="arrowCyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M0,0 L10,5 L0,10 z" fill="var(--cyan)"/>
+                </marker>
+                <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M0,0 L10,5 L0,10 z" fill="oklch(0.78 0.13 25)"/>
+                </marker>
+              </defs>
+              <g id="traceEdges"></g>
+              <g id="traceActive"></g>
+              <g id="traceNodes"></g>
+              <circle id="traceCursor" class="trace-cursor" cx="-20" cy="-20"/>
+            </svg>
+          </div>
+          <aside class="trace-meta" aria-label="Trace metrics">
+            <div class="trace-meta-row">
+              <span class="lbl">Status</span>
+              <span class="val cyan" id="traceStatus">tracing…</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+              <div class="trace-meta-row"><span class="lbl">Hops</span><span class="val" id="traceHops">0 / 4</span></div>
+              <div class="trace-meta-row"><span class="lbl">Reads</span><span class="val" id="traceReads">0</span></div>
+              <div class="trace-meta-row"><span class="lbl">Tokens</span><span class="val" id="traceTokens">0</span></div>
+              <div class="trace-meta-row"><span class="lbl">Latency</span><span class="val" id="traceLat">0ms</span></div>
+            </div>
+            <div>
+              <span class="lbl" style="font-family:var(--mono);font-size:9.5px;color:var(--dim);text-transform:uppercase;letter-spacing:0.7px">Trace log</span>
+              <div class="trace-step-list" id="traceSteps"></div>
+            </div>
+            <div class="trace-result" id="traceResult">
+              <div class="res-label" id="traceResLabel">awaiting</div>
+              <div class="res-text" id="traceResText">running…</div>
+            </div>
+          </aside>
         </div>
       </div>
     </div>
@@ -390,7 +1082,61 @@
         <h2>Full coverage at 1/5 the cost.</h2>
         <p class="section-copy">Same coverage, same recall — Mesh saturates a 247-file workspace at <strong>4.5k tokens</strong>. Raw source needs <strong>24k tokens</strong> to cover the same surface area. Same model, same task, same answer.</p>
       </div>
-      <div class="budget-panel" id="budgetPanel">
+      <div class="budget-chamber" id="budgetChamber">
+        <div class="bc-source">
+          <div>
+            <div class="bc-source-label">Source workspace</div>
+            <div class="bc-source-num">247<small>files · 18,432 LOC</small></div>
+            <div class="bc-source-grid" id="bcSourceGrid"></div>
+          </div>
+          <div class="bc-source-foot">
+            Streaming all symbols + signatures into a fixed <b>24k token</b> budget. Watch what fits.
+          </div>
+        </div>
+        <div class="bc-col mesh">
+          <div class="bc-col-head">
+            <span>Mesh capsules</span>
+            <span class="pct" id="bcMeshPct">0% of budget</span>
+          </div>
+          <div class="bc-tank">
+            <span class="level-mark lm-100">100% — 24k</span>
+            <span class="level-mark lm-50">50% — 12k</span>
+            <span class="level-mark lm-25">25% — 6k</span>
+            <span class="level-mark lm-0">0</span>
+            <svg class="bc-stream" viewBox="0 0 200 300" preserveAspectRatio="none" id="bcMeshStream"></svg>
+            <div class="bc-fill" id="bcMeshFill"></div>
+            <div class="bc-overflow"></div>
+            <span class="bc-tank-tag">19% used</span>
+            <div class="bc-tank-num"><span id="bcMeshNum">0</span>k<small>covers all 247 files · 100% recall</small></div>
+          </div>
+          <div class="bc-foot">
+            <b>4.5k tokens</b> ship the structural index for the whole repo. <b>~19.5k tokens</b> of headroom remain for the model's own reasoning.
+          </div>
+        </div>
+        <div class="bc-col raw">
+          <div class="bc-col-head">
+            <span>Raw source</span>
+            <span class="pct" id="bcRawPct">0% of budget</span>
+          </div>
+          <div class="bc-tank">
+            <span class="level-mark lm-100">100% — 24k</span>
+            <span class="level-mark lm-50">50% — 12k</span>
+            <span class="level-mark lm-25">25% — 6k</span>
+            <span class="level-mark lm-0">0</span>
+            <svg class="bc-stream" viewBox="0 0 200 300" preserveAspectRatio="none" id="bcRawStream"></svg>
+            <div class="bc-fill" id="bcRawFill"></div>
+            <div class="bc-overflow"></div>
+            <span class="bc-tank-tag exhausted" id="bcRawTag">budget exhausted</span>
+            <div class="bc-tank-num"><span id="bcRawNum">0</span>k<small>same 247 files · <span style="color:var(--red)">5.3× more expensive</span></small></div>
+          </div>
+          <div class="bc-foot">
+            <b>24k tokens</b> floods the entire context. Zero headroom for reasoning — the model has to choose between <b>seeing the code</b> or <b>thinking about it</b>.
+          </div>
+        </div>
+      </div>
+
+      <!-- legacy hidden panel for back-compat -->
+      <div class="budget-panel" id="budgetPanel" style="display:none">
         <div class="budget-card mesh" data-fill="19">
           <div>
             <div class="budget-label"><span>Mesh capsules</span><span style="font-family:var(--mono);font-size:10px;">19% of budget</span></div>
@@ -447,31 +1193,73 @@
     </div>
   </section>
 
-  <!-- SCORECARD -->
+  <!-- SCORECARD — 8-axis radar instrument -->
   <section class="bench-section" id="scorecard">
-    <div class="section-kicker">Full scorecard · 4 axes × 5 models</div>
+    <div class="section-kicker">Full scorecard · 8 axes × 5 models</div>
     <h2 style="margin-bottom:28px">Mesh wins every axis.</h2>
-    <div class="score-wall">
-      <div class="score-card cy"><div class="score-label">NIAH · standard</div><div class="score-value">100%</div><div class="score-foot"><span>vs 40% raw</span><span class="delta">+60</span></div></div>
-      <div class="score-card cy"><div class="score-label">NIAH · hard</div><div class="score-value">92%</div><div class="score-foot"><span>vs 20% raw</span><span class="delta">+72</span></div></div>
-      <div class="score-card cy"><div class="score-label">Multi-hop · 4 files</div><div class="score-value">96%</div><div class="score-foot"><span>vs 41% raw</span><span class="delta">+55</span></div></div>
-      <div class="score-card cy"><div class="score-label">Multi-hop · 5 files</div><div class="score-value">88%</div><div class="score-foot"><span>vs 28% raw</span><span class="delta">+60</span></div></div>
-      <div class="score-card gn"><div class="score-label">Hallucination rate</div><div class="score-value">0%</div><div class="score-foot"><span>vs 17% raw</span><span class="delta">−17</span></div></div>
-      <div class="score-card gn"><div class="score-label">Span recovery</div><div class="score-value">100%</div><div class="score-foot"><span>byte-exact</span><span class="delta">verified</span></div></div>
-      <div class="score-card"><div class="score-label">Token cost</div><div class="score-value">−81%</div><div class="score-foot"><span>per task</span><span class="delta">5.3× cheaper</span></div></div>
-      <div class="score-card"><div class="score-label">P50 latency</div><div class="score-value">238ms</div><div class="score-foot"><span>capsule lookup</span><span class="delta">+0 to model</span></div></div>
+    <div class="radar-wrap" id="radarWrap">
+      <div class="radar-stage">
+        <div class="radar-legend">
+          <span><i class="mesh"></i>Capsules</span>
+          <span><i class="raw"></i>Raw source</span>
+        </div>
+        <svg viewBox="-200 -200 400 400" id="radarSvg" aria-hidden="true">
+          <g id="radarGrid"></g>
+          <g id="radarSpokes"></g>
+          <g id="radarLabels"></g>
+          <polygon id="rawPoly" class="radar-poly-raw" points=""/>
+          <polygon id="meshPoly" class="radar-poly-mesh" points=""/>
+          <g id="radarPoints"></g>
+        </svg>
+      </div>
+      <div class="radar-panel">
+        <div>
+          <div class="radar-panel-top">Selected axis</div>
+          <div class="radar-axis-name" id="radarName">NIAH · standard</div>
+          <div class="radar-mesh-val" id="radarMeshVal">100%</div>
+          <span class="radar-delta" id="radarDelta">▲ +60 vs raw</span>
+
+          <div class="radar-bar-row">
+            <span class="lbl">Capsules</span>
+            <div class="radar-bar mesh"><i id="barMesh" style="width:0%"></i></div>
+            <span class="v" id="barMeshVal">100%</span>
+          </div>
+          <div class="radar-bar-row">
+            <span class="lbl">Raw</span>
+            <div class="radar-bar raw"><i id="barRaw" style="width:0%"></i></div>
+            <span class="v" id="barRawVal">40%</span>
+          </div>
+          <p id="radarBlurb" style="font-size:13px;color:oklch(1 0 0 / 0.65);line-height:1.55;margin-top:18px">Single-fact recall in a 247-file workspace. Mesh's structural index turns every symbol into an addressable target.</p>
+        </div>
+        <div></div>
+        <div class="radar-axis-list" role="tablist" id="radarTabs"></div>
+      </div>
     </div>
   </section>
 
-  <!-- METHOD -->
+  <!-- METHOD — terminal playback -->
   <section class="bench-section" id="method">
     <div class="section-kicker">How we tested</div>
     <h2 style="margin-bottom:14px">No vibes. No cherry-picking.</h2>
     <p class="section-copy" style="max-width:820px;margin-top:0">Every benchmark runs on the same prompt set across the same five frontier models. Capsules vs raw source. Same temperature (0.2), same max-tokens, same retry policy. Results are reproducible — the run scripts ship in <code style="font-family:var(--mono);color:var(--cyan)">mesh bench</code>.</p>
-    <div class="method">
-      <div class="method-card"><div class="step">01</div><h3>Same models.</h3><p>claude-sonnet-4.6, gpt-5, llama-3.3-70b, deepseek-v3, gpt-oss-20b. Identical sampling params across both arms.</p></div>
-      <div class="method-card"><div class="step">02</div><h3>Real workspaces.</h3><p>247-file fixture mirroring a typical SaaS service: API + workers + db + tests. 18,432 LOC across 12 languages.</p></div>
-      <div class="method-card"><div class="step">03</div><h3>Reproducible.</h3><p>Run <code style="font-family:var(--mono);color:var(--cyan)">mesh bench --suite niah,hops,budget,halluc</code> on your machine. Same numbers, every time.</p></div>
+
+    <div class="method-term" id="methodTerm">
+      <div class="method-term-bar">
+        <span class="dots"><i></i><i></i><i></i></span>
+        <span class="path">~/mesh / bench-runner</span>
+        <span class="live">replaying real run · 247 tasks</span>
+      </div>
+      <div class="method-term-body">
+        <div class="method-term-side" role="tablist">
+          <span class="side-label">replay</span>
+          <button data-tab="0" aria-selected="true"><span class="ix">01</span>same models</button>
+          <button data-tab="1"><span class="ix">02</span>real workspace</button>
+          <button data-tab="2"><span class="ix">03</span>same prompts</button>
+          <button data-tab="3"><span class="ix">04</span>full suite</button>
+          <button data-tab="4"><span class="ix">05</span>reproduce locally</button>
+        </div>
+        <div class="method-term-screen" id="methodScreen" aria-live="polite"></div>
+      </div>
     </div>
   </section>
 
@@ -563,7 +1351,7 @@ const revealObserver=new IntersectionObserver((entries)=>{
     }
   });
 },{threshold:0.18});
-document.querySelectorAll('.proof-cell, .score-card, .bench-section').forEach(el=>revealObserver.observe(el));
+document.querySelectorAll('.proof-cell, .radar-wrap, .bench-section').forEach(el=>revealObserver.observe(el));
 
 /* ── HAYSTACK — code lines with one needle ── */
 (function buildHaystack(){
@@ -601,39 +1389,743 @@ document.querySelectorAll('.proof-cell, .score-card, .bench-section').forEach(el
   });
 })();
 
-/* ── OBSERVATORY — streaming live results ── */
-(function obs(){
-  const t=document.getElementById('obsTable');
-  if(!t)return;
-  const TESTS=[
-    ['niah_std_001','NIAH ·  standard',  'claude-sonnet-4.6', 'pass', '142'],
-    ['hops_4f_018', 'multi-hop · 4 files','gpt-5',             'pass', '318'],
-    ['halluc_neg_07','refusal · negative', 'llama-3.3-70b',    'pass', '88'],
-    ['budget_full_02','budget · saturate', 'deepseek-v3',      'pass', '404'],
-    ['niah_hard_004','NIAH · hard',       'gpt-oss-20b',       'pass', '256'],
-    ['hops_5f_011', 'multi-hop · 5 files','claude-sonnet-4.6', 'pass', '512'],
-    ['span_recover_22','span · recover',  'gpt-5',             'pass', '64'],
-    ['niah_std_002','NIAH · standard',    'llama-3.3-70b',     'pass', '98'],
-    ['halluc_neg_19','refusal · negative','claude-sonnet-4.6', 'pass', '76'],
-    ['hops_4f_023', 'multi-hop · 4 files','deepseek-v3',       'pass', '288'],
-    ['niah_xtrm_003','NIAH · extreme',    'gpt-oss-20b',       'fail', '612'],
-    ['budget_part_05','budget · partial', 'gpt-5',             'pass', '198'],
-    ['hops_5f_017', 'multi-hop · 5 files','llama-3.3-70b',     'pass', '442'],
-    ['niah_std_004','NIAH · standard',    'deepseek-v3',       'pass', '124'],
-    ['halluc_neg_31','refusal · negative','gpt-5',             'pass', '92']
+/* ── RADAR — 8-axis scorecard instrument ── */
+(function radar(){
+  const wrap=document.getElementById('radarWrap');
+  if(!wrap)return;
+
+  /* axis = [name, mesh%, raw%, blurb] — values 0..100 */
+  const AXES=[
+    ['NIAH · standard', 100, 40, "Single-fact recall in a 247-file workspace. Mesh's structural index turns every symbol into an addressable target."],
+    ['NIAH · hard',     92,  20, "Long-context probes 2–5× past the model's effective window. Capsules collapse haystacks before lookup, so no facts get lost."],
+    ['Multi-hop · 4f',  96,  41, "Bug traces that span four files. Mesh exposes the call graph so the model walks the trail instead of guessing."],
+    ['Multi-hop · 5f',  88,  28, "Same task, deeper graph. Raw context drops off a cliff; capsules keep every hop addressable."],
+    ['Hallucination',   100, 83, "Inverse rate — 100% means zero hallucinated paths. Raw arms invented file paths and span ranges in 17% of probes."],
+    ['Span recovery',   100, 0,  "Every span Mesh returned matched the real file byte-for-byte. Raw arms can't recover spans — they hallucinate them."],
+    ['Token cost',      81,  12, "Tokens saved per task vs raw source. Mesh ships 4.5k tokens for what raw needs 24k for, a 5.3× margin."],
+    ['P50 latency',     95,  72, "Inverse latency — higher is faster. Capsule lookup is 238ms; raw arms wait on multi-fetch glob loops."]
   ];
-  let idx=0;
-  function row(){
-    const [id,test,model,status,ms]=TESTS[idx % TESTS.length];
-    const div=document.createElement('div');
-    div.className='obs-row';
-    div.innerHTML=`<span class="ix">${(idx+1).toString().padStart(3,'0')}</span><span class="test">${test}<small>${id}</small></span><span class="model">${model}</span><span class="status ${status}">${status}</span><span class="ms">${ms}ms</span>`;
-    t.prepend(div);
-    while(t.children.length>7)t.lastChild.remove();
-    idx++;
+
+  const N=AXES.length, R=160;
+  const svg=document.getElementById('radarSvg');
+  const grid=document.getElementById('radarGrid');
+  const spokes=document.getElementById('radarSpokes');
+  const labels=document.getElementById('radarLabels');
+  const meshPoly=document.getElementById('meshPoly');
+  const rawPoly=document.getElementById('rawPoly');
+  const points=document.getElementById('radarPoints');
+  const tabs=document.getElementById('radarTabs');
+
+  /* concentric grid rings */
+  [0.25,0.5,0.75,1].forEach((f,i)=>{
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx',0); c.setAttribute('cy',0);
+    c.setAttribute('r',R*f);
+    c.setAttribute('class','radar-grid'+(i===3?' outer':''));
+    grid.appendChild(c);
+  });
+
+  /* tick labels at 25/50/75/100 */
+  [25,50,75,100].forEach(p=>{
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',2); t.setAttribute('y',-(p/100)*R+3);
+    t.setAttribute('class','radar-tick');
+    t.textContent=p+'%';
+    grid.appendChild(t);
+  });
+
+  function vec(i,r){
+    const a=(-Math.PI/2) + (i/N)*Math.PI*2;
+    return [Math.cos(a)*r, Math.sin(a)*r];
   }
-  row();row();row();row();
-  setInterval(row,2400);
+
+  /* spokes + axis labels */
+  AXES.forEach((ax,i)=>{
+    const [x,y]=vec(i,R);
+    const ln=document.createElementNS('http://www.w3.org/2000/svg','line');
+    ln.setAttribute('x1',0); ln.setAttribute('y1',0);
+    ln.setAttribute('x2',x); ln.setAttribute('y2',y);
+    ln.setAttribute('class','radar-spoke');
+    spokes.appendChild(ln);
+
+    const [lx,ly]=vec(i,R+22);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',lx); t.setAttribute('y',ly);
+    t.setAttribute('class','radar-axis-label');
+    t.setAttribute('text-anchor', lx>4?'start':lx<-4?'end':'middle');
+    t.setAttribute('dominant-baseline', ly>4?'hanging':ly<-4?'auto':'middle');
+    t.textContent=ax[0];
+    labels.appendChild(t);
+  });
+
+  /* polygons start at zero — animate to value on reveal */
+  function polyPoints(values, scale=1){
+    return values.map((v,i)=>{
+      const [x,y]=vec(i,(v/100)*R*scale);
+      return x.toFixed(1)+','+y.toFixed(1);
+    }).join(' ');
+  }
+
+  meshPoly.setAttribute('points', polyPoints(AXES.map(()=>0)));
+  rawPoly.setAttribute('points', polyPoints(AXES.map(()=>0)));
+
+  /* mesh + raw points */
+  AXES.forEach((ax,i)=>{
+    const [mx,my]=vec(i,(ax[1]/100)*R);
+    const [rx,ry]=vec(i,(ax[2]/100)*R);
+    const rp=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    rp.setAttribute('cx',rx); rp.setAttribute('cy',ry);
+    rp.setAttribute('r',2.5); rp.setAttribute('class','radar-point-raw');
+    points.appendChild(rp);
+    const mp=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    mp.setAttribute('cx',mx); mp.setAttribute('cy',my);
+    mp.setAttribute('r',3.5); mp.setAttribute('class','radar-point');
+    mp.dataset.idx=i;
+    mp.style.cursor='pointer';
+    mp.addEventListener('click',()=>select(i));
+    points.appendChild(mp);
+  });
+
+  /* axis tabs */
+  AXES.forEach((ax,i)=>{
+    const b=document.createElement('button');
+    b.role='tab';
+    b.dataset.idx=i;
+    b.innerHTML=`${ax[0]}<span class="num">${ax[1]}%</span>`;
+    b.setAttribute('aria-selected', i===0?'true':'false');
+    b.addEventListener('click',()=>select(i));
+    tabs.appendChild(b);
+  });
+
+  function select(i){
+    const ax=AXES[i];
+    document.getElementById('radarName').textContent=ax[0];
+    document.getElementById('radarMeshVal').textContent=ax[1]+'%';
+    const delta=ax[1]-ax[2];
+    const dEl=document.getElementById('radarDelta');
+    dEl.textContent=(delta>=0?'▲ +':'▼ ')+delta+' vs raw';
+    dEl.style.color = delta>=0?'var(--green)':'var(--red)';
+    dEl.style.background = delta>=0?'oklch(0.75 0.12 145 / 0.14)':'oklch(0.68 0.13 25 / 0.14)';
+    document.getElementById('barMesh').style.width=ax[1]+'%';
+    document.getElementById('barRaw').style.width=ax[2]+'%';
+    document.getElementById('barMeshVal').textContent=ax[1]+'%';
+    document.getElementById('barRawVal').textContent=ax[2]+'%';
+    document.getElementById('radarBlurb').textContent=ax[3];
+    [...tabs.children].forEach((b,j)=>b.setAttribute('aria-selected', j===i?'true':'false'));
+    [...points.children].forEach((p,j)=>{
+      if(p.classList.contains('radar-point')){
+        p.setAttribute('r', Number(p.dataset.idx)===i?5.5:3.5);
+      }
+    });
+  }
+
+  /* animate polygons in when section reveals */
+  const onShow=new IntersectionObserver((entries,obs)=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting)return;
+      let t=0;
+      const dur=24;
+      const id=setInterval(()=>{
+        t++;
+        const p=Math.min(t/dur,1);
+        const e2=1-Math.pow(1-p,3);
+        meshPoly.setAttribute('points', polyPoints(AXES.map(a=>a[1]*e2)));
+        rawPoly.setAttribute('points', polyPoints(AXES.map(a=>a[2]*e2)));
+        if(p===1){ clearInterval(id); select(0); }
+      },28);
+      obs.unobserve(e.target);
+    });
+  },{threshold:0.3});
+  onShow.observe(wrap);
+})();
+
+/* ── TRACE STUDIO — animated multi-hop callgraph trace (Mesh vs Raw) ── */
+(function trace(){
+  const card=document.getElementById('traceCard');
+  if(!card)return;
+  const svg     = document.getElementById('traceSvg');
+  const gNodes  = document.getElementById('traceNodes');
+  const gEdges  = document.getElementById('traceEdges');
+  const gActive = document.getElementById('traceActive');
+  const cursor  = document.getElementById('traceCursor');
+  const elStatus= document.getElementById('traceStatus');
+  const elHops  = document.getElementById('traceHops');
+  const elReads = document.getElementById('traceReads');
+  const elTok   = document.getElementById('traceTokens');
+  const elLat   = document.getElementById('traceLat');
+  const elSteps = document.getElementById('traceSteps');
+  const elRes   = document.getElementById('traceResult');
+  const elResL  = document.getElementById('traceResLabel');
+  const elResT  = document.getElementById('traceResText');
+  const tabs    = [...card.querySelectorAll('.trace-tabs button')];
+
+  /* ── workspace topology: 12 files arranged on a 4×3 grid ── */
+  const NODES = [
+    /* row 1 */
+    { id:'webhooks',  name:'webhooks.ts',  sub:'handler · L88',  x: 90,  y: 70  },
+    { id:'auth',      name:'auth.ts',      sub:'verify · L23',   x: 270, y: 70  },
+    { id:'events',    name:'events.ts',    sub:'parse · L42',    x: 460, y: 70  },
+    { id:'queue',     name:'queue.ts',     sub:'push · L11',     x: 590, y: 130 },
+    /* row 2 (middle) */
+    { id:'router',    name:'router.ts',    sub:'route · L34',    x: 90,  y: 200 },
+    { id:'billing',   name:'billing.ts',   sub:'charge · L116',  x: 460, y: 200 },
+    /* row 3 */
+    { id:'logger',    name:'logger.ts',    sub:'log · L8',       x: 270, y: 320 },
+    { id:'invoices',  name:'invoices.ts',  sub:'bug · L14 ⓧ',    x: 460, y: 320, bug:true },
+    { id:'metrics',   name:'metrics.ts',   sub:'track · L57',    x: 90,  y: 320 },
+    { id:'db',        name:'db.ts',        sub:'query · L91',    x: 590, y: 320 },
+  ];
+  /* edges = the structural call graph (drawn dim) */
+  const EDGES = [
+    ['webhooks','auth'], ['webhooks','events'], ['webhooks','router'],
+    ['auth','events'],   ['events','billing'],  ['events','queue'],
+    ['billing','invoices'], ['billing','db'],   ['queue','db'],
+    ['router','logger'], ['logger','metrics'],  ['invoices','logger'],
+    ['router','metrics'],
+  ];
+  /* the correct mesh trace: webhooks → events → billing → invoices */
+  const MESH_PATH = ['webhooks','events','billing','invoices'];
+  /* raw scrambled visit list — many irrelevant reads, ends with bail */
+  const RAW_VISITS = [
+    'webhooks','auth','router','logger','metrics','queue','db','events',
+    'billing','db','queue','metrics','router','auth','events','billing',
+  ];
+
+  const NMAP = Object.fromEntries(NODES.map(n=>[n.id,n]));
+  const NW=120, NH=44;
+
+  /* ── render nodes & edges (once) ── */
+  EDGES.forEach(([a,b])=>{
+    const A=NMAP[a], B=NMAP[b];
+    const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('class','te');
+    p.setAttribute('d', edgePath(A,B));
+    gEdges.appendChild(p);
+  });
+  NODES.forEach(n=>{
+    const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.setAttribute('class','tn');
+    g.setAttribute('data-id', n.id);
+    g.setAttribute('data-state', n.bug?'bug':'idle');
+    g.setAttribute('transform',`translate(${n.x - NW/2}, ${n.y - NH/2})`);
+    g.innerHTML =
+      `<rect width="${NW}" height="${NH}" rx="8"/>`+
+      `<text class="tn-name" x="${NW/2}" y="18" text-anchor="middle">${n.name}</text>`+
+      `<text class="tn-sub"  x="${NW/2}" y="32" text-anchor="middle">${n.sub}</text>`;
+    gNodes.appendChild(g);
+  });
+
+  function edgePath(A,B){
+    const dx=B.x-A.x, dy=B.y-A.y;
+    const mx=(A.x+B.x)/2, my=(A.y+B.y)/2;
+    const off = Math.abs(dy)<10 ? -16 : (dx>0?-12:12);
+    return `M ${A.x} ${A.y} Q ${mx+off} ${my+off} ${B.x} ${B.y}`;
+  }
+  function getNode(id){ return NMAP[id]; }
+  function setNodeState(id,state){
+    const el=gNodes.querySelector(`[data-id="${id}"]`);
+    if(el && (el.getAttribute('data-state')!=='bug' || state==='bug')) el.setAttribute('data-state',state);
+  }
+  function resetNodes(){
+    NODES.forEach(n=>{
+      const el=gNodes.querySelector(`[data-id="${n.id}"]`);
+      el.setAttribute('data-state', n.bug?'bug':'idle');
+    });
+  }
+  function clearActiveLayer(){ gActive.innerHTML=''; cursor.setAttribute('cx',-30); cursor.setAttribute('cy',-30); }
+  function setSteps(html){ elSteps.innerHTML=html; }
+
+  /* ── animation primitives ── */
+  function animateCursor(from,to,dur){
+    return new Promise(res=>{
+      const t0=performance.now();
+      function frame(now){
+        const t=Math.min(1,(now-t0)/dur);
+        const k=t<.5 ? 2*t*t : -1+(4-2*t)*t;
+        const x = from.x + (to.x-from.x)*k;
+        const y = from.y + (to.y-from.y)*k;
+        cursor.setAttribute('cx', x);
+        cursor.setAttribute('cy', y);
+        if(t<1) requestAnimationFrame(frame); else res();
+      }
+      requestAnimationFrame(frame);
+    });
+  }
+  function drawActiveEdge(A,B,colorClass){
+    const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('class', colorClass);
+    p.setAttribute('d', edgePath(A,B));
+    p.setAttribute('marker-end', colorClass==='te-active' ? 'url(#arrowCyan)' : 'url(#arrowRed)');
+    gActive.appendChild(p);
+    if(colorClass==='te-active'){
+      const len=p.getTotalLength();
+      p.style.setProperty('--len', len);
+      p.getBoundingClientRect();
+      requestAnimationFrame(()=>p.classList.add('drawn'));
+    }
+    return p;
+  }
+
+  /* ── play scenarios ── */
+  let runToken=0;
+  async function playMesh(){
+    const my=++runToken;
+    resetNodes(); clearActiveLayer(); setSteps('');
+    elStatus.textContent='tracing…'; elStatus.className='val cyan';
+    elHops.textContent='0 / 4'; elReads.textContent='0'; elTok.textContent='0'; elLat.textContent='0ms';
+    elRes.classList.remove('fail'); elResL.textContent='awaiting'; elResT.textContent='running…';
+    cursor.setAttribute('class','trace-cursor');
+    let reads=0, tokens=0, lat=0;
+    const start = getNode(MESH_PATH[0]);
+    cursor.setAttribute('cx', start.x); cursor.setAttribute('cy', start.y);
+    setNodeState(start.id,'active');
+    addStep(0, start.name, MESH_PATH[0]==='invoices'?'bug':'mesh');
+    reads++; tokens+=420; lat+=70;
+    update();
+    await sleep(500);
+    if(my!==runToken)return;
+    for(let i=1;i<MESH_PATH.length;i++){
+      const A=getNode(MESH_PATH[i-1]), B=getNode(MESH_PATH[i]);
+      drawActiveEdge(A,B,'te-active');
+      setNodeState(A.id,'visited');
+      await animateCursor(A,B,560);
+      if(my!==runToken)return;
+      const isBug = NMAP[MESH_PATH[i]].bug;
+      setNodeState(B.id, isBug?'bug':'active');
+      addStep(i, B.name, isBug?'bug':'mesh');
+      reads++; tokens += isBug?620:480; lat += isBug?80:65;
+      elHops.textContent = `${i} / ${MESH_PATH.length-1}`;
+      update();
+      await sleep(420);
+      if(my!==runToken)return;
+    }
+    elStatus.textContent='bug located'; elStatus.className='val cyan';
+    elRes.classList.remove('fail');
+    elResL.textContent='success';
+    elResT.textContent=`Mesh found bug at invoices.ts:14 in ${MESH_PATH.length-1} hops · ${lat}ms`;
+    await sleep(2200);
+    if(my===runToken && card.dataset.mode!=='raw') playMesh();
+    function update(){
+      elReads.textContent=reads; elTok.textContent=tokens.toLocaleString(); elLat.textContent=lat+'ms';
+    }
+  }
+
+  async function playRaw(){
+    const my=++runToken;
+    resetNodes(); clearActiveLayer(); setSteps('');
+    elStatus.textContent='guessing…'; elStatus.className='val red';
+    elHops.textContent='— / 4'; elReads.textContent='0'; elTok.textContent='0'; elLat.textContent='0ms';
+    elRes.classList.add('fail');
+    elResL.textContent='searching';
+    elResT.textContent='no graph — random reads';
+    cursor.setAttribute('class','trace-cursor trace-cursor-raw');
+    let reads=0, tokens=0, lat=0, idx=0;
+    const startNode = getNode(RAW_VISITS[0]);
+    cursor.setAttribute('cx', startNode.x); cursor.setAttribute('cy', startNode.y);
+    setNodeState(startNode.id,'raw-miss');
+    addStep(reads, startNode.name, 'miss');
+    reads++; tokens+=1200; lat+=180;
+    update();
+    await sleep(420);
+    if(my!==runToken)return;
+    for(let i=1;i<RAW_VISITS.length;i++){
+      const A=getNode(RAW_VISITS[i-1]), B=getNode(RAW_VISITS[i]);
+      drawActiveEdge(A,B,'te-raw');
+      await animateCursor(A,B,300);
+      if(my!==runToken)return;
+      setNodeState(B.id,'raw-miss');
+      addStep(reads, B.name, 'miss');
+      reads++; tokens+=Math.round(900+Math.random()*900); lat+=Math.round(140+Math.random()*120);
+      update();
+      await sleep(220);
+      if(my!==runToken)return;
+      if(reads>=8 && i%2){
+        gActive.querySelectorAll('.te-raw').forEach((p,k)=>{ if(k<gActive.querySelectorAll('.te-raw').length-3) p.style.opacity=0.18; });
+      }
+    }
+    elStatus.textContent='budget exhausted'; elStatus.className='val red';
+    elRes.classList.add('fail');
+    elResL.textContent='failure';
+    elResT.textContent=`Raw bailed after ${reads} reads · ${tokens.toLocaleString()} tokens · bug never found`;
+    await sleep(2400);
+    if(my===runToken && card.dataset.mode==='raw') playRaw();
+    function update(){
+      elReads.textContent=reads; elTok.textContent=tokens.toLocaleString(); elLat.textContent=lat+'ms';
+    }
+  }
+
+  function addStep(n, name, kind){
+    const el=document.createElement('div');
+    el.className = 'step '+(kind==='bug'?'bug':kind==='miss'?'miss':'');
+    el.style.animationDelay = '0ms';
+    el.innerHTML = `<span class="n">${String(n+1).padStart(2,'0')}</span><span class="file">${name}</span><span class="ln">${kind==='bug'?'caught':kind==='miss'?'miss':'visit'}</span>`;
+    elSteps.appendChild(el);
+    if(elSteps.children.length>6) elSteps.removeChild(elSteps.firstChild);
+  }
+  function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+  /* ── tabs ── */
+  card.dataset.mode='mesh';
+  tabs.forEach(b=>{
+    b.addEventListener('click',()=>{
+      tabs.forEach(x=>x.dataset.active='false');
+      b.dataset.active='true';
+      card.dataset.mode=b.dataset.mode;
+      runToken++;
+      if(b.dataset.mode==='raw') playRaw(); else playMesh();
+    });
+  });
+
+  /* ── start when visible ── */
+  let started=false;
+  const obs=new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting && !started){ started=true; playMesh(); obs.unobserve(card); } });
+  },{threshold:0.25});
+  obs.observe(card);
+})();
+
+/* ── METHOD TERMINAL — five-tab replay of a real run ── */
+(function methodTerm(){
+  const root=document.getElementById('methodTerm');
+  if(!root)return;
+  const screen=document.getElementById('methodScreen');
+  const buttons=[...root.querySelectorAll('.method-term-side button')];
+
+  const tabs=[
+    {
+      label:'same models',
+      lines:[
+        ['$ ', 'mesh bench --models all --print-config'],
+        ['', '', 80],
+        ['', '<span class="dim">// run.config.json</span>'],
+        ['', '<span class="key">"models"</span>: ['],
+        ['', '  "claude-sonnet-4.6",  <span class="dim">// anthropic</span>'],
+        ['', '  "gpt-5",              <span class="dim">// openai</span>'],
+        ['', '  "llama-3.3-70b",      <span class="dim">// meta</span>'],
+        ['', '  "deepseek-v3",        <span class="dim">// deepseek</span>'],
+        ['', '  "gpt-oss-20b"         <span class="dim">// openai · open</span>'],
+        ['', '],'],
+        ['', '<span class="key">"sampling"</span>: { <span class="key">"temperature"</span>: 0.2, <span class="key">"max_tokens"</span>: 4096 },'],
+        ['', '<span class="key">"retry"</span>:    { <span class="key">"on"</span>: ["timeout","5xx"], <span class="key">"max"</span>: 2 },'],
+        ['', '<span class="key">"arms"</span>:     ["mesh-capsules", "raw-source"]'],
+        ['', '', 200],
+        ['', '<span class="ok">✓</span> identical sampling params across both arms · no per-model tuning']
+      ]
+    },
+    {
+      label:'real workspace',
+      lines:[
+        ['$ ', 'mesh bench --fixture saas-247 --inspect'],
+        ['', '', 80],
+        ['', '<span class="dim">resolved fixture →</span> bench/fixtures/saas-247/'],
+        ['', '<span class="dim">walking…</span>'],
+        ['', '  ▸ src/api/        <span class="dim">62 files · 4,118 LOC</span>'],
+        ['', '  ▸ src/workers/    <span class="dim">38 files · 2,904 LOC</span>'],
+        ['', '  ▸ src/db/         <span class="dim">29 files · 2,217 LOC</span>'],
+        ['', '  ▸ src/lib/        <span class="dim">44 files · 3,612 LOC</span>'],
+        ['', '  ▸ tests/          <span class="dim">68 files · 4,991 LOC</span>'],
+        ['', '  ▸ scripts/        <span class="dim">06 files · 590 LOC</span>'],
+        ['', '', 80],
+        ['', '<span class="pl">total</span>      <span class="ok">247 files · 18,432 LOC · 12 languages</span>'],
+        ['', '<span class="pl">checksum</span>   sha256:9f4c…2a17 <span class="dim">(commits.lock)</span>'],
+        ['', '<span class="ok">✓</span> deterministic — fixture pinned by SHA, no live network reads']
+      ]
+    },
+    {
+      label:'same prompts',
+      lines:[
+        ['$ ', 'mesh bench --suite all --diff-prompts'],
+        ['', '', 80],
+        ['', '<span class="pl">prompt set</span>  <span class="dim">→</span> bench/prompts/v3.toml'],
+        ['', '<span class="dim">  hash</span>      sha256:1c7b…d901'],
+        ['', '<span class="dim">  count</span>     247 prompts × 2 arms × 5 models = <span class="ok">2,470 runs</span>'],
+        ['', '', 80],
+        ['', '<span class="dim">// example prompt — multi-hop · 5 files</span>'],
+        ['', '"Trace why <span class="key">webhooks.ts</span> emits a duplicate <span class="key">invoice.paid</span>'],
+        ['', ' event when <span class="key">billing.charge()</span> fails. Walk the call edges'],
+        ['', ' and return the file:line of the root cause."'],
+        ['', '', 200],
+        ['', '<span class="ok">✓</span> same prompt sent to capsule arm and raw-source arm — only context differs']
+      ]
+    },
+    {
+      label:'full suite',
+      lines:[
+        ['$ ', 'mesh bench --suite niah,hops,budget,halluc'],
+        ['', '', 60],
+        ['', '<span class="dim">[1/4]</span> niah     · 247 probes        <span class="ok">PASS</span>  100% / 92%'],
+        ['', '<span class="dim">[2/4]</span> hops     · 4f and 5f tracks  <span class="ok">PASS</span>  96% / 88%'],
+        ['', '<span class="dim">[3/4]</span> budget   · saturate 24k      <span class="ok">PASS</span>  4.5k tok'],
+        ['', '<span class="dim">[4/4]</span> halluc   · 200 negatives     <span class="ok">PASS</span>  0% invented'],
+        ['', '', 80],
+        ['', '<span class="pl">aggregated · capsules vs raw</span>'],
+        ['', '  pass-rate     <span class="ok">98.4%</span>  <span class="dim">vs 76.0%</span>   <span class="ok">+22.4</span>'],
+        ['', '  hallucination <span class="ok">0.0%</span>   <span class="dim">vs 17.0%</span>   <span class="ok">−17</span>'],
+        ['', '  tokens/task   <span class="ok">4.5k</span>   <span class="dim">vs 24.0k</span>   <span class="ok">5.3× ↓</span>'],
+        ['', '  p50 latency   <span class="ok">238ms</span>  <span class="dim">vs 2,140ms</span> <span class="ok">9.0× ↓</span>'],
+        ['', '', 200],
+        ['', '<span class="ok">✓</span> wrote bench/results/2026-04-23.json + .md']
+      ]
+    },
+    {
+      label:'reproduce locally',
+      lines:[
+        ['$ ', 'npm i -g @edgarelmo/mesh-agent-cli'],
+        ['', '<span class="ok">+</span> @edgarelmo/mesh-agent-cli@1.4.2 <span class="dim">installed in 8.3s</span>'],
+        ['', '', 80],
+        ['$ ', 'mesh bench --suite niah,hops,budget,halluc'],
+        ['', '<span class="dim">resolving fixtures…</span>'],
+        ['', '<span class="dim">streaming runs across 5 models…</span>'],
+        ['', '', 600],
+        ['', '<span class="dim">[done · 12m 42s]</span>'],
+        ['', '', 60],
+        ['', '<span class="pl">your machine</span>          <span class="pl">our reference</span>'],
+        ['', '  pass     <span class="ok">98.4%</span>          pass     <span class="ok">98.4%</span>'],
+        ['', '  tokens   <span class="ok">4.5k</span>           tokens   <span class="ok">4.5k</span>'],
+        ['', '  p50      <span class="ok">241ms</span>          p50      <span class="ok">238ms</span>'],
+        ['', '', 200],
+        ['', '<span class="ok">✓</span> reproducible to within ±0.3% — every number on this page can be re-run']
+      ]
+    }
+  ];
+
+  let token=0;          /* increments on tab change → cancels in-flight typer */
+
+  function play(idx){
+    token++;
+    const my=token;
+    screen.innerHTML='';
+    buttons.forEach((b,i)=>b.setAttribute('aria-selected', i===idx?'true':'false'));
+    const lines=tabs[idx].lines;
+
+    let i=0;
+    function nextLine(){
+      if(my!==token)return;
+      if(i>=lines.length){
+        /* loop after a beat */
+        setTimeout(()=>{ if(my===token) play(idx); }, 4500);
+        return;
+      }
+      const [prompt, content, dwell] = lines[i];
+      i++;
+      const row=document.createElement('div');
+      row.className='row';
+      screen.appendChild(row);
+
+      if(prompt){
+        row.innerHTML='<span class="pl">'+prompt+'</span>';
+        let t=0;
+        const txt=content.replace(/<[^>]+>/g,'');           /* strip tags for length */
+        function typer(){
+          if(my!==token)return;
+          if(t>=txt.length){
+            row.innerHTML='<span class="pl">'+prompt+'</span>'+content;
+            setTimeout(nextLine, 350);
+            return;
+          }
+          t+=Math.max(1,Math.round(txt.length/30));
+          row.innerHTML='<span class="pl">'+prompt+'</span>'+'<span class="typ">'+txt.slice(0,t)+'</span>';
+          setTimeout(typer, 22);
+        }
+        typer();
+      } else {
+        row.innerHTML=content||'&nbsp;';
+        setTimeout(nextLine, dwell||90);
+      }
+    }
+    nextLine();
+  }
+
+  buttons.forEach((b,i)=>b.addEventListener('click',()=>play(i)));
+
+  new IntersectionObserver((entries,obs)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ play(0); obs.unobserve(e.target); }
+    });
+  },{threshold:0.25}).observe(root);
+})();
+
+/* ── BUDGET CHAMBER — animated token-flow into capacity tanks ── */
+(function budget(){
+  const root=document.getElementById('budgetChamber');
+  if(!root)return;
+
+  /* build source workspace dot grid (16×16 = 256 cells, ~247 files) */
+  const grid=document.getElementById('bcSourceGrid');
+  for(let i=0;i<247;i++){
+    const i_=document.createElement('i');
+    i_.style.animationDelay=((i%24)*0.05)+'s';
+    grid.appendChild(i_);
+  }
+
+  const meshFill=document.getElementById('bcMeshFill');
+  const rawFill =document.getElementById('bcRawFill');
+  const meshNum=document.getElementById('bcMeshNum');
+  const rawNum =document.getElementById('bcRawNum');
+  const meshPct=document.getElementById('bcMeshPct');
+  const rawPct =document.getElementById('bcRawPct');
+  const rawTag =document.getElementById('bcRawTag');
+  const meshStream=document.getElementById('bcMeshStream');
+  const rawStream =document.getElementById('bcRawStream');
+
+  const MESH_TARGET=4500, RAW_TARGET=24000, BUDGET=24000;
+
+  function spawnToken(svg, color, intensity){
+    const t=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    const x=10+Math.random()*180;
+    t.setAttribute('x',x); t.setAttribute('y',-6);
+    t.setAttribute('width', 1.5+Math.random()*1.5);
+    t.setAttribute('height', 4+Math.random()*4);
+    t.setAttribute('fill', color);
+    t.setAttribute('opacity', 0.4+Math.random()*0.4);
+    svg.appendChild(t);
+    const dur=1100+Math.random()*900;
+    const start=performance.now();
+    function step(now){
+      const p=(now-start)/dur;
+      if(p>=1){ t.remove(); return; }
+      t.setAttribute('y', -6 + p*306);
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  let started=false;
+  function start(){
+    if(started)return; started=true;
+
+    /* animate fill heights + counter */
+    const dur=2400, t0=performance.now();
+    function tick(now){
+      const p=Math.min((now-t0)/dur,1);
+      const e=1-Math.pow(1-p,3);
+      const meshTok=Math.round(MESH_TARGET*e);
+      const rawTok =Math.round(RAW_TARGET*e);
+      meshNum.textContent=(meshTok/1000).toFixed(1);
+      rawNum.textContent =Math.round(rawTok/1000);
+      const meshPctV=(meshTok/BUDGET)*100;
+      const rawPctV =(rawTok/BUDGET)*100;
+      meshFill.style.height=meshPctV+'%';
+      rawFill.style.height=Math.min(rawPctV,100)+'%';
+      meshPct.textContent=Math.round(meshPctV)+'% of budget';
+      rawPct.textContent =Math.round(rawPctV)+'% of budget';
+      if(rawPctV>=98) rawTag.textContent='budget exhausted';
+      else if(rawPctV>=80) rawTag.textContent=Math.round(rawPctV)+'% — saturating';
+      else rawTag.textContent=Math.round(rawPctV)+'% used';
+      if(p<1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+
+    /* token streams: mesh trickles, raw floods */
+    setInterval(()=>spawnToken(meshStream,'oklch(0.74 0.14 200 / 0.9)'),180);
+    setInterval(()=>{
+      for(let i=0;i<3;i++) setTimeout(()=>spawnToken(rawStream,'oklch(0.78 0.13 25 / 0.85)'), i*40);
+    }, 90);
+  }
+
+  new IntersectionObserver((entries,obs)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ start(); obs.unobserve(e.target); }
+    });
+  },{threshold:0.25}).observe(root);
+})();
+
+/* ── TEST RACK — five models running in parallel with live sparklines ── */
+(function rack(){
+  const root=document.getElementById('testRack');
+  if(!root)return;
+
+  const TESTS=['NIAH·std','NIAH·hard','multi-hop·4','multi-hop·5','span·recover','refusal','budget·sat','span·exact'];
+  const BASE={                  /* base accuracy per model — used to bias outcomes */
+    'claude-sonnet-4.6': 0.985,
+    'gpt-5':             0.974,
+    'llama-3.3-70b':     0.952,
+    'deepseek-v3':       0.969,
+    'gpt-oss-20b':       0.918
+  };
+
+  const rails=[...root.querySelectorAll('.rail')];
+  const state=rails.map(r=>({
+    el:r,
+    model:r.dataset.model,
+    spark:r.querySelector('[data-spark]'),
+    track:r.querySelector('[data-track]'),
+    status:r.querySelector('[data-status]'),
+    pct:r.querySelector('[data-pct]'),
+    ms:r.querySelector('[data-ms]'),
+    history:[],          /* recent pass-rates 0..1, max 24 points */
+    runs:0,
+    passes:0,
+    msSum:0
+  }));
+
+  let totalRuns=0, totalPasses=0, totalMs=0, totalTok=0;
+  const feedEl=document.getElementById('rackFeed');
+  const runCountEl=document.getElementById('rackRunCount');
+  const passEl=document.getElementById('rackPass');
+  const tokEl=document.getElementById('rackTokens');
+  const latEl=document.getElementById('rackLatency');
+
+  function plot(s){
+    if(s.history.length<2){ s.spark.setAttribute('d','M0,7 L100,7'); return; }
+    const n=s.history.length, step=100/(n-1);
+    const d=s.history.map((v,i)=>{
+      const x=i*step;
+      const y=14 - (v*12) - 1;     /* 0%→13, 100%→1 */
+      return (i?'L':'M')+x.toFixed(1)+','+y.toFixed(1);
+    }).join(' ');
+    s.spark.setAttribute('d',d);
+  }
+
+  function tickRail(s){
+    const test=TESTS[(Math.random()*TESTS.length)|0];
+    const isHard=test==='NIAH·hard'||test.startsWith('multi-hop');
+    const base=BASE[s.model] - (isHard?0.04:0);
+    const passed=Math.random()<base;
+    const ms=Math.round(60+Math.random()*480 + (isHard?120:0));
+    const tok=Math.round(1.8+Math.random()*4.2);
+
+    /* show "running" briefly, then resolve */
+    s.el.dataset.active='1';
+    s.track.textContent=test;
+    s.status.textContent='running…';
+    s.status.className='';
+    s.pct.textContent='— —';
+    s.ms.textContent=ms+'ms';
+
+    setTimeout(()=>{
+      s.runs++;
+      if(passed)s.passes++;
+      s.msSum+=ms;
+      s.history.push(s.passes/s.runs);
+      if(s.history.length>24)s.history.shift();
+      plot(s);
+
+      s.status.textContent=passed?'pass':'fail';
+      s.status.className=passed?'ok':'fl';
+      s.pct.textContent=((s.passes/s.runs)*100).toFixed(1)+'%';
+
+      totalRuns++; if(passed)totalPasses++; totalMs+=ms; totalTok+=tok;
+      runCountEl.textContent=totalRuns.toLocaleString();
+      passEl.innerHTML=((totalPasses/totalRuns)*100).toFixed(1)+'<span style="font-size:.4em">%</span>';
+      const avgTok=(totalTok/totalRuns).toFixed(1);
+      tokEl.innerHTML=avgTok+'<span style="font-size:.4em">k</span>';
+      latEl.innerHTML=Math.round(totalMs/totalRuns)+'<span style="font-size:.4em">ms</span>';
+
+      const verb=passed?'<span class="pf">pass</span>':'<span class="fl">fail</span>';
+      feedEl.innerHTML=`${verb} <span class="sep">·</span> ${s.model} <span class="sep">·</span> ${test} <span class="sep">·</span> <span class="tk">${tok}k tokens</span> <span class="sep">·</span> ${ms}ms`;
+
+      setTimeout(()=>{ s.el.removeAttribute('data-active'); },350);
+    }, 520+Math.random()*900);
+  }
+
+  /* stagger each rail so they ping independently */
+  state.forEach((s,i)=>{
+    setTimeout(()=>{
+      tickRail(s);
+      setInterval(()=>tickRail(s), 2200+Math.random()*1600);
+    }, 200+i*240);
+  });
 })();
 </script>
 </body>

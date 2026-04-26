@@ -60,18 +60,171 @@
     .primary-btn { background: var(--cyan); color: var(--bg-deep); }
     .secondary-btn { background: oklch(1 0 0 / 0.035); border-color: var(--line); color: var(--ink); }
     .primary-btn:hover, .secondary-btn:hover { transform: translateY(-2px); }
-    .surface-map { border: 1px solid var(--line); border-radius: 8px; background: linear-gradient(180deg, oklch(0.13 0.05 200 / 0.92), oklch(0.08 0.04 200 / 0.92)); box-shadow: 0 32px 90px oklch(0 0 0 / 0.28); overflow: hidden; position: relative; }
-    .map-top { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 10px; color: var(--dim); }
-    .map-pulse { display: inline-flex; gap: 6px; align-items: center; color: var(--green); }
-    .map-pulse::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 18px var(--green); }
-    .map-body { padding: 28px 24px 24px; display: grid; gap: 12px; }
-    .map-row { display: grid; grid-template-columns: 48px 1fr auto; gap: 14px; align-items: center; padding: 16px; border: 1px solid oklch(1 0 0 / 0.07); border-radius: 8px; background: oklch(1 0 0 / 0.028); position: relative; --x: 50%; --y: 50%; }
-    .map-row::before { content: ''; position: absolute; inset: 0; background: radial-gradient(300px circle at var(--x) var(--y), oklch(0.74 0.14 200 / 0.08), transparent 40%); opacity: 0; transition: opacity 0.3s; pointer-events: none; }
-    .map-row:hover::before { opacity: 1; }
-    .map-num { width: 32px; height: 32px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; color: var(--cyan); font-family: var(--mono); font-size: 12px; }
-    .map-title { color: var(--ink); font-size: 15px; font-weight: 700; }
-    .map-copy { margin-top: 4px; color: var(--muted); font-size: 13px; line-height: 1.5; }
-    .map-badge { padding: 5px 9px; border-radius: 999px; background: oklch(1 0 0 / 0.035); border: 1px solid var(--line); color: var(--dim); font-family: var(--mono); font-size: 10px; white-space: nowrap; }
+    /* ── HUB CONSTELLATION (FEATURES HERO) ── */
+    .hub {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background:
+        radial-gradient(1100px circle at 50% 50%, oklch(0.74 0.14 200 / 0.05), transparent 55%),
+        linear-gradient(180deg, oklch(0.105 0.046 200 / 0.95), oklch(0.06 0.034 204 / 0.95));
+      box-shadow: 0 40px 110px oklch(0 0 0 / 0.5), inset 0 1px 0 oklch(1 0 0 / 0.04);
+      overflow: hidden;
+    }
+    .hub-top, .hub-bot {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px;
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--dim);
+    }
+    .hub-top { border-bottom: 1px solid var(--line); }
+    .hub-bot { border-top: 1px solid var(--line); }
+    .hub-top .live { display: inline-flex; gap: 8px; align-items: center; color: var(--green); }
+    .hub-top .live::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 10px var(--green);
+      animation: hubPulse 1.6s ease-in-out infinite;
+    }
+    @keyframes hubPulse { 0%,100% { opacity: 0.55; } 50% { opacity: 1; } }
+    .hub-stat { display: inline-flex; gap: 8px; align-items: center; color: oklch(1 0 0 / 0.55); font-variant-numeric: tabular-nums; }
+    .hub-stat b { color: var(--ink); font-weight: 500; }
+
+    .hub-stage {
+      position: relative;
+      aspect-ratio: 1.05 / 1;
+      width: 100%;
+      overflow: hidden;
+    }
+    .hub-rings {
+      position: absolute; inset: 0;
+      pointer-events: none;
+    }
+    .hub-rings circle {
+      fill: none;
+      stroke: oklch(0.74 0.14 200 / 0.12);
+      stroke-dasharray: 2 5;
+      transform-origin: 50% 50%;
+      animation: hubSpin 60s linear infinite;
+    }
+    .hub-rings circle:nth-child(2) { animation-duration: 90s; animation-direction: reverse; stroke-opacity: 0.5; }
+    .hub-rings circle:nth-child(3) { animation-duration: 120s; stroke-opacity: 0.3; }
+    @keyframes hubSpin { to { transform: rotate(360deg); } }
+
+    .hub-wires { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
+    .hub-wires path {
+      fill: none;
+      stroke: oklch(0.74 0.14 200 / 0.18);
+      stroke-width: 1;
+    }
+    .hub-wires .glow {
+      stroke: oklch(0.74 0.14 200 / 0.6);
+      stroke-width: 1.4;
+      stroke-dasharray: 240;
+      stroke-dashoffset: 240;
+      filter: drop-shadow(0 0 6px oklch(0.74 0.14 200 / 0.6));
+      animation: hubFlow 2.4s cubic-bezier(.5,.05,.5,.95) infinite;
+    }
+    .hub-wires .glow.w1 { animation-delay: 0s; }
+    .hub-wires .glow.w2 { animation-delay: 0.6s; }
+    .hub-wires .glow.w3 { animation-delay: 1.2s; }
+    .hub-wires .glow.w4 { animation-delay: 1.8s; }
+    @keyframes hubFlow {
+      0% { stroke-dashoffset: 240; opacity: 0; }
+      20% { opacity: 1; }
+      100% { stroke-dashoffset: 0; opacity: 0; }
+    }
+
+    .hub-core {
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      width: 132px; height: 132px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 35%, oklch(0.74 0.14 200 / 0.45), oklch(0.74 0.14 200 / 0.05) 65%),
+        oklch(0.08 0.04 200);
+      border: 1px solid oklch(0.74 0.14 200 / 0.4);
+      box-shadow: 0 0 60px oklch(0.74 0.14 200 / 0.35), inset 0 0 40px oklch(0.74 0.14 200 / 0.18);
+      display: grid; place-items: center;
+      text-align: center;
+    }
+    .hub-core::before {
+      content: ''; position: absolute; inset: -2px;
+      border-radius: 50%;
+      border: 1px dashed oklch(0.74 0.14 200 / 0.55);
+      animation: hubSpin 24s linear infinite;
+    }
+    .hub-core .lbl {
+      font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--cyan);
+    }
+    .hub-core .ratio {
+      font-family: var(--display); font-style: italic; font-weight: 900;
+      font-size: 38px; line-height: 1; color: var(--white);
+      letter-spacing: -0.02em; margin: 4px 0 2px;
+      font-variant-numeric: tabular-nums;
+    }
+    .hub-core .sub {
+      font-family: var(--mono); font-size: 9px; color: oklch(1 0 0 / 0.5);
+      letter-spacing: 0.06em;
+    }
+
+    .hub-node {
+      position: absolute; width: 142px;
+      padding: 12px 12px 11px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: oklch(0.07 0.034 200 / 0.92);
+      backdrop-filter: blur(8px);
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    }
+    .hub-node[data-active="1"] {
+      border-color: oklch(0.74 0.14 200 / 0.55);
+      box-shadow: 0 0 28px oklch(0.74 0.14 200 / 0.25);
+    }
+    .hub-node .ic {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em;
+      color: var(--cyan); text-transform: uppercase;
+    }
+    .hub-node .ic svg { width: 11px; height: 11px; opacity: 0.9; }
+    .hub-node .nm {
+      font-family: var(--display); font-style: italic; font-weight: 800;
+      font-size: 19px; line-height: 1.05; color: var(--white);
+      margin-top: 6px;
+    }
+    .hub-node .meta {
+      font-family: var(--mono); font-size: 9.5px;
+      color: oklch(1 0 0 / 0.45);
+      margin-top: 5px; min-height: 13px;
+      font-variant-numeric: tabular-nums;
+    }
+    .hub-node .meta .blink { color: var(--cyan); }
+    .hub-node .spark {
+      margin-top: 7px; height: 14px;
+      width: 100%;
+      stroke: oklch(0.74 0.14 200 / 0.7);
+      stroke-width: 1; fill: none;
+    }
+    .hub-node.n-cli { left: 14px; top: 14px; }
+    .hub-node.n-ide { right: 14px; top: 14px; }
+    .hub-node.n-mcp { left: 14px; bottom: 14px; }
+    .hub-node.n-api { right: 14px; bottom: 14px; }
+
+    .hub-particles { position: absolute; inset: 0; pointer-events: none; }
+    .hub-particles circle {
+      fill: oklch(0.85 0.13 200);
+      filter: drop-shadow(0 0 4px oklch(0.74 0.14 200 / 0.9));
+    }
+
+    .hub-feed {
+      font-family: var(--mono); font-size: 10px; color: oklch(1 0 0 / 0.45);
+      flex: 1; min-width: 0;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      letter-spacing: 0.02em; text-transform: none;
+    }
+    .hub-feed b { color: var(--cyan); font-weight: 500; }
+    .hub-feed .t { color: oklch(1 0 0 / 0.32); }
     .surfaces-section { padding: 100px 0; }
     .feature-surface { width: min(1180px, calc(100% - 64px)); margin: 0 auto 64px; border: 1px solid var(--line); border-radius: 12px; background: oklch(0.10 0.046 200 / 0.6); display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16,1,0.3,1); }
     .feature-surface.visible { opacity: 1; transform: none; }
@@ -294,6 +447,64 @@
       animation: streamDot 1.2s ease-in-out infinite;
     }
     @keyframes streamDot { 0%,100%{opacity:0.3;transform:scale(0.85)} 50%{opacity:1;transform:scale(1.1)} }
+
+    /* ── ANIMATED SURFACE PANELS ── */
+    /* CLI typed terminal */
+    .term-status { display:inline-flex; align-items:center; gap:6px; margin-left:auto; font-family: var(--mono); font-size: 10px; color: var(--green); text-transform: uppercase; letter-spacing: 0.08em; }
+    .term-status::before { content:""; width:6px; height:6px; border-radius:50%; background: var(--green); box-shadow: 0 0 8px var(--green); animation: streamDot 1.4s ease-in-out infinite; }
+    .term-line { display: block; min-height: 1.85em; opacity: 0; transform: translateX(-4px); transition: opacity .3s ease, transform .3s ease; }
+    .term-line.in { opacity: 1; transform: none; }
+    .term-cursor { display: inline-block; width: 7px; height: 13px; margin-left: 3px; background: var(--cyan); vertical-align: -2px; animation: blink 1s steps(1) infinite; }
+    @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+
+    /* IDE animated cursor + scanning */
+    .ide-edit { position: relative; }
+    .ide-cursor { position: absolute; left: 16px; width: 2px; height: 16px; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); pointer-events: none; transition: top .35s cubic-bezier(0.16,1,0.3,1), left .25s ease; animation: blink 1.1s steps(1) infinite; }
+    .ide-edit .ln { transition: background .25s ease; position: relative; }
+    .ide-edit .ln.scan { background: oklch(0.74 0.14 200 / 0.05); }
+    .ide-edit .ln.hl-bug { background: oklch(0.78 0.13 25 / 0.08) !important; box-shadow: inset 3px 0 0 var(--red); }
+    .ide-tree .f { transition: color .2s ease, background .2s ease; }
+    .ide-tree .f.scanning { color: var(--cyan); }
+    .ide-tree .f.scanning::before { content: "▸"; margin-right: 2px; color: var(--cyan); }
+    .ide-msg { opacity: 0; transform: translateY(6px); transition: opacity .35s ease, transform .35s ease; }
+    .ide-msg.in { opacity: 1; transform: none; }
+    .ide-typing { display: inline-flex; align-items: center; gap: 3px; margin-top: 6px; }
+    .ide-typing span { width: 4px; height: 4px; border-radius: 50%; background: var(--cyan); opacity: 0.4; animation: idedot 1.1s ease-in-out infinite; }
+    .ide-typing span:nth-child(2){animation-delay:.18s}
+    .ide-typing span:nth-child(3){animation-delay:.36s}
+    @keyframes idedot { 0%,100%{opacity:0.3;transform:translateY(0)} 50%{opacity:1;transform:translateY(-2px)} }
+
+    /* MCP handshake packets */
+    .mcp-conn { overflow: hidden; }
+    .mcp-conn .packet { position: absolute; top: 50%; transform: translateY(-50%); width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); pointer-events: none; opacity: 0; }
+    .mcp-conn .packet.go { animation: pktGo 1.2s ease-in-out forwards; }
+    .mcp-conn .packet.back { animation: pktBack 1.2s ease-in-out forwards; }
+    @keyframes pktGo { 0%{left:0;opacity:0} 10%{opacity:1} 90%{opacity:1} 100%{left:100%;opacity:0} }
+    @keyframes pktBack { 0%{left:100%;opacity:0} 10%{opacity:1} 90%{opacity:1} 100%{left:0;opacity:0} }
+    .mcp-tool { position: relative; transition: border-color .3s, color .3s, background .3s; }
+    .mcp-tool.firing { border-color: var(--line-strong); color: var(--ink); background: oklch(0.74 0.14 200 / 0.06); }
+    .mcp-tool.firing::before { background: var(--cyan); box-shadow: 0 0 10px var(--cyan); transform: scale(1.4); }
+    .mcp-tool::before { transition: transform .3s ease, background .3s ease, box-shadow .3s ease; }
+    .mcp-node.mesh.busy { box-shadow: 0 0 0 1px oklch(0.74 0.14 200 / 0.5), 0 0 24px oklch(0.74 0.14 200 / 0.18); }
+    .mcp-mock { position: relative; }
+    .mcp-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; font-family: var(--mono); font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--dim); }
+    .mcp-meta .req { color: var(--cyan); transition: opacity .2s; }
+
+    /* API SSE streaming */
+    .api-body { position: relative; min-height: 158px; }
+    .api-line { display: block; opacity: 0; transform: translateY(2px); transition: opacity .3s ease, transform .3s ease; }
+    .api-line.in { opacity: 1; transform: none; }
+    .api-pane { position: relative; }
+    .api-pane.sending::after { content: "sending…"; position: absolute; right: 14px; top: 9px; font-family: var(--mono); font-size: 9.5px; color: var(--cyan); animation: streamDot 1s steps(1) infinite; }
+    .api-evt { display: inline-flex; align-items: center; gap: 6px; }
+    .api-evt::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .api-bytes-bar { height: 2px; background: oklch(1 0 0 / 0.06); border-radius: 1px; margin: 0 16px 14px; overflow: hidden; }
+    .api-bytes-bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--cyan), oklch(0.74 0.14 200 / 0.4)); transition: width .25s linear; }
+    /* CLI body min-height so typing doesn't shift layout */
+    .terminal-body { min-height: 280px; }
+    #cliStream { min-height: 0; }
+    /* IDE chat side min-height for stability */
+    .ide-side { min-height: 220px; }
     footer { background: oklch(0.045 0.032 204); padding: 44px 80px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--line); }
     .f-logo { display: inline-flex; align-items: center; }
     .f-links { display: flex; gap: 24px; }
@@ -360,13 +571,77 @@
         <a class="secondary-btn" href="#surfaces">Explore surfaces</a>
       </div>
     </div>
-    <div class="surface-map">
-      <div class="map-top"><span>mesh/features-manifest</span><span class="map-pulse">indexed</span></div>
-      <div class="map-body">
-        <div class="map-row"><div class="map-num">01</div><div><div class="map-title">Terminal CLI</div><div class="map-copy">Local-first agent loop with shell execution.</div></div><div class="map-badge">perfect for devs</div></div>
-        <div class="map-row"><div class="map-num">02</div><div><div class="map-title">Mesh IDE</div><div class="map-copy">VS Code-style workspace intelligence.</div></div><div class="map-badge">visual work</div></div>
-        <div class="map-row"><div class="map-num">03</div><div><div class="map-title">MCP Server</div><div class="map-copy">Connect Claude or Cursor to Mesh.</div></div><div class="map-badge">bring your agent</div></div>
-        <div class="map-row"><div class="map-num">04</div><div><div class="map-title">Gateway API</div><div class="map-copy">Programmable endpoint for indexing.</div></div><div class="map-badge">build on Mesh</div></div>
+    <div class="hub" id="hub" aria-hidden="true">
+      <div class="hub-top">
+        <span>mesh / hub.live</span>
+        <span class="live">connected</span>
+      </div>
+      <div class="hub-stage">
+        <svg class="hub-rings" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet">
+          <circle cx="200" cy="200" r="80"/>
+          <circle cx="200" cy="200" r="125"/>
+          <circle cx="200" cy="200" r="170"/>
+        </svg>
+        <svg class="hub-wires" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet">
+          <path id="w-cli" d="M200 200 L70 70"/>
+          <path id="w-ide" d="M200 200 L330 70"/>
+          <path id="w-mcp" d="M200 200 L70 330"/>
+          <path id="w-api" d="M200 200 L330 330"/>
+          <path class="glow w1" d="M200 200 L70 70"/>
+          <path class="glow w2" d="M200 200 L330 70"/>
+          <path class="glow w3" d="M200 200 L70 330"/>
+          <path class="glow w4" d="M200 200 L330 330"/>
+        </svg>
+        <div class="hub-core">
+          <div>
+            <div class="lbl">Capsule Engine</div>
+            <div class="ratio" id="hub-ratio">3.92×</div>
+            <div class="sub">tree-sitter · v0.9</div>
+          </div>
+        </div>
+        <div class="hub-node n-cli" data-node="cli">
+          <div class="ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+            01 · CLI
+          </div>
+          <div class="nm">Terminal.</div>
+          <div class="meta" data-meta="cli">$ <span class="blink">mesh » indexing</span></div>
+          <svg class="spark" viewBox="0 0 100 14" preserveAspectRatio="none"><polyline data-spark="cli" points=""/></svg>
+        </div>
+        <div class="hub-node n-ide" data-node="ide">
+          <div class="ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
+            02 · IDE
+          </div>
+          <div class="nm">Browser IDE.</div>
+          <div class="meta" data-meta="ide">cursor → invoices.ts:16</div>
+          <svg class="spark" viewBox="0 0 100 14" preserveAspectRatio="none"><polyline data-spark="ide" points=""/></svg>
+        </div>
+        <div class="hub-node n-mcp" data-node="mcp">
+          <div class="ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M3.5 12c0-2 1-4 3-5.5M20.5 12c0 2-1 4-3 5.5"/></svg>
+            03 · MCP
+          </div>
+          <div class="nm">Agent bridge.</div>
+          <div class="meta" data-meta="mcp">tool → search_code()</div>
+          <svg class="spark" viewBox="0 0 100 14" preserveAspectRatio="none"><polyline data-spark="mcp" points=""/></svg>
+        </div>
+        <div class="hub-node n-api" data-node="api">
+          <div class="ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+            04 · API
+          </div>
+          <div class="nm">Gateway.</div>
+          <div class="meta" data-meta="api">POST /capsules · 238ms</div>
+          <svg class="spark" viewBox="0 0 100 14" preserveAspectRatio="none"><polyline data-spark="api" points=""/></svg>
+        </div>
+        <svg class="hub-particles" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet">
+          <g id="hub-tokens"></g>
+        </svg>
+      </div>
+      <div class="hub-bot">
+        <span class="hub-feed" id="hub-feed">[00:00] booting <b>capsule.engine</b> …</span>
+        <span class="hub-stat"><b id="hub-files">3,174</b> files indexed</span>
       </div>
     </div>
   </section>
@@ -381,8 +656,11 @@
       </div>
       <div class="fs-visual">
         <div class="terminal-visual">
-          <div class="window-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-          <div class="terminal-body">
+          <div class="window-bar">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            <span class="term-status">live</span>
+          </div>
+          <div class="terminal-body" id="cliBody">
 <pre class="ascii-logo">
 <span style="color:#c678dd">‹ </span>███╗   ███╗███████╗███████╗██╗  ██╗
 <span style="color:#c678dd">‹ </span>████╗ ████║██╔════╝██╔════╝██║  ██║
@@ -390,9 +668,8 @@
 <span style="color:#c678dd">‹ </span>██║╚██╔╝██║██╔══╝  ╚════██║██╔══██║
 <span style="color:#c678dd">‹ </span>██║ ╚═╝ ██║███████╗███████║██║  ██║
 <span style="color:#c678dd">‹ </span>╚═╝     ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝ <span style="color:#c678dd">›</span></pre>
-            <div><span class="terminal-prompt">$</span> mesh</div>
-            <div class="terminal-muted">-> Indexed 247 files (1.1s)</div>
-            <div>mesh » fix broken auth</div>
+            <div id="cliStream"></div>
+            <div class="term-line in" id="cliPrompt"><span class="terminal-prompt">$</span> <span id="cliInput"></span><span class="term-cursor"></span></div>
           </div>
         </div>
       </div>
@@ -400,48 +677,41 @@
     <!-- IDE -->
     <div class="feature-surface">
       <div class="fs-visual">
-        <div class="ide-mock" aria-hidden="true">
+        <div class="ide-mock" id="ideMock" aria-hidden="true">
           <div class="ide-bar"><div class="d"></div><div class="d"></div><div class="d"></div><div class="ttl">mesh-ide · acme/payments-service</div></div>
           <div class="ide-grid">
-            <div class="ide-tree">
+            <div class="ide-tree" id="ideTree">
               <div class="h">Workspace</div>
               <div class="dr">▾ src/</div>
-              <div class="f">  api/</div>
-              <div class="f">  billing/</div>
-              <div class="f">  db/</div>
-              <div class="f a">  invoices.ts</div>
-              <div class="f">  webhooks.ts</div>
+              <div class="f" data-file="api">  api/</div>
+              <div class="f" data-file="billing">  billing/</div>
+              <div class="f" data-file="db">  db/</div>
+              <div class="f a" data-file="invoices">  invoices.ts</div>
+              <div class="f" data-file="webhooks">  webhooks.ts</div>
               <div class="dr">▾ tests/</div>
-              <div class="f">  invoices.spec.ts</div>
+              <div class="f" data-file="spec">  invoices.spec.ts</div>
               <div class="dr">▸ infra/</div>
               <div class="dr">▸ docs/</div>
             </div>
-            <div class="ide-edit">
+            <div class="ide-edit" id="ideEdit">
               <div class="ide-tab"><span>billing.ts</span><span class="act">invoices.ts</span><span>webhooks.ts</span></div>
-              <div class="ln"><span class="n">14</span><span><span class="kw">export async function</span> <span class="fn">finalizeInvoice</span>(id: <span class="kw">string</span>) {</span></div>
-              <div class="ln"><span class="n">15</span><span>  <span class="kw">const</span> inv = <span class="kw">await</span> <span class="fn">db.invoices.find</span>(id);</span></div>
-              <div class="ln hl"><span class="n">16</span><span>  <span class="cm">// ↳ Mesh suggests: handle "void" status before charge</span></span></div>
-              <div class="ln"><span class="n">17</span><span>  <span class="kw">if</span> (inv.status === <span class="st">'void'</span>) <span class="kw">return</span>;</span></div>
-              <div class="ln"><span class="n">18</span><span>  <span class="kw">await</span> <span class="fn">stripe.charge</span>(inv.amount, {</span></div>
-              <div class="ln"><span class="n">19</span><span>    customer: inv.customerId,</span></div>
-              <div class="ln"><span class="n">20</span><span>    metadata: { source: <span class="st">'mesh'</span> },</span></div>
-              <div class="ln"><span class="n">21</span><span>  });</span></div>
-              <div class="ln"><span class="n">22</span><span>}</span></div>
+              <div class="ln" data-line="14"><span class="n">14</span><span><span class="kw">export async function</span> <span class="fn">finalizeInvoice</span>(id: <span class="kw">string</span>) {</span></div>
+              <div class="ln" data-line="15"><span class="n">15</span><span>  <span class="kw">const</span> inv = <span class="kw">await</span> <span class="fn">db.invoices.find</span>(id);</span></div>
+              <div class="ln hl" data-line="16"><span class="n">16</span><span>  <span class="cm">// ↳ Mesh suggests: handle "void" status before charge</span></span></div>
+              <div class="ln" data-line="17"><span class="n">17</span><span>  <span class="kw">if</span> (inv.status === <span class="st">'void'</span>) <span class="kw">return</span>;</span></div>
+              <div class="ln" data-line="18"><span class="n">18</span><span>  <span class="kw">await</span> <span class="fn">stripe.charge</span>(inv.amount, {</span></div>
+              <div class="ln" data-line="19"><span class="n">19</span><span>    customer: inv.customerId,</span></div>
+              <div class="ln" data-line="20"><span class="n">20</span><span>    metadata: { source: <span class="st">'mesh'</span> },</span></div>
+              <div class="ln" data-line="21"><span class="n">21</span><span>  });</span></div>
+              <div class="ln" data-line="22"><span class="n">22</span><span>}</span></div>
+              <div class="ide-cursor" id="ideCursor" style="top:0;left:48px;display:none"></div>
             </div>
-            <div class="ide-side">
+            <div class="ide-side" id="ideSide">
               <div class="lbl">Mesh chat · context</div>
-              <div class="ide-msg">
+              <div class="ide-msg in">
                 <span class="from">Indexed</span>
                 3.2k files · 12 lang · 1 capsule
                 <span class="ide-pill">3.9× compressed</span>
-              </div>
-              <div class="ide-msg you">
-                <span class="from">You</span>
-                Why are voided invoices being charged?
-              </div>
-              <div class="ide-msg">
-                <span class="from">Mesh</span>
-                Pulled <b>invoices.ts:14</b>, <b>webhooks.ts:88</b>, <b>billing.spec.ts:42</b>. The charge runs before the status check…
               </div>
             </div>
           </div>
@@ -463,18 +733,21 @@
         <button class="secondary-btn" onclick="navigator.clipboard.writeText('mesh connect --mcp'); alert('Copied')">Copy config command</button>
       </div>
       <div class="fs-visual">
-        <div class="mcp-mock" aria-hidden="true">
-          <div class="lbl">Model Context Protocol · live wire</div>
+        <div class="mcp-mock" id="mcpMock" aria-hidden="true">
+          <div class="mcp-meta">
+            <span>Model Context Protocol · live wire</span>
+            <span class="req" id="mcpReqLabel">idle</span>
+          </div>
           <div class="mcp-row">
-            <div class="mcp-node">
+            <div class="mcp-node" data-node="claude">
               <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M3.5 12c0-2 1-4 3-5.5M20.5 12c0 2-1 4-3 5.5M12 3.5c2 0 4 1 5.5 3M12 20.5c-2 0-4-1-5.5-3"/></svg></div>
               <div>
                 <div class="nm">Claude Desktop</div>
                 <div class="sub">agent · sonnet-4.6</div>
               </div>
             </div>
-            <div class="mcp-conn"><span class="pulse"></span></div>
-            <div class="mcp-node mesh">
+            <div class="mcp-conn" data-conn="claude"><span class="pulse"></span></div>
+            <div class="mcp-node mesh" data-node="mesh-1">
               <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 6L2 12l3 6M11 6L8 12l3 6M17 6l-3 6 3 6M22 6l-3 6 3 6"/></svg></div>
               <div>
                 <div class="nm">Mesh MCP Server</div>
@@ -483,15 +756,15 @@
             </div>
           </div>
           <div class="mcp-row">
-            <div class="mcp-node">
+            <div class="mcp-node" data-node="cursor">
               <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
               <div>
                 <div class="nm">Cursor</div>
                 <div class="sub">agent · gpt-5</div>
               </div>
             </div>
-            <div class="mcp-conn"><span class="pulse" style="animation-delay:.4s"></span></div>
-            <div class="mcp-node mesh">
+            <div class="mcp-conn" data-conn="cursor"><span class="pulse" style="animation-delay:.4s"></span></div>
+            <div class="mcp-node mesh" data-node="mesh-2">
               <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
               <div>
                 <div class="nm">Capsule Engine</div>
@@ -499,11 +772,11 @@
               </div>
             </div>
           </div>
-          <div class="mcp-tools">
-            <div class="mcp-tool">mesh.search_code()</div>
-            <div class="mcp-tool">mesh.read_span()</div>
-            <div class="mcp-tool">mesh.find_refs()</div>
-            <div class="mcp-tool">mesh.recover()</div>
+          <div class="mcp-tools" id="mcpTools">
+            <div class="mcp-tool" data-tool="search">mesh.search_code()</div>
+            <div class="mcp-tool" data-tool="read">mesh.read_span()</div>
+            <div class="mcp-tool" data-tool="refs">mesh.find_refs()</div>
+            <div class="mcp-tool" data-tool="recover">mesh.recover()</div>
           </div>
         </div>
       </div>
@@ -511,29 +784,23 @@
     <!-- API -->
     <div class="feature-surface">
       <div class="fs-visual">
-        <div class="api-mock" aria-hidden="true">
-          <div class="api-pane">
-            <div class="api-head"><span class="method post">POST</span><span class="url">api.mesh.dev/v1/capsules</span><span class="ms">→ request</span></div>
-            <div class="api-body">
-<span class="br">{</span>
-  <span class="k">"repo"</span>: <span class="s">"github.com/acme/payments"</span>,
-  <span class="k">"branch"</span>: <span class="s">"main"</span>,
-  <span class="k">"include"</span>: <span class="br">[</span><span class="s">"src/**"</span>, <span class="s">"tests/**"</span><span class="br">]</span>,
-  <span class="k">"compress"</span>: <span class="b">true</span>
-<span class="br">}</span>
+        <div class="api-mock" id="apiMock" aria-hidden="true">
+          <div class="api-pane" id="apiReqPane">
+            <div class="api-head"><span class="method post">POST</span><span class="url">api.mesh.dev/v1/capsules</span><span class="ms" id="apiReqMs">→ request</span></div>
+            <div class="api-body" id="apiReqBody">
+<span class="api-line in"><span class="br">{</span></span>
+<span class="api-line in">  <span class="k">"repo"</span>: <span class="s">"github.com/acme/payments"</span>,</span>
+<span class="api-line in">  <span class="k">"branch"</span>: <span class="s">"main"</span>,</span>
+<span class="api-line in">  <span class="k">"include"</span>: <span class="br">[</span><span class="s">"src/**"</span>, <span class="s">"tests/**"</span><span class="br">]</span>,</span>
+<span class="api-line in">  <span class="k">"compress"</span>: <span class="b">true</span></span>
+<span class="api-line in"><span class="br">}</span></span>
             </div>
+            <div class="api-bytes-bar"><i id="apiReqBar" style="width:100%"></i></div>
           </div>
-          <div class="api-pane">
-            <div class="api-head"><span class="method res">200</span><span class="url">stream · server-sent events</span><span class="ms">238 ms</span></div>
-            <div class="api-body">
-<span class="br">{</span>
-  <span class="k">"capsule_id"</span>: <span class="s">"cap_8kX9z2a"</span>,
-  <span class="k">"files"</span>: <span class="n">3174</span>, <span class="k">"tokens_in"</span>: <span class="n">2.4M</span>,
-  <span class="k">"tokens_out"</span>: <span class="n">612k</span>, <span class="k">"ratio"</span>: <span class="n">3.92</span>,
-  <span class="k">"recall"</span>: <span class="n">1.00</span>, <span class="k">"status"</span>: <span class="s">"ready"</span>
-<span class="br">}</span>
-<span class="api-stream"></span><span style="color:var(--cyan)">event: capsule.ready</span>
-            </div>
+          <div class="api-pane" id="apiResPane">
+            <div class="api-head"><span class="method res">200</span><span class="url">stream · server-sent events</span><span class="ms" id="apiResMs">— ms</span></div>
+            <div class="api-body" id="apiResBody"></div>
+            <div class="api-bytes-bar"><i id="apiResBar" style="width:0"></i></div>
           </div>
         </div>
       </div>
@@ -552,6 +819,544 @@
   <div class="f-copy">© 2026 Mesh Intelligence</div>
 </footer>
 <script>
-const canvas=document.getElementById('mesh-canvas'),ctx=canvas.getContext('2d');let W,H,pts;const mouse={x:-9999,y:-9999},LINK=155;function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}function mkPts(){const n=Math.min(80,Math.floor(W*H/12000));pts=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-0.5)*0.4,vy:(Math.random()-0.5)*0.4}))}function raf(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;const dx=p.x-mouse.x,dy=p.y-mouse.y,d=Math.hypot(dx,dy);if(d<100){p.vx+=dx/d*0.02;p.vy+=dy/d*0.02}});for(let i=0;i<pts.length;i++){for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.hypot(dx,dy);if(d<LINK){ctx.strokeStyle=`rgba(0,180,200,${(1-d/LINK)*0.25})`;ctx.lineWidth=0.6;ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.stroke()}}ctx.fillStyle='rgba(0,212,232,0.45)';ctx.beginPath();ctx.arc(pts[i].x,pts[i].y,1.6,0,Math.PI*2);ctx.fill()}requestAnimationFrame(raf)}resize();mkPts();raf();window.addEventListener('resize',()=>{resize();mkPts()});window.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY},{passive:true});setTimeout(()=>{document.querySelectorAll('.hero-word .l').forEach((el,i)=>setTimeout(()=>el.classList.add('in'),i*60+50))},50);const spotlightElements=document.querySelectorAll('.map-row, .feature-surface');spotlightElements.forEach(el=>{el.addEventListener('mousemove',e=>{const r=el.getBoundingClientRect();el.style.setProperty('--x',`${e.clientX-r.left}px`);el.style.setProperty('--y',`${e.clientY-r.top}px`)},{passive:true})});function openModal(){document.getElementById('modalBg').classList.add('open')}function closeModal(e){const m=document.getElementById('modalBg');if(!e||e.target===m||e.currentTarget?.classList?.contains('modal-close'))m.classList.remove('open')}async function submitWaitlist(){const e=document.getElementById('wlEmail'),f=document.getElementById('wlFirst'),l=document.getElementById('wlLast'),m=document.getElementById('wlMsg'),v=e.value.trim();if(!/^\S+@\S+\.\S+$/.test(v)){m.textContent='Please enter a valid email address.';return}m.textContent='Submitting...';try{const r=await fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:v,firstName:f.value,lastName:l.value})});const p=await r.json();m.textContent=p.message||'Thanks. You are now on the waitlist.'}catch(err){m.textContent='Subscription failed.'}}const revealObserver=new IntersectionObserver((entries)=>{entries.forEach((entry)=>{if(entry.isIntersecting){entry.target.classList.add('visible');revealObserver.unobserve(entry.target)}})},{threshold:0.15});document.querySelectorAll('.feature-surface').forEach((section)=>revealObserver.observe(section));</script>
+const canvas=document.getElementById('mesh-canvas'),ctx=canvas.getContext('2d');let W,H,pts;const mouse={x:-9999,y:-9999},LINK=155;function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}function mkPts(){const n=Math.min(80,Math.floor(W*H/12000));pts=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-0.5)*0.4,vy:(Math.random()-0.5)*0.4}))}function raf(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;const dx=p.x-mouse.x,dy=p.y-mouse.y,d=Math.hypot(dx,dy);if(d<100){p.vx+=dx/d*0.02;p.vy+=dy/d*0.02}});for(let i=0;i<pts.length;i++){for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.hypot(dx,dy);if(d<LINK){ctx.strokeStyle=`rgba(0,180,200,${(1-d/LINK)*0.25})`;ctx.lineWidth=0.6;ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.stroke()}}ctx.fillStyle='rgba(0,212,232,0.45)';ctx.beginPath();ctx.arc(pts[i].x,pts[i].y,1.6,0,Math.PI*2);ctx.fill()}requestAnimationFrame(raf)}resize();mkPts();raf();window.addEventListener('resize',()=>{resize();mkPts()});window.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY},{passive:true});setTimeout(()=>{document.querySelectorAll('.hero-word .l').forEach((el,i)=>setTimeout(()=>el.classList.add('in'),i*60+50))},50);const spotlightElements=document.querySelectorAll('.feature-surface');spotlightElements.forEach(el=>{el.addEventListener('mousemove',e=>{const r=el.getBoundingClientRect();el.style.setProperty('--x',`${e.clientX-r.left}px`);el.style.setProperty('--y',`${e.clientY-r.top}px`)},{passive:true})});function openModal(){document.getElementById('modalBg').classList.add('open')}function closeModal(e){const m=document.getElementById('modalBg');if(!e||e.target===m||e.currentTarget?.classList?.contains('modal-close'))m.classList.remove('open')}async function submitWaitlist(){const e=document.getElementById('wlEmail'),f=document.getElementById('wlFirst'),l=document.getElementById('wlLast'),m=document.getElementById('wlMsg'),v=e.value.trim();if(!/^\S+@\S+\.\S+$/.test(v)){m.textContent='Please enter a valid email address.';return}m.textContent='Submitting...';try{const r=await fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:v,firstName:f.value,lastName:l.value})});const p=await r.json();m.textContent=p.message||'Thanks. You are now on the waitlist.'}catch(err){m.textContent='Subscription failed.'}}const revealObserver=new IntersectionObserver((entries)=>{entries.forEach((entry)=>{if(entry.isIntersecting){entry.target.classList.add('visible');revealObserver.unobserve(entry.target)}})},{threshold:0.15});document.querySelectorAll('.feature-surface').forEach((section)=>revealObserver.observe(section));
+
+/* ── HUB CONSTELLATION ── */
+(function initHub(){
+  const hub = document.getElementById('hub');
+  if (!hub) return;
+
+  const NODES = {
+    cli: { sx: 200, sy: 200, ex: 70,  ey: 70  },
+    ide: { sx: 200, sy: 200, ex: 330, ey: 70  },
+    mcp: { sx: 200, sy: 200, ex: 70,  ey: 330 },
+    api: { sx: 200, sy: 200, ex: 330, ey: 330 },
+  };
+
+  const META = {
+    cli: [
+      '$ mesh » fix broken auth',
+      '$ mesh search "session"',
+      '$ mesh diff src/auth.ts',
+      '$ mesh » indexing 247 files',
+      '$ mesh resume cap_6w',
+      '$ mesh test --capsule',
+    ],
+    ide: [
+      'cursor → invoices.ts:16',
+      'open billing.ts',
+      'symbol → finalizeInvoice',
+      'capsule reload · 142ms',
+      'refs → 14 in 8 files',
+      'edit → invoices.ts:42',
+    ],
+    mcp: [
+      'tool → search_code()',
+      'tool → read_span()',
+      'tool → find_refs()',
+      'tool → recover()',
+      'claude.exec · 211ms',
+      'cursor.query · 184ms',
+    ],
+    api: [
+      'POST /capsules · 238ms',
+      'GET  /search   · 51ms',
+      'POST /spans    · 87ms',
+      'POST /capsules · 244ms',
+      'GET  /refs     · 64ms',
+      'POST /reindex  · 312ms',
+    ],
+  };
+
+  const FEED_VERBS = [
+    ['cli', 'mesh.search_code'],
+    ['ide', 'workspace.open'],
+    ['mcp', 'mesh.read_span'],
+    ['api', 'POST /capsules'],
+    ['cli', 'mesh.recover'],
+    ['mcp', 'mesh.find_refs'],
+    ['ide', 'capsule.reload'],
+    ['api', 'GET /search'],
+    ['cli', 'mesh.bench'],
+    ['mcp', 'tools.list'],
+  ];
+
+  const feedEl = document.getElementById('hub-feed');
+  const filesEl = document.getElementById('hub-files');
+  const ratioEl = document.getElementById('hub-ratio');
+  const tokenLayer = document.getElementById('hub-tokens');
+  const SVGNS = 'http://www.w3.org/2000/svg';
+
+  // sparkline state
+  const sparks = {};
+  Object.keys(NODES).forEach(k => { sparks[k] = Array.from({length: 24}, () => 0.5 + Math.random()*0.4); });
+  function drawSparks() {
+    Object.keys(sparks).forEach(k => {
+      const arr = sparks[k];
+      const pts = arr.map((v, i) => `${(i/(arr.length-1))*100},${14 - v*12}`).join(' ');
+      const el = hub.querySelector(`polyline[data-spark="${k}"]`);
+      if (el) el.setAttribute('points', pts);
+    });
+  }
+  drawSparks();
+
+  // pad
+  const pad = n => String(n).padStart(2,'0');
+  function nowStamp() {
+    const d = new Date();
+    return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  }
+
+  // animate one token along a wire
+  function emitToken(target) {
+    const n = NODES[target];
+    if (!n) return;
+    const c = document.createElementNS(SVGNS, 'circle');
+    c.setAttribute('r', '2.4');
+    c.setAttribute('cx', n.sx);
+    c.setAttribute('cy', n.sy);
+    tokenLayer.appendChild(c);
+    const dur = 900 + Math.random()*300;
+    const start = performance.now();
+    function step(t) {
+      const k = Math.min(1, (t-start)/dur);
+      const e = 1 - Math.pow(1-k, 2.4);
+      const x = n.sx + (n.ex - n.sx) * e;
+      const y = n.sy + (n.ey - n.sy) * e;
+      c.setAttribute('cx', x);
+      c.setAttribute('cy', y);
+      c.setAttribute('opacity', 1 - k*0.6);
+      if (k < 1) requestAnimationFrame(step);
+      else {
+        c.remove();
+        // flash the receiving node
+        const node = hub.querySelector(`.hub-node[data-node="${target}"]`);
+        if (node) {
+          node.dataset.active = '1';
+          // bump sparkline
+          sparks[target].push(0.6 + Math.random()*0.4);
+          if (sparks[target].length > 24) sparks[target].shift();
+          drawSparks();
+          setTimeout(() => { node.dataset.active = '0'; }, 480);
+        }
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  // rotating meta line per node
+  let metaIdx = { cli: 0, ide: 0, mcp: 0, api: 0 };
+  function bumpMeta(target) {
+    metaIdx[target] = (metaIdx[target] + 1) % META[target].length;
+    const el = hub.querySelector(`[data-meta="${target}"]`);
+    if (!el) return;
+    el.style.opacity = '0';
+    setTimeout(() => {
+      const t = META[target][metaIdx[target]];
+      if (target === 'cli') el.innerHTML = '$ <span class="blink">' + t.replace(/^\$\s*/, '') + '</span>';
+      else el.textContent = t;
+      el.style.transition = 'opacity 0.3s ease';
+      el.style.opacity = '1';
+    }, 120);
+  }
+
+  // ratio drift
+  let ratio = 3.92;
+  function driftRatio() {
+    ratio = Math.max(3.6, Math.min(4.2, ratio + (Math.random()-0.5)*0.06));
+    if (ratioEl) ratioEl.textContent = ratio.toFixed(2) + '×';
+  }
+
+  // file count drift
+  let files = 3174;
+  function driftFiles() {
+    files += Math.floor(Math.random()*4);
+    if (filesEl) filesEl.textContent = files.toLocaleString();
+  }
+
+  // event feed
+  let feedIdx = 0;
+  function tickFeed() {
+    const [t, verb] = FEED_VERBS[feedIdx % FEED_VERBS.length];
+    feedIdx++;
+    if (feedEl) feedEl.innerHTML = `<span class="t">[${nowStamp()}]</span> ${t.toUpperCase()} ← <b>${verb}</b>`;
+    emitToken(t);
+    bumpMeta(t);
+  }
+
+  let started = false;
+  const io = new IntersectionObserver((es) => {
+    es.forEach(e => {
+      if (e.isIntersecting && !started) {
+        started = true;
+        tickFeed();
+        setInterval(tickFeed, 1100);
+        setInterval(driftRatio, 1700);
+        setInterval(driftFiles, 1300);
+        // continuous ambient tokens too
+        setInterval(() => {
+          const keys = Object.keys(NODES);
+          emitToken(keys[Math.floor(Math.random()*keys.length)]);
+        }, 280);
+        io.disconnect();
+      }
+    });
+  }, { threshold: 0.2 });
+  io.observe(hub);
+})();
+
+/* ── CLI · typed terminal playback ── */
+(function cli(){
+  const body = document.getElementById('cliBody');
+  const stream = document.getElementById('cliStream');
+  const input = document.getElementById('cliInput');
+  if (!body || !stream || !input) return;
+
+  const SCRIPTS = [
+    { cmd: 'mesh', out: [
+      ['mute', '→ Indexing 247 files…'],
+      ['mute', '→ Tree-sitter AST · 12 langs · 1.1s'],
+      ['ok',   '✓ Capsule cap_8kX9z2a · 612k tokens · 3.92× ratio'],
+    ]},
+    { cmd: 'mesh » fix broken auth', out: [
+      ['mute', '→ Span recovery · src/auth.ts:47–112'],
+      ['mute', '→ Patched session expiry guard'],
+      ['ok',   '✓ 47 / 47 tests pass · pushed cap_9p2'],
+    ]},
+    { cmd: 'mesh search "finalizeInvoice"', out: [
+      ['mute', '→ 14 references in 8 files'],
+      ['hit',  '  invoices.ts:14   · billing.ts:88'],
+      ['hit',  '  webhooks.ts:42   · billing.spec.ts:33'],
+    ]},
+    { cmd: 'mesh diff src/billing.ts', out: [
+      ['add',  '+ if (inv.status === "void") return;'],
+      ['del',  '- // TODO: handle voided invoices'],
+      ['ok',   '✓ Capsule reload · 142ms'],
+    ]},
+  ];
+
+  const COL = { mute: 'oklch(0.6 0.012 200)', ok: 'oklch(0.78 0.16 162)', add: 'oklch(0.78 0.16 162)', del: 'oklch(0.78 0.13 25)', hit: 'oklch(0.74 0.14 200)' };
+  const TYPING = 32;     // ms per character
+  const PAUSE  = 700;    // ms between commands
+  const OUT_GAP = 220;   // ms between output lines
+
+  let idx = 0;
+  let prevHistory = [];
+
+  function pushLine(html, color) {
+    const div = document.createElement('div');
+    div.className = 'term-line';
+    if (color) div.style.color = color;
+    div.innerHTML = html;
+    stream.appendChild(div);
+    requestAnimationFrame(() => div.classList.add('in'));
+    // keep stream from growing forever
+    while (stream.children.length > 10) stream.removeChild(stream.firstChild);
+    body.scrollTop = body.scrollHeight;
+  }
+
+  async function typeCmd(text) {
+    input.textContent = '';
+    for (let i = 0; i < text.length; i++) {
+      input.textContent = text.slice(0, i+1);
+      await wait(TYPING + Math.random()*30);
+    }
+  }
+  function wait(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+  async function runOnce() {
+    const s = SCRIPTS[idx % SCRIPTS.length];
+    idx++;
+    await typeCmd(s.cmd);
+    await wait(260);
+    pushLine('<span class="terminal-prompt">$</span> ' + escapeHtml(s.cmd), null);
+    input.textContent = '';
+    for (const [kind, line] of s.out) {
+      await wait(OUT_GAP);
+      pushLine(escapeHtml(line), COL[kind] || COL.mute);
+    }
+    await wait(PAUSE);
+  }
+  function escapeHtml(s){ return s.replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c])); }
+
+  let started = false;
+  const io = new IntersectionObserver(async (es) => {
+    es.forEach(async e => {
+      if (e.isIntersecting && !started) {
+        started = true;
+        io.disconnect();
+        while (true) await runOnce();
+      }
+    });
+  }, { threshold: 0.2 });
+  io.observe(body);
+})();
+
+/* ── IDE · cursor + scan + chat reveal ── */
+(function ide(){
+  const mock = document.getElementById('ideMock');
+  const tree = document.getElementById('ideTree');
+  const edit = document.getElementById('ideEdit');
+  const cursor = document.getElementById('ideCursor');
+  const side = document.getElementById('ideSide');
+  if (!mock || !cursor || !edit) return;
+
+  const FILE_ORDER = ['api','billing','db','invoices','webhooks','spec'];
+  const lines = Array.from(edit.querySelectorAll('.ln'));
+
+  function moveCursorToLine(lineEl) {
+    if (!lineEl) return;
+    const editR = edit.getBoundingClientRect();
+    const lnR = lineEl.getBoundingClientRect();
+    cursor.style.display = 'block';
+    cursor.style.top = (lnR.top - editR.top + 4) + 'px';
+    cursor.style.left = (lnR.left - editR.left + 36 + Math.random()*60) + 'px';
+  }
+
+  function scanFiles(cb) {
+    let i = 0;
+    function step(){
+      const prev = tree.querySelector('.f.scanning');
+      if (prev) prev.classList.remove('scanning');
+      if (i >= FILE_ORDER.length) { cb && cb(); return; }
+      const f = tree.querySelector(`.f[data-file="${FILE_ORDER[i]}"]`);
+      if (f) f.classList.add('scanning');
+      i++;
+      setTimeout(step, 220);
+    }
+    step();
+  }
+
+  function scanLines(cb) {
+    let i = 0;
+    function step(){
+      lines.forEach(l => l.classList.remove('scan'));
+      if (i >= lines.length) { cb && cb(); return; }
+      const ln = lines[i];
+      ln.classList.add('scan');
+      moveCursorToLine(ln);
+      i++;
+      setTimeout(step, 180);
+    }
+    step();
+  }
+
+  function appendMsg(html, who){
+    const div = document.createElement('div');
+    div.className = 'ide-msg' + (who === 'you' ? ' you' : '');
+    div.innerHTML = '<span class="from">' + who + '</span> ' + html;
+    side.appendChild(div);
+    requestAnimationFrame(() => div.classList.add('in'));
+    if (side.children.length > 6) {
+      side.children[1].remove();
+    }
+  }
+
+  function showTyping(who){
+    const div = document.createElement('div');
+    div.className = 'ide-msg in typing';
+    div.innerHTML = '<span class="from">' + who + '</span><span class="ide-typing"><span></span><span></span><span></span></span>';
+    side.appendChild(div);
+    return div;
+  }
+
+  function flashBug(){
+    const ln17 = edit.querySelector('.ln[data-line="17"]');
+    if (ln17) {
+      ln17.classList.add('hl-bug');
+      setTimeout(() => ln17.classList.remove('hl-bug'), 1100);
+    }
+  }
+
+  async function cycle(){
+    while (true) {
+      // 1) reset chat
+      [...side.querySelectorAll('.ide-msg')].slice(1).forEach(n => n.remove());
+      cursor.style.display = 'none';
+      lines.forEach(l => l.classList.remove('scan','hl-bug'));
+      await wait(700);
+
+      // 2) you ask
+      appendMsg('Why are voided invoices being charged?', 'You');
+      await wait(700);
+
+      // 3) mesh thinking + scan
+      const t = showTyping('Mesh');
+      scanFiles();
+      await wait(900);
+      scanLines();
+      await wait(900);
+      t.remove();
+
+      // 4) reveal answer + flash the bug line
+      flashBug();
+      appendMsg('Pulled <b>invoices.ts:14</b>, <b>webhooks.ts:88</b>, <b>billing.spec.ts:42</b>. The charge runs <b>before</b> the status check on line 17.', 'Mesh');
+      await wait(2400);
+
+      // 5) follow-up
+      appendMsg('Patch it and re-run the suite.', 'You');
+      await wait(700);
+      const t2 = showTyping('Mesh');
+      scanLines();
+      await wait(1400);
+      t2.remove();
+      appendMsg('Patched · 47 / 47 tests pass · capsule cap_9p2', 'Mesh');
+      await wait(3200);
+    }
+  }
+  function wait(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+  let started = false;
+  const io = new IntersectionObserver((es) => {
+    es.forEach(e => {
+      if (e.isIntersecting && !started) {
+        started = true;
+        io.disconnect();
+        cycle();
+      }
+    });
+  }, { threshold: 0.2 });
+  io.observe(mock);
+})();
+
+/* ── MCP · packets + tool firing ── */
+(function mcp(){
+  const mock = document.getElementById('mcpMock');
+  if (!mock) return;
+  const reqLabel = document.getElementById('mcpReqLabel');
+  const conns = mock.querySelectorAll('.mcp-conn');
+  const meshNodes = mock.querySelectorAll('.mcp-node.mesh');
+  const tools = mock.querySelectorAll('.mcp-tool');
+
+  const SEQ = [
+    { from: 'claude', tool: 'search', label: 'claude → search_code()' },
+    { from: 'cursor', tool: 'read',   label: 'cursor → read_span()' },
+    { from: 'claude', tool: 'refs',   label: 'claude → find_refs()' },
+    { from: 'cursor', tool: 'recover',label: 'cursor → recover()' },
+    { from: 'claude', tool: 'read',   label: 'claude → read_span()' },
+  ];
+
+  function sendPacket(connEl, dirClass) {
+    const p = document.createElement('span');
+    p.className = 'packet ' + dirClass;
+    connEl.appendChild(p);
+    setTimeout(() => p.remove(), 1300);
+  }
+
+  function fireTool(name, label) {
+    tools.forEach(t => t.classList.toggle('firing', t.dataset.tool === name));
+    if (reqLabel) reqLabel.textContent = label;
+    setTimeout(() => {
+      tools.forEach(t => t.classList.remove('firing'));
+      if (reqLabel) reqLabel.textContent = 'idle';
+    }, 1100);
+  }
+
+  function light(node) {
+    node.classList.add('busy');
+    setTimeout(() => node.classList.remove('busy'), 1100);
+  }
+
+  let i = 0;
+  function tick(){
+    const s = SEQ[i % SEQ.length]; i++;
+    const conn = mock.querySelector(`.mcp-conn[data-conn="${s.from}"]`);
+    const meshTarget = s.from === 'claude' ? meshNodes[0] : meshNodes[1];
+    if (!conn) return;
+    sendPacket(conn, 'go');
+    setTimeout(() => fireTool(s.tool, s.label), 600);
+    setTimeout(() => { sendPacket(conn, 'back'); light(meshTarget); }, 1100);
+  }
+
+  let started = false;
+  const io = new IntersectionObserver((es) => {
+    es.forEach(e => {
+      if (e.isIntersecting && !started) {
+        started = true;
+        io.disconnect();
+        tick();
+        setInterval(tick, 2200);
+      }
+    });
+  }, { threshold: 0.2 });
+  io.observe(mock);
+})();
+
+/* ── API · streaming SSE response ── */
+(function api(){
+  const mock = document.getElementById('apiMock');
+  if (!mock) return;
+  const reqPane = document.getElementById('apiReqPane');
+  const resPane = document.getElementById('apiResPane');
+  const resBody = document.getElementById('apiResBody');
+  const resBar  = document.getElementById('apiResBar');
+  const resMs   = document.getElementById('apiResMs');
+  const reqMs   = document.getElementById('apiReqMs');
+
+  const STREAM_LINES = [
+    { html: '<span class="api-evt"><span style="color:var(--cyan)">event: stream.start</span></span>', delay: 80 },
+    { html: '<span class="br">{</span>', delay: 100 },
+    { html: '  <span class="k">"capsule_id"</span>: <span class="s">"cap_8kX9z2a"</span>,', delay: 140 },
+    { html: '  <span class="k">"files"</span>: <span class="n">3174</span>,', delay: 90 },
+    { html: '  <span class="k">"tokens_in"</span>: <span class="n">2.4M</span>,', delay: 110 },
+    { html: '  <span class="k">"tokens_out"</span>: <span class="n">612k</span>,', delay: 110 },
+    { html: '  <span class="k">"ratio"</span>: <span class="n">3.92</span>,', delay: 90 },
+    { html: '  <span class="k">"recall"</span>: <span class="n">1.00</span>,', delay: 90 },
+    { html: '  <span class="k">"status"</span>: <span class="s">"ready"</span>', delay: 110 },
+    { html: '<span class="br">}</span>', delay: 100 },
+    { html: '<span class="api-evt"><span style="color:var(--cyan)">event: capsule.ready</span></span>', delay: 90 },
+  ];
+
+  function wait(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+  async function runOnce(){
+    // reset
+    resBody.innerHTML = '';
+    resBar.style.width = '0%';
+    resMs.textContent = '— ms';
+    reqPane.classList.add('sending');
+    reqMs.textContent = '→ sending';
+
+    // fake send latency
+    let elapsed = 0;
+    const SEND = 540;
+    await wait(SEND);
+    reqPane.classList.remove('sending');
+    reqMs.textContent = '→ sent · 12 KB';
+
+    // open SSE
+    resMs.textContent = '0 ms · streaming';
+    const start = performance.now();
+    for (let i = 0; i < STREAM_LINES.length; i++) {
+      const s = STREAM_LINES[i];
+      await wait(s.delay);
+      const el = document.createElement('span');
+      el.className = 'api-line';
+      el.innerHTML = s.html;
+      resBody.appendChild(el);
+      requestAnimationFrame(() => el.classList.add('in'));
+      const pct = ((i+1) / STREAM_LINES.length) * 100;
+      resBar.style.width = pct + '%';
+      const dt = Math.round(performance.now() - start);
+      resMs.textContent = dt + ' ms · streaming';
+    }
+    const total = Math.round(performance.now() - start);
+    resMs.textContent = total + ' ms · done';
+    await wait(2600);
+  }
+
+  let started = false;
+  const io = new IntersectionObserver(async (es) => {
+    es.forEach(async e => {
+      if (e.isIntersecting && !started) {
+        started = true;
+        io.disconnect();
+        while (true) await runOnce();
+      }
+    });
+  }, { threshold: 0.2 });
+  io.observe(mock);
+})();
+</script>
 </body>
 </html>

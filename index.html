@@ -150,194 +150,427 @@
 
     @keyframes up { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:none} }
 
-    /* ── HOW IT WORKS — inline animated diagram ── */
-    .how {
+    /* ── ENGINE INSTRUMENT — single immersive panel ── */
+    .engine-section {
       position: relative; z-index: 1;
-      padding: 40px 80px 120px;
+      padding: 110px 56px 140px;
     }
-    .how-shell {
-      border-radius: 24px;
-      border: 1px solid oklch(1 0 0 / 0.07);
-      background: linear-gradient(180deg, oklch(0.092 0.04 200 / 0.96), oklch(0.06 0.032 200 / 0.96));
-      overflow: hidden;
-      box-shadow: 0 40px 120px oklch(0 0 0 / 0.35);
+    .engine-intro {
+      max-width: 920px; margin: 0 auto 36px; text-align: center;
     }
-    .how-head {
-      display:flex; align-items:center; justify-content:space-between; gap:20px;
-      padding: 22px 28px;
-      border-bottom: 1px solid oklch(1 0 0 / 0.06);
-    }
-    .how-kicker {
-      font-family: var(--mono); font-size: 11px;
-      letter-spacing: 0.14em; text-transform: uppercase; color: var(--cyan);
+    .engine-eyebrow {
       display: inline-flex; align-items: center; gap: 10px;
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: 0.16em; text-transform: uppercase; color: var(--cyan);
+      margin-bottom: 18px;
     }
-    .how-kicker::before {
-      content: ''; width: 7px; height: 7px; border-radius: 50%;
-      background: var(--cyan); box-shadow: 0 0 14px var(--cyan);
-      animation: pulseDot 2.4s ease-in-out infinite;
+    .engine-eyebrow::before, .engine-eyebrow::after {
+      content: ''; width: 28px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cyan));
     }
-    @keyframes pulseDot { 0%,100%{opacity:0.4} 50%{opacity:1} }
-    .how-meta { display: flex; gap: 22px; font-family: var(--mono); font-size: 11px; color: oklch(1 0 0 / 0.32); }
-    .how-meta b { color: oklch(1 0 0 / 0.7); font-weight: 500; }
+    .engine-eyebrow::after { background: linear-gradient(90deg, var(--cyan), transparent); }
+    .engine-h2 {
+      font-family: var(--display); font-style: italic; font-weight: 900;
+      font-size: clamp(54px, 7vw, 96px); line-height: 0.9;
+      letter-spacing: -0.025em; color: var(--white);
+    }
+    .engine-h2 em { color: var(--cyan); font-style: inherit; }
+    .engine-lede {
+      max-width: 620px; margin: 22px auto 0;
+      font-size: 17px; line-height: 1.65; font-weight: 300;
+      color: oklch(1 0 0 / 0.5);
+    }
 
-    .how-stage {
-      display: grid; grid-template-columns: 1fr 1fr 1fr;
-      gap: 0;
-      min-height: 480px;
-    }
-    .how-col {
+    /* The instrument shell */
+    .instrument {
       position: relative;
-      padding: 36px 32px 30px;
-      border-right: 1px solid oklch(1 0 0 / 0.05);
-      display: flex; flex-direction: column;
+      max-width: 1320px; margin: 0 auto;
+      border-radius: 18px;
+      border: 1px solid oklch(1 0 0 / 0.08);
+      background:
+        radial-gradient(1200px 480px at 50% -120px, oklch(0.74 0.14 200 / 0.10), transparent 60%),
+        linear-gradient(180deg, oklch(0.10 0.045 200 / 0.92), oklch(0.045 0.028 200 / 0.96));
+      overflow: hidden;
+      box-shadow: 0 60px 160px oklch(0 0 0 / 0.5),
+                  inset 0 1px 0 oklch(1 0 0 / 0.06);
     }
-    .how-col:last-child { border-right: 0; }
-    .how-step {
+
+    /* Top telemetry strip */
+    .inst-top {
+      display: grid; grid-template-columns: auto 1fr auto;
+      gap: 24px; align-items: center;
+      padding: 18px 26px;
+      border-bottom: 1px solid oklch(1 0 0 / 0.06);
+      background: oklch(0.06 0.034 200 / 0.7);
+    }
+    .inst-id {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-family: var(--mono); font-size: 11px;
+      color: oklch(1 0 0 / 0.55);
+      letter-spacing: 0.06em;
+    }
+    .inst-id .live-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: oklch(0.78 0.16 145);
+      box-shadow: 0 0 12px oklch(0.78 0.16 145 / 0.8);
+      animation: pulseDot 2s ease-in-out infinite;
+    }
+    @keyframes pulseDot { 0%,100%{opacity:1; transform:scale(1)} 50%{opacity:0.45; transform:scale(0.85)} }
+    .inst-cycle {
+      display: flex; align-items: center; gap: 8px;
+      justify-content: center;
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
+      color: oklch(1 0 0 / 0.32); text-transform: uppercase;
+    }
+    .inst-cycle .stage { padding: 4px 10px; border-radius: 4px; transition: all 0.4s; }
+    .inst-cycle .stage.act { color: var(--cyan); background: oklch(0.74 0.14 200 / 0.12); }
+    .inst-cycle .arr { color: oklch(1 0 0 / 0.18); font-family: var(--sans); font-size: 12px; }
+    .inst-meta { display: flex; gap: 22px; font-family: var(--mono); font-size: 10.5px; color: oklch(1 0 0 / 0.42); }
+    .inst-meta b { color: oklch(1 0 0 / 0.85); font-weight: 500; font-variant-numeric: tabular-nums; margin-right: 4px; }
+
+    /* Main stage — 3 zones inside one continuous canvas */
+    .inst-stage {
+      position: relative;
+      display: grid;
+      grid-template-columns: 320px 1fr 380px;
+      min-height: 540px;
+    }
+
+    /* connecting flow lines absolute over stage */
+    .flow-lines {
+      position: absolute; inset: 0; pointer-events: none; z-index: 1;
+    }
+    .flow-lines path {
+      fill: none; stroke: oklch(0.74 0.14 200 / 0.45);
+      stroke-width: 1.2; stroke-dasharray: 4 5;
+      filter: drop-shadow(0 0 6px oklch(0.74 0.14 200 / 0.4));
+      animation: flowDash 6s linear infinite;
+    }
+    @keyframes flowDash { to { stroke-dashoffset: -28; } }
+
+    /* ZONE 1 — file intake */
+    .zone {
+      position: relative; z-index: 2;
+      padding: 26px 24px;
+      display: flex; flex-direction: column;
+      min-width: 0;
+    }
+    .zone + .zone { border-left: 1px dashed oklch(1 0 0 / 0.05); }
+    .zone-tag {
+      display: inline-flex; align-items: center; gap: 8px;
       font-family: var(--mono); font-size: 10px;
       letter-spacing: 0.16em; text-transform: uppercase;
-      color: oklch(1 0 0 / 0.32); margin-bottom: 8px;
+      color: oklch(1 0 0 / 0.34); margin-bottom: 12px;
     }
-    .how-title {
+    .zone-tag i {
+      display: inline-grid; place-items: center;
+      width: 18px; height: 18px;
+      background: oklch(0.74 0.14 200 / 0.1);
+      color: var(--cyan); border-radius: 4px;
+      font-style: normal; font-size: 9px;
+    }
+    .zone-h {
       font-family: var(--display); font-style: italic; font-weight: 900;
-      font-size: 38px; line-height: 0.95; letter-spacing: -0.02em;
-      color: var(--white); margin-bottom: 8px;
+      font-size: 30px; line-height: 0.95; letter-spacing: -0.02em;
+      color: var(--white); margin-bottom: 4px;
     }
-    .how-sub {
-      font-family: var(--mono); font-size: 11px; color: var(--cyan);
-      margin-bottom: 22px;
+    .zone-sub {
+      font-family: var(--mono); font-size: 11px;
+      color: var(--cyan); margin-bottom: 20px;
     }
-    .how-canvas {
-      flex: 1; position: relative; overflow: hidden;
+
+    /* file scanner */
+    .scanner {
+      flex: 1; position: relative;
       border-radius: 10px;
-      background: oklch(0.04 0.025 200 / 0.7);
+      background: oklch(0.03 0.022 200 / 0.85);
       border: 1px solid oklch(1 0 0 / 0.05);
-      padding: 18px;
+      overflow: hidden;
+      display: flex; flex-direction: column;
     }
-    .how-foot {
-      margin-top: 16px;
-      display: flex; gap: 14px; align-items: baseline;
+    .scanner-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 12px;
+      border-bottom: 1px solid oklch(1 0 0 / 0.05);
+      font-family: var(--mono); font-size: 9.5px;
+      color: oklch(1 0 0 / 0.36); letter-spacing: 0.06em;
     }
-    .how-foot .num {
-      font-family: var(--display); font-style: italic; font-weight: 900;
-      font-size: 32px; color: var(--cyan); line-height: 1;
-      font-variant-numeric: tabular-nums;
-    }
-    .how-foot .lbl {
-      font-family: var(--mono); font-size: 11px; color: oklch(1 0 0 / 0.42);
-      line-height: 1.4;
-    }
-
-    /* col 1 — file dots */
-    .file-grid {
-      position: absolute; inset: 18px;
-      display: grid; grid-template-columns: repeat(20, 1fr); gap: 4px;
-    }
-    .file-grid i {
-      display: block; aspect-ratio: 1;
-      background: oklch(1 0 0 / 0.06);
-      border-radius: 1.5px;
-      transition: background 0.5s ease, transform 0.5s ease;
-    }
-    .file-grid i.on { background: oklch(0.74 0.14 200 / 0.55); }
-    .file-grid i.lost { background: oklch(0.65 0.18 28 / 0.4); }
-
-    /* col 2 — engine */
-    .engine {
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .engine-ring {
-      position: absolute;
-      width: 220px; height: 220px;
-      border: 1px solid oklch(0.74 0.14 200 / 0.18);
-      border-radius: 50%;
-      animation: spinRing 14s linear infinite;
-    }
-    .engine-ring::before, .engine-ring::after {
-      content: ''; position: absolute;
+    .scanner-head .pulse {
       width: 6px; height: 6px; border-radius: 50%;
-      background: var(--cyan); box-shadow: 0 0 12px var(--cyan);
+      background: var(--cyan); box-shadow: 0 0 8px var(--cyan);
+      animation: pulseDot 1.4s ease-in-out infinite;
     }
-    .engine-ring::before { top: -3px; left: 50%; transform: translateX(-50%); }
-    .engine-ring::after { bottom: -3px; left: 50%; transform: translateX(-50%); opacity: 0.5; }
-    .engine-ring.r2 { width: 150px; height: 150px; animation: spinRing 9s linear infinite reverse; border-color: oklch(0.74 0.14 200 / 0.28); }
-    @keyframes spinRing { to { transform: rotate(360deg); } }
-    .engine-core {
-      position: relative; z-index: 2;
-      width: 80px; height: 80px;
-      display: grid; place-items: center;
-      background: oklch(0.07 0.035 200);
-      border: 1px solid oklch(0.74 0.14 200 / 0.3);
-      border-radius: 50%;
+    .file-list {
+      flex: 1; overflow: hidden;
+      padding: 6px 0;
+      position: relative;
     }
-    .engine-core svg { width: 36px; height: 36px; }
-    .engine-tokens {
-      position: absolute; inset: 0;
+    .file-list::after {
+      content: ''; position: absolute; left: 0; right: 0; bottom: 0;
+      height: 60px;
+      background: linear-gradient(to bottom, transparent, oklch(0.03 0.022 200 / 0.95));
       pointer-events: none;
     }
-    .engine-tokens span {
-      position: absolute; top: 50%; left: 50%;
-      width: 14px; height: 6px; border-radius: 1.5px;
-      background: linear-gradient(90deg, oklch(0.74 0.14 200 / 0.9), oklch(0.74 0.14 200 / 0));
-      transform-origin: 0 50%;
-      animation: shoot 2.4s linear infinite;
+    .file-row {
+      display: grid; grid-template-columns: 16px 1fr auto auto;
+      gap: 8px; align-items: center;
+      padding: 4px 12px;
+      font-family: var(--mono); font-size: 10.5px;
+      color: oklch(1 0 0 / 0.46);
+      transition: background 0.3s, color 0.3s;
+      position: relative;
     }
-    @keyframes shoot {
-      0%   { opacity: 0; transform: rotate(var(--a)) translateX(0) scaleX(0.4); }
-      20%  { opacity: 1; }
-      80%  { opacity: 0.8; }
-      100% { opacity: 0; transform: rotate(var(--a)) translateX(160px) scaleX(1); }
+    .file-row.scanning {
+      background: oklch(0.74 0.14 200 / 0.08);
+      color: var(--cyan);
+    }
+    .file-row.done { color: oklch(1 0 0 / 0.7); }
+    .file-row.done .ext { color: oklch(0.78 0.16 145); }
+    .file-row .icn {
+      width: 12px; height: 12px;
+      border: 1px solid oklch(1 0 0 / 0.18);
+      border-radius: 2px; position: relative;
+    }
+    .file-row.done .icn::before {
+      content: ''; position: absolute; inset: 1.5px;
+      background: var(--cyan); border-radius: 1px;
+    }
+    .file-row .nm { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .file-row .toks { font-size: 9.5px; color: oklch(1 0 0 / 0.32); font-variant-numeric: tabular-nums; }
+    .file-row .ext {
+      font-size: 9px; padding: 1px 4px; border-radius: 2px;
+      background: oklch(1 0 0 / 0.04); color: oklch(1 0 0 / 0.4);
+    }
+    .scanner-foot {
+      padding: 10px 12px;
+      border-top: 1px solid oklch(1 0 0 / 0.06);
+      display: flex; align-items: center; justify-content: space-between;
+      font-family: var(--mono); font-size: 10px; color: oklch(1 0 0 / 0.5);
+      background: oklch(0 0 0 / 0.25);
+    }
+    .scanner-foot b { color: var(--cyan); font-weight: 500; font-variant-numeric: tabular-nums; }
+    .progress-bar {
+      flex: 1; height: 2px; margin: 0 12px;
+      background: oklch(1 0 0 / 0.06); border-radius: 1px; overflow: hidden;
+    }
+    .progress-bar i {
+      display: block; height: 100%; width: 0;
+      background: linear-gradient(90deg, var(--petrol), var(--cyan));
+      transition: width 0.2s linear;
     }
 
-    /* col 3 — context bar */
-    .ctx {
-      position: absolute; inset: 18px;
-      display: flex; flex-direction: column; gap: 18px;
-      justify-content: center;
+    /* ZONE 2 — AST chamber */
+    .chamber {
+      flex: 1; position: relative;
+      border-radius: 12px;
+      background:
+        radial-gradient(420px 320px at 50% 50%, oklch(0.74 0.14 200 / 0.10), transparent 60%),
+        oklch(0.03 0.022 200 / 0.85);
+      border: 1px solid oklch(1 0 0 / 0.05);
+      overflow: hidden;
     }
-    .ctx-row { font-family: var(--mono); font-size: 10px; color: oklch(1 0 0 / 0.42); }
-    .ctx-row .lbl { display: flex; justify-content: space-between; margin-bottom: 6px; }
-    .ctx-bar {
-      height: 14px; border-radius: 4px;
-      background: oklch(1 0 0 / 0.05);
-      border: 1px solid oklch(1 0 0 / 0.08);
-      overflow: hidden; position: relative;
+    .chamber-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(oklch(1 0 0 / 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, oklch(1 0 0 / 0.025) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask: radial-gradient(ellipse 70% 70% at 50% 50%, #000, transparent 90%);
     }
-    .ctx-bar i {
-      display: block; height: 100%;
-      background: linear-gradient(90deg, oklch(0.65 0.18 28 / 0.45), oklch(0.65 0.18 28 / 0.7));
-      width: var(--w, 0%);
-      transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    .chamber-flow {
+      position: relative; z-index: 2;
+      height: 100%; padding: 20px 22px;
+      display: grid; grid-template-rows: auto 1fr auto;
+      gap: 14px;
     }
-    .ctx-bar.ok i { background: linear-gradient(90deg, oklch(0.38 0.09 198), var(--cyan)); }
-    .ctx-tag {
-      display: inline-block; margin-top: 8px;
-      padding: 3px 8px; border-radius: 999px;
+    .ast-input, .ast-output {
+      border-radius: 8px;
+      border: 1px solid oklch(1 0 0 / 0.06);
+      background: oklch(0.05 0.028 200 / 0.7);
+      padding: 12px 14px;
+      font-family: var(--mono); font-size: 10.5px;
+      color: oklch(1 0 0 / 0.62); line-height: 1.7;
+      overflow: hidden; min-height: 0;
+    }
+    .ast-input .pill, .ast-output .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 2px 8px; border-radius: 999px;
       font-family: var(--mono); font-size: 9px;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .ast-input .pill { background: oklch(1 0 0 / 0.05); color: oklch(1 0 0 / 0.5); }
+    .ast-output .pill { background: oklch(0.74 0.14 200 / 0.12); color: var(--cyan); }
+    .ast-input .pill .stat, .ast-output .pill .stat {
+      font-variant-numeric: tabular-nums; opacity: 0.8;
+    }
+    .ast-input pre, .ast-output pre {
+      font-family: var(--mono); font-size: 10.5px; line-height: 1.55;
+      white-space: pre-wrap; word-break: break-word;
+      color: oklch(1 0 0 / 0.55);
+      max-height: 110px; overflow: hidden;
+    }
+    .ast-input .hl-kw { color: #c678dd; }
+    .ast-input .hl-fn { color: #61afef; }
+    .ast-input .hl-st { color: #98c379; }
+    .ast-input .hl-cm { color: oklch(1 0 0 / 0.28); font-style: italic; }
+
+    .ast-output pre .sym { color: var(--cyan); }
+    .ast-output pre .typ { color: #d19a66; }
+    .ast-output pre .meta { color: oklch(1 0 0 / 0.32); }
+
+    /* the compression squeeze in the middle */
+    .squeeze {
+      position: relative; height: 70px;
+      display: grid; grid-template-columns: 1fr 80px 1fr;
+      align-items: center;
+    }
+    .squeeze-ratio {
+      grid-column: 2; z-index: 3;
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: oklch(0.06 0.034 200);
+      border: 1px solid oklch(0.74 0.14 200 / 0.4);
+      display: grid; place-items: center;
+      box-shadow: 0 0 32px oklch(0.74 0.14 200 / 0.4),
+                  inset 0 0 16px oklch(0.74 0.14 200 / 0.15);
+      position: relative;
+    }
+    .squeeze-ratio::before, .squeeze-ratio::after {
+      content: ''; position: absolute;
+      border: 1px solid oklch(0.74 0.14 200 / 0.18);
+      border-radius: 50%;
+      animation: ringExpand 2.4s ease-out infinite;
+    }
+    .squeeze-ratio::before { inset: -8px; }
+    .squeeze-ratio::after { inset: -16px; animation-delay: 1.2s; }
+    @keyframes ringExpand {
+      0% { transform: scale(0.5); opacity: 1; }
+      100% { transform: scale(1.4); opacity: 0; }
+    }
+    .squeeze-ratio span {
+      font-family: var(--display); font-style: italic; font-weight: 900;
+      color: var(--cyan); line-height: 1; text-align: center;
+    }
+    .squeeze-ratio .num { font-size: 26px; }
+    .squeeze-ratio .lbl {
+      font-family: var(--mono); font-size: 8px;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: oklch(1 0 0 / 0.44); margin-top: 2px;
+    }
+    .squeeze-particles {
+      position: absolute; inset: 0; overflow: hidden; z-index: 1;
+    }
+    .particle {
+      position: absolute; top: 50%;
+      width: 14px; height: 4px; border-radius: 2px;
+      background: linear-gradient(90deg, oklch(0.74 0.14 200 / 0.9), oklch(0.74 0.14 200 / 0));
+      transform: translateY(-50%);
+      animation: particleFlow 1.6s linear infinite;
+    }
+    @keyframes particleFlow {
+      0%   { left: 8%; opacity: 0; transform: translateY(-50%) scaleX(0.4); }
+      15%  { opacity: 1; }
+      48%  { left: 42%; opacity: 1; transform: translateY(-50%) scaleX(0.7); }
+      52%  { left: 58%; opacity: 1; transform: translateY(-50%) scaleX(0.3); width: 4px; }
+      100% { left: 92%; opacity: 0; transform: translateY(-50%) scaleX(0.2); width: 4px; }
+    }
+
+    /* ZONE 3 — fit/result */
+    .fit {
+      flex: 1; position: relative;
+      border-radius: 12px;
+      background: oklch(0.03 0.022 200 / 0.85);
+      border: 1px solid oklch(1 0 0 / 0.05);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .fit-head {
+      padding: 12px 14px;
+      border-bottom: 1px solid oklch(1 0 0 / 0.05);
+      font-family: var(--mono); font-size: 10px;
+      color: oklch(1 0 0 / 0.42); letter-spacing: 0.06em;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .fit-head b { color: var(--white); font-weight: 500; font-variant-numeric: tabular-nums; }
+    .fit-meters { padding: 16px 14px; display: grid; gap: 14px; }
+
+    .meter { position: relative; }
+    .meter-label {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 6px;
+      font-family: var(--mono); font-size: 10.5px;
+    }
+    .meter-label .name { color: oklch(1 0 0 / 0.6); }
+    .meter-label .name b { color: oklch(1 0 0 / 0.9); font-weight: 500; }
+    .meter-label .vals { color: oklch(1 0 0 / 0.42); font-variant-numeric: tabular-nums; }
+    .meter-bar {
+      position: relative; height: 22px;
+      border-radius: 4px;
+      background: oklch(1 0 0 / 0.04);
+      border: 1px solid oklch(1 0 0 / 0.08);
+      overflow: hidden;
+    }
+    .meter-bar i {
+      display: block; height: 100%; width: 0;
+      transition: width 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+    .meter.raw .meter-bar i {
+      background: linear-gradient(90deg, oklch(0.55 0.16 28), oklch(0.7 0.18 28));
+    }
+    .meter.raw .meter-bar i::after {
+      content: ''; position: absolute; right: 0; top: 0; bottom: 0;
+      width: 12px;
+      background: linear-gradient(90deg, transparent, oklch(0.78 0.18 28));
+      animation: overflow 1.6s ease-in-out infinite;
+    }
+    @keyframes overflow { 0%,100%{opacity:0.6} 50%{opacity:1} }
+    .meter.mesh .meter-bar i {
+      background: linear-gradient(90deg, var(--petrol), var(--cyan));
+      box-shadow: inset 0 0 12px oklch(0.74 0.14 200 / 0.4);
+    }
+    .meter-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 8px;
+      padding: 3px 8px; border-radius: 999px;
+      font-family: var(--mono); font-size: 9.5px;
       letter-spacing: 0.06em; text-transform: uppercase;
     }
-    .ctx-tag.bad { background: oklch(0.65 0.18 28 / 0.12); color: oklch(0.78 0.18 28); }
-    .ctx-tag.good { background: oklch(0.74 0.14 200 / 0.12); color: var(--cyan); }
-    .ctx-result {
-      margin-top: 10px;
-      padding: 10px 12px; border-radius: 8px;
-      background: oklch(0.74 0.14 200 / 0.06);
+    .meter-tag.bad { background: oklch(0.65 0.18 28 / 0.14); color: oklch(0.78 0.16 28); }
+    .meter-tag.good { background: oklch(0.78 0.16 145 / 0.12); color: oklch(0.84 0.14 145); }
+
+    .fit-result {
+      margin: auto 14px 14px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      background: oklch(0.74 0.14 200 / 0.05);
       border: 1px solid oklch(0.74 0.14 200 / 0.18);
-      font-family: var(--mono); font-size: 11px;
-      color: oklch(1 0 0 / 0.65); line-height: 1.5;
+      font-family: var(--mono); font-size: 10.5px;
+      color: oklch(1 0 0 / 0.65); line-height: 1.65;
     }
-    .ctx-result b { color: var(--cyan); font-weight: 500; }
+    .fit-result .who { color: var(--cyan); font-weight: 500; }
+    .fit-result .ok { color: oklch(0.84 0.14 145); }
+    .fit-result .stat { color: oklch(1 0 0 / 0.85); font-variant-numeric: tabular-nums; }
+    .fit-result .row { display: flex; gap: 8px; align-items: baseline; }
+    .fit-result .typewriter {
+      display: inline-block;
+      overflow: hidden; vertical-align: bottom;
+      border-right: 6px solid var(--cyan);
+      animation: caret 0.9s steps(1) infinite;
+    }
+    @keyframes caret { 50%{border-color: transparent} }
 
     @media (max-width: 1100px) {
-      .how-stage { grid-template-columns: 1fr; }
-      .how-col { border-right: 0; border-bottom: 1px solid oklch(1 0 0 / 0.05); min-height: 360px; }
-      .how-col:last-child { border-bottom: 0; }
+      .inst-stage { grid-template-columns: 1fr; }
+      .zone + .zone { border-left: 0; border-top: 1px dashed oklch(1 0 0 / 0.05); }
+      .flow-lines { display: none; }
     }
     @media (max-width: 900px) {
-      .how { padding: 24px 24px 80px; }
-      .how-head { flex-direction: column; align-items: flex-start; }
-      .how-meta { flex-wrap: wrap; }
+      .engine-section { padding: 30px 16px 80px; }
+      .inst-top { flex-direction: column; gap: 12px; padding: 14px 18px; grid-template-columns: 1fr; }
+      .inst-meta { flex-wrap: wrap; gap: 12px; }
+      .inst-cycle { flex-wrap: wrap; }
     }
 
     /* FOUR SURFACES GRID */
@@ -649,89 +882,146 @@
   </div>
 </section>
 
-<!-- HOW IT WORKS — inline animated diagram (no controls, no iframe) -->
-<section class="how" id="how">
-  <div class="how-shell">
-    <div class="how-head">
-      <div class="how-kicker">Live · Capsule Engine</div>
-      <div class="how-meta">
-        <span><b id="howFiles">247</b> files</span>
-        <span><b id="howRatio">3.9×</b> compression</span>
-        <span><b id="howRecall">100%</b> recall</span>
-        <span>model: <b>claude-sonnet-4.6</b></span>
+<!-- ENGINE INSTRUMENT — single immersive panel -->
+<section class="engine-section" id="how">
+  <div class="engine-intro">
+    <div class="engine-eyebrow">Inside the Capsule Engine</div>
+    <h2 class="engine-h2">87,030 tokens of source.<br><em>3,347 tokens to your model.</em></h2>
+    <p class="engine-lede">A live trace of one Mesh run. Every file in your workspace, parsed, distilled, and packed into a budget your model can actually fit — without dropping a single one.</p>
+  </div>
+
+  <div class="instrument" id="instrument">
+    <!-- Top telemetry strip -->
+    <div class="inst-top">
+      <div class="inst-id">
+        <span class="live-dot"></span>
+        <span>RUN <b id="runId">cap_8x9c2a</b> · <span id="runHost">api.mesh / pid 1207</span></span>
+      </div>
+      <div class="inst-cycle" id="instCycle">
+        <span class="stage" data-s="0">Scan</span>
+        <span class="arr">›</span>
+        <span class="stage" data-s="1">Parse</span>
+        <span class="arr">›</span>
+        <span class="stage" data-s="2">Distill</span>
+        <span class="arr">›</span>
+        <span class="stage" data-s="3">Capsule</span>
+        <span class="arr">›</span>
+        <span class="stage" data-s="4">Fit</span>
+      </div>
+      <div class="inst-meta">
+        <span><b id="metaFiles">0</b>files</span>
+        <span><b id="metaTokIn">0</b>tok in</span>
+        <span><b id="metaTokOut">0</b>tok out</span>
+        <span><b id="metaRatio">—</b>ratio</span>
+        <span><b id="metaMs">0</b>ms</span>
       </div>
     </div>
 
-    <div class="how-stage" id="howStage">
+    <!-- Main 3-zone stage -->
+    <div class="inst-stage">
+      <svg class="flow-lines" viewBox="0 0 1320 540" preserveAspectRatio="none">
+        <path d="M 320 270 C 420 270, 460 220, 540 220" />
+        <path d="M 320 290 C 420 290, 460 320, 540 320" />
+        <path d="M 320 310 C 420 310, 460 380, 540 380" />
+        <path d="M 940 220 C 1020 220, 1060 270, 1140 270" />
+        <path d="M 940 320 C 1020 320, 1060 290, 1140 290" />
+        <path d="M 940 380 C 1020 380, 1060 310, 1140 310" />
+      </svg>
 
-      <!-- COL 1 — Workspace scan -->
-      <div class="how-col">
-        <div class="how-step">Step 01</div>
-        <h3 class="how-title">Workspace.</h3>
-        <div class="how-sub">247 files · 87,000 raw tokens</div>
-        <div class="how-canvas">
-          <div class="file-grid" id="fileGrid"></div>
-        </div>
-        <div class="how-foot">
-          <span class="num" id="fileCount">0</span>
-          <span class="lbl">files indexed<br>via Tree-sitter AST</span>
-        </div>
-      </div>
-
-      <!-- COL 2 — Compression engine -->
-      <div class="how-col">
-        <div class="how-step">Step 02</div>
-        <h3 class="how-title">Compress.</h3>
-        <div class="how-sub">Capsule tier · structural distill</div>
-        <div class="how-canvas">
-          <div class="engine">
-            <div class="engine-ring"></div>
-            <div class="engine-ring r2"></div>
-            <div class="engine-core">
-              <svg viewBox="0 0 32 32" fill="none">
-                <path d="M9 6 L4 16 L9 26" stroke="#00d4e8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M19 6 L24 16 L19 26" stroke="#7ceeff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="14" cy="16" r="1.6" fill="#00d4e8"/>
-              </svg>
-            </div>
-            <div class="engine-tokens" id="engineTokens"></div>
+      <!-- ZONE 1 — Scanner -->
+      <div class="zone">
+        <div class="zone-tag"><i>01</i> Workspace intake</div>
+        <h3 class="zone-h">Scan.</h3>
+        <div class="zone-sub">Tree-sitter AST · 247 files</div>
+        <div class="scanner">
+          <div class="scanner-head">
+            <span>~/repo · main</span>
+            <span style="display:inline-flex;align-items:center;gap:6px"><span class="pulse"></span>walking</span>
+          </div>
+          <div class="file-list" id="fileList"></div>
+          <div class="scanner-foot">
+            <span><b id="scannedCount">0</b>/247</span>
+            <div class="progress-bar"><i id="scanProg"></i></div>
+            <span><b id="scanRate">0</b>file/ms</span>
           </div>
         </div>
-        <div class="how-foot">
-          <span class="num">2,881<span style="color:oklch(1 0 0/0.28)">→</span><span style="color:#fff">55T</span></span>
-          <span class="lbl">avg per file<br>after capsule pass</span>
-        </div>
       </div>
 
-      <!-- COL 3 — Context fits -->
-      <div class="how-col">
-        <div class="how-step">Step 03</div>
-        <h3 class="how-title">It fits.</h3>
-        <div class="how-sub">6,000 token budget · all 247 files</div>
-        <div class="how-canvas">
-          <div class="ctx">
-            <div class="ctx-row">
-              <div class="lbl"><span>Raw context</span><span>22 / 247 files</span></div>
-              <div class="ctx-bar"><i style="--w:100%"></i></div>
-              <span class="ctx-tag bad">budget exhausted</span>
+      <!-- ZONE 2 — AST chamber -->
+      <div class="zone">
+        <div class="zone-tag"><i>02</i> Compression chamber</div>
+        <h3 class="zone-h">Distill.</h3>
+        <div class="zone-sub">Symbols + signatures + edges</div>
+        <div class="chamber">
+          <div class="chamber-grid"></div>
+          <div class="chamber-flow">
+            <div class="ast-input">
+              <div class="pill"><span>RAW</span> · <span class="stat" id="astFile">src/auth/session.ts</span></div>
+<pre id="astSrc"><span class="hl-cm">// session refresh + cookie rotate</span>
+<span class="hl-kw">export async function</span> <span class="hl-fn">refreshSession</span>(ctx) {
+  <span class="hl-kw">const</span> token = <span class="hl-kw">await</span> ctx.cookies.get(<span class="hl-st">'mesh.sid'</span>)
+  <span class="hl-kw">if</span> (isExpired(token)) <span class="hl-kw">return</span> redirect(<span class="hl-st">'/login'</span>)
+  <span class="hl-kw">return</span> resumeWorkspace(ctx)
+}</pre>
             </div>
-            <div class="ctx-row">
-              <div class="lbl"><span>Mesh capsules</span><span><span id="ctxFitFiles">247</span> / 247 files</span></div>
-              <div class="ctx-bar ok"><i id="ctxFill" style="--w:0%"></i></div>
-              <span class="ctx-tag good">3,347T used · 2,653T headroom</span>
+
+            <div class="squeeze">
+              <div class="squeeze-particles" id="particles"></div>
+              <div class="squeeze-ratio">
+                <div>
+                  <span class="num" id="ratioNum">3.9×</span>
+                  <span class="lbl">capsule</span>
+                </div>
+              </div>
             </div>
-            <div class="ctx-result">
-              <b>mesh »</b> fix broken auth<br>
-              → patched <b>src/auth.ts</b> · 47 / 47 tests pass
+
+            <div class="ast-output">
+              <div class="pill"><span>CAPSULE</span> · <span class="stat"><span id="rawT">2881</span>T → <span id="capT">55</span>T</span></div>
+<pre id="astOut"><span class="meta">// fn signature · 0 deps · 4 edges</span>
+<span class="sym">refreshSession</span>(ctx: <span class="typ">Ctx</span>) → <span class="typ">Response</span>
+  ↳ cookies.get(<span class="sym">'mesh.sid'</span>)
+  ↳ isExpired() · redirect(<span class="sym">'/login'</span>)
+  ↳ resumeWorkspace(ctx)</pre>
             </div>
           </div>
         </div>
-        <div class="how-foot">
-          <span class="num">100<span style="color:oklch(1 0 0/0.28)">%</span></span>
-          <span class="lbl">NIAH recall<br>5 / 5 model configs</span>
-        </div>
       </div>
 
+      <!-- ZONE 3 — Budget fit -->
+      <div class="zone">
+        <div class="zone-tag"><i>03</i> Budget &amp; recall</div>
+        <h3 class="zone-h">Fit.</h3>
+        <div class="zone-sub">6,000 token window</div>
+        <div class="fit">
+          <div class="fit-head">
+            <span>budget · <b style="color:var(--white)">6,000T</b></span>
+            <span>model · <b style="color:var(--white)">claude-sonnet-4.6</b></span>
+          </div>
+          <div class="fit-meters">
+            <div class="meter raw">
+              <div class="meter-label">
+                <span class="name"><b>Raw source</b></span>
+                <span class="vals"><span id="rawFiles">0</span>/247 files · <span id="rawTok">0</span>T</span>
+              </div>
+              <div class="meter-bar"><i id="rawBar"></i></div>
+              <span class="meter-tag bad">overflow at file 23</span>
+            </div>
+            <div class="meter mesh">
+              <div class="meter-label">
+                <span class="name"><b>Mesh capsules</b></span>
+                <span class="vals"><span id="meshFiles">0</span>/247 files · <span id="meshTok">0</span>T</span>
+              </div>
+              <div class="meter-bar"><i id="meshBar"></i></div>
+              <span class="meter-tag good">2,653T headroom · 100% recall</span>
+            </div>
+          </div>
+          <div class="fit-result">
+            <div class="row"><span class="who">mesh »</span><span id="prompt"></span><span class="typewriter" style="width:6px;height:11px"></span></div>
+            <div class="row" style="margin-top:6px"><span class="ok">✓</span><span>patched <b style="color:var(--white)">src/auth/session.ts</b></span></div>
+            <div class="row"><span class="ok">✓</span><span><span class="stat">47/47</span> tests pass · <span class="stat">238ms</span></span></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1034,71 +1324,231 @@ function copyInstall() {
   });
 }
 
-/* ── HOW-IT-WORKS animated diagram ── */
-(function initHow() {
-  const grid = document.getElementById('fileGrid');
-  const tokens = document.getElementById('engineTokens');
-  const ctxFill = document.getElementById('ctxFill');
-  const ctxFitFiles = document.getElementById('ctxFitFiles');
-  const fileCount = document.getElementById('fileCount');
-  if (!grid) return;
+/* ── CAPSULE ENGINE INSTRUMENT ── */
+(function initInstrument() {
+  const inst = document.getElementById('instrument');
+  if (!inst) return;
 
-  const TOTAL = 240;
-  for (let i = 0; i < TOTAL; i++) {
-    const el = document.createElement('i');
-    grid.appendChild(el);
+  // synthetic but plausible workspace
+  const FILES = [
+    ['src/auth/session.ts',     142, 2881],
+    ['src/auth/middleware.ts',   88, 1740],
+    ['src/auth/jwt.ts',          54,  920],
+    ['src/billing/stripe.ts',   210, 4308],
+    ['src/billing/invoices.ts', 156, 3214],
+    ['src/billing/webhooks.ts',  98, 2002],
+    ['src/api/router.ts',       312, 6440],
+    ['src/api/handlers.ts',     188, 3712],
+    ['src/db/migrations.ts',    266, 5512],
+    ['src/db/schema.ts',         78, 1610],
+    ['src/db/queries.ts',       142, 2901],
+    ['src/jobs/worker.ts',       96, 1980],
+    ['src/jobs/queue.ts',        62, 1244],
+    ['src/lib/logger.ts',        38,  720],
+    ['src/lib/config.ts',        44,  840],
+    ['src/lib/cache.ts',         74, 1502],
+    ['src/lib/email.ts',         52, 1010],
+    ['src/lib/crypto.ts',        66, 1320],
+    ['src/lib/redis.ts',         48,  962],
+    ['src/web/dashboard.tsx',   320, 6612],
+    ['src/web/settings.tsx',    176, 3580],
+    ['src/web/billing.tsx',     188, 3811],
+    ['src/web/login.tsx',        98, 2010],
+    ['tests/auth.spec.ts',      144, 2904],
+    ['tests/billing.spec.ts',   168, 3402],
+    ['tests/api.spec.ts',       192, 3870],
+    ['scripts/seed.ts',          88, 1800],
+    ['scripts/migrate.ts',       64, 1280],
+    ['package.json',             54,  880],
+    ['tsconfig.json',            32,  540],
+  ];
+
+  const fileList   = document.getElementById('fileList');
+  const scannedCt  = document.getElementById('scannedCount');
+  const scanProg   = document.getElementById('scanProg');
+  const scanRate   = document.getElementById('scanRate');
+  const stages     = inst.querySelectorAll('.inst-cycle .stage');
+  const metaFiles  = document.getElementById('metaFiles');
+  const metaTokIn  = document.getElementById('metaTokIn');
+  const metaTokOut = document.getElementById('metaTokOut');
+  const metaRatio  = document.getElementById('metaRatio');
+  const metaMs     = document.getElementById('metaMs');
+  const rawBar     = document.getElementById('rawBar');
+  const meshBar    = document.getElementById('meshBar');
+  const rawFiles   = document.getElementById('rawFiles');
+  const meshFiles  = document.getElementById('meshFiles');
+  const rawTok     = document.getElementById('rawTok');
+  const meshTok    = document.getElementById('meshTok');
+  const promptEl   = document.getElementById('prompt');
+  const particles  = document.getElementById('particles');
+  const astFile    = document.getElementById('astFile');
+  const rawT       = document.getElementById('rawT');
+  const capT       = document.getElementById('capT');
+  const ratioNum   = document.getElementById('ratioNum');
+
+  // build fixed file rows once
+  function buildList(scrollOffset = 0) {
+    fileList.innerHTML = '';
+    for (let i = 0; i < FILES.length; i++) {
+      const idx = (scrollOffset + i) % FILES.length;
+      const [name, lines, tok] = FILES[idx];
+      const row = document.createElement('div');
+      row.className = 'file-row';
+      const ext = name.split('.').pop();
+      row.innerHTML =
+        `<span class="icn"></span>` +
+        `<span class="nm">${name}</span>` +
+        `<span class="toks">${tok.toLocaleString()}T</span>` +
+        `<span class="ext">${ext}</span>`;
+      fileList.appendChild(row);
+    }
   }
-  const cells = grid.children;
 
-  for (let i = 0; i < 12; i++) {
-    const s = document.createElement('span');
-    s.style.setProperty('--a', (i * 30) + 'deg');
-    s.style.animationDelay = (i * -0.2) + 's';
-    tokens.appendChild(s);
+  // particles in compression chamber (always running)
+  for (let i = 0; i < 14; i++) {
+    const p = document.createElement('span');
+    p.className = 'particle';
+    p.style.top = (32 + Math.random() * 36) + '%';
+    p.style.animationDelay = (-i * 0.18) + 's';
+    p.style.animationDuration = (1.4 + Math.random() * 0.5) + 's';
+    particles.appendChild(p);
   }
 
-  let started = false;
-  const startCycle = () => {
-    if (started) return;
-    started = true;
-    runCycle();
-    setInterval(runCycle, 7200);
-  };
+  // animate counter helper
+  function tween(el, from, to, dur, fmt) {
+    const start = performance.now();
+    const f = fmt || (v => Math.round(v).toLocaleString());
+    function step(t) {
+      const k = Math.min(1, (t - start) / dur);
+      const e = 1 - Math.pow(1 - k, 3);
+      el.textContent = f(from + (to - from) * e);
+      if (k < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
 
-  function runCycle() {
-    [...cells].forEach(c => { c.classList.remove('on', 'lost'); });
-    if (ctxFill) ctxFill.style.setProperty('--w', '0%');
-    if (fileCount) fileCount.textContent = '0';
+  function setStage(n) {
+    stages.forEach((s, i) => s.classList.toggle('act', i === n));
+  }
 
+  function typewrite(el, text, dur) {
+    el.textContent = '';
+    const per = dur / text.length;
     let i = 0;
-    const fillInt = setInterval(() => {
-      if (i >= TOTAL) { clearInterval(fillInt); return; }
-      const batch = 6;
-      for (let k = 0; k < batch && i < TOTAL; k++, i++) {
-        cells[i].classList.add('on');
+    function step() {
+      if (i > text.length) return;
+      el.textContent = text.slice(0, i++);
+      if (i <= text.length) setTimeout(step, per);
+    }
+    step();
+  }
+
+  let cycling = false;
+  function runCycle() {
+    if (cycling) return;
+    cycling = true;
+
+    // randomize run id + ast file each cycle
+    const runEl = document.getElementById('runId');
+    if (runEl) runEl.textContent = 'cap_' + Math.random().toString(36).slice(2, 8);
+    const focusFile = FILES[Math.floor(Math.random() * 8)];
+    astFile.textContent = focusFile[0];
+    const focusRaw = focusFile[2];
+    const focusCap = Math.round(focusRaw / (3.6 + Math.random() * 0.8));
+    rawT.textContent = focusRaw.toLocaleString();
+    capT.textContent = focusCap.toLocaleString();
+    const focusRatio = (focusRaw / focusCap).toFixed(1) + '×';
+    ratioNum.textContent = focusRatio;
+
+    // reset
+    buildList(Math.floor(Math.random() * FILES.length));
+    metaFiles.textContent = '0';
+    metaTokIn.textContent = '0';
+    metaTokOut.textContent = '0';
+    metaRatio.textContent = '—';
+    metaMs.textContent  = '0';
+    rawBar.style.width  = '0%';
+    meshBar.style.width = '0%';
+    rawFiles.textContent = '0';
+    meshFiles.textContent = '0';
+    rawTok.textContent = '0';
+    meshTok.textContent = '0';
+
+    // ── stage 0: SCAN
+    setStage(0);
+    const TOTAL = 247;
+    let scanned = 0;
+    let visIdx = 0;
+    const rows = fileList.children;
+    const scanInt = setInterval(() => {
+      if (scanned >= TOTAL) { clearInterval(scanInt); afterScan(); return; }
+      const batch = 6 + Math.floor(Math.random() * 4);
+      for (let k = 0; k < batch && scanned < TOTAL; k++, scanned++) {
+        const r = rows[visIdx % rows.length];
+        if (r) {
+          r.classList.add('scanning');
+          ((rr) => setTimeout(() => { rr.classList.remove('scanning'); rr.classList.add('done'); }, 90))(r);
+        }
+        visIdx++;
       }
-      if (fileCount) fileCount.textContent = Math.min(i, 247);
-    }, 28);
+      scannedCt.textContent = scanned;
+      scanProg.style.width = (scanned / TOTAL * 100) + '%';
+      scanRate.textContent = (1.8 + Math.random() * 0.4).toFixed(1);
+      metaFiles.textContent = scanned;
+      metaMs.textContent = Math.round(scanned * 0.95);
+    }, 38);
 
-    setTimeout(() => {
-      [...cells].forEach((c, idx) => {
-        if (idx >= 22) c.classList.add('lost');
-      });
-    }, 1500);
+    function afterScan() {
+      // ── stage 1+2: PARSE + DISTILL
+      setStage(1);
+      tween(metaTokIn, 0, 87030, 900);
+      setTimeout(() => setStage(2), 700);
 
-    setTimeout(() => {
-      [...cells].forEach(c => c.classList.remove('lost'));
-      [...cells].forEach((c, idx) => {
-        setTimeout(() => c.classList.add('on'), idx * 4);
-      });
-      if (ctxFill) ctxFill.style.setProperty('--w', '55%');
-    }, 2400);
+      // ── stage 3: CAPSULE
+      setTimeout(() => {
+        setStage(3);
+        tween(metaTokOut, 87030, 3347, 1100);
+        const rEl = { textContent: '' };
+        const setRatio = v => metaRatio.textContent = v.toFixed(1) + '×';
+        const t0 = performance.now();
+        function rstep(t) {
+          const k = Math.min(1, (t - t0) / 1100);
+          setRatio(1 + (3.9 - 1) * (1 - Math.pow(1 - k, 3)));
+          if (k < 1) requestAnimationFrame(rstep);
+        }
+        requestAnimationFrame(rstep);
+      }, 1300);
+
+      // ── stage 4: FIT
+      setTimeout(() => {
+        setStage(4);
+        // raw bar overflows fast
+        rawBar.style.width = '100%';
+        tween(rawFiles, 0, 22, 900);
+        tween(rawTok,   0, 6000, 900);
+        // mesh bar: 3347 / 6000 = ~56%
+        setTimeout(() => {
+          meshBar.style.width = '55.8%';
+          tween(meshFiles, 0, 247, 1300);
+          tween(meshTok,   0, 3347, 1300);
+        }, 350);
+        // typewrite the prompt
+        setTimeout(() => typewrite(promptEl, 'fix the broken auth session refresh', 1400), 800);
+        setTimeout(() => { cycling = false; }, 4500);
+      }, 2700);
+    }
   }
 
   const io = new IntersectionObserver((es) => {
-    es.forEach(e => { if (e.isIntersecting) { startCycle(); io.disconnect(); } });
-  }, { threshold: 0.25 });
-  io.observe(grid);
+    es.forEach(e => {
+      if (e.isIntersecting) {
+        runCycle();
+        setInterval(runCycle, 12000);
+        io.disconnect();
+      }
+    });
+  }, { threshold: 0.2 });
+  io.observe(inst);
 })();
 
 /* ── SURFACE GRID: spotlight + pulse + stagger ── */

@@ -73,20 +73,99 @@
     .t-cyan { color: var(--cyan); } .t-green { color: var(--green); } .t-dim { color: var(--dim); } .t-white { color: #fff; }
     .cursor { display: inline-block; width: 8px; height: 15px; margin-left: 3px; background: var(--cyan); vertical-align: -2px; animation: blink 1s infinite; }
     @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
-    .quick-grid { width: min(1180px, calc(100% - 64px)); margin: 60px auto 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-    .quick-card { min-height: 190px; padding: 24px; border: 1px solid var(--line); border-radius: 10px; background: oklch(0.10 0.042 200 / 0.74); opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
-    .quick-card.visible { opacity: 1; transform: none; }
-    .quick-card h3 { font-family: var(--display); font-size: 34px; font-weight: 800; line-height: 1; margin-bottom: 14px; }
-    .quick-card p { color: var(--muted); font-size: 14px; line-height: 1.6; }
+    /* ── MINI DEMO GRID — 4 interactive instruments ── */
+    .quick-grid { width: min(1180px, calc(100% - 64px)); margin: 60px auto 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .mini-demo { position: relative; min-height: 260px; padding: 18px 18px 16px; border: 1px solid var(--line); border-radius: 12px; background: linear-gradient(160deg, oklch(0.115 0.046 200 / 0.85), oklch(0.078 0.038 200 / 0.85)); display: flex; flex-direction: column; overflow: hidden; opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease, border-color .25s ease, box-shadow .25s ease; }
+    .mini-demo.visible { opacity: 1; transform: none; }
+    .mini-demo:hover { border-color: var(--line-strong); box-shadow: 0 18px 48px oklch(0 0 0 / 0.4); }
+    .mini-demo::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(120% 60% at 50% -10%, oklch(0.74 0.14 200 / 0.06), transparent 60%); }
+    .mini-top { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+    .mini-top .lbl { font-family: var(--mono); font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.7px; color: var(--dim); display: inline-flex; align-items: center; gap: 6px; }
+    .mini-top .lbl::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); animation: minPulse 1.6s ease-in-out infinite; }
+    @keyframes minPulse { 0%, 100% { opacity: 0.4; transform: scale(1); } 50% { opacity: 1; transform: scale(1.4); } }
+    .mini-top .meta { font-family: var(--mono); font-size: 9.5px; color: oklch(1 0 0 / 0.32); }
+    .mini-h3 { position: relative; z-index: 1; font-family: var(--display); font-style: italic; font-weight: 900; font-size: 34px; line-height: 0.95; color: var(--ink); margin-bottom: 4px; }
+    .mini-sub { position: relative; z-index: 1; font-family: var(--mono); font-size: 10px; color: oklch(1 0 0 / 0.42); margin-bottom: 14px; }
+    .mini-stage { position: relative; z-index: 1; flex: 1; min-height: 100px; border-radius: 8px; background: oklch(0.046 0.034 204 / 0.6); border: 1px solid var(--line); padding: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+
+    /* ── VOICE: animated waveform ── */
+    .voice-wave { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; gap: 3px; }
+    .voice-wave .bar { width: 3px; min-height: 4px; background: linear-gradient(180deg, var(--cyan), oklch(0.74 0.14 200 / 0.4)); border-radius: 2px; transform-origin: center; animation: voiceBar var(--dur, 1.2s) ease-in-out infinite; animation-delay: var(--delay, 0s); }
+    @keyframes voiceBar { 0%, 100% { transform: scaleY(0.18); opacity: 0.4; } 50% { transform: scaleY(1); opacity: 1; } }
+    .voice-mic { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 30px; height: 30px; border-radius: 50%; background: oklch(0.046 0.034 204); border: 1px solid var(--line-strong); display: grid; place-items: center; box-shadow: 0 0 0 0 oklch(0.74 0.14 200 / 0.5); animation: voiceMicGlow 2.4s ease-in-out infinite; color: var(--cyan); }
+    @keyframes voiceMicGlow { 0%, 100% { box-shadow: 0 0 0 0 oklch(0.74 0.14 200 / 0.5); } 50% { box-shadow: 0 0 0 12px oklch(0.74 0.14 200 / 0); } }
+    .voice-cap { position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); font-family: var(--mono); font-size: 10px; color: var(--cyan); white-space: nowrap; }
+    .voice-cap::after { content: "_"; animation: blink 1s steps(1) infinite; }
+
+    /* ── RESUME: timeline with playhead ── */
+    .resume-stage { padding: 14px 12px; align-items: stretch; flex-direction: column; gap: 12px; }
+    .resume-track { position: relative; flex: 1; min-height: 86px; }
+    .resume-line { position: absolute; left: 6px; right: 6px; top: 50%; height: 1px; background: linear-gradient(90deg, transparent, var(--line-strong), transparent); }
+    .resume-checkpoints { position: absolute; left: 6px; right: 6px; top: 50%; transform: translateY(-50%); display: flex; justify-content: space-between; }
+    .resume-cp { width: 8px; height: 8px; border-radius: 50%; background: oklch(0.74 0.14 200 / 0.18); border: 1px solid var(--line-strong); transition: background .3s, transform .3s, box-shadow .3s; }
+    .resume-cp.passed { background: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 10px var(--cyan); }
+    .resume-cp.now { transform: scale(1.6); background: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 14px var(--cyan); }
+    .resume-cap { position: absolute; top: 0; font-family: var(--mono); font-size: 9px; color: var(--dim); }
+    .resume-cap.l { left: 6px; }
+    .resume-cap.r { right: 6px; }
+    .resume-now { position: absolute; bottom: 0; transform: translateX(-50%); font-family: var(--mono); font-size: 9.5px; color: var(--cyan); white-space: nowrap; transition: left .35s cubic-bezier(0.16,1,0.3,1); }
+    .resume-cmd { font-family: var(--mono); font-size: 11px; color: oklch(1 0 0 / 0.7); padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: oklch(1 0 0 / 0.025); }
+    .resume-cmd .t-cyan { color: var(--cyan); margin-right: 6px; }
+
+    /* ── DOCTOR: live diagnostic checklist ── */
+    .doctor-stage { padding: 12px 12px; align-items: stretch; flex-direction: column; gap: 6px; justify-content: center; }
+    .doc-row { display: grid; grid-template-columns: 14px 1fr auto; align-items: center; gap: 10px; font-family: var(--mono); font-size: 10.5px; color: oklch(1 0 0 / 0.78); padding: 4px 0; opacity: 0; transform: translateX(-6px); transition: opacity .4s ease, transform .4s ease; }
+    .doc-row.in { opacity: 1; transform: none; }
+    .doc-row .ic { width: 14px; height: 14px; border-radius: 50%; border: 1px solid oklch(1 0 0 / 0.15); display: grid; place-items: center; color: var(--dim); position: relative; }
+    .doc-row.ok .ic { border-color: var(--green); color: var(--green); background: oklch(0.75 0.12 145 / 0.12); }
+    .doc-row.warn .ic { border-color: var(--amber); color: var(--amber); background: oklch(0.78 0.10 58 / 0.12); }
+    .doc-row .ic svg { width: 9px; height: 9px; }
+    .doc-row .lbl { color: oklch(1 0 0 / 0.78); }
+    .doc-row .val { font-size: 9.5px; color: var(--dim); }
+    .doc-row.ok .val { color: var(--green); }
+    .doc-row.warn .val { color: var(--amber); }
+
+    /* ── KEYS: provider router ── */
+    .keys-stage { padding: 14px 8px 10px; flex-direction: column; gap: 12px; align-items: center; justify-content: space-between; }
+    .keys-ring { position: relative; width: 110px; height: 110px; }
+    .keys-ring .core { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 38px; height: 38px; border-radius: 50%; background: oklch(0.046 0.034 204); border: 1px solid var(--line-strong); display: grid; place-items: center; color: var(--cyan); font-family: var(--mono); font-size: 9px; letter-spacing: 0.5px; box-shadow: inset 0 0 18px oklch(0.74 0.14 200 / 0.18); }
+    .keys-ring .orb { position: absolute; left: 50%; top: 50%; width: 22px; height: 22px; border-radius: 50%; background: oklch(0.13 0.05 200); border: 1px solid var(--line); display: grid; place-items: center; font-family: var(--mono); font-size: 8.5px; color: oklch(1 0 0 / 0.55); transform-origin: center; transition: border-color .3s, color .3s, box-shadow .3s; }
+    .keys-ring .orb.active { border-color: var(--cyan); color: var(--cyan); box-shadow: 0 0 14px oklch(0.74 0.14 200 / 0.55); }
+    .keys-ring svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    .keys-ring .beam { stroke: var(--cyan); stroke-width: 1; stroke-dasharray: 3 4; opacity: 0; transition: opacity .25s ease; filter: drop-shadow(0 0 4px oklch(0.74 0.14 200 / 0.5)); }
+    .keys-ring .beam.on { opacity: 0.85; }
+    .keys-active { font-family: var(--mono); font-size: 10px; color: var(--cyan); }
+    .keys-active .dim { color: var(--dim); }
+
+    /* ── PIPELINE — animated SVG scan→parse→capsule ── */
     .flow-section { width: min(1180px, calc(100% - 64px)); margin: 30px auto 0; padding: 66px 0; }
     .section-grid { display: grid; grid-template-columns: 0.72fr 1.28fr; gap: 58px; align-items: center; }
     h2 { font-family: var(--display); font-size: 72px; font-style: italic; font-weight: 900; line-height: 0.92; }
-    .flow-board { border: 1px solid var(--line); border-radius: 10px; background: oklch(0.10 0.042 200 / 0.72); overflow: hidden; }
-    .flow-row { display: grid; grid-template-columns: 58px 1fr auto; gap: 18px; align-items: center; padding: 20px 22px; border-bottom: 1px solid var(--line); opacity: 0; transform: translateX(18px); transition: all 0.6s ease; }
-    .flow-row.visible { opacity: 1; transform: none; }
-    .flow-num { width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid var(--line-strong); border-radius: 50%; color: var(--cyan); font-family: var(--mono); font-size: 12px; }
-    .flow-title { color: var(--ink); font-size: 16px; font-weight: 700; }
-    .flow-copy { margin-top: 4px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .pipeline-card { position: relative; border: 1px solid var(--line); border-radius: 12px; background: linear-gradient(160deg, oklch(0.115 0.046 200 / 0.9), oklch(0.078 0.038 200 / 0.9)); overflow: hidden; }
+    .pipeline-top { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 10px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.7px; }
+    .pipeline-top .left { display: inline-flex; align-items: center; gap: 8px; }
+    .pipeline-top .left::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 10px var(--green); }
+    .pipeline-top .meta { color: oklch(1 0 0 / 0.3); }
+    .pipeline-stage { position: relative; height: 320px; padding: 18px; }
+    .pipeline-svg { width: 100%; height: 100%; display: block; }
+    .pl-stage-rect { fill: oklch(0.046 0.034 204 / 0.7); stroke: var(--line); stroke-width: 1; rx: 8; }
+    .pl-stage-rect.active { stroke: var(--line-strong); }
+    .pl-stage-title { fill: var(--ink); font-family: var(--display); font-style: italic; font-weight: 900; font-size: 22px; }
+    .pl-stage-num { fill: var(--cyan); font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.5px; text-transform: uppercase; }
+    .pl-stage-sub { fill: oklch(1 0 0 / 0.5); font-family: var(--mono); font-size: 10px; }
+    .pl-stage-stat { fill: var(--cyan); font-family: var(--mono); font-size: 11px; }
+    .pl-stage-stat.dim { fill: oklch(1 0 0 / 0.45); }
+    .pl-edge { fill: none; stroke: oklch(0.74 0.14 200 / 0.18); stroke-width: 1.2; stroke-dasharray: 4 5; }
+    .pl-edge-active { fill: none; stroke: var(--cyan); stroke-width: 1.5; filter: drop-shadow(0 0 5px oklch(0.74 0.14 200 / 0.55)); }
+    .pl-particle { fill: var(--cyan); filter: drop-shadow(0 0 4px oklch(0.74 0.14 200 / 0.65)); }
+    .pl-tick { fill: oklch(1 0 0 / 0.18); font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.6px; }
+    .pl-grid { stroke: oklch(1 0 0 / 0.04); stroke-width: 1; }
+    .pipeline-foot { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--line); }
+    .pipeline-foot .cell { padding: 14px 18px; border-right: 1px solid var(--line); }
+    .pipeline-foot .cell:last-child { border-right: 0; }
+    .pipeline-foot .k { font-family: var(--mono); font-size: 9.5px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.7px; }
+    .pipeline-foot .v { margin-top: 4px; font-family: var(--display); font-style: italic; font-weight: 900; font-size: 26px; color: var(--cyan); line-height: 1; }
+    .pipeline-foot .v small { font-family: var(--mono); font-size: 10px; color: oklch(1 0 0 / 0.4); font-style: normal; font-weight: 400; margin-left: 2px; }
     .closing-cta { width: min(1180px, calc(100% - 64px)); margin: 28px auto 88px; padding: 52px 58px; border: 1px solid var(--line-strong); border-radius: 10px; background: radial-gradient(circle at 78% 40%, oklch(0.74 0.14 200 / 0.18), transparent 28rem), oklch(0.105 0.045 200); display: flex; align-items: center; justify-content: space-between; gap: 34px; }
     footer { background: oklch(0.045 0.032 204); padding: 44px 80px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--line); }
     .f-logo { display: inline-flex; align-items: center; }
@@ -125,7 +204,16 @@
       .hero { padding-top: 126px; padding-bottom: 54px; text-align: left; }
       .command-stack { border-right: 0; border-bottom: 1px solid var(--line); } .quick-grid { grid-template-columns: repeat(2, 1fr); }
       .surface-tab { font-size: 12px; padding: 10px 8px; }
+      .pipeline-stage { height: 280px; }
       footer { padding: 38px 24px; gap: 26px; flex-wrap: wrap; }
+    }
+    @media (max-width: 640px) {
+      .quick-grid { grid-template-columns: 1fr; }
+      .mini-demo { min-height: 240px; }
+      .pipeline-stage { height: 380px; padding: 14px; }
+      .pipeline-foot { grid-template-columns: 1fr; }
+      .pipeline-foot .cell { border-right: 0; border-bottom: 1px solid var(--line); }
+      .pipeline-foot .cell:last-child { border-bottom: 0; }
     }
   </style>
 </head>
@@ -266,19 +354,153 @@
       </aside>
     </div>
   </section>
-  <section class="quick-grid">
-    <div class="quick-card"><h3>Voice.</h3><p>Hands-free terminal mode. Install local Whisper deps once, then speak commands directly to the agent.</p></div>
-    <div class="quick-card"><h3>Resume.</h3><p>Continue any previous session with full capsule history. <span class="t-cyan" style="font-family:var(--mono)">mesh resume &lt;id&gt;</span></p></div>
-    <div class="quick-card"><h3>Doctor.</h3><p>Verify model routing, Node version, env. <span class="t-cyan" style="font-family:var(--mono)">mesh doctor</span></p></div>
-    <div class="quick-card"><h3>Bring keys.</h3><p>Anthropic, OpenAI, OpenRouter, Groq, local Ollama — set <span class="t-cyan" style="font-family:var(--mono)">MESH_PROVIDER</span> &amp; go.</p></div>
+  <section class="quick-grid" id="miniGrid">
+    <!-- VOICE — animated waveform mic -->
+    <article class="mini-demo" id="miniVoice">
+      <div class="mini-top"><span class="lbl">live · whisper</span><span class="meta">mesh voice</span></div>
+      <h3 class="mini-h3">Voice.</h3>
+      <div class="mini-sub">hands-free terminal · whisper.cpp local</div>
+      <div class="mini-stage">
+        <div class="voice-wave" id="voiceWave"></div>
+        <div class="voice-mic" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+        </div>
+        <div class="voice-cap" id="voiceCap">listening</div>
+      </div>
+    </article>
+
+    <!-- RESUME — checkpoint timeline with playhead -->
+    <article class="mini-demo" id="miniResume">
+      <div class="mini-top"><span class="lbl">session · cap_8kX9z2a</span><span class="meta">12 turns</span></div>
+      <h3 class="mini-h3">Resume.</h3>
+      <div class="mini-sub">continue any session · full capsule history</div>
+      <div class="mini-stage resume-stage">
+        <div class="resume-track">
+          <span class="resume-cap l">10:42</span>
+          <span class="resume-cap r">now</span>
+          <div class="resume-line"></div>
+          <div class="resume-checkpoints" id="resumeCps"></div>
+          <span class="resume-now" id="resumeNow" style="left:50%">turn 7</span>
+        </div>
+        <div class="resume-cmd"><span class="t-cyan">$</span>mesh resume <span style="color:var(--cyan)">cap_8kX9z2a</span></div>
+      </div>
+    </article>
+
+    <!-- DOCTOR — live diagnostic -->
+    <article class="mini-demo" id="miniDoctor">
+      <div class="mini-top"><span class="lbl">running · diagnostics</span><span class="meta">mesh doctor</span></div>
+      <h3 class="mini-h3">Doctor.</h3>
+      <div class="mini-sub">verify routing · node · env · keys</div>
+      <div class="mini-stage doctor-stage" id="doctorStage"></div>
+    </article>
+
+    <!-- KEYS — provider router ring -->
+    <article class="mini-demo" id="miniKeys">
+      <div class="mini-top"><span class="lbl">router · MESH_PROVIDER</span><span class="meta">5 backends</span></div>
+      <h3 class="mini-h3">Bring keys.</h3>
+      <div class="mini-sub">Anthropic · OpenAI · Groq · OpenRouter · Ollama</div>
+      <div class="mini-stage keys-stage">
+        <div class="keys-ring" id="keysRing">
+          <svg viewBox="0 0 110 110">
+            <line class="beam" id="beam-0" x1="55" y1="55" x2="55" y2="11"></line>
+            <line class="beam" id="beam-1" x1="55" y1="55" x2="97" y2="42"></line>
+            <line class="beam" id="beam-2" x1="55" y1="55" x2="80" y2="92"></line>
+            <line class="beam" id="beam-3" x1="55" y1="55" x2="30" y2="92"></line>
+            <line class="beam" id="beam-4" x1="55" y1="55" x2="13" y2="42"></line>
+          </svg>
+          <div class="core">mesh</div>
+          <div class="orb" id="orb-0" style="left:50%;top:0%;transform:translate(-50%,-50%)">A</div>
+          <div class="orb" id="orb-1" style="left:88%;top:38%;transform:translate(-50%,-50%)">O</div>
+          <div class="orb" id="orb-2" style="left:73%;top:84%;transform:translate(-50%,-50%)">G</div>
+          <div class="orb" id="orb-3" style="left:27%;top:84%;transform:translate(-50%,-50%)">R</div>
+          <div class="orb" id="orb-4" style="left:12%;top:38%;transform:translate(-50%,-50%)">·</div>
+        </div>
+        <div class="keys-active"><span class="dim">active →</span> <span id="keysActive">anthropic</span></div>
+      </div>
+    </article>
   </section>
   <section class="flow-section">
     <div class="section-grid">
-      <div><h2>How it works.</h2><p class="hero-copy">Mesh prepares your code context in three deterministic steps before the AI even starts thinking.</p></div>
-      <div class="flow-board" id="flowBoard">
-        <div class="flow-row"><div class="flow-num">01</div><div><div class="flow-title">Workspace Scan</div><p class="flow-copy">Mesh walks the repo and builds a structural index of every symbol, export, and call edge.</p></div></div>
-        <div class="flow-row"><div class="flow-num">02</div><div><div class="flow-title">AST Parse</div><p class="flow-copy">Symbols and signatures are extracted using Tree-sitter for model-ready compression.</p></div></div>
-        <div class="flow-row"><div class="flow-num">03</div><div><div class="flow-title">Capsule Build</div><p class="flow-copy">A 3.9x compressed representation is generated, keeping the LLM within its token budget.</p></div></div>
+      <div>
+        <h2>How it works.</h2>
+        <p class="hero-copy">Three deterministic stages. Same output every run — no embeddings, no probabilistic recall.</p>
+      </div>
+      <div class="pipeline-card" id="pipelineCard">
+        <div class="pipeline-top">
+          <span class="left">mesh / capsule-pipeline</span>
+          <span class="meta">deterministic · tree-sitter · zstd</span>
+        </div>
+        <div class="pipeline-stage">
+          <svg class="pipeline-svg" id="pipelineSvg" viewBox="0 0 720 320" preserveAspectRatio="xMidYMid meet" aria-label="Mesh capsule build pipeline">
+            <defs>
+              <pattern id="pl-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="oklch(1 0 0 / 0.04)" stroke-width="1"/>
+              </pattern>
+              <radialGradient id="pl-glow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="oklch(0.74 0.14 200 / 0.6)"/>
+                <stop offset="100%" stop-color="oklch(0.74 0.14 200 / 0)"/>
+              </radialGradient>
+            </defs>
+            <rect width="720" height="320" fill="url(#pl-grid)"/>
+
+            <!-- ── stage 01 — workspace scan ── -->
+            <g id="pl-stage-1">
+              <rect class="pl-stage-rect" x="20" y="60" width="200" height="200" rx="8"/>
+              <text class="pl-stage-num" x="36" y="86">step · 01</text>
+              <text class="pl-stage-title" x="36" y="116">Workspace</text>
+              <text class="pl-stage-sub" x="36" y="136">tree-walk · ignore</text>
+              <!-- file dot grid -->
+              <g id="pl-files" transform="translate(36,160)"></g>
+              <text class="pl-stage-stat" id="pl-files-count" x="36" y="244">0 files</text>
+            </g>
+
+            <!-- ── stage 02 — AST parse ── -->
+            <g id="pl-stage-2">
+              <rect class="pl-stage-rect" x="260" y="60" width="200" height="200" rx="8"/>
+              <text class="pl-stage-num" x="276" y="86">step · 02</text>
+              <text class="pl-stage-title" x="276" y="116">AST Parse</text>
+              <text class="pl-stage-sub" x="276" y="136">tree-sitter · symbols</text>
+              <!-- symbol braces -->
+              <g id="pl-symbols" transform="translate(276,150)"></g>
+              <text class="pl-stage-stat" id="pl-symbols-count" x="276" y="244">0 symbols</text>
+            </g>
+
+            <!-- ── stage 03 — capsule ── -->
+            <g id="pl-stage-3">
+              <rect class="pl-stage-rect" x="500" y="60" width="200" height="200" rx="8"/>
+              <text class="pl-stage-num" x="516" y="86">step · 03</text>
+              <text class="pl-stage-title" x="516" y="116">Capsule</text>
+              <text class="pl-stage-sub" x="516" y="136">zstd · structural distill</text>
+              <circle cx="600" cy="195" r="44" fill="none" stroke="oklch(0.74 0.14 200 / 0.18)" stroke-width="1"/>
+              <circle cx="600" cy="195" r="30" fill="none" stroke="oklch(0.74 0.14 200 / 0.32)" stroke-width="1"/>
+              <circle cx="600" cy="195" r="44" fill="url(#pl-glow)" opacity="0"  id="pl-cap-glow"/>
+              <circle cx="600" cy="195" r="14" fill="oklch(0.046 0.034 204)" stroke="oklch(0.74 0.14 200 / 0.6)" stroke-width="1.2"/>
+              <text x="600" y="199" text-anchor="middle" font-family="Geist Mono,monospace" font-size="10" fill="oklch(0.74 0.14 200)">&lt;/&gt;</text>
+              <text class="pl-stage-stat" id="pl-cap-ratio" x="516" y="244">0.0×</text>
+            </g>
+
+            <!-- ── connectors ── -->
+            <path id="pl-edge-12" class="pl-edge" d="M 220 160 C 240 160 240 160 260 160"/>
+            <path id="pl-edge-23" class="pl-edge" d="M 460 160 C 480 160 480 160 500 160"/>
+            <path id="pl-edge-12-active" class="pl-edge-active" d="M 220 160 C 240 160 240 160 260 160" stroke-dasharray="120" stroke-dashoffset="120"/>
+            <path id="pl-edge-23-active" class="pl-edge-active" d="M 460 160 C 480 160 480 160 500 160" stroke-dasharray="120" stroke-dashoffset="120"/>
+
+            <!-- ── particle layer ── -->
+            <g id="pl-particles"></g>
+
+            <!-- ── timeline ticks ── -->
+            <line x1="20" y1="290" x2="700" y2="290" stroke="oklch(1 0 0 / 0.1)" stroke-width="1"/>
+            <text class="pl-tick" x="20" y="306">t = 0ms</text>
+            <text class="pl-tick" x="220" y="306" text-anchor="middle">scan · 92ms</text>
+            <text class="pl-tick" x="460" y="306" text-anchor="middle">parse · 48ms</text>
+            <text class="pl-tick" x="700" y="306" text-anchor="end">capsule · 16ms</text>
+          </svg>
+        </div>
+        <div class="pipeline-foot">
+          <div class="cell"><div class="k">indexed</div><div class="v"><span id="pl-foot-files">0</span><small> files</small></div></div>
+          <div class="cell"><div class="k">extracted</div><div class="v"><span id="pl-foot-syms">0</span><small> symbols</small></div></div>
+          <div class="cell"><div class="k">compressed</div><div class="v"><span id="pl-foot-ratio">0.0</span><small>× · 100% recall</small></div></div>
+        </div>
       </div>
     </div>
   </section>
@@ -359,7 +581,301 @@ document.querySelectorAll('.surface-tab').forEach(b=>b.addEventListener('click',
 playTerm('terminalCli',TERM_SCRIPTS.cli);
 
 const revealObserver=new IntersectionObserver((entries)=>{entries.forEach((entry)=>{if(entry.isIntersecting){entry.target.classList.add('visible');revealObserver.unobserve(entry.target)}})},{threshold:0.15});
-document.querySelectorAll('.command-card, .quick-card, .flow-row').forEach(el=>revealObserver.observe(el));
+document.querySelectorAll('.command-card, .mini-demo').forEach(el=>revealObserver.observe(el));
+
+/* ── VOICE — animated waveform ── */
+(function voice(){
+  const wave=document.getElementById('voiceWave');
+  if(!wave)return;
+  const N=28;
+  for(let i=0;i<N;i++){
+    const b=document.createElement('span');
+    b.className='bar';
+    const dist=Math.abs(i-(N-1)/2)/((N-1)/2);
+    b.style.setProperty('--dur',(0.7+Math.random()*0.9)+'s');
+    b.style.setProperty('--delay',(-Math.random()*1.2)+'s');
+    b.style.height=(14+(1-dist)*30+Math.random()*8)+'px';
+    wave.appendChild(b);
+  }
+  const phrases=['listening','mesh › fix auth','running…','listening'];
+  const cap=document.getElementById('voiceCap');
+  let i=0;
+  setInterval(()=>{i=(i+1)%phrases.length;cap.firstChild.nodeValue=phrases[i];},2400);
+})();
+
+/* ── RESUME — animated checkpoint timeline ── */
+(function resume(){
+  const wrap=document.getElementById('resumeCps');
+  const now=document.getElementById('resumeNow');
+  if(!wrap||!now)return;
+  const N=12;
+  for(let i=0;i<N;i++){const d=document.createElement('span');d.className='resume-cp';wrap.appendChild(d);}
+  const cps=wrap.querySelectorAll('.resume-cp');
+  let cur=0;
+  function tick(){
+    cps.forEach((c,i)=>{c.classList.toggle('passed',i<cur);c.classList.toggle('now',i===cur);});
+    const pct=(cur/(N-1))*100;
+    now.style.left=pct+'%';
+    now.textContent='turn '+(cur+1);
+    cur=(cur+1)%N;
+  }
+  tick();
+  setInterval(tick,800);
+})();
+
+/* ── DOCTOR — live diagnostic checklist ── */
+(function doctor(){
+  const stage=document.getElementById('doctorStage');
+  if(!stage)return;
+  const ROWS=[
+    {lbl:'node version',     val:'v22.4.1', state:'ok'},
+    {lbl:'mesh.config.json', val:'valid',   state:'ok'},
+    {lbl:'capsule cache',    val:'247 MB',  state:'ok'},
+    {lbl:'router · anthropic', val:'reachable', state:'ok'},
+    {lbl:'router · openai',  val:'rate-limited', state:'warn'},
+    {lbl:'env · MESH_KEY',   val:'set',     state:'ok'},
+  ];
+  const tickIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  const warnIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="8" x2="12" y2="13"/><circle cx="12" cy="17" r="0.6" fill="currentColor"/></svg>';
+  const dotIcon='<span style="width:5px;height:5px;border-radius:50%;background:currentColor;display:block"></span>';
+  ROWS.forEach(r=>{
+    const row=document.createElement('div');
+    row.className='doc-row';
+    row.innerHTML=`<span class="ic">${dotIcon}</span><span class="lbl">${r.lbl}</span><span class="val">checking…</span>`;
+    stage.appendChild(row);
+  });
+  function run(){
+    const rows=stage.querySelectorAll('.doc-row');
+    rows.forEach((row,i)=>{
+      row.classList.remove('in','ok','warn');
+      row.querySelector('.val').textContent='checking…';
+      row.querySelector('.ic').innerHTML=dotIcon;
+      setTimeout(()=>{
+        row.classList.add('in');
+        setTimeout(()=>{
+          const r=ROWS[i];
+          row.classList.add(r.state);
+          row.querySelector('.val').textContent=r.val;
+          row.querySelector('.ic').innerHTML=r.state==='ok'?tickIcon:warnIcon;
+        },220+i*60);
+      },i*180);
+    });
+  }
+  run();
+  setInterval(run,7000);
+})();
+
+/* ── KEYS — provider router ── */
+(function keys(){
+  const ring=document.getElementById('keysRing');
+  const active=document.getElementById('keysActive');
+  if(!ring||!active)return;
+  const PROVIDERS=['anthropic','openai','groq','openrouter','ollama'];
+  let idx=0;
+  function tick(){
+    for(let i=0;i<5;i++){
+      document.getElementById('orb-'+i).classList.toggle('active',i===idx);
+      document.getElementById('beam-'+i).classList.toggle('on',i===idx);
+    }
+    active.textContent=PROVIDERS[idx];
+    idx=(idx+1)%5;
+  }
+  tick();
+  setInterval(tick,1200);
+})();
+
+/* ── PIPELINE — animated capsule build ── */
+(function pipeline(){
+  const card=document.getElementById('pipelineCard');
+  const svg=document.getElementById('pipelineSvg');
+  if(!card||!svg)return;
+  const NS='http://www.w3.org/2000/svg';
+  const filesG=document.getElementById('pl-files');
+  const symbolsG=document.getElementById('pl-symbols');
+  const particlesG=document.getElementById('pl-particles');
+  const fileCount=document.getElementById('pl-files-count');
+  const symCount=document.getElementById('pl-symbols-count');
+  const ratio=document.getElementById('pl-cap-ratio');
+  const footFiles=document.getElementById('pl-foot-files');
+  const footSyms=document.getElementById('pl-foot-syms');
+  const footRatio=document.getElementById('pl-foot-ratio');
+  const stage1=document.querySelector('#pl-stage-1 .pl-stage-rect');
+  const stage2=document.querySelector('#pl-stage-2 .pl-stage-rect');
+  const stage3=document.querySelector('#pl-stage-3 .pl-stage-rect');
+  const edge12=document.getElementById('pl-edge-12-active');
+  const edge23=document.getElementById('pl-edge-23-active');
+  const capGlow=document.getElementById('pl-cap-glow');
+
+  /* build a 12×7 dot grid representing 84 file slots */
+  const COLS=12, ROWS=7, CELL=12;
+  const dots=[];
+  for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
+    const d=document.createElementNS(NS,'rect');
+    d.setAttribute('x',c*CELL); d.setAttribute('y',r*CELL);
+    d.setAttribute('width',6); d.setAttribute('height',6); d.setAttribute('rx',1);
+    d.setAttribute('fill','oklch(0.74 0.14 200 / 0.12)');
+    filesG.appendChild(d); dots.push(d);
+  }
+
+  /* build symbol braces — 6 rows of code-shaped lines */
+  const symRows=[];
+  for(let r=0;r<6;r++){
+    const g=document.createElementNS(NS,'g');
+    g.setAttribute('transform','translate(0,'+(r*14)+')');
+    const open=document.createElementNS(NS,'text');
+    open.setAttribute('x',0); open.setAttribute('y',10);
+    open.setAttribute('font-family','Geist Mono,monospace');
+    open.setAttribute('font-size','10');
+    open.setAttribute('fill','oklch(0.74 0.14 200 / 0.5)');
+    open.textContent='{';
+    g.appendChild(open);
+    const line=document.createElementNS(NS,'rect');
+    line.setAttribute('x',10); line.setAttribute('y',4);
+    line.setAttribute('height',5); line.setAttribute('rx',1);
+    line.setAttribute('width',0);
+    line.setAttribute('fill','oklch(0.74 0.14 200 / 0.4)');
+    g.appendChild(line);
+    const close=document.createElementNS(NS,'text');
+    close.setAttribute('x',155); close.setAttribute('y',10);
+    close.setAttribute('font-family','Geist Mono,monospace');
+    close.setAttribute('font-size','10');
+    close.setAttribute('fill','oklch(0.74 0.14 200 / 0.5)');
+    close.textContent='}';
+    close.style.opacity='0';
+    g.appendChild(close);
+    symbolsG.appendChild(g);
+    symRows.push({line,close,target:120+Math.random()*30});
+  }
+
+  function emitParticle(x1,y1,x2,y2,delay){
+    const p=document.createElementNS(NS,'circle');
+    p.setAttribute('r',2.4);
+    p.setAttribute('class','pl-particle');
+    p.setAttribute('cx',x1); p.setAttribute('cy',y1);
+    particlesG.appendChild(p);
+    const start=performance.now()+delay;
+    const dur=900;
+    function step(t){
+      if(t<start){requestAnimationFrame(step);return;}
+      const k=Math.min(1,(t-start)/dur);
+      p.setAttribute('cx',x1+(x2-x1)*k);
+      p.setAttribute('cy',y1+(y2-y1)*k);
+      p.setAttribute('opacity',Math.sin(k*Math.PI));
+      if(k<1){requestAnimationFrame(step);}
+      else{p.remove();}
+    }
+    requestAnimationFrame(step);
+  }
+
+  function run(){
+    /* reset */
+    dots.forEach(d=>d.setAttribute('fill','oklch(0.74 0.14 200 / 0.12)'));
+    symRows.forEach(s=>{s.line.setAttribute('width',0);s.close.style.opacity='0';});
+    fileCount.textContent='0 files';
+    symCount.textContent='0 symbols';
+    ratio.textContent='0.0×';
+    footFiles.textContent='0';
+    footSyms.textContent='0';
+    footRatio.textContent='0.0';
+    edge12.style.strokeDashoffset='120';
+    edge23.style.strokeDashoffset='120';
+    capGlow.setAttribute('opacity','0');
+    stage1.classList.remove('active');
+    stage2.classList.remove('active');
+    stage3.classList.remove('active');
+
+    /* ── stage 1: scan ── */
+    setTimeout(()=>{
+      stage1.classList.add('active');
+      let lit=0;
+      const total=dots.length;
+      const target=247;
+      const step=()=>{
+        const batch=Math.ceil(total/30);
+        for(let k=0;k<batch && lit<total;k++,lit++){
+          dots[lit].setAttribute('fill','oklch(0.74 0.14 200 / 0.85)');
+        }
+        const pct=lit/total;
+        const n=Math.round(pct*target);
+        fileCount.textContent=n+' files';
+        footFiles.textContent=n;
+        if(lit<total)setTimeout(step,30);
+      };
+      step();
+    },200);
+
+    /* ── transition 1→2 ── */
+    setTimeout(()=>{
+      edge12.style.transition='stroke-dashoffset 0.9s cubic-bezier(0.16,1,0.3,1)';
+      edge12.style.strokeDashoffset='0';
+      for(let i=0;i<8;i++)emitParticle(220,160,260,160,i*70);
+    },1500);
+
+    /* ── stage 2: parse ── */
+    setTimeout(()=>{
+      stage2.classList.add('active');
+      symRows.forEach((s,i)=>{
+        setTimeout(()=>{
+          const start=performance.now();
+          const dur=420;
+          function grow(t){
+            const k=Math.min(1,(t-start)/dur);
+            s.line.setAttribute('width',s.target*k);
+            if(k<1)requestAnimationFrame(grow);
+            else s.close.style.opacity='1';
+          }
+          requestAnimationFrame(grow);
+        },i*120);
+      });
+      let n=0;
+      const target=2881;
+      const stepSym=()=>{
+        n+=Math.ceil((target-n)/14);
+        symCount.textContent=n+' symbols';
+        footSyms.textContent=n;
+        if(n<target)setTimeout(stepSym,40);
+      };
+      setTimeout(stepSym,200);
+    },2000);
+
+    /* ── transition 2→3 ── */
+    setTimeout(()=>{
+      edge23.style.transition='stroke-dashoffset 0.9s cubic-bezier(0.16,1,0.3,1)';
+      edge23.style.strokeDashoffset='0';
+      for(let i=0;i<8;i++)emitParticle(460,160,500,160,i*70);
+    },3300);
+
+    /* ── stage 3: capsule ── */
+    setTimeout(()=>{
+      stage3.classList.add('active');
+      capGlow.style.transition='opacity 1.2s ease';
+      capGlow.setAttribute('opacity','1');
+      let r=0;
+      const target=3.9;
+      const stepR=()=>{
+        r+=(target-r)*0.12;
+        const v=r.toFixed(1);
+        ratio.textContent=v+'×';
+        footRatio.textContent=v;
+        if(r<target-0.05)setTimeout(stepR,40);
+        else{ratio.textContent=target.toFixed(1)+'×';footRatio.textContent=target.toFixed(1);}
+      };
+      stepR();
+    },3800);
+  }
+
+  let started=false;
+  const obs=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(e.isIntersecting && !started){
+        started=true;
+        run();
+        setInterval(run,9000);
+      }
+    });
+  },{threshold:0.25});
+  obs.observe(card);
+})();
 </script>
 </body>
 </html>
