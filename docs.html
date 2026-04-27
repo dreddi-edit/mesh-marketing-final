@@ -207,55 +207,217 @@
     .surface-card p { color: var(--muted); font-size: 14px; line-height: 1.55; margin: 0; flex: 1; }
     .surface-card .arrow { display: inline-flex; align-items: center; gap: 6px; color: var(--cyan); font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
 
-    /* command explorer */
-    .cmd-explorer { margin: 18px 0 26px; display: grid; gap: 10px; }
-    .cmd-accordion {
+    /* slash command explorer */
+    .slash-console {
+      margin: 24px 0 34px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      background:
+        radial-gradient(760px 360px at 80% 0%, oklch(0.74 0.14 200 / 0.13), transparent 68%),
+        radial-gradient(620px 340px at 0% 100%, oklch(0.78 0.16 145 / 0.08), transparent 70%),
+        oklch(0.052 0.032 204 / 0.88);
+      box-shadow: 0 28px 80px rgba(0,0,0,0.25), inset 0 1px 0 oklch(1 0 0 / 0.04);
+    }
+    .slash-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+      gap: 28px;
+      padding: 28px;
+      border-bottom: 1px solid var(--line);
+    }
+    .slash-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 12px;
+    }
+    .slash-title {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 900;
+      font-size: clamp(40px, 5vw, 64px);
+      line-height: 0.92;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: 14px;
+    }
+    .slash-title em { color: var(--cyan); font-style: inherit; }
+    .slash-lede {
+      max-width: 680px;
+      color: oklch(1 0 0 / 0.68);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+    .slash-stats {
+      display: grid;
+      gap: 1px;
       border: 1px solid var(--line);
       border-radius: 10px;
-      background: oklch(0.058 0.034 200 / 0.7);
       overflow: hidden;
+      background: oklch(1 0 0 / 0.06);
     }
-    .cmd-accordion summary {
+    .slash-stat {
+      padding: 14px 16px;
+      background: oklch(0.035 0.026 204 / 0.72);
+      font-family: var(--mono);
+      color: oklch(1 0 0 / 0.44);
+      font-size: 10.5px;
+      line-height: 1.45;
+    }
+    .slash-stat b {
+      display: block;
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 34px;
+      line-height: 0.9;
+      color: var(--ink);
+      margin-bottom: 5px;
+    }
+    .slash-runway {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .slash-runway div {
+      padding: 16px;
+      background: oklch(0.045 0.03 204 / 0.78);
+      min-width: 0;
+    }
+    .slash-runway code {
+      display: inline-block;
+      margin-bottom: 7px;
+      color: var(--cyan);
+      background: oklch(0.74 0.14 200 / 0.09);
+      border: 1px solid oklch(0.74 0.14 200 / 0.18);
+      border-radius: 5px;
+      padding: 3px 6px;
+    }
+    .slash-runway span {
+      display: block;
+      font-size: 12.5px;
+      color: oklch(1 0 0 / 0.54);
+      line-height: 1.45;
+    }
+    .cmd-clusters {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--line);
+    }
+    .cmd-cluster {
+      background: oklch(0.058 0.034 200 / 0.86);
+      min-width: 0;
+    }
+    .cmd-cluster summary {
       list-style: none;
       cursor: pointer;
-      padding: 13px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      font-size: 14px;
-      color: var(--ink);
-      font-weight: 600;
-    }
-    .cmd-accordion summary::-webkit-details-marker { display: none; }
-    .cmd-accordion summary .meta {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--cyan);
-      letter-spacing: 0.04em;
-    }
-    .cmd-accordion .cmd-body {
-      border-top: 1px solid var(--line);
-      padding: 12px 14px 14px;
-      font-size: 14px;
-      color: oklch(1 0 0 / 0.76);
-      line-height: 1.6;
+      min-height: 98px;
+      padding: 18px 18px;
       display: grid;
-      gap: 8px;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      color: var(--ink);
+      transition: background .2s;
     }
-    .cmd-accordion .cmd-body code { color: var(--cyan); }
-    .cmd-accordion .cmd-body ul { margin: 4px 0 0; padding-left: 20px; }
-    .cmd-accordion .cmd-body li { margin: 3px 0; }
+    .cmd-cluster summary:hover { background: oklch(0.74 0.14 200 / 0.055); }
+    .cmd-cluster summary::-webkit-details-marker { display: none; }
+    .cmd-title {
+      display: block;
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 900;
+      font-size: 30px;
+      line-height: 0.95;
+      letter-spacing: -0.01em;
+      margin-bottom: 7px;
+    }
+    .cmd-desc {
+      display: block;
+      color: oklch(1 0 0 / 0.50);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .cmd-count {
+      align-self: start;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--cyan);
+      border: 1px solid oklch(0.74 0.14 200 / 0.22);
+      border-radius: 999px;
+      padding: 4px 8px;
+      white-space: nowrap;
+      background: oklch(0.74 0.14 200 / 0.08);
+    }
+    .cmd-body {
+      border-top: 1px solid var(--line);
+      padding: 0;
+      display: grid;
+    }
+    .cmd-line {
+      display: grid;
+      grid-template-columns: minmax(130px, 0.34fr) minmax(0, 1fr);
+      gap: 14px;
+      padding: 13px 18px;
+      border-bottom: 1px solid oklch(1 0 0 / 0.055);
+      align-items: baseline;
+    }
+    .cmd-line:last-child { border-bottom: 0; }
+    .cmd-line code {
+      width: max-content;
+      max-width: 100%;
+      color: var(--cyan);
+      background: oklch(0.74 0.14 200 / 0.08);
+      border: 1px solid oklch(0.74 0.14 200 / 0.16);
+      border-radius: 5px;
+      padding: 3px 6px;
+      overflow-wrap: anywhere;
+    }
+    .cmd-line span {
+      color: oklch(1 0 0 / 0.66);
+      font-size: 13.5px;
+      line-height: 1.55;
+    }
+    .slash-note {
+      padding: 18px 20px;
+      border-top: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 22px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+      background: oklch(0.74 0.14 200 / 0.045);
+    }
+    .slash-note .ic {
+      width: 22px; height: 22px;
+      display: grid; place-items: center;
+      border-radius: 6px;
+      color: var(--cyan);
+      background: oklch(0.74 0.14 200 / 0.14);
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+    .slash-note p { margin: 0; color: oklch(1 0 0 / 0.64); font-size: 13.5px; line-height: 1.6; }
 
     /* Mobile */
     @media (max-width: 1100px) {
       .docs-layout { grid-template-columns: 220px minmax(0, 1fr); gap: 36px; padding: 80px 0 60px; }
+      .slash-hero { grid-template-columns: 1fr; }
+      .slash-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .cmd-line { grid-template-columns: 1fr; gap: 7px; }
     }
     @media (max-width: 760px) {
       .site-nav { padding: 14px 18px; }
       .docs-layout { grid-template-columns: 1fr; padding: 92px 0 48px; gap: 30px; width: min(100% - 28px, 720px); }
       .docs-side { position: relative; top: 0; max-height: none; padding-right: 0; border-right: 0; border-bottom: 1px solid var(--line); padding-bottom: 22px; }
       .surface-grid { grid-template-columns: 1fr; }
+      .slash-hero { padding: 22px; }
+      .slash-stats, .slash-runway, .cmd-clusters { grid-template-columns: 1fr; }
+      .cmd-cluster summary { min-height: auto; }
     }
 
     /* MODAL */
@@ -324,7 +486,7 @@
 
     <div class="side-group">
       <div class="side-h">Slash commands</div>
-      <a class="side-link" href="#slash-command-reference">122 command reference</a>
+      <a class="side-link" href="#slash-command-reference">Operator surface</a>
     </div>
 
     <div class="side-group">
@@ -469,54 +631,127 @@ mesh › <span class="s">why are voided invoices being charged?</span>
       </table>
     </div>
 
-    <h2 class="docs-h2" id="slash-command-reference">Slash commands · <em>reference</em>.</h2>
-    <p>Mesh CLI exposes a broad slash-command surface (122 commands and aliases in the current registry). The dropdowns below document the top-level slash entries and what they do.</p>
-    <div class="cmd-explorer">
-      <details class="cmd-accordion" open><summary><span><code>/help</code>, <code>/commands</code></span><span class="meta">discovery</span></summary><div class="cmd-body"><p>Print the full command list and usage hints directly in the terminal.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/status</code></span><span class="meta">session state</span></summary><div class="cmd-body"><p>Show runtime state: model, token counters, git state, index health, and active session context.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/capsule</code>, <code>/memory</code></span><span class="meta">memory</span></summary><div class="cmd-body"><p>Inspect, compact, clear, or export the active session capsule used for context persistence.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/index</code></span><span class="meta">indexing</span></summary><div class="cmd-body"><p>Re-index the workspace and refresh structural context for reliable retrieval.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/distill</code></span><span class="meta">project brain</span></summary><div class="cmd-body"><p>Update project-level distilled context artifacts from repository signals.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/synthesize</code></span><span class="meta">planning</span></summary><div class="cmd-body"><p>Generate structured change proposals from your current goal and codebase state.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/twin</code></span><span class="meta">digital twin</span></summary><div class="cmd-body"><p>Build/read the codebase digital twin (symbols, routes, risks, relationships).</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/repair</code></span><span class="meta">predictive fixes</span></summary><div class="cmd-body"><p>Show and prioritize repair opportunities from diagnostics and runtime signals.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/daemon</code></span><span class="meta">background services</span></summary><div class="cmd-body"><p>Control Mesh background daemon lifecycle (start/status/digest/stop).</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/issues</code></span><span class="meta">issue pipeline</span></summary><div class="cmd-body"><p>Transform issue trackers into implementation-ready engineering tasks.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/chatops</code></span><span class="meta">team workflows</span></summary><div class="cmd-body"><p>Run Slack/Discord-oriented co-engineer workflows with approval-aware output.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/production</code></span><span class="meta">prod signals</span></summary><div class="cmd-body"><p>Read production telemetry summaries and prioritize top regressions.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/replay</code></span><span class="meta">forensics</span></summary><div class="cmd-body"><p>Replay production traces locally and compare expected vs observed behavior.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/bisect</code></span><span class="meta">regression hunt</span></summary><div class="cmd-body"><p>Run symptom-driven git bisect with verification commands to locate breakage.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/whatif</code></span><span class="meta">counterfactuals</span></summary><div class="cmd-body"><p>Simulate migration/change hypotheses in isolated timelines before committing.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/audit</code></span><span class="meta">integrity</span></summary><div class="cmd-body"><p>Verify hash-chained audit logs for tool actions and decision trails.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/brain</code></span><span class="meta">global intelligence</span></summary><div class="cmd-body"><p>Query Mesh Brain stats and project-level learning participation state.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/learn</code></span><span class="meta">engineering memory</span></summary><div class="cmd-body"><p>Extract and update durable engineering patterns from local history.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/intent</code></span><span class="meta">intent compile</span></summary><div class="cmd-body"><p>Compile product intent into implementation constraints, files, and risk checkpoints.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/causal</code></span><span class="meta">causal graph</span></summary><div class="cmd-body"><p>Build/query causal intelligence linking files, tests, risks, and outcomes.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/lab</code></span><span class="meta">discovery</span></summary><div class="cmd-body"><p>Run autonomous discovery workflows over repair, causal, and workspace signals.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/fork</code></span><span class="meta">reality forks</span></summary><div class="cmd-body"><p>Create and assess alternate implementation branches in parallel timelines.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/ghost</code></span><span class="meta">style replay</span></summary><div class="cmd-body"><p>Apply Ghost Engineer patterns to mimic your local implementation style.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/fix</code></span><span class="meta">quick remediation</span></summary><div class="cmd-body"><p>Apply prepared speculative fixes for currently detected compiler/linter issues.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/hologram</code></span><span class="meta">runtime telemetry</span></summary><div class="cmd-body"><p>Start commands under deep runtime observation and capture autopsy artifacts.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/entangle</code></span><span class="meta">multi-repo</span></summary><div class="cmd-body"><p>Link another repository for cross-repo experiments and contextual operations.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/inspect</code></span><span class="meta">visual portal</span></summary><div class="cmd-body"><p>Attach the visual agent portal for UI and canvas-level inspection flows.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/stop-inspect</code></span><span class="meta">portal teardown</span></summary><div class="cmd-body"><p>Detach and stop the active visual inspection portal session.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/preview</code></span><span class="meta">frontend preview</span></summary><div class="cmd-body"><p>Capture frontend previews/screenshots directly from the terminal.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/dashboard</code></span><span class="meta">supervision UI</span></summary><div class="cmd-body"><p>Launch the local dashboard for interactive run supervision and diagnostics.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/sync</code></span><span class="meta">cache sync</span></summary><div class="cmd-body"><p>Inspect cloud/local cache sync status and latency/coverage details.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/setup</code></span><span class="meta">configuration</span></summary><div class="cmd-body"><p>Run interactive or scripted setup for models, theme, cloud, and voice defaults.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/model</code></span><span class="meta">model routing</span></summary><div class="cmd-body"><p>Select, list, or persist active model choices from the model catalog.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/cost</code></span><span class="meta">usage</span></summary><div class="cmd-body"><p>Estimate session cost from token counts and model pricing metadata.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/approvals</code></span><span class="meta">safety policy</span></summary><div class="cmd-body"><p>Control auto-approval behavior for tools with higher execution risk.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/undo</code></span><span class="meta">rollback</span></summary><div class="cmd-body"><p>Undo the latest agent-applied file changes using local backups.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/steps</code></span><span class="meta">limits</span></summary><div class="cmd-body"><p>Set maximum tool-step budget for the current interactive session.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/doctor</code></span><span class="meta">diagnostics</span></summary><div class="cmd-body"><p>Run environment checks for Node/tooling/voice dependencies and configuration.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/compact</code></span><span class="meta">compression</span></summary><div class="cmd-body"><p>Compress transcript/tool history into capsule memory to reclaim context budget.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/clear</code></span><span class="meta">ui</span></summary><div class="cmd-body"><p>Clear the terminal view and reset visible CLI output state.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/voice</code></span><span class="meta">speech mode</span></summary><div class="cmd-body"><p>Configure and enable voice interaction (STT/TTS) for hands-free operation.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/exit</code>, <code>/quit</code></span><span class="meta">termination</span></summary><div class="cmd-body"><p>Gracefully leave the current Mesh CLI session.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/tribunal</code></span><span class="meta">decision panel</span></summary><div class="cmd-body"><p>Run a 3-panel debate (correctness/performance/resilience) and emit a decision artifact.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/resurrect</code></span><span class="meta">checkpoint restore</span></summary><div class="cmd-body"><p>Save/restore intent, checkpoint state, and unresolved next actions.</p></div></details>
-      <details class="cmd-accordion"><summary><span><code>/sheriff</code></span><span class="meta">semantic contracts</span></summary><div class="cmd-body"><p>Detect and verify semantic drift using contract fingerprints.</p></div></details>
+    <h2 class="docs-h2" id="slash-command-reference">Slash commands · <em>operator surface</em>.</h2>
+    <p>Mesh's slash commands are the terminal controls for its 122-feature system: capsules, local voice, neural retrieval, isolated timelines, runtime autopsy, UI-to-code inspection, digital twin analysis, multi-agent work, and safety policy.</p>
+
+    <div class="slash-console">
+      <div class="slash-hero">
+        <div>
+          <div class="slash-label">Command registry</div>
+          <div class="slash-title">One prompt line.<br><em>Many engines behind it.</em></div>
+          <p class="slash-lede">The commands below are grouped by the job they unlock. Some are simple session controls; others activate deeper Mesh systems such as fix racing, Hologram tracing, predictive repair, or semantic contract checks.</p>
+        </div>
+        <div class="slash-stats">
+          <div class="slash-stat"><b>122</b>features, tools, moonshots, and agents in the current Mesh map</div>
+          <div class="slash-stat"><b>8</b>command families: context, voice, timelines, runtime, UI, safety, memory, and setup</div>
+          <div class="slash-stat"><b>1</b>shared capsule engine behind CLI, IDE, MCP, and API surfaces</div>
+        </div>
+      </div>
+
+      <div class="slash-runway">
+        <div><code>/status</code><span>See session state, model routing, git state, index health, and active capsule context.</span></div>
+        <div><code>/capsule</code><span>Inspect, compact, clear, or export the compressed memory attached to the current run.</span></div>
+        <div><code>/hologram start &lt;cmd&gt;</code><span>Run a Node command under runtime observation and collect crash evidence.</span></div>
+        <div><code>/fork</code><span>Generate and score alternate implementation paths before touching main.</span></div>
+      </div>
+
+      <div class="cmd-clusters">
+        <details class="cmd-cluster" open>
+          <summary><span><span class="cmd-title">Context &amp; Capsules</span><span class="cmd-desc">Turn raw repos into model-sized structure with exact span recovery.</span></span><span class="cmd-count">core</span></summary>
+          <div class="cmd-body">
+            <div class="cmd-line"><code>/index</code><span>Rebuild the workspace index: summaries, AST structure, file relationships, and cache metadata.</span></div>
+            <div class="cmd-line"><code>/capsule</code><span>Inspect active capsule state, token shape, compacted memory, and exportable context artifacts.</span></div>
+            <div class="cmd-line"><code>/memory</code><span>Alias for capsule memory operations in long-running coding sessions.</span></div>
+            <div class="cmd-line"><code>/compact</code><span>Compress transcript and tool history back into the session capsule to reclaim context budget.</span></div>
+            <div class="cmd-line"><code>/distill</code><span>Refresh project-level distilled context from repository signals: symbols, dependencies, risks, and summaries.</span></div>
+          </div>
+        </details>
+
+        <details class="cmd-cluster" open>
+          <summary><span><span class="cmd-title">Voice &amp; Local Control</span><span class="cmd-desc">Operate Mesh without leaving the terminal, including local speech workflows.</span></span><span class="cmd-count">hands-free</span></summary>
+          <div class="cmd-body">
+            <div class="cmd-line"><code>/voice on</code><span>Enable voice interaction with local speech-to-text and native speech output.</span></div>
+            <div class="cmd-line"><code>/voice off</code><span>Return to typed interaction without changing the active session or capsule.</span></div>
+            <div class="cmd-line"><code>/voice setup</code><span>Initialize the local audio loop, microphone access, and speech dependencies.</span></div>
+            <div class="cmd-line"><code>/doctor voice fix</code><span>Diagnose and repair missing voice dependencies such as FFmpeg or local model assets.</span></div>
+            <div class="cmd-line"><code>/clear</code><span>Clear the terminal UI while keeping the session state intact.</span></div>
+          </div>
+        </details>
+
+        <details class="cmd-cluster">
+          <summary><span><span class="cmd-title">Timelines &amp; Fix Racing</span><span class="cmd-desc">Try risky changes in isolated worktrees before promotion.</span></span><span class="cmd-count">verification</span></summary>
+          <div class="cmd-body">
+            <div class="cmd-line"><code>/fork</code><span>Create competing implementation paths and compare their blast radius, tests, and maintainability.</span></div>
+            <div class="cmd-line"><code>/whatif</code><span>Simulate migrations or architecture changes in alternate timelines before committing.</span></div>
+            <div class="cmd-line"><code>/bisect</code><span>Run symptom-driven git bisect with verification commands to locate the introducing commit.</span></div>
+            <div class="cmd-line"><code>/fix</code><span>Apply prepared speculative fixes for currently detected compiler, lint, or runtime failures.</span></div>
+            <div class="cmd-line"><code>/undo</code><span>Surgically roll back the latest agent-applied file change without resetting unrelated work.</span></div>
+          </div>
+        </details>
+
+        <details class="cmd-cluster">
+          <summary><span><span class="cmd-title">Runtime Autopsy</span><span class="cmd-desc">Capture why a program broke, not just where the stack trace ended.</span></span><span class="cmd-count">hologram</span></summary>
+          <div class="cmd-body">
+            <div class="cmd-line"><code>/hologram start &lt;cmd&gt;</code><span>Inject runtime observation into a command and persist stack traces, logs, and crash artifacts.</span></div>
+            <div class="cmd-line"><code>/replay</code><span>Replay production traces locally and compare observed behavior against expected code paths.</span></div>
+            <div class="cmd-line"><code>/production</code><span>Read production signal summaries and prioritize the highest-risk regressions.</span></div>
+            <div class="cmd-line"><code>/causal</code><span>Build or query causal links across files, tests, churn, failures, and risk zones.</span></div>
+            <div class="cmd-line"><code>/audit</code><span>Verify hash-chained logs for tool actions, decisions, and promotion trails.</span></div>
+          </div>
+        </details>
+
+        <details class="cmd-cluster">
+          <summary><span><span class="cmd-title">UI-to-Code &amp; Cockpit</span><span class="cmd-desc">Inspect frontend surfaces and supervise Mesh visually when terminal output is not enough.</span></span><span class="cmd-count">visual</span></summary>
+          <div class="cmd-body">
+            <div class="cmd-line"><code>/inspect</code><span>Attach the visual portal for UI-level inspection and intent-based code navigation.</span></div>
+            <div class="cmd-line"><code>/stop-inspect</code><span>Detach the active visual portal and end the browser inspection bridge.</span></div>
+            <div class="cmd-line"><code>/preview</code><span>Capture frontend previews or screenshots directly from the terminal workflow.</span></div>
+            <div class="cmd-line"><code>/dashboard</code><span>Launch the local dashboard with run supervision, graph views, and live event streams.</span></div>
+            <div class="cmd-line"><code>/entangle &lt;path&gt;</code><span>Link another repo so Mesh can reason across frontend/backend or multi-repo boundaries.</span></div>
+          </div>
+        </details>
+
+        <details class="cmd-cluster">
+          <summary><span><span class="cmd-title">Digital Twin &amp; Memory</span><span class="cmd-desc">Make the codebase explain itself, remember conventions, and forecast impact.</span></span><span class="cmd-count">intelligence</span></summary>
+          <div class="cmd-body">
+            <div class="cmd-line"><code>/twin</code><span>Build or read a digital twin of routes, package shape, risk zones, and code relationships.</span></div>
+            <div class="cmd-line"><code>/repair</code><span>Prioritize predictive repair opportunities from diagnostics and runtime signals.</span></div>
+            <div class="cmd-line"><code>/learn</code><span>Extract durable engineering patterns from accepted work, git history, and team conventions.</span></div>
+            <div class="cmd-line"><code>/intent</code><span>Compile a product request into implementation constraints, files, tests, and rollback checkpoints.</span></div>
+            <div class="cmd-line"><code>/ghost</code><span>Replay local implementation style learned from previous commits and accepted patches.</span></div>
+            <div class="cmd-line"><code>/resurrect</code><span>Restore saved intent, open questions, and next actions from a previous cognitive checkpoint.</span></div>
+          </div>
+        </details>
+
+        <details class="cmd-cluster">
+          <summary><span><span class="cmd-title">Safety &amp; Governance</span><span class="cmd-desc">Control risk, cost, contracts, and model routing before the agent acts.</span></span><span class="cmd-count">policy</span></summary>
+          <div class="cmd-body">
+            <div class="cmd-line"><code>/approvals</code><span>Configure auto-approval behavior for higher-risk tools and command execution.</span></div>
+            <div class="cmd-line"><code>/steps</code><span>Set the maximum tool-step budget for the active interactive session.</span></div>
+            <div class="cmd-line"><code>/cost</code><span>Estimate session cost from token counters and model pricing metadata.</span></div>
+            <div class="cmd-line"><code>/model</code><span>Select, list, or persist the active model choice from the provider catalog.</span></div>
+            <div class="cmd-line"><code>/sheriff</code><span>Detect semantic drift by checking contract fingerprints after refactors.</span></div>
+            <div class="cmd-line"><code>/tribunal</code><span>Run a three-perspective review across correctness, performance, and resilience.</span></div>
+          </div>
+        </details>
+
+        <details class="cmd-cluster">
+          <summary><span><span class="cmd-title">Setup, Help &amp; Exit</span><span class="cmd-desc">The small controls that keep the interactive shell understandable.</span></span><span class="cmd-count">session</span></summary>
+          <div class="cmd-body">
+            <div class="cmd-line"><code>/help</code><span>Print the available slash commands and usage hints in the terminal.</span></div>
+            <div class="cmd-line"><code>/commands</code><span>Alias for command discovery when you want the registry view.</span></div>
+            <div class="cmd-line"><code>/setup</code><span>Run interactive or scripted setup for providers, theme, cloud sync, and voice defaults.</span></div>
+            <div class="cmd-line"><code>/doctor</code><span>Check local Node/tooling/provider configuration and repair common environment problems.</span></div>
+            <div class="cmd-line"><code>/sync</code><span>Inspect local/cloud cache sync status, latency, and coverage details.</span></div>
+            <div class="cmd-line"><code>/exit</code><span>Gracefully leave the current Mesh CLI session.</span></div>
+          </div>
+        </details>
+      </div>
+
+      <div class="slash-note">
+        <div class="ic">i</div>
+        <p>The 122-feature map includes user-facing slash commands, lower-level workspace tools, moonshot workflows, and sub-agents. Slash commands are the operator entry points; the deeper tool calls run behind them when a workflow needs indexing, timelines, runtime capture, semantic search, or multi-agent delegation.</p>
+      </div>
     </div>
 
     <hr>
