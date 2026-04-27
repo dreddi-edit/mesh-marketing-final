@@ -1229,6 +1229,22 @@
       <summary><span>Can teams run Mesh in CI?</span><span>+</span></summary>
       <p>Yes. Teams usually combine CLI and API for CI pipelines, while MCP and IDE support day-to-day developer workflows. You can adopt incrementally without rewriting your stack.</p>
     </details>
+    <details class="faq-item">
+      <summary><span>Do we have to re-index on every change?</span><span>+</span></summary>
+      <p>No. You usually re-index when there are significant structural code changes. For fast iterative edits, the existing capsule is often enough and recover calls stay accurate.</p>
+    </details>
+    <details class="faq-item">
+      <summary><span>How do updates to the IDE download work?</span><span>+</span></summary>
+      <p>The public URL stays stable. New builds overwrite the same Blob path, and <code>/download/ide-macos</code> always redirects to the latest <code>Mesh.dmg</code>.</p>
+    </details>
+    <details class="faq-item">
+      <summary><span>Can we keep data local?</span><span>+</span></summary>
+      <p>Yes. A common setup is local indexing and local recovery with your own provider keys. Teams can decide how much to run local vs cloud per surface.</p>
+    </details>
+    <details class="faq-item">
+      <summary><span>Where should new users start?</span><span>+</span></summary>
+      <p>Start in CLI, run <code>mesh</code>, and build confidence with index/recover flows. Then add MCP for coding assistants and IDE/API only when your team needs those surfaces.</p>
+    </details>
   </div>
 </div>
 

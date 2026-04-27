@@ -323,10 +323,14 @@
     </div>
 
     <div class="side-group">
+      <div class="side-h">Slash commands</div>
+      <a class="side-link" href="#slash-command-reference">122 command reference</a>
+    </div>
+
+    <div class="side-group">
       <div class="side-h">CLI</div>
       <a class="side-link" href="#cli-overview">Overview</a>
       <a class="side-link" href="#cli-commands">Commands</a>
-      <a class="side-link" href="#cli-command-explorer">122 command map</a>
       <a class="side-link" href="#cli-providers">Providers &amp; keys</a>
       <a class="side-link" href="#cli-voice">Voice mode</a>
     </div>
@@ -465,6 +469,56 @@ mesh › <span class="s">why are voided invoices being charged?</span>
       </table>
     </div>
 
+    <h2 class="docs-h2" id="slash-command-reference">Slash commands · <em>reference</em>.</h2>
+    <p>Mesh CLI exposes a broad slash-command surface (122 commands and aliases in the current registry). The dropdowns below document the top-level slash entries and what they do.</p>
+    <div class="cmd-explorer">
+      <details class="cmd-accordion" open><summary><span><code>/help</code>, <code>/commands</code></span><span class="meta">discovery</span></summary><div class="cmd-body"><p>Print the full command list and usage hints directly in the terminal.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/status</code></span><span class="meta">session state</span></summary><div class="cmd-body"><p>Show runtime state: model, token counters, git state, index health, and active session context.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/capsule</code>, <code>/memory</code></span><span class="meta">memory</span></summary><div class="cmd-body"><p>Inspect, compact, clear, or export the active session capsule used for context persistence.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/index</code></span><span class="meta">indexing</span></summary><div class="cmd-body"><p>Re-index the workspace and refresh structural context for reliable retrieval.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/distill</code></span><span class="meta">project brain</span></summary><div class="cmd-body"><p>Update project-level distilled context artifacts from repository signals.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/synthesize</code></span><span class="meta">planning</span></summary><div class="cmd-body"><p>Generate structured change proposals from your current goal and codebase state.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/twin</code></span><span class="meta">digital twin</span></summary><div class="cmd-body"><p>Build/read the codebase digital twin (symbols, routes, risks, relationships).</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/repair</code></span><span class="meta">predictive fixes</span></summary><div class="cmd-body"><p>Show and prioritize repair opportunities from diagnostics and runtime signals.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/daemon</code></span><span class="meta">background services</span></summary><div class="cmd-body"><p>Control Mesh background daemon lifecycle (start/status/digest/stop).</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/issues</code></span><span class="meta">issue pipeline</span></summary><div class="cmd-body"><p>Transform issue trackers into implementation-ready engineering tasks.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/chatops</code></span><span class="meta">team workflows</span></summary><div class="cmd-body"><p>Run Slack/Discord-oriented co-engineer workflows with approval-aware output.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/production</code></span><span class="meta">prod signals</span></summary><div class="cmd-body"><p>Read production telemetry summaries and prioritize top regressions.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/replay</code></span><span class="meta">forensics</span></summary><div class="cmd-body"><p>Replay production traces locally and compare expected vs observed behavior.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/bisect</code></span><span class="meta">regression hunt</span></summary><div class="cmd-body"><p>Run symptom-driven git bisect with verification commands to locate breakage.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/whatif</code></span><span class="meta">counterfactuals</span></summary><div class="cmd-body"><p>Simulate migration/change hypotheses in isolated timelines before committing.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/audit</code></span><span class="meta">integrity</span></summary><div class="cmd-body"><p>Verify hash-chained audit logs for tool actions and decision trails.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/brain</code></span><span class="meta">global intelligence</span></summary><div class="cmd-body"><p>Query Mesh Brain stats and project-level learning participation state.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/learn</code></span><span class="meta">engineering memory</span></summary><div class="cmd-body"><p>Extract and update durable engineering patterns from local history.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/intent</code></span><span class="meta">intent compile</span></summary><div class="cmd-body"><p>Compile product intent into implementation constraints, files, and risk checkpoints.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/causal</code></span><span class="meta">causal graph</span></summary><div class="cmd-body"><p>Build/query causal intelligence linking files, tests, risks, and outcomes.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/lab</code></span><span class="meta">discovery</span></summary><div class="cmd-body"><p>Run autonomous discovery workflows over repair, causal, and workspace signals.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/fork</code></span><span class="meta">reality forks</span></summary><div class="cmd-body"><p>Create and assess alternate implementation branches in parallel timelines.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/ghost</code></span><span class="meta">style replay</span></summary><div class="cmd-body"><p>Apply Ghost Engineer patterns to mimic your local implementation style.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/fix</code></span><span class="meta">quick remediation</span></summary><div class="cmd-body"><p>Apply prepared speculative fixes for currently detected compiler/linter issues.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/hologram</code></span><span class="meta">runtime telemetry</span></summary><div class="cmd-body"><p>Start commands under deep runtime observation and capture autopsy artifacts.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/entangle</code></span><span class="meta">multi-repo</span></summary><div class="cmd-body"><p>Link another repository for cross-repo experiments and contextual operations.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/inspect</code></span><span class="meta">visual portal</span></summary><div class="cmd-body"><p>Attach the visual agent portal for UI and canvas-level inspection flows.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/stop-inspect</code></span><span class="meta">portal teardown</span></summary><div class="cmd-body"><p>Detach and stop the active visual inspection portal session.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/preview</code></span><span class="meta">frontend preview</span></summary><div class="cmd-body"><p>Capture frontend previews/screenshots directly from the terminal.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/dashboard</code></span><span class="meta">supervision UI</span></summary><div class="cmd-body"><p>Launch the local dashboard for interactive run supervision and diagnostics.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/sync</code></span><span class="meta">cache sync</span></summary><div class="cmd-body"><p>Inspect cloud/local cache sync status and latency/coverage details.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/setup</code></span><span class="meta">configuration</span></summary><div class="cmd-body"><p>Run interactive or scripted setup for models, theme, cloud, and voice defaults.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/model</code></span><span class="meta">model routing</span></summary><div class="cmd-body"><p>Select, list, or persist active model choices from the model catalog.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/cost</code></span><span class="meta">usage</span></summary><div class="cmd-body"><p>Estimate session cost from token counts and model pricing metadata.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/approvals</code></span><span class="meta">safety policy</span></summary><div class="cmd-body"><p>Control auto-approval behavior for tools with higher execution risk.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/undo</code></span><span class="meta">rollback</span></summary><div class="cmd-body"><p>Undo the latest agent-applied file changes using local backups.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/steps</code></span><span class="meta">limits</span></summary><div class="cmd-body"><p>Set maximum tool-step budget for the current interactive session.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/doctor</code></span><span class="meta">diagnostics</span></summary><div class="cmd-body"><p>Run environment checks for Node/tooling/voice dependencies and configuration.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/compact</code></span><span class="meta">compression</span></summary><div class="cmd-body"><p>Compress transcript/tool history into capsule memory to reclaim context budget.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/clear</code></span><span class="meta">ui</span></summary><div class="cmd-body"><p>Clear the terminal view and reset visible CLI output state.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/voice</code></span><span class="meta">speech mode</span></summary><div class="cmd-body"><p>Configure and enable voice interaction (STT/TTS) for hands-free operation.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/exit</code>, <code>/quit</code></span><span class="meta">termination</span></summary><div class="cmd-body"><p>Gracefully leave the current Mesh CLI session.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/tribunal</code></span><span class="meta">decision panel</span></summary><div class="cmd-body"><p>Run a 3-panel debate (correctness/performance/resilience) and emit a decision artifact.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/resurrect</code></span><span class="meta">checkpoint restore</span></summary><div class="cmd-body"><p>Save/restore intent, checkpoint state, and unresolved next actions.</p></div></details>
+      <details class="cmd-accordion"><summary><span><code>/sheriff</code></span><span class="meta">semantic contracts</span></summary><div class="cmd-body"><p>Detect and verify semantic drift using contract fingerprints.</p></div></details>
+    </div>
+
     <hr>
 
     <!-- ─────────── CLI ─────────── -->
@@ -486,77 +540,6 @@ mesh › <span class="s">why are voided invoices being charged?</span>
           <tr><td><code>mesh bench</code></td><td>Run the benchmark suite locally.</td></tr>
         </tbody>
       </table>
-    </div>
-
-    <h3 class="docs-h3" id="cli-command-explorer">122 command explorer</h3>
-    <p>Mesh ships a large command surface. The list below groups the most used command families and explains what each family does in practice.</p>
-    <div class="cmd-explorer">
-      <details class="cmd-accordion" open>
-        <summary><span>Session and navigation</span><span class="meta">core flow</span></summary>
-        <div class="cmd-body">
-          <p>These commands control interactive work sessions and movement across context states.</p>
-          <ul>
-            <li><code>mesh</code>, <code>mesh ask</code>, <code>mesh resume</code> start or continue work.</li>
-            <li><code>/status</code>, <code>/intent</code>, <code>/context</code> expose current run state and priorities.</li>
-            <li><code>/resurrect</code> and related recovery commands restore interrupted sessions.</li>
-          </ul>
-        </div>
-      </details>
-      <details class="cmd-accordion">
-        <summary><span>Workspace intelligence and indexing</span><span class="meta">capsule + twin</span></summary>
-        <div class="cmd-body">
-          <p>These build and refresh structural understanding of the repository so models do not need raw full-file reads.</p>
-          <ul>
-            <li><code>mesh index</code> and <code>mesh index --force</code> rebuild capsule state.</li>
-            <li><code>/twin build</code> and related graph commands build dependency-aware code maps.</li>
-            <li><code>mesh recover</code> retrieves exact byte spans from source files.</li>
-          </ul>
-        </div>
-      </details>
-      <details class="cmd-accordion">
-        <summary><span>Patching, safety, and verification</span><span class="meta">change control</span></summary>
-        <div class="cmd-body">
-          <p>This family is about writing changes safely, then proving they work before promotion.</p>
-          <ul>
-            <li><code>/implement</code>, <code>/review</code>, and patch commands target minimal diffs.</li>
-            <li><code>/hologram start &lt;cmd&gt;</code> runs instrumented commands with runtime evidence.</li>
-            <li><code>/sheriff scan</code>, <code>/tribunal</code>, and diagnostics surface risk before merge.</li>
-          </ul>
-        </div>
-      </details>
-      <details class="cmd-accordion">
-        <summary><span>Debugging and runtime forensics</span><span class="meta">root cause</span></summary>
-        <div class="cmd-body">
-          <p>These commands focus on isolating failures, replaying behavior, and tracing regressions.</p>
-          <ul>
-            <li><code>/fix</code> and debug flows combine targeted reads with runtime context.</li>
-            <li><code>/replay &lt;traceId&gt;</code> and <code>/bisect &lt;symptom&gt;</code> support regression triage.</li>
-            <li><code>/repair</code> surfaces predictive fixes from observed failures.</li>
-          </ul>
-        </div>
-      </details>
-      <details class="cmd-accordion">
-        <summary><span>Moonshots and advanced orchestration</span><span class="meta">power tools</span></summary>
-        <div class="cmd-body">
-          <p>These are advanced commands for multi-agent orchestration, alternate timelines, and high-autonomy workflows.</p>
-          <ul>
-            <li><code>/fork &lt;intent&gt;</code> explores alternative implementations in parallel realities.</li>
-            <li><code>/lab</code> runs autonomous discovery over project signals.</li>
-            <li><code>/dashboard</code> opens a local supervision layer for observability.</li>
-          </ul>
-        </div>
-      </details>
-      <details class="cmd-accordion">
-        <summary><span>Provider, voice, and environment ops</span><span class="meta">runtime config</span></summary>
-        <div class="cmd-body">
-          <p>Operational commands configure model routing and local capabilities.</p>
-          <ul>
-            <li><code>mesh providers</code> and env vars switch active LLM backends.</li>
-            <li><code>mesh doctor</code> validates environment health and key wiring.</li>
-            <li><code>mesh voice install</code> and <code>mesh --voice</code> enable local speech interaction.</li>
-          </ul>
-        </div>
-      </details>
     </div>
 
     <h3 class="docs-h3" id="cli-providers">Providers &amp; keys</h3>
