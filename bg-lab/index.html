@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mesh · Background Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,800;1,900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cyan:#00d4e8; --cyan2:#7ceeff; --petrol:#1a4d5a;
+  --bg:#070b12; --bg2:#0c1219; --panel:#0f1620;
+  --line:rgba(255,255,255,0.08); --line2:rgba(0,212,232,0.30);
+  --ink:#fcfcfc; --dim:rgba(255,255,255,0.42); --muted:rgba(255,255,255,0.62);
+  --mono:'Geist Mono',monospace; --display:'Barlow Condensed',sans-serif; --sans:'DM Sans',sans-serif;
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);overflow:hidden;-webkit-font-smoothing:antialiased}
+
+/* canvas backdrop */
+#bg{position:fixed;inset:0;z-index:0;display:block}
+
+/* hero overlay (mirrors index.html) */
+#hero{position:fixed;inset:0;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 32px;pointer-events:none;transition:opacity .25s}
+#hero.off{opacity:0}
+.hero-word{display:flex;gap:0;font-family:var(--display);font-style:italic;font-weight:900;font-size:clamp(96px,18vw,260px);line-height:0.85;letter-spacing:-0.04em;color:var(--ink)}
+.hero-word .l{display:inline-block;background:linear-gradient(180deg,#fff 0%,#cbd6df 100%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 60px rgba(0,212,232,0.10)}
+.hero-tag{margin-top:18px;font-family:var(--mono);font-size:11px;letter-spacing:0.32em;color:var(--cyan);text-transform:uppercase}
+.hero-sub{margin-top:24px;max-width:580px;font-size:16px;line-height:1.55;color:rgba(255,255,255,0.7);font-weight:300}
+.hero-sub strong{color:var(--ink);font-weight:500}
+
+/* top bar */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:18px 28px;background:rgba(7,11,18,0.55);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);pointer-events:auto}
+.topbar .b{display:flex;align-items:center;gap:14px;font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim)}
+.topbar .b strong{color:var(--cyan);letter-spacing:0.18em}
+.topbar .b .dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:0.4}50%{opacity:1}}
+.topbar .a{display:flex;gap:6px;align-items:center}
+.topbar .a a{font-family:var(--mono);font-size:11px;letter-spacing:0.10em;text-transform:uppercase;color:var(--dim);text-decoration:none;padding:6px 10px;border:1px solid transparent;border-radius:6px;transition:color .15s,border-color .15s}
+.topbar .a a:hover{color:var(--ink);border-color:var(--line)}
+
+/* lab panel */
+#lab{position:fixed;top:64px;right:24px;z-index:6;width:340px;max-height:calc(100vh - 88px);overflow-y:auto;background:rgba(15,22,32,0.82);backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,0.6);transition:transform .25s,opacity .25s}
+#lab::-webkit-scrollbar{width:5px}
+#lab::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:3px}
+#lab.collapsed{transform:translateX(calc(100% + 28px));opacity:0;pointer-events:none}
+
+#lab .lab-h{padding:18px 20px 10px;border-bottom:1px solid var(--line)}
+#lab .lab-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--cyan);margin-bottom:6px}
+#lab .lab-h h1{font-family:var(--display);font-style:italic;font-weight:900;font-size:32px;line-height:1;color:var(--ink);letter-spacing:-0.01em}
+
+#lab .group{padding:16px 20px;border-bottom:1px solid var(--line)}
+#lab .group:last-child{border-bottom:0}
+#lab .group .g-h{display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim);margin-bottom:12px}
+#lab .group .g-h .g-num{color:var(--cyan)}
+
+/* variation list */
+.vlist{display:grid;grid-template-columns:1fr;gap:6px}
+.vbtn{display:grid;grid-template-columns:24px 1fr auto;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,0.015);color:var(--muted);font-family:var(--sans);font-size:13px;font-weight:500;text-align:left;cursor:pointer;transition:border-color .15s,background .15s,color .15s}
+.vbtn:hover{border-color:rgba(0,212,232,0.20);color:var(--ink)}
+.vbtn.active{border-color:var(--line2);background:rgba(0,212,232,0.06);color:var(--cyan)}
+.vbtn .vnum{font-family:var(--mono);font-size:10.5px;color:var(--dim);text-align:center}
+.vbtn.active .vnum{color:var(--cyan)}
+.vbtn .vname{font-family:var(--sans);letter-spacing:-0.005em}
+.vbtn .vmark{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;color:var(--dim);text-transform:uppercase}
+.vbtn.active .vmark{color:var(--cyan)}
+
+/* vibe */
+.vibe{font-size:12.5px;line-height:1.55;color:var(--muted)}
+.vibe code{font-family:var(--mono);font-size:11.5px;color:var(--cyan);padding:1px 5px;border:1px solid var(--line);border-radius:4px;background:rgba(255,255,255,0.025)}
+
+/* params */
+.row{display:grid;grid-template-columns:1fr;gap:6px;margin-bottom:14px}
+.row:last-child{margin-bottom:0}
+.row .lbl{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--dim)}
+.row .lbl .val{color:var(--cyan);font-variant-numeric:tabular-nums;letter-spacing:0;text-transform:none;font-size:11px}
+.row input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--cyan) 0%,rgba(0,212,232,0.3) 100%);outline:none;cursor:pointer}
+.row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--ink);border:2px solid var(--cyan);cursor:pointer;transition:transform .12s}
+.row input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15)}
+.row input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--ink);border:2px solid var(--cyan);cursor:pointer}
+.row.empty{color:var(--dim);font-size:12px;font-style:italic;text-align:center;padding:6px 0}
+
+/* seed nav */
+.seed{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:8px}
+.seed .sl{font-family:var(--mono);font-size:10.5px;color:var(--dim);letter-spacing:0.10em;text-transform:uppercase}
+.seed input{flex:1;padding:7px 10px;background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:7px;color:var(--ink);font-family:var(--mono);font-size:12px;outline:none;font-variant-numeric:tabular-nums}
+.seed input:focus{border-color:var(--cyan)}
+.seed button{width:30px;height:30px;display:grid;place-items:center;background:rgba(255,255,255,0.025);border:1px solid var(--line);border-radius:7px;color:var(--muted);cursor:pointer;font-family:var(--mono);font-size:13px;line-height:1;transition:all .12s}
+.seed button:hover{border-color:var(--line2);color:var(--cyan)}
+.seed-row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.seed-row2 button{padding:9px 0;background:rgba(255,255,255,0.025);border:1px solid var(--line);border-radius:7px;color:var(--muted);cursor:pointer;font-family:var(--mono);font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;transition:all .12s}
+.seed-row2 button:hover{border-color:var(--line2);color:var(--cyan)}
+
+/* actions */
+.act{display:grid;grid-template-columns:1fr;gap:8px}
+.act button{padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;background:rgba(255,255,255,0.025);border:1px solid var(--line);border-radius:8px;color:var(--muted);cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;transition:all .12s}
+.act button:hover{border-color:var(--line2);color:var(--cyan)}
+.act button.primary{background:rgba(0,212,232,0.08);border-color:rgba(0,212,232,0.30);color:var(--cyan)}
+.act button.primary:hover{background:rgba(0,212,232,0.14)}
+.act button .k{font-size:10px;color:var(--dim);background:rgba(255,255,255,0.03);padding:2px 6px;border-radius:4px;border:1px solid var(--line);letter-spacing:0;text-transform:none;font-family:var(--mono)}
+
+/* show/hide tab when collapsed */
+#lab-toggle{position:fixed;top:64px;right:24px;z-index:7;display:none;width:36px;height:36px;align-items:center;justify-content:center;background:rgba(15,22,32,0.88);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:9px;color:var(--cyan);cursor:pointer;font-family:var(--mono);font-size:14px;transition:border-color .15s}
+#lab.collapsed ~ #lab-toggle{display:flex}
+#lab-toggle:hover{border-color:var(--line2)}
+
+/* toast */
+#toast{position:fixed;left:50%;bottom:36px;transform:translateX(-50%) translateY(20px);z-index:10;padding:11px 18px;background:var(--cyan);color:#001318;border-radius:10px;font-family:var(--mono);font-size:12px;letter-spacing:0.04em;font-weight:600;opacity:0;pointer-events:none;transition:transform .22s,opacity .22s;box-shadow:0 12px 32px rgba(0,212,232,0.30)}
+#toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* mobile */
+@media (max-width:760px){
+  #lab{top:auto;bottom:16px;right:16px;left:16px;width:auto;max-height:60vh}
+  .hero-word{font-size:clamp(72px,22vw,180px)}
+}
+@media (prefers-reduced-motion:reduce){
+  /* engine respects this & quietens animations */
+}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+
+<div id="hero">
+  <div class="hero-word">
+    <span class="l">M</span><span class="l">E</span><span class="l">S</span><span class="l">H</span>
+  </div>
+  <div class="hero-tag">Terminal · IDE · MCP · API</div>
+  <p class="hero-sub">One <strong>context engine</strong>. Four surfaces. Compresses your entire codebase to 3.9× more context — in any AI workflow.</p>
+</div>
+
+<div class="topbar">
+  <div class="b"><span class="dot"></span><strong>Background Lab</strong> · <span id="topbar-name">Particle Mesh</span></div>
+  <div class="a">
+    <a href="/" target="_blank" rel="noreferrer">Open live site ↗</a>
+    <a href="/bg-lab/PHILOSOPHY.md" target="_blank" rel="noreferrer">Philosophy</a>
+  </div>
+</div>
+
+<aside id="lab">
+  <div class="lab-h">
+    <div class="lab-eyebrow">Lab · 7 candidates</div>
+    <h1>Pick a <em style="color:var(--cyan);font-style:italic">background.</em></h1>
+  </div>
+
+  <div class="group">
+    <div class="g-h"><span>Variation</span><span class="g-num" id="vcounter">1 / 6</span></div>
+    <div class="vlist" id="vlist"></div>
+  </div>
+
+  <div class="group">
+    <div class="g-h"><span>Vibe</span><span class="g-num" id="vibekey">—</span></div>
+    <div class="vibe" id="vibe">—</div>
+  </div>
+
+  <div class="group">
+    <div class="g-h"><span>Parameters</span><span class="g-num" id="pcount">0</span></div>
+    <div id="params"></div>
+  </div>
+
+  <div class="group">
+    <div class="g-h"><span>Seed</span><span class="g-num">deterministic</span></div>
+    <div class="seed">
+      <span class="sl">#</span>
+      <input type="number" id="seedInput" min="0" max="999999" step="1" value="42">
+      <button id="seedPrev" title="Previous seed (←)">‹</button>
+      <button id="seedNext" title="Next seed (→)">›</button>
+    </div>
+    <div class="seed-row2">
+      <button id="seedRand">Random</button>
+      <button id="seedReset">Reset · 42</button>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="g-h"><span>Actions</span><span class="g-num">⌨ shortcuts</span></div>
+    <div class="act">
+      <button id="toggleHero">Toggle hero overlay <span class="k">H</span></button>
+      <button id="toggleLab">Hide lab panel <span class="k">L</span></button>
+      <button id="copySnippet" class="primary">Copy as drop-in snippet <span class="k">C</span></button>
+    </div>
+  </div>
+</aside>
+<button id="lab-toggle" title="Show lab (L)">⟨</button>
+
+<div id="toast">Snippet copied to clipboard</div>
+
+<script>
+/* ============================================================
+   QUIET COMPUTE — Background Lab
+   6 ambient backgrounds in the Mesh palette.
+   Each variation: { name, vibe, defaults, params, init, frame }
+============================================================ */
+
+/* ── tiny PRNG + Perlin-ish noise (deterministic by seed) ── */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=a;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296}}
+function makeNoise(seed){
+  const rng=mulberry32(seed); const p=new Uint8Array(512); const t=Array.from({length:256},(_,i)=>i);
+  for(let i=255;i>0;i--){const j=Math.floor(rng()*(i+1));[t[i],t[j]]=[t[j],t[i]]}
+  for(let i=0;i<512;i++)p[i]=t[i&255];
+  const fade=t=>t*t*t*(t*(t*6-15)+10), lerp=(a,b,t)=>a+(b-a)*t;
+  function grad(h,x,y,z){const u=h<8?x:y,v=h<4?y:(h===12||h===14?x:z);return((h&1)===0?u:-u)+((h&2)===0?v:-v)}
+  return function(x,y,z=0){
+    const X=Math.floor(x)&255,Y=Math.floor(y)&255,Z=Math.floor(z)&255;
+    x-=Math.floor(x); y-=Math.floor(y); z-=Math.floor(z);
+    const u=fade(x),v=fade(y),w=fade(z);
+    const A=p[X]+Y, AA=p[A]+Z, AB=p[A+1]+Z, B=p[X+1]+Y, BA=p[B]+Z, BB=p[B+1]+Z;
+    return (lerp(
+      lerp(lerp(grad(p[AA],x,y,z),grad(p[BA],x-1,y,z),u),
+           lerp(grad(p[AB],x,y-1,z),grad(p[BB],x-1,y-1,z),u), v),
+      lerp(lerp(grad(p[AA+1],x,y,z-1),grad(p[BA+1],x-1,y,z-1),u),
+           lerp(grad(p[AB+1],x,y-1,z-1),grad(p[BB+1],x-1,y-1,z-1),u), v), w
+    )+1)*0.5;
+  };
+}
+
+/* ── canvas plumbing ── */
+const cvs=document.getElementById('bg'), ctx=cvs.getContext('2d');
+let W=0,H=0,DPR=Math.min(2,window.devicePixelRatio||1);
+function resize(){
+  W=window.innerWidth; H=window.innerHeight;
+  cvs.width=W*DPR; cvs.height=H*DPR;
+  cvs.style.width=W+'px'; cvs.style.height=H+'px';
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+  if(active) active.init(ctx,W,H,seed,params);
+}
+window.addEventListener('resize',()=>{resize()});
+
+/* ============================================================
+   VARIATIONS
+============================================================ */
+const VARS = [];
+
+/* ── 1 · Particle Mesh (current baseline) ─────────────────── */
+VARS.push({
+  key:'mesh', name:'Particle Mesh', mark:'CURRENT',
+  vibe:'The current <code>particles + edges</code> network. Reactive to mouse, classic tech-brand baseline. Kept here as A/B reference.',
+  defaults:{count:90, link:155, speed:0.45},
+  params:[
+    {key:'count', label:'Particles', min:30, max:200, step:5},
+    {key:'link',  label:'Link distance', min:60, max:240, step:5},
+    {key:'speed', label:'Speed', min:0.1, max:1.5, step:0.05},
+  ],
+  state:null,
+  init(ctx,W,H,seed,p){
+    const r=mulberry32(seed);
+    const pts=Array.from({length:p.count},()=>({
+      x:r()*W, y:r()*H,
+      vx:(r()-0.5)*p.speed*2, vy:(r()-0.5)*p.speed*2
+    }));
+    this.state={pts};
+  },
+  frame(ctx,W,H,t,p){
+    ctx.clearRect(0,0,W,H);
+    const {pts}=this.state, L=p.link, mx=mouse.x, my=mouse.y;
+    for(const q of pts){
+      q.x+=q.vx; q.y+=q.vy;
+      if(q.x<0||q.x>W) q.vx*=-1;
+      if(q.y<0||q.y>H) q.vy*=-1;
+      const dx=q.x-mx, dy=q.y-my, d=Math.hypot(dx,dy);
+      if(d<110){q.vx+=dx/d*0.025; q.vy+=dy/d*0.025}
+      const sp=Math.hypot(q.vx,q.vy);
+      if(sp>1.2){q.vx*=0.97; q.vy*=0.97}
+    }
+    for(let i=0;i<pts.length;i++){
+      for(let j=i+1;j<pts.length;j++){
+        const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y, d=Math.hypot(dx,dy);
+        if(d<L){
+          const a=(1-d/L)*0.32;
+          ctx.strokeStyle=`rgba(0,212,232,${a})`; ctx.lineWidth=0.7;
+          ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y); ctx.stroke();
+        }
+      }
+      ctx.fillStyle='rgba(0,212,232,0.55)';
+      ctx.beginPath(); ctx.arc(pts[i].x,pts[i].y,1.8,0,Math.PI*2); ctx.fill();
+    }
+  }
+});
+
+/* ── 2 · Cursor Grid (presence map — cells light only where you have been) ── */
+VARS.push({
+  key:'grid', name:'Cursor Grid', mark:'NEW',
+  vibe:'A dormant lattice. Each cell ignites only where the cursor crosses it, then quietly fades back into the dark — leaving a slow trail of <code>presence</code>. Pure interaction, zero ambient motion.',
+  defaults:{size:80, hold:500, fade:0.02, glow:1.0},
+  params:[
+    {key:'size', label:'Cell size',        min:40,    max:160,  step:4},
+    {key:'hold', label:'Hold (ms)',        min:100,   max:1500, step:50},
+    {key:'fade', label:'Fade rate',        min:0.005, max:0.08, step:0.005},
+    {key:'glow', label:'Glow intensity',   min:0.3,   max:1.5,  step:0.05},
+  ],
+  state:null,
+  init(ctx,W,H,seed,p){
+    const cells=[];
+    for(let x=0; x<W; x+=p.size){
+      for(let y=0; y<H; y+=p.size){
+        cells.push({x,y,alpha:0,fading:false,touched:0});
+      }
+    }
+    /* index lookup by integer cell coords for O(1) hit-test */
+    const cols=Math.ceil(W/p.size);
+    this.state={cells, cols};
+    ctx.fillStyle='#070b12'; ctx.fillRect(0,0,W,H);
+  },
+  frame(ctx,W,H,t,p){
+    const s=this.state;
+    ctx.fillStyle='#070b12'; ctx.fillRect(0,0,W,H);
+    const now=performance.now();
+    /* ignite cell under cursor */
+    if(mouse.x>=0 && mouse.y>=0 && mouse.x<W && mouse.y<H){
+      const ix=Math.floor(mouse.x/p.size), iy=Math.floor(mouse.y/p.size);
+      const idx=ix*Math.ceil(H/p.size)+iy;
+      const c=s.cells[idx];
+      if(c && c.alpha===0){
+        c.alpha=1; c.touched=now; c.fading=false;
+      }
+    }
+    for(const c of s.cells){
+      if(c.alpha>0 && !c.fading && now-c.touched > p.hold) c.fading=true;
+      if(c.fading){
+        c.alpha -= p.fade;
+        if(c.alpha<=0){c.alpha=0; c.fading=false; continue}
+      }
+      if(c.alpha>0){
+        const cx=c.x+p.size/2, cy=c.y+p.size/2;
+        const g=ctx.createRadialGradient(cx,cy,5, cx,cy,p.size);
+        g.addColorStop(0, `rgba(0,212,232,${Math.min(1,c.alpha*p.glow)})`);
+        g.addColorStop(1, 'rgba(0,212,232,0)');
+        ctx.strokeStyle=g; ctx.lineWidth=1.3;
+        ctx.strokeRect(c.x+0.5, c.y+0.5, p.size-1, p.size-1);
+      }
+    }
+  }
+});
+
+/* ── 3 · Flow Currents (Perlin flow field, motion-blur trails) ── */
+VARS.push({
+  key:'flow', name:'Flow Currents', mark:'NEW',
+  vibe:'Hundreds of particles drift along a layered <code>Perlin</code> noise field, leaving slow ribbons. Ambient, organic, never the same frame twice.',
+  defaults:{count:600, scale:0.0017, speed:0.55, fade:0.045},
+  params:[
+    {key:'count', label:'Particles', min:200, max:1400, step:50},
+    {key:'scale', label:'Field detail', min:0.0008, max:0.004, step:0.0001},
+    {key:'speed', label:'Flow speed', min:0.2, max:1.4, step:0.05},
+    {key:'fade',  label:'Trail length', min:0.01, max:0.15, step:0.005},
+  ],
+  state:null,
+  init(ctx,W,H,seed,p){
+    const r=mulberry32(seed), n=makeNoise(seed);
+    const pts=Array.from({length:p.count},()=>({
+      x:r()*W, y:r()*H, life:Math.floor(r()*200)+50
+    }));
+    this.state={pts, n, r, t:0};
+    ctx.fillStyle='#070b12'; ctx.fillRect(0,0,W,H);
+  },
+  frame(ctx,W,H,t,p){
+    const s=this.state; s.t+=0.0009*p.speed;
+    ctx.fillStyle=`rgba(7,11,18,${p.fade})`;
+    ctx.fillRect(0,0,W,H);
+    for(const q of s.pts){
+      const v=s.n(q.x*p.scale, q.y*p.scale, s.t)*Math.PI*2*2;
+      q.x+=Math.cos(v)*p.speed*1.6;
+      q.y+=Math.sin(v)*p.speed*1.6;
+      q.life--;
+      const a=0.55*(0.4+0.6*Math.sin((q.life/250)*Math.PI));
+      ctx.fillStyle=`rgba(${50+150*Math.cos(v)},${200+30*Math.sin(v)},232,${a})`;
+      ctx.fillRect(q.x|0, q.y|0, 1.4, 1.4);
+      if(q.life<=0||q.x<0||q.x>W||q.y<0||q.y>H){
+        q.x=s.r()*W; q.y=s.r()*H; q.life=Math.floor(s.r()*200)+50;
+      }
+    }
+  }
+});
+
+/* ── 4 · Aurora ───────────────────────────────────────────── */
+VARS.push({
+  key:'aurora', name:'Aurora', mark:'NEW',
+  vibe:'Soft drifting cyan blobs composited additively. No interaction, no intent — pure ambient field. Most subtle option, easiest on the eye.',
+  defaults:{blobs:6, radius:520, speed:0.5, glow:0.55},
+  params:[
+    {key:'blobs',  label:'Blobs', min:3, max:10, step:1},
+    {key:'radius', label:'Radius', min:240, max:800, step:20},
+    {key:'speed',  label:'Drift speed', min:0.1, max:1.5, step:0.05},
+    {key:'glow',   label:'Glow', min:0.1, max:1.0, step:0.05},
+  ],
+  state:null,
+  init(ctx,W,H,seed,p){
+    const r=mulberry32(seed);
+    const blobs=Array.from({length:p.blobs},()=>({
+      ax:r()*Math.PI*2, ay:r()*Math.PI*2,
+      fx:0.0003+r()*0.0005, fy:0.0003+r()*0.0005,
+      cx:r()*W, cy:r()*H,
+      hue:0.5+r()*0.06,
+    }));
+    this.state={blobs, t:0};
+  },
+  frame(ctx,W,H,t,p){
+    const s=this.state; s.t+=p.speed;
+    ctx.fillStyle='#070b12'; ctx.fillRect(0,0,W,H);
+    ctx.globalCompositeOperation='lighter';
+    for(const b of s.blobs){
+      const x=W*0.5+Math.cos(s.t*b.fx+b.ax)*W*0.42;
+      const y=H*0.5+Math.sin(s.t*b.fy+b.ay)*H*0.42;
+      const r=p.radius*(0.85+0.15*Math.sin(s.t*0.002+b.ax));
+      const g=ctx.createRadialGradient(x,y,0,x,y,r);
+      g.addColorStop(0, `rgba(0,212,232,${0.34*p.glow})`);
+      g.addColorStop(0.4, `rgba(60,180,210,${0.10*p.glow})`);
+      g.addColorStop(1, 'rgba(0,40,60,0)');
+      ctx.fillStyle=g; ctx.fillRect(x-r,y-r,r*2,r*2);
+    }
+    ctx.globalCompositeOperation='source-over';
+    /* fine grain */
+    if(grain) ctx.drawImage(grain,0,0,W,H);
+  }
+});
+
+/* ── 5 · Hex Pulse ────────────────────────────────────────── */
+VARS.push({
+  key:'hex', name:'Hex Pulse', mark:'NEW',
+  vibe:'Hexagonal lattice that breathes with noise. Pulses ripple outward from random origins. Most "infrastructure-y" option — quiet, structured.',
+  defaults:{size:42, base:0.10, pulse:1.0, density:1.0},
+  params:[
+    {key:'size',    label:'Hex size', min:20, max:80, step:2},
+    {key:'base',    label:'Base brightness', min:0.04, max:0.22, step:0.01},
+    {key:'pulse',   label:'Pulse strength', min:0, max:2.0, step:0.05},
+    {key:'density', label:'Pulse rate', min:0.2, max:3.0, step:0.1},
+  ],
+  state:null,
+  init(ctx,W,H,seed,p){
+    const r=mulberry32(seed), n=makeNoise(seed);
+    this.state={n, r, pulses:[], t:0, lastPulse:0};
+  },
+  frame(ctx,W,H,t,p){
+    const s=this.state; s.t+=0.012;
+    ctx.fillStyle='#070b12'; ctx.fillRect(0,0,W,H);
+    /* spawn pulses */
+    if(s.t-s.lastPulse > (1/p.density)){
+      s.pulses.push({x:s.r()*W, y:s.r()*H, t:0});
+      s.lastPulse=s.t;
+      if(s.pulses.length>6) s.pulses.shift();
+    }
+    s.pulses.forEach(pl=>pl.t+=0.008);
+    s.pulses=s.pulses.filter(pl=>pl.t<1.5);
+    /* draw lattice */
+    const a=p.size, hw=a*Math.sqrt(3), vh=a*1.5;
+    ctx.lineWidth=0.8;
+    for(let row=-1; row*vh<H+a; row++){
+      const offsetX=(row%2===0?0:hw/2);
+      for(let col=-1; col*hw+offsetX<W+a; col++){
+        const cx=col*hw+offsetX, cy=row*vh;
+        const noise=s.n(cx*0.005, cy*0.005, s.t*0.2)*0.4;
+        let pulseA=0;
+        for(const pl of s.pulses){
+          const d=Math.hypot(cx-pl.x, cy-pl.y);
+          const ringR=pl.t*900;
+          const dist=Math.abs(d-ringR);
+          if(dist<70) pulseA += (1 - dist/70) * (1 - pl.t/1.5) * 0.7 * p.pulse;
+        }
+        const alpha=Math.min(0.85, p.base + noise + pulseA);
+        ctx.strokeStyle=`rgba(0,212,232,${alpha})`;
+        drawHex(ctx, cx, cy, a*0.92);
+      }
+    }
+  }
+});
+function drawHex(ctx,x,y,r){
+  ctx.beginPath();
+  for(let i=0;i<6;i++){
+    const ang=Math.PI/6 + i*Math.PI/3;
+    const px=x+Math.cos(ang)*r, py=y+Math.sin(ang)*r;
+    if(i===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+  }
+  ctx.closePath(); ctx.stroke();
+}
+
+/* ── 6 · Wave Resonance ───────────────────────────────────── */
+VARS.push({
+  key:'wave', name:'Wave Resonance', mark:'NEW',
+  vibe:'Concentric waves from drifting sources interfere — constructive nodes and quiet voids. Mathematical, harmonic, slightly dreamy.',
+  defaults:{sources:3, freq:0.04, drift:0.4, alpha:0.35},
+  params:[
+    {key:'sources', label:'Sources', min:2, max:6, step:1},
+    {key:'freq',    label:'Frequency', min:0.015, max:0.10, step:0.002},
+    {key:'drift',   label:'Source drift', min:0.05, max:1.2, step:0.05},
+    {key:'alpha',   label:'Brightness', min:0.10, max:0.7, step:0.02},
+  ],
+  state:null,
+  init(ctx,W,H,seed,p){
+    const r=mulberry32(seed);
+    this.state={
+      r,
+      srcs: Array.from({length:p.sources},()=>({
+        ax:r()*Math.PI*2, ay:r()*Math.PI*2,
+        fx:0.0006+r()*0.0008, fy:0.0006+r()*0.0008
+      })),
+      t:0
+    };
+  },
+  frame(ctx,W,H,t,p){
+    const s=this.state; s.t+=p.drift;
+    ctx.fillStyle='#070b12'; ctx.fillRect(0,0,W,H);
+    const positions = s.srcs.map(src=>({
+      x: W*0.5 + Math.cos(s.t*src.fx + src.ax)*W*0.38,
+      y: H*0.5 + Math.sin(s.t*src.fy + src.ay)*H*0.38
+    }));
+    /* render with concentric rings per source, additive */
+    ctx.globalCompositeOperation='lighter';
+    const maxR = Math.hypot(W,H);
+    const ringStep = 2*Math.PI / p.freq;
+    for(const pos of positions){
+      const phase = s.t*0.6;
+      ctx.strokeStyle=`rgba(0,212,232,${p.alpha*0.18})`;
+      ctx.lineWidth=1.0;
+      for(let r=8; r<maxR*0.7; r+=14){
+        const wave = Math.sin(r*p.freq - phase);
+        if(wave<0.1) continue;
+        ctx.globalAlpha = wave * p.alpha;
+        ctx.beginPath(); ctx.arc(pos.x, pos.y, r, 0, Math.PI*2); ctx.stroke();
+      }
+      ctx.globalAlpha=1;
+    }
+    /* source markers */
+    ctx.globalCompositeOperation='source-over';
+    for(const pos of positions){
+      ctx.fillStyle='rgba(124,238,255,0.85)';
+      ctx.beginPath(); ctx.arc(pos.x,pos.y,3,0,Math.PI*2); ctx.fill();
+    }
+  }
+});
+
+/* ── 7 · Topographic ──────────────────────────────────────── */
+VARS.push({
+  key:'topo', name:'Topographic', mark:'NEW',
+  vibe:'Animated <code>marching-squares</code> contour lines over a Perlin field. Reads like a slow-shifting topographic map — quietly cartographic.',
+  defaults:{cell:24, levels:9, speed:0.4, weight:1.0},
+  params:[
+    {key:'cell',   label:'Grid cell', min:14, max:48, step:2},
+    {key:'levels', label:'Contour levels', min:4, max:14, step:1},
+    {key:'speed',  label:'Drift speed', min:0.05, max:1.2, step:0.05},
+    {key:'weight', label:'Line weight', min:0.5, max:2.5, step:0.1},
+  ],
+  state:null,
+  init(ctx,W,H,seed,p){
+    this.state={n:makeNoise(seed), t:0};
+  },
+  frame(ctx,W,H,t,p){
+    const s=this.state; s.t+=0.0008*p.speed;
+    ctx.fillStyle='#070b12'; ctx.fillRect(0,0,W,H);
+    const cell=p.cell, cols=Math.ceil(W/cell)+1, rows=Math.ceil(H/cell)+1;
+    /* sample noise grid */
+    const grid=new Float32Array(cols*rows);
+    for(let y=0;y<rows;y++) for(let x=0;x<cols;x++){
+      grid[y*cols+x] = s.n(x*0.05, y*0.05, s.t);
+    }
+    /* draw contour for each level */
+    ctx.lineWidth=p.weight;
+    for(let lv=0; lv<p.levels; lv++){
+      const v = (lv+1)/(p.levels+1);
+      const dist = Math.abs(v-0.5)*2;
+      const a = 0.50 - dist*0.30;
+      ctx.strokeStyle=`rgba(0,212,232,${a})`;
+      ctx.beginPath();
+      for(let y=0;y<rows-1;y++){
+        for(let x=0;x<cols-1;x++){
+          const a0=grid[y*cols+x], a1=grid[y*cols+(x+1)], a2=grid[(y+1)*cols+(x+1)], a3=grid[(y+1)*cols+x];
+          let idx=0;
+          if(a0>v) idx|=1; if(a1>v) idx|=2; if(a2>v) idx|=4; if(a3>v) idx|=8;
+          if(idx===0||idx===15) continue;
+          /* linear interpolated edge points */
+          const px=x*cell, py=y*cell;
+          const t01=(v-a0)/(a1-a0), t12=(v-a1)/(a2-a1), t32=(v-a3)/(a2-a3), t03=(v-a0)/(a3-a0);
+          const e0={x:px+cell*t01, y:py};
+          const e1={x:px+cell, y:py+cell*t12};
+          const e2={x:px+cell*t32, y:py+cell};
+          const e3={x:px, y:py+cell*t03};
+          const segs={
+            1:[e3,e0], 2:[e0,e1], 3:[e3,e1], 4:[e1,e2], 5:[e3,e0,e1,e2],
+            6:[e0,e2], 7:[e3,e2], 8:[e2,e3], 9:[e0,e2], 10:[e0,e1,e2,e3],
+            11:[e1,e2], 12:[e1,e3], 13:[e0,e1], 14:[e0,e3]
+          }[idx];
+          if(!segs) continue;
+          for(let i=0;i<segs.length;i+=2){
+            ctx.moveTo(segs[i].x, segs[i].y); ctx.lineTo(segs[i+1].x, segs[i+1].y);
+          }
+        }
+      }
+      ctx.stroke();
+    }
+  }
+});
+
+/* ── grain texture (precomputed for Aurora) ── */
+let grain=null;
+(function makeGrain(){
+  const c=document.createElement('canvas'); c.width=180; c.height=180;
+  const g=c.getContext('2d'), id=g.createImageData(180,180);
+  for(let i=0;i<id.data.length;i+=4){
+    const v=Math.random()*30; id.data[i]=id.data[i+1]=id.data[i+2]=v; id.data[i+3]=14;
+  }
+  g.putImageData(id,0,0); grain=c;
+})();
+
+/* ============================================================
+   ENGINE
+============================================================ */
+let active=null, params={}, seed=42, raf=0;
+const mouse={x:-9999,y:-9999};
+window.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY},{passive:true});
+
+function loop(t){
+  if(active) active.frame(ctx,W,H,t,params);
+  raf=requestAnimationFrame(loop);
+}
+
+function setVariation(idx, keepSeed=false){
+  if(raf) cancelAnimationFrame(raf);
+  active=VARS[idx];
+  params={...active.defaults};
+  document.getElementById('topbar-name').textContent=active.name;
+  document.getElementById('vcounter').textContent=`${idx+1} / ${VARS.length}`;
+  document.getElementById('vibekey').textContent=active.key;
+  document.getElementById('vibe').innerHTML=active.vibe;
+  buildVlist(idx);
+  buildParams();
+  active.init(ctx,W,H,seed,params);
+  raf=requestAnimationFrame(loop);
+  currentIdx=idx;
+}
+
+let currentIdx=0;
+function buildVlist(activeIdx){
+  const el=document.getElementById('vlist'); el.innerHTML='';
+  VARS.forEach((v,i)=>{
+    const b=document.createElement('button');
+    b.className='vbtn'+(i===activeIdx?' active':'');
+    b.innerHTML=`<span class="vnum">0${i+1}</span><span class="vname">${v.name}</span><span class="vmark">${v.mark}</span>`;
+    b.onclick=()=>setVariation(i);
+    el.appendChild(b);
+  });
+}
+
+function buildParams(){
+  const el=document.getElementById('params'); el.innerHTML='';
+  document.getElementById('pcount').textContent=active.params.length;
+  if(!active.params.length){
+    el.innerHTML='<div class="row empty">No parameters · pure ambient</div>';
+    return;
+  }
+  active.params.forEach(p=>{
+    const row=document.createElement('div'); row.className='row';
+    const fmt=v=>p.step<1?(+v).toFixed(p.step<0.01?4:p.step<0.1?3:2):(''+(v|0));
+    row.innerHTML=`
+      <div class="lbl"><span>${p.label}</span><span class="val" id="v_${p.key}">${fmt(params[p.key])}</span></div>
+      <input type="range" min="${p.min}" max="${p.max}" step="${p.step}" value="${params[p.key]}" data-k="${p.key}">
+    `;
+    const input=row.querySelector('input');
+    input.oninput=e=>{
+      const v=p.step<1?parseFloat(e.target.value):parseInt(e.target.value);
+      params[p.key]=v;
+      row.querySelector('.val').textContent=fmt(v);
+      active.init(ctx,W,H,seed,params);
+    };
+    el.appendChild(row);
+  });
+}
+
+/* ── seed controls ── */
+const seedInput=document.getElementById('seedInput');
+function setSeed(n){
+  seed=Math.max(0,Math.min(999999,n|0));
+  seedInput.value=seed;
+  active.init(ctx,W,H,seed,params);
+}
+seedInput.onchange=e=>setSeed(parseInt(e.target.value)||0);
+document.getElementById('seedPrev').onclick=()=>setSeed(seed-1);
+document.getElementById('seedNext').onclick=()=>setSeed(seed+1);
+document.getElementById('seedRand').onclick=()=>setSeed(Math.floor(Math.random()*100000));
+document.getElementById('seedReset').onclick=()=>setSeed(42);
+
+/* ── overlay + lab toggles ── */
+const heroEl=document.getElementById('hero'), labEl=document.getElementById('lab');
+let heroOn=true, labOn=true;
+document.getElementById('toggleHero').onclick=()=>{heroOn=!heroOn; heroEl.classList.toggle('off',!heroOn)};
+document.getElementById('toggleLab').onclick=()=>{labOn=false; labEl.classList.add('collapsed')};
+document.getElementById('lab-toggle').onclick=()=>{labOn=true; labEl.classList.remove('collapsed')};
+
+/* ── snippet copy ── */
+const SNIPPET_TEMPLATES = {
+  mesh: `<canvas id="bg-fx"></canvas>
+<style>#bg-fx{position:fixed;inset:0;z-index:0;pointer-events:none}</style>
+<script>
+/* Mesh background · Particle Mesh */
+(function(){
+  const c=document.getElementById('bg-fx'),x=c.getContext('2d');
+  let W,H,p; const m={x:-9999,y:-9999};
+  const N=__count, L=__link, S=__speed;
+  function R(){W=c.width=innerWidth;H=c.height=innerHeight}
+  function I(){p=Array.from({length:N},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*S*2,vy:(Math.random()-.5)*S*2}))}
+  function F(){
+    x.clearRect(0,0,W,H);
+    for(const q of p){q.x+=q.vx;q.y+=q.vy;if(q.x<0||q.x>W)q.vx*=-1;if(q.y<0||q.y>H)q.vy*=-1;
+      const dx=q.x-m.x,dy=q.y-m.y,d=Math.hypot(dx,dy);if(d<110){q.vx+=dx/d*.025;q.vy+=dy/d*.025}
+      const sp=Math.hypot(q.vx,q.vy);if(sp>1.2){q.vx*=.97;q.vy*=.97}}
+    for(let i=0;i<p.length;i++){for(let j=i+1;j<p.length;j++){const dx=p[i].x-p[j].x,dy=p[i].y-p[j].y,d=Math.hypot(dx,dy);
+      if(d<L){x.strokeStyle='rgba(0,212,232,'+(1-d/L)*.32+')';x.lineWidth=.7;x.beginPath();x.moveTo(p[i].x,p[i].y);x.lineTo(p[j].x,p[j].y);x.stroke()}}
+      x.fillStyle='rgba(0,212,232,.55)';x.beginPath();x.arc(p[i].x,p[i].y,1.8,0,Math.PI*2);x.fill()}
+    requestAnimationFrame(F);
+  }
+  R();I();F();
+  addEventListener('resize',()=>{R();I()});
+  addEventListener('mousemove',e=>{m.x=e.clientX;m.y=e.clientY},{passive:true});
+})();
+<\/script>`,
+  grid: `<canvas id="bg-fx"></canvas>
+<style>#bg-fx{position:fixed;inset:0;z-index:0;pointer-events:none;background:#070b12}</style>
+<script>
+/* Mesh background · Cursor Grid */
+(function(){
+  const c=document.getElementById('bg-fx'),x=c.getContext('2d');
+  const SZ=__size, HOLD=__hold, FADE=__fade, GLOW=__glow;
+  const m={x:-9999,y:-9999}; let W,H,cells;
+  function R(){W=c.width=innerWidth;H=c.height=innerHeight;I()}
+  function I(){cells=[];for(let i=0;i<W;i+=SZ)for(let j=0;j<H;j+=SZ)cells.push({x:i,y:j,a:0,f:false,t:0});x.fillStyle='#070b12';x.fillRect(0,0,W,H)}
+  function F(){
+    x.fillStyle='#070b12';x.fillRect(0,0,W,H);
+    const n=performance.now();
+    if(m.x>=0&&m.y>=0&&m.x<W&&m.y<H){
+      const ix=Math.floor(m.x/SZ),iy=Math.floor(m.y/SZ),id=ix*Math.ceil(H/SZ)+iy,c2=cells[id];
+      if(c2&&c2.a===0){c2.a=1;c2.t=n;c2.f=false}
+    }
+    for(const k of cells){
+      if(k.a>0&&!k.f&&n-k.t>HOLD)k.f=true;
+      if(k.f){k.a-=FADE;if(k.a<=0){k.a=0;k.f=false;continue}}
+      if(k.a>0){
+        const cx=k.x+SZ/2,cy=k.y+SZ/2,g=x.createRadialGradient(cx,cy,5,cx,cy,SZ);
+        g.addColorStop(0,'rgba(0,212,232,'+Math.min(1,k.a*GLOW)+')');g.addColorStop(1,'rgba(0,212,232,0)');
+        x.strokeStyle=g;x.lineWidth=1.3;x.strokeRect(k.x+.5,k.y+.5,SZ-1,SZ-1);
+      }
+    }
+    requestAnimationFrame(F);
+  }
+  R();F();
+  addEventListener('resize',R);
+  addEventListener('mousemove',e=>{m.x=e.clientX;m.y=e.clientY},{passive:true});
+})();
+<\/script>`,
+  /* For other variations, the snippet is a marker note + a pointer to the lab */
+  _other: `<!-- Mesh background · __NAME__ -->
+<!-- Source: bg-lab/index.html · variation key: "__KEY__" · seed: __SEED__ -->
+<!-- Settings: __SETTINGS__ -->
+<!-- To deploy, copy the corresponding VARS["__KEY__"] block from bg-lab/index.html
+     into your page (along with the makeNoise/mulberry32 helpers) and call:
+       active = VARS.find(v => v.key === "__KEY__");
+       params = __PARAMS_JSON__;
+       active.init(ctx, W, H, __SEED__, params);
+       requestAnimationFrame(loop); -->`
+};
+
+document.getElementById('copySnippet').onclick=()=>{
+  let snippet;
+  if(active.key==='mesh'){
+    snippet = SNIPPET_TEMPLATES.mesh
+      .replace('__count', params.count)
+      .replace('__link', params.link)
+      .replace('__speed', params.speed);
+  } else if(active.key==='grid'){
+    snippet = SNIPPET_TEMPLATES.grid
+      .replace('__size', params.size)
+      .replace('__hold', params.hold)
+      .replace('__fade', params.fade)
+      .replace('__glow', params.glow);
+  } else {
+    snippet = SNIPPET_TEMPLATES._other
+      .replace(/__NAME__/g, active.name)
+      .replace(/__KEY__/g, active.key)
+      .replace(/__SEED__/g, seed)
+      .replace(/__SETTINGS__/g, Object.entries(params).map(([k,v])=>`${k}=${v}`).join(', '))
+      .replace(/__PARAMS_JSON__/g, JSON.stringify(params));
+  }
+  navigator.clipboard.writeText(snippet).then(showToast);
+};
+function showToast(){const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
+
+/* ── keyboard ── */
+addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT')return;
+  if(e.key==='ArrowLeft'){setSeed(seed-1)}
+  else if(e.key==='ArrowRight'){setSeed(seed+1)}
+  else if(e.key==='ArrowUp'){const i=(currentIdx-1+VARS.length)%VARS.length; setVariation(i)}
+  else if(e.key==='ArrowDown'){const i=(currentIdx+1)%VARS.length; setVariation(i)}
+  else if(e.key==='h'||e.key==='H'){document.getElementById('toggleHero').click()}
+  else if(e.key==='l'||e.key==='L'){if(labOn){document.getElementById('toggleLab').click()}else{document.getElementById('lab-toggle').click()}}
+  else if(e.key==='c'||e.key==='C'){document.getElementById('copySnippet').click()}
+});
+
+/* ── boot ── */
+resize();
+setVariation(1);
+</script>
+</body>
+</html>

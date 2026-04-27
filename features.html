@@ -613,7 +613,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
             02 · IDE
           </div>
-          <div class="nm">Browser IDE.</div>
+          <div class="nm">Desktop IDE.</div>
           <div class="meta" data-meta="ide">cursor → invoices.ts:16</div>
           <svg class="spark" viewBox="0 0 100 14" preserveAspectRatio="none"><polyline data-spark="ide" points=""/></svg>
         </div>
@@ -720,8 +720,8 @@
       <div class="fs-content">
         <div class="fs-kicker">Surface 02</div>
         <h2 class="fs-title">Mesh IDE.</h2>
-        <p class="fs-copy">A VS Code-style workspace intelligence layer for your browser. Full file tree, structural search, and multi-file editing with live context compression. <strong>Perfect for complex refactors</strong>.</p>
-        <button class="secondary-btn" onclick="openModal()">Request early access</button>
+        <p class="fs-copy">A desktop-first VS Code-style workspace intelligence layer for deep sessions. Full file tree, structural search, and multi-file editing with live context compression. <strong>Built for complex refactors</strong>.</p>
+        <a class="secondary-btn" href="https://github.com/mesh-ide/mesh-ide/releases" target="_blank" rel="noreferrer">Download IDE</a>
       </div>
     </div>
     <!-- MCP -->
@@ -729,8 +729,8 @@
       <div class="fs-content">
         <div class="fs-kicker">Surface 03</div>
         <h2 class="fs-title">MCP Server.</h2>
-        <p class="fs-copy">Bring Mesh to Claude Desktop or Cursor. Any agent supporting <strong>Model Context Protocol</strong> can now query your codebase through Mesh's capsule engine. Use Mesh as a local data source for any agent stack.</p>
-        <button class="secondary-btn" onclick="navigator.clipboard.writeText('mesh connect --mcp'); alert('Copied')">Copy config command</button>
+        <p class="fs-copy">Bring Mesh to Claude Desktop or Cursor. Any agent supporting <strong>Model Context Protocol</strong> can query your codebase through Mesh's capsule engine and access the full toolset, not just a small fixed subset.</p>
+        <button class="secondary-btn" onclick="navigator.clipboard.writeText('npm i -g @edgarelmo/mesh-mcp && mesh mcp serve --port 7400'); alert('Copied')">Copy install + run</button>
       </div>
       <div class="fs-visual">
         <div class="mcp-mock" id="mcpMock" aria-hidden="true">

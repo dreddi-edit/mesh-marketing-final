@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 620" font-family="-apple-system, system-ui, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#0a1418"/>
+      <stop offset="1" stop-color="#040a0d"/>
+    </linearGradient>
+  </defs>
+  <rect width="1100" height="620" fill="url(#bg)"/>
+  <text x="550" y="42" text-anchor="middle" fill="#fff" font-size="20" font-weight="700" font-style="italic">Moonshot Workflows</text>
+  <text x="550" y="66" text-anchor="middle" fill="#7ceeff" font-size="11" letter-spacing="3">PERSISTENT EVIDENCE LEDGERS · NOT JUST CHAT REPLIES</text>
+
+  <g font-family="-apple-system, system-ui, sans-serif">
+    <g transform="translate(80, 110)">
+      <rect width="300" height="140" rx="10" fill="#0d1d23" stroke="rgba(255,255,255,0.08)"/>
+      <rect x="0" y="0" width="4" height="140" rx="2" fill="#e84a4a"/>
+      <text x="20" y="32" fill="#7ceeff" font-size="10" letter-spacing="2">SECURITY</text>
+      <text x="20" y="60" fill="#fff" font-size="18" font-weight="800" font-style="italic">Self-Defending Code</text>
+      <text x="20" y="84" fill="#a0b8c0" font-size="11">Probes for ReDoS, SQLi, XSS,</text>
+      <text x="20" y="100" fill="#a0b8c0" font-size="11">path traversal. Auto-patches</text>
+      <text x="20" y="116" fill="#a0b8c0" font-size="11">deterministic classes in</text>
+      <text x="20" y="132" fill="#a0b8c0" font-size="11">isolated timelines.</text>
+    </g>
+    <g transform="translate(400, 110)">
+      <rect width="300" height="140" rx="10" fill="#0d1d23" stroke="rgba(255,255,255,0.08)"/>
+      <rect x="0" y="0" width="4" height="140" rx="2" fill="#e8a04a"/>
+      <text x="20" y="32" fill="#7ceeff" font-size="10" letter-spacing="2">PREDICTIVE</text>
+      <text x="20" y="60" fill="#fff" font-size="18" font-weight="800" font-style="italic">Precrime for Software</text>
+      <text x="20" y="84" fill="#a0b8c0" font-size="11">14-day risk forecasts from</text>
+      <text x="20" y="100" fill="#a0b8c0" font-size="11">change boundaries, telemetry,</text>
+      <text x="20" y="116" fill="#a0b8c0" font-size="11">outcomes. Gates risky merges</text>
+      <text x="20" y="132" fill="#a0b8c0" font-size="11">before promotion.</text>
+    </g>
+    <g transform="translate(720, 110)">
+      <rect width="300" height="140" rx="10" fill="#0d1d23" stroke="rgba(255,255,255,0.08)"/>
+      <rect x="0" y="0" width="4" height="140" rx="2" fill="#7ce0c4"/>
+      <text x="20" y="32" fill="#7ceeff" font-size="10" letter-spacing="2">CONTRACTS</text>
+      <text x="20" y="60" fill="#fff" font-size="18" font-weight="800" font-style="italic">Bidirectional Spec-Code</text>
+      <text x="20" y="84" fill="#a0b8c0" font-size="11">Synthesizes contracts from</text>
+      <text x="20" y="100" fill="#a0b8c0" font-size="11">code, accepts human specs,</text>
+      <text x="20" y="116" fill="#a0b8c0" font-size="11">detects drift, locks important</text>
+      <text x="20" y="132" fill="#a0b8c0" font-size="11">behavior.</text>
+    </g>
+
+    <g transform="translate(80, 280)">
+      <rect width="300" height="140" rx="10" fill="#0d1d23" stroke="rgba(255,255,255,0.08)"/>
+      <rect x="0" y="0" width="4" height="140" rx="2" fill="#a979d1"/>
+      <text x="20" y="32" fill="#7ceeff" font-size="10" letter-spacing="2">MERGE</text>
+      <text x="20" y="60" fill="#fff" font-size="18" font-weight="800" font-style="italic">Semantic Git</text>
+      <text x="20" y="84" fill="#a0b8c0" font-size="11">Analyzes merge conflicts at</text>
+      <text x="20" y="100" fill="#a0b8c0" font-size="11">the symbol level. Plans safe</text>
+      <text x="20" y="116" fill="#a0b8c0" font-size="11">resolutions, verifies in</text>
+      <text x="20" y="132" fill="#a0b8c0" font-size="11">timelines, then promotes.</text>
+    </g>
+    <g transform="translate(400, 280)">
+      <rect width="300" height="140" rx="10" fill="#0d1d23" stroke="rgba(255,255,255,0.08)"/>
+      <rect x="0" y="0" width="4" height="140" rx="2" fill="#5fbedd"/>
+      <text x="20" y="32" fill="#7ceeff" font-size="10" letter-spacing="2">DRIFT</text>
+      <text x="20" y="60" fill="#fff" font-size="18" font-weight="800" font-style="italic">Semantic Sheriff</text>
+      <text x="20" y="84" fill="#a0b8c0" font-size="11">Fingerprints module semantics</text>
+      <text x="20" y="100" fill="#a0b8c0" font-size="11">and reports when refactors</text>
+      <text x="20" y="116" fill="#a0b8c0" font-size="11">silently change meaning —</text>
+      <text x="20" y="132" fill="#a0b8c0" font-size="11">even when syntax still passes.</text>
+    </g>
+    <g transform="translate(720, 280)">
+      <rect width="300" height="140" rx="10" fill="#0d1d23" stroke="rgba(255,255,255,0.08)"/>
+      <rect x="0" y="0" width="4" height="140" rx="2" fill="#e8c44a"/>
+      <text x="20" y="32" fill="#7ceeff" font-size="10" letter-spacing="2">DECISIONS</text>
+      <text x="20" y="60" fill="#fff" font-size="18" font-weight="800" font-style="italic">3-Panel Tribunal</text>
+      <text x="20" y="84" fill="#a0b8c0" font-size="11">Correctness, performance, and</text>
+      <text x="20" y="100" fill="#a0b8c0" font-size="11">resilience panelists debate</text>
+      <text x="20" y="116" fill="#a0b8c0" font-size="11">hard engineering decisions.</text>
+      <text x="20" y="132" fill="#a0b8c0" font-size="11">Writes a decision artifact.</text>
+    </g>
+
+    <g transform="translate(80, 450)">
+      <rect width="300" height="140" rx="10" fill="#0d1d23" stroke="rgba(255,255,255,0.08)"/>
+      <rect x="0" y="0" width="4" height="140" rx="2" fill="#7ce0c4"/>
+      <text x="20" y="32" fill="#7ceeff" font-size="10" letter-spacing="2">EXPLORATION</text>
+      <text x="20" y="60" fill="#fff" font-size="18" font-weight="800" font-style="italic">Reality Forks</text>
+      <text x="20" y="84" fill="#a0b8c0" font-size="11">Materializes 2-4 alternative</text>
+      <text x="20" y="100" fill="#a0b8c0" font-size="11">implementations of the same</text>
+      <text x="20" y="116" fill="#a0b8c0" font-size="11">intent. Verifies and ranks</text>
+      <text x="20" y="132" fill="#a0b8c0" font-size="11">them in parallel timelines.</text>
+    </g>
+    <g transform="translate(400, 450)">
+      <rect width="300" height="140" rx="10" fill="#0d1d23" stroke="rgba(255,255,255,0.08)"/>
+      <rect x="0" y="0" width="4" height="140" rx="2" fill="#a979d1"/>
+      <text x="20" y="32" fill="#7ceeff" font-size="10" letter-spacing="2">STYLE</text>
+      <text x="20" y="60" fill="#fff" font-size="18" font-weight="800" font-style="italic">Ghost Engineer</text>
+      <text x="20" y="84" fill="#a0b8c0" font-size="11">Learns your repo's engineering</text>
+      <text x="20" y="100" fill="#a0b8c0" font-size="11">style from history. Predicts</text>
+      <text x="20" y="116" fill="#a0b8c0" font-size="11">implementation paths and</text>
+      <text x="20" y="132" fill="#a0b8c0" font-size="11">drafts patches that fit.</text>
+    </g>
+    <g transform="translate(720, 450)">
+      <rect width="300" height="140" rx="10" fill="#0d1d23" stroke="rgba(255,255,255,0.08)"/>
+      <rect x="0" y="0" width="4" height="140" rx="2" fill="#e8a04a"/>
+      <text x="20" y="32" fill="#7ceeff" font-size="10" letter-spacing="2">DEBUG</text>
+      <text x="20" y="60" fill="#fff" font-size="18" font-weight="800" font-style="italic">Causal Autopsy</text>
+      <text x="20" y="84" fill="#a0b8c0" font-size="11">Combines runtime traces, V8</text>
+      <text x="20" y="100" fill="#a0b8c0" font-size="11">stackframes, proof bundles,</text>
+      <text x="20" y="116" fill="#a0b8c0" font-size="11">and the causal graph into one</text>
+      <text x="20" y="132" fill="#a0b8c0" font-size="11">root-cause artifact.</text>
+    </g>
+  </g>
+</svg>

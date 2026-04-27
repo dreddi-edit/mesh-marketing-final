@@ -350,7 +350,7 @@
   <main class="docs-main">
     <div class="docs-eyebrow">Documentation · v0.9 (preview)</div>
     <h1 class="docs-title">Mesh in <em>five minutes.</em></h1>
-    <p class="docs-lede">Mesh is a deterministic <strong>code-context engine</strong> that compresses your workspace 3.9× while keeping 100% recall. Same engine, four surfaces — terminal CLI, browser IDE, MCP server, and the raw Gateway API. This is everything you need to ship.</p>
+    <p class="docs-lede">Mesh is a deterministic <strong>code-context engine</strong> that compresses your workspace 3.9× while keeping 100% recall. Same engine, four surfaces — terminal CLI, desktop IDE, MCP server, and the raw Gateway API. This is everything you need to ship.</p>
 
     <!-- Surface grid -->
     <h2 class="docs-h2" id="welcome">Pick a <em>surface.</em></h2>
@@ -364,7 +364,7 @@
       <a class="surface-card" href="#ide-launch">
         <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div>
         <h3>IDE</h3>
-        <p>Browser workspace with file tree, structural search, and inline chat.</p>
+        <p>Desktop-first workspace with file tree, structural search, and inline chat.</p>
         <span class="arrow">Read · IDE ↗</span>
       </a>
       <a class="surface-card" href="#mcp-install">
@@ -383,7 +383,7 @@
 
     <!-- Install -->
     <h2 class="docs-h2" id="install">Install.</h2>
-    <p>Mesh is shipped as a single npm binary. macOS, Linux, and WSL2 are first-class. Node 18+ required.</p>
+    <p>Mesh is shipped as a single npm binary. macOS, Linux, and WSL2 are first-class. Node 20+ required.</p>
 
     <div class="code">
       <div class="code-head"><span class="lang">bash</span><span>install · 1 line</span><button class="copy-btn" data-copy="npm i -g @edgarelmo/mesh-agent-cli">copy</button></div>
@@ -398,6 +398,7 @@ $ <span class="c">yarn global add @edgarelmo/mesh-agent-cli</span>
 $ <span class="c">mesh --version</span>
 <span class="g">mesh 0.9.0</span></pre>
     </div>
+    <p>Global install is the recommended default. For one-off runs without installing, use <code>npx -y @edgarelmo/mesh-agent-cli</code>.</p>
 
     <div class="note">
       <div class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
@@ -527,10 +528,12 @@ $ <span class="c">mesh --voice</span>            <span class="d"># launch in voi
 
     <!-- ─────────── IDE ─────────── -->
     <h2 class="docs-h2" id="ide-launch">IDE · <em>launch</em>.</h2>
-    <p>The Mesh IDE is a browser workspace at <a href="https://ide.try-mesh.com" target="_blank" rel="noreferrer">ide.try-mesh.com</a>. VS Code-style file tree, structural search, and inline chat — all powered by the same capsule engine.</p>
+    <p>The Mesh IDE is a desktop-first workspace with a VS Code-style file tree, structural search, and inline chat — all powered by the same capsule engine. Web access can be used where available.</p>
+    <p>Download the desktop build from <a href="https://github.com/mesh-ide/mesh-ide/releases" target="_blank" rel="noreferrer">mesh-ide releases</a>. If you prefer building from source, see the stack documentation guide.</p>
 
     <ol>
-      <li>Open <a href="https://ide.try-mesh.com" target="_blank" rel="noreferrer">ide.try-mesh.com</a> and sign in with GitHub.</li>
+      <li>Download and install Mesh IDE from the releases page.</li>
+      <li>Launch Mesh IDE and sign in with GitHub.</li>
       <li>Pick a repository (read-only or read-write).</li>
       <li>Press <kbd>⌘K</kbd> → <code>Index workspace</code>.</li>
       <li>Open the chat panel (<kbd>⌘L</kbd>) and start asking.</li>
@@ -569,12 +572,13 @@ mesh mcp serve --port 7400">copy</button></div>
 $ <span class="c">mesh mcp serve --port 7400</span>
 
 <span class="d">▸ binding 127.0.0.1:7400</span>
-<span class="g">✓ MCP server ready · 4 tools registered</span>
+<span class="g">✓ MCP server ready · 112+ tools registered</span>
   <span class="d">• mesh.search_code</span>
   <span class="d">• mesh.read_span</span>
   <span class="d">• mesh.find_refs</span>
   <span class="d">• mesh.recover</span></pre>
     </div>
+    <p>Global install is recommended for daily usage. For ephemeral runs, use <code>npx -y @edgarelmo/mesh-mcp</code>.</p>
 
     <h3 class="docs-h3" id="mcp-claude">Add to Claude Desktop / Cursor</h3>
     <p>Drop this snippet into your client's MCP config:</p>
@@ -595,7 +599,8 @@ $ <span class="c">mesh mcp serve --port 7400</span>
 }</pre>
     </div>
 
-    <h3 class="docs-h3" id="mcp-tools">Tool reference</h3>
+    <h3 class="docs-h3" id="mcp-tools">Common tools (subset)</h3>
+    <p>Mesh MCP exposes a broad tool surface. The table below lists only the most common entry points.</p>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Tool</th><th>Args</th><th>Returns</th></tr></thead>
@@ -750,7 +755,7 @@ enabled = <span class="k">false</span>          <span class="d"># opt-in, off by
     <ul>
       <li><strong>0.9.0</strong> — Multi-hop reasoning benchmark added. <code>mesh recover</code> now byte-exact across all providers.</li>
       <li><strong>0.8.4</strong> — MCP server ships standalone (<code>@edgarelmo/mesh-mcp</code>). <code>find_refs</code> tool added.</li>
-      <li><strong>0.8.0</strong> — Browser IDE preview. Capsule sharing via <code>~/.mesh/</code>.</li>
+      <li><strong>0.8.0</strong> — Desktop IDE preview. Capsule sharing via <code>~/.mesh/</code>.</li>
       <li><strong>0.7.0</strong> — Voice mode (Whisper turbo, local-only).</li>
       <li><strong>0.6.0</strong> — Provider plugin system. Ollama support.</li>
     </ul>

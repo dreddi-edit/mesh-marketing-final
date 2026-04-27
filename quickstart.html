@@ -248,7 +248,7 @@
           <div><span class="l">S</span><span class="l">t</span><span class="l">a</span><span class="l">r</span><span class="l">t</span>&nbsp;<span class="l">M</span><span class="l">e</span><span class="l">s</span><span class="l">h</span></div>
           <div class="cyan-line"><span class="l">i</span><span class="l">n</span>&nbsp;<span class="l">3</span><span class="l">0</span>&nbsp;<span class="l">s</span><span class="l">e</span><span class="l">c</span><span class="l">o</span><span class="l">n</span><span class="l">d</span><span class="l">s</span><span class="l">.</span></div>
         </h1>
-        <p class="hero-copy">Pick a surface — terminal, browser IDE, MCP for Claude/Cursor, or the raw Gateway API. Same capsule engine underneath, three commands to ship.</p>
+        <p class="hero-copy">Pick a surface — terminal CLI first, desktop IDE, MCP for Claude/Cursor, or the raw Gateway API. Same capsule engine underneath, three commands to ship.</p>
         <div class="hero-actions">
           <a class="primary-btn" href="#install">Install now</a>
           <a class="secondary-btn" href="/docs">Read docs</a>
@@ -307,11 +307,11 @@
 
       <!-- IDE -->
       <aside class="launch-console surface-pane" data-pane="ide">
-        <div class="console-top"><span>mesh/ide · browser workspace</span><span class="console-live">browser</span></div>
+        <div class="console-top"><span>mesh/ide · desktop workbench</span><span class="console-live">desktop</span></div>
         <div class="console-grid">
           <div class="command-stack">
-            <div class="command-card"><div class="command-num">1</div><div class="command-title">Open the IDE</div><button class="copy-line" onclick="window.open('https://ide.try-mesh.com','_blank')"><span class="t-cyan">↗</span><span>ide.try-mesh.com</span></button></div>
-            <div class="command-card"><div class="command-num">2</div><div class="command-title">Sign in with GitHub</div><button class="copy-line" onclick="copyCmd(this,'gh auth login --web')"><span class="t-cyan">$</span><span>gh auth login --web</span></button></div>
+            <div class="command-card"><div class="command-num">1</div><div class="command-title">Download Mesh IDE</div><button class="copy-line" onclick="window.open('https://github.com/mesh-ide/mesh-ide/releases','_blank')"><span class="t-cyan">↗</span><span>github.com/mesh-ide/mesh-ide/releases</span></button></div>
+            <div class="command-card"><div class="command-num">2</div><div class="command-title">Launch desktop IDE</div><button class="copy-line" onclick="copyCmd(this,'open -a \"Mesh IDE\"')"><span class="t-cyan">$</span><span>open -a "Mesh IDE"</span></button></div>
             <div class="command-card"><div class="command-num">3</div><div class="command-title">Pick a repo &amp; index</div><button class="copy-line" onclick="copyCmd(this,'⌘K  →  Index workspace')"><span class="t-cyan">⌘</span><span>⌘K → Index workspace</span></button></div>
           </div>
           <div class="terminal-wrap">
@@ -326,9 +326,9 @@
         <div class="console-top"><span>mesh/mcp · model-context-protocol</span><span class="console-live">localhost:7400</span></div>
         <div class="console-grid">
           <div class="command-stack">
-            <div class="command-card"><div class="command-num">1</div><div class="command-title">Install the MCP server</div><button class="copy-line" onclick="copyCmd(this,'npm i -g @edgarelmo/mesh-mcp')"><span class="t-cyan">$</span><span>npm i -g @edgarelmo/mesh-mcp</span></button></div>
+            <div class="command-card"><div class="command-num">1</div><div class="command-title">Install MCP globally (recommended)</div><button class="copy-line" onclick="copyCmd(this,'npm i -g @edgarelmo/mesh-mcp')"><span class="t-cyan">$</span><span>npm i -g @edgarelmo/mesh-mcp</span></button></div>
             <div class="command-card"><div class="command-num">2</div><div class="command-title">Start the server</div><button class="copy-line" onclick="copyCmd(this,'mesh mcp serve --port 7400')"><span class="t-cyan">$</span><span>mesh mcp serve --port 7400</span></button></div>
-            <div class="command-card"><div class="command-num">3</div><div class="command-title">Add to Claude / Cursor</div><button class="copy-line" onclick="copyCmd(this,'{\n  \\\"mcpServers\\\": {\n    \\\"mesh\\\": { \\\"url\\\": \\\"http://localhost:7400\\\" }\n  }\n}')"><span class="t-cyan">{}</span><span>copy mcp config →</span></button></div>
+            <div class="command-card"><div class="command-num">3</div><div class="command-title">No global install? use npx</div><button class="copy-line" onclick="copyCmd(this,'npx -y @edgarelmo/mesh-mcp')"><span class="t-cyan">$</span><span>npx -y @edgarelmo/mesh-mcp</span></button></div>
           </div>
           <div class="terminal-wrap">
             <div class="terminal-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--dim)">mcp.json</span></div>
@@ -553,9 +553,9 @@ function copyCmd(btn,cmd){
 
 /* ── tabs + per-tab terminal scripts ── */
 const TERM_SCRIPTS={
-  cli:[['cyan','$ mesh'],['dim','▸ scanning workspace…'],['green','✓ 247 files · 12 languages indexed'],['dim','▸ building capsule (3.9× compression)…'],['green','✓ capsule cap_8kX9z2a ready'],['white','mesh › why are voided invoices being charged?'],['dim','▸ searching: invoices, charge, void…'],['cyan','▸ pulled: invoices.ts:14, webhooks.ts:88'],['green','✓ proposed patch · src/billing/invoices.ts'],['dim','press ↵ to apply, e to edit, q to skip']],
-  ide:[['dim','▸ opening ide.try-mesh.com…'],['green','✓ signed in as @you'],['dim','▸ acme/payments-service · main'],['cyan','▸ ⌘K  →  Index workspace'],['green','✓ 3,174 files · capsule ready in 1.4s'],['white','chat › refactor stripe charge flow'],['cyan','▸ Mesh opened: invoices.ts, webhooks.ts'],['green','✓ inline diff in editor (12 +, 4 -)']],
-  mcp:[['cyan','$ mesh mcp serve --port 7400'],['dim','▸ binding 127.0.0.1:7400'],['green','✓ MCP server ready · 4 tools registered'],['dim','  • mesh.search_code'],['dim','  • mesh.read_span'],['dim','  • mesh.find_refs'],['dim','  • mesh.recover'],['white','claude › "find every place we call stripe.charge"'],['cyan','▸ tool call: mesh.find_refs(symbol="stripe.charge")'],['green','✓ 6 references in 4 files · returned to model']],
+  cli:[['cyan','$ npm i -g @edgarelmo/mesh-agent-cli'],['green','✓ global install complete'],['cyan','$ mesh'],['dim','▸ scanning workspace…'],['green','✓ 247 files · 12 languages indexed'],['dim','▸ building capsule (3.9× compression)…'],['green','✓ capsule cap_8kX9z2a ready'],['white','mesh › why are voided invoices being charged?'],['dim','▸ searching: invoices, charge, void…'],['cyan','▸ pulled: invoices.ts:14, webhooks.ts:88'],['green','✓ proposed patch · src/billing/invoices.ts'],['dim','press ↵ to apply, e to edit, q to skip']],
+  ide:[['cyan','$ open -a "Mesh IDE"'],['green','✓ desktop workbench launched'],['green','✓ signed in as @you'],['dim','▸ acme/payments-service · main'],['cyan','▸ ⌘K  →  Index workspace'],['green','✓ 3,174 files · capsule ready in 1.4s'],['white','chat › refactor stripe charge flow'],['cyan','▸ Mesh opened: invoices.ts, webhooks.ts'],['green','✓ inline diff in editor (12 +, 4 -)']],
+  mcp:[['cyan','$ mesh mcp serve --port 7400'],['dim','▸ binding 127.0.0.1:7400'],['green','✓ MCP server ready · 112+ tools registered'],['dim','  • mesh.search_code'],['dim','  • mesh.read_span'],['dim','  • mesh.find_refs'],['dim','  • mesh.recover'],['dim','  • … plus runtime, workspace, and recovery tools'],['white','claude › "find every place we call stripe.charge"'],['cyan','▸ tool call: mesh.find_refs(symbol="stripe.charge")'],['green','✓ 6 references in 4 files · returned to model']],
   api:[['cyan','$ curl -X POST https://api.mesh.dev/v1/capsules \\'],['cyan','    -H "Authorization: Bearer $MESH_KEY" \\'],['cyan','    -d \'{"repo":"github.com/acme/payments"}\''],['dim','▸ event: capsule.indexing'],['dim','▸ files: 3,174 · tokens_in: 2.4M'],['green','✓ event: capsule.ready'],['white','{ "capsule_id": "cap_8kX9z2a",'],['white','  "ratio": 3.92, "recall": 1.00 }']]
 };
 

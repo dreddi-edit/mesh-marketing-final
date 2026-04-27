@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 460" font-family="-apple-system, system-ui, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#0a1418"/>
+      <stop offset="1" stop-color="#040a0d"/>
+    </linearGradient>
+    <marker id="okArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#3ba767"/>
+    </marker>
+  </defs>
+
+  <rect width="1100" height="460" fill="url(#bg)"/>
+  <text x="550" y="42" text-anchor="middle" fill="#fff" font-size="20" font-weight="700" font-style="italic">Timeline Verification: Risky Changes Without Risk</text>
+  <text x="550" y="66" text-anchor="middle" fill="#7ceeff" font-size="11" letter-spacing="3">PATCH IS NEVER PROMOTED UNTIL VERIFIED</text>
+
+  <g transform="translate(80, 130)">
+    <text x="0" y="-12" fill="#a0b8c0" font-size="11" font-weight="600">main workspace</text>
+    <line x1="0" y1="20" x2="940" y2="20" stroke="#475c64" stroke-width="2"/>
+    <circle cx="0" cy="20" r="8" fill="#475c64"/>
+    <circle cx="940" cy="20" r="8" fill="#475c64"/>
+    <text x="-2" y="48" fill="#a0b8c0" font-size="10">commit A</text>
+    <text x="918" y="48" fill="#a0b8c0" font-size="10">commit A</text>
+  </g>
+
+  <g transform="translate(80, 200)">
+    <text x="0" y="0" fill="#7ceeff" font-size="11" font-weight="600">timeline-α (isolated worktree)</text>
+    <line x1="0" y1="22" x2="700" y2="22" stroke="#00d4e8" stroke-width="2" stroke-dasharray="4 3" opacity="0.7"/>
+    <circle cx="0" cy="22" r="6" fill="#00d4e8"/>
+    
+    <g transform="translate(120, 22)">
+      <rect x="-32" y="-14" width="64" height="28" rx="4" fill="#0d1d23" stroke="#00d4e8" stroke-opacity="0.5"/>
+      <text x="0" y="4" text-anchor="middle" fill="#7ceeff" font-size="10">patch</text>
+    </g>
+
+    <g transform="translate(280, 22)">
+      <rect x="-40" y="-14" width="80" height="28" rx="4" fill="#0d1d23" stroke="#00d4e8" stroke-opacity="0.5"/>
+      <text x="0" y="4" text-anchor="middle" fill="#7ceeff" font-size="10">npm test</text>
+    </g>
+
+    <g transform="translate(440, 22)">
+      <rect x="-50" y="-14" width="100" height="28" rx="4" fill="#0d2a18" stroke="#3ba767"/>
+      <text x="0" y="4" text-anchor="middle" fill="#3ba767" font-size="10" font-weight="600">✓ 47/47 pass</text>
+    </g>
+
+    <g transform="translate(600, 22)">
+      <rect x="-44" y="-14" width="88" height="28" rx="4" fill="#001f26" stroke="#00d4e8"/>
+      <text x="0" y="4" text-anchor="middle" fill="#00d4e8" font-size="10" font-weight="600">PROMOTE →</text>
+    </g>
+
+    <line x1="688" y1="22" x2="794" y2="-8" stroke="#3ba767" stroke-width="2" marker-end="url(#okArrow)"/>
+  </g>
+
+  <g transform="translate(80, 290)">
+    <text x="0" y="0" fill="#a36868" font-size="11" font-weight="600">timeline-β (alternate hypothesis)</text>
+    <line x1="0" y1="22" x2="500" y2="22" stroke="#a36868" stroke-width="2" stroke-dasharray="4 3" opacity="0.6"/>
+    <circle cx="0" cy="22" r="6" fill="#a36868"/>
+    
+    <g transform="translate(120, 22)">
+      <rect x="-32" y="-14" width="64" height="28" rx="4" fill="#1a0e0e" stroke="#a36868" stroke-opacity="0.5"/>
+      <text x="0" y="4" text-anchor="middle" fill="#e6a9a9" font-size="10">patch</text>
+    </g>
+
+    <g transform="translate(280, 22)">
+      <rect x="-40" y="-14" width="80" height="28" rx="4" fill="#1a0e0e" stroke="#a36868" stroke-opacity="0.5"/>
+      <text x="0" y="4" text-anchor="middle" fill="#e6a9a9" font-size="10">npm test</text>
+    </g>
+
+    <g transform="translate(440, 22)">
+      <rect x="-50" y="-14" width="100" height="28" rx="4" fill="#2a0d0d" stroke="#e84a4a"/>
+      <text x="0" y="4" text-anchor="middle" fill="#e84a4a" font-size="10" font-weight="600">✗ 3 failed</text>
+    </g>
+
+    <text x="540" y="26" fill="#a36868" font-size="10" font-style="italic">→ discarded · main untouched</text>
+  </g>
+
+  <g transform="translate(80, 130)">
+    <line x1="600" y1="20" x2="940" y2="20" stroke="#00d4e8" stroke-width="2" marker-end="url(#okArrow)"/>
+  </g>
+  <g transform="translate(700, 110)">
+    <text x="0" y="0" fill="#3ba767" font-size="11" font-weight="600">verified merge</text>
+    <text x="0" y="14" fill="#a0b8c0" font-size="10">cap_9p2 · proof bundle</text>
+  </g>
+
+  <g transform="translate(80, 400)">
+    <rect x="0" y="0" width="940" height="40" rx="6" fill="#0d1d23" stroke="rgba(255,255,255,0.06)"/>
+    <text x="20" y="25" fill="#a0b8c0" font-size="11">
+      <tspan fill="#7ceeff" font-weight="600">Timeline workflow:</tspan>
+      <tspan dx="8">create →</tspan>
+      <tspan dx="6">patch (in isolation) →</tspan>
+      <tspan dx="6">verify (run command) →</tspan>
+      <tspan dx="6">compare diffs →</tspan>
+      <tspan dx="6" fill="#3ba767">promote ✓</tspan>
+      <tspan dx="6" fill="#475c64">|</tspan>
+      <tspan dx="6" fill="#e6a9a9">discard ✗</tspan>
+    </text>
+  </g>
+</svg>
