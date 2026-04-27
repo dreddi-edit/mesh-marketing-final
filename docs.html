@@ -38,7 +38,7 @@
     /* ── DOCS LAYOUT ── */
     .docs-layout {
       display: grid;
-      grid-template-columns: 264px minmax(0, 1fr) 220px;
+      grid-template-columns: 264px minmax(0, 1fr);
       gap: 56px;
       width: min(1280px, calc(100% - 48px));
       margin: 0 auto;
@@ -207,34 +207,48 @@
     .surface-card p { color: var(--muted); font-size: 14px; line-height: 1.55; margin: 0; flex: 1; }
     .surface-card .arrow { display: inline-flex; align-items: center; gap: 6px; color: var(--cyan); font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
 
-    /* Right TOC */
-    .docs-toc {
-      position: sticky; top: 88px;
-      align-self: start;
-      max-height: calc(100vh - 120px);
-      overflow-y: auto;
-      padding-top: 24px;
-      font-size: 13px;
+    /* command explorer */
+    .cmd-explorer { margin: 18px 0 26px; display: grid; gap: 10px; }
+    .cmd-accordion {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: oklch(0.058 0.034 200 / 0.7);
+      overflow: hidden;
     }
-    .docs-toc::-webkit-scrollbar { width: 0; }
-    .docs-toc h6 {
-      font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
-      text-transform: uppercase; color: var(--cyan); margin-bottom: 12px;
+    .cmd-accordion summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 13px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--ink);
+      font-weight: 600;
     }
-    .docs-toc a {
-      display: block; padding: 5px 10px;
-      color: oklch(1 0 0 / 0.42);
-      border-left: 2px solid transparent;
-      transition: color .15s, border-color .15s;
-      line-height: 1.4;
+    .cmd-accordion summary::-webkit-details-marker { display: none; }
+    .cmd-accordion summary .meta {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--cyan);
+      letter-spacing: 0.04em;
     }
-    .docs-toc a.h3 { padding-left: 22px; font-size: 12.5px; }
-    .docs-toc a:hover { color: var(--ink); }
-    .docs-toc a.active { color: var(--cyan); border-left-color: var(--cyan); }
+    .cmd-accordion .cmd-body {
+      border-top: 1px solid var(--line);
+      padding: 12px 14px 14px;
+      font-size: 14px;
+      color: oklch(1 0 0 / 0.76);
+      line-height: 1.6;
+      display: grid;
+      gap: 8px;
+    }
+    .cmd-accordion .cmd-body code { color: var(--cyan); }
+    .cmd-accordion .cmd-body ul { margin: 4px 0 0; padding-left: 20px; }
+    .cmd-accordion .cmd-body li { margin: 3px 0; }
 
     /* Mobile */
     @media (max-width: 1100px) {
-      .docs-toc { display: none; }
       .docs-layout { grid-template-columns: 220px minmax(0, 1fr); gap: 36px; padding: 80px 0 60px; }
     }
     @media (max-width: 760px) {
@@ -312,6 +326,7 @@
       <div class="side-h">CLI</div>
       <a class="side-link" href="#cli-overview">Overview</a>
       <a class="side-link" href="#cli-commands">Commands</a>
+      <a class="side-link" href="#cli-command-explorer">122 command map</a>
       <a class="side-link" href="#cli-providers">Providers &amp; keys</a>
       <a class="side-link" href="#cli-voice">Voice mode</a>
     </div>
@@ -326,7 +341,7 @@
       <div class="side-h">MCP server</div>
       <a class="side-link" href="#mcp-install">Install &amp; run</a>
       <a class="side-link" href="#mcp-claude">Add to Claude / Cursor</a>
-      <a class="side-link" href="#mcp-tools">Tool reference</a>
+      <a class="side-link" href="#mcp-tools">Common tools</a>
     </div>
 
     <div class="side-group">
@@ -473,6 +488,77 @@ mesh › <span class="s">why are voided invoices being charged?</span>
       </table>
     </div>
 
+    <h3 class="docs-h3" id="cli-command-explorer">122 command explorer</h3>
+    <p>Mesh ships a large command surface. The list below groups the most used command families and explains what each family does in practice.</p>
+    <div class="cmd-explorer">
+      <details class="cmd-accordion" open>
+        <summary><span>Session and navigation</span><span class="meta">core flow</span></summary>
+        <div class="cmd-body">
+          <p>These commands control interactive work sessions and movement across context states.</p>
+          <ul>
+            <li><code>mesh</code>, <code>mesh ask</code>, <code>mesh resume</code> start or continue work.</li>
+            <li><code>/status</code>, <code>/intent</code>, <code>/context</code> expose current run state and priorities.</li>
+            <li><code>/resurrect</code> and related recovery commands restore interrupted sessions.</li>
+          </ul>
+        </div>
+      </details>
+      <details class="cmd-accordion">
+        <summary><span>Workspace intelligence and indexing</span><span class="meta">capsule + twin</span></summary>
+        <div class="cmd-body">
+          <p>These build and refresh structural understanding of the repository so models do not need raw full-file reads.</p>
+          <ul>
+            <li><code>mesh index</code> and <code>mesh index --force</code> rebuild capsule state.</li>
+            <li><code>/twin build</code> and related graph commands build dependency-aware code maps.</li>
+            <li><code>mesh recover</code> retrieves exact byte spans from source files.</li>
+          </ul>
+        </div>
+      </details>
+      <details class="cmd-accordion">
+        <summary><span>Patching, safety, and verification</span><span class="meta">change control</span></summary>
+        <div class="cmd-body">
+          <p>This family is about writing changes safely, then proving they work before promotion.</p>
+          <ul>
+            <li><code>/implement</code>, <code>/review</code>, and patch commands target minimal diffs.</li>
+            <li><code>/hologram start &lt;cmd&gt;</code> runs instrumented commands with runtime evidence.</li>
+            <li><code>/sheriff scan</code>, <code>/tribunal</code>, and diagnostics surface risk before merge.</li>
+          </ul>
+        </div>
+      </details>
+      <details class="cmd-accordion">
+        <summary><span>Debugging and runtime forensics</span><span class="meta">root cause</span></summary>
+        <div class="cmd-body">
+          <p>These commands focus on isolating failures, replaying behavior, and tracing regressions.</p>
+          <ul>
+            <li><code>/fix</code> and debug flows combine targeted reads with runtime context.</li>
+            <li><code>/replay &lt;traceId&gt;</code> and <code>/bisect &lt;symptom&gt;</code> support regression triage.</li>
+            <li><code>/repair</code> surfaces predictive fixes from observed failures.</li>
+          </ul>
+        </div>
+      </details>
+      <details class="cmd-accordion">
+        <summary><span>Moonshots and advanced orchestration</span><span class="meta">power tools</span></summary>
+        <div class="cmd-body">
+          <p>These are advanced commands for multi-agent orchestration, alternate timelines, and high-autonomy workflows.</p>
+          <ul>
+            <li><code>/fork &lt;intent&gt;</code> explores alternative implementations in parallel realities.</li>
+            <li><code>/lab</code> runs autonomous discovery over project signals.</li>
+            <li><code>/dashboard</code> opens a local supervision layer for observability.</li>
+          </ul>
+        </div>
+      </details>
+      <details class="cmd-accordion">
+        <summary><span>Provider, voice, and environment ops</span><span class="meta">runtime config</span></summary>
+        <div class="cmd-body">
+          <p>Operational commands configure model routing and local capabilities.</p>
+          <ul>
+            <li><code>mesh providers</code> and env vars switch active LLM backends.</li>
+            <li><code>mesh doctor</code> validates environment health and key wiring.</li>
+            <li><code>mesh voice install</code> and <code>mesh --voice</code> enable local speech interaction.</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
     <h3 class="docs-h3" id="cli-providers">Providers &amp; keys</h3>
     <p>Mesh supports six providers out of the box. Set the env var, point <code>MESH_PROVIDER</code> at it, and go.</p>
 
@@ -528,11 +614,12 @@ $ <span class="c">mesh --voice</span>            <span class="d"># launch in voi
 
     <!-- ─────────── IDE ─────────── -->
     <h2 class="docs-h2" id="ide-launch">IDE · <em>launch</em>.</h2>
-    <p>The Mesh IDE is a desktop-first workspace with a VS Code-style file tree, structural search, and inline chat — all powered by the same capsule engine. Web access can be used where available.</p>
-    <p>Download the desktop build from <a href="https://github.com/mesh-ide/mesh-ide/releases" target="_blank" rel="noreferrer">mesh-ide releases</a>. If you prefer building from source, see the stack documentation guide.</p>
+    <p>The Mesh IDE is a desktop-first workspace with a VS Code-style file tree, structural search, and inline chat — all powered by the same capsule engine.</p>
+    <p><strong>macOS build:</strong> download directly from <a href="/download/ide-macos" target="_blank" rel="noreferrer">try-mesh.com/download/ide-macos</a> (DMG). This link always points to the latest stable macOS build. Windows support is coming later.</p>
 
     <ol>
-      <li>Download and install Mesh IDE from the releases page.</li>
+      <li>Download <code>mesh-ide-macos.dmg</code> from the macOS download link.</li>
+      <li>Open the DMG and drag <code>Mesh IDE</code> to <code>Applications</code>.</li>
       <li>Launch Mesh IDE and sign in with GitHub.</li>
       <li>Pick a repository (read-only or read-write).</li>
       <li>Press <kbd>⌘K</kbd> → <code>Index workspace</code>.</li>
@@ -581,7 +668,7 @@ $ <span class="c">mesh mcp serve --port 7400</span>
     <p>Global install is recommended for daily usage. For ephemeral runs, use <code>npx -y @edgarelmo/mesh-mcp</code>.</p>
 
     <h3 class="docs-h3" id="mcp-claude">Add to Claude Desktop / Cursor</h3>
-    <p>Drop this snippet into your client's MCP config:</p>
+    <p>For clients that support HTTP MCP servers, keep <code>mesh mcp serve --port 7400</code> running and use this config:</p>
 
     <div class="code">
       <div class="code-head"><span class="lang">json</span><span>~/Library/Application Support/Claude/mcp.json</span><button class="copy-btn" data-copy='{
@@ -598,6 +685,7 @@ $ <span class="c">mesh mcp serve --port 7400</span>
   }
 }</pre>
     </div>
+    <p>For stdio-based clients (or quick tests), use <code>npx -y @edgarelmo/mesh-mcp</code> as command instead of a localhost URL.</p>
 
     <h3 class="docs-h3" id="mcp-tools">Common tools (subset)</h3>
     <p>Mesh MCP exposes a broad tool surface. The table below lists only the most common entry points.</p>
@@ -768,31 +856,6 @@ enabled = <span class="k">false</span>          <span class="d"># opt-in, off by
     </p>
   </main>
 
-  <!-- ── RIGHT TOC ── -->
-  <aside class="docs-toc" aria-label="On this page">
-    <h6>On this page</h6>
-    <a href="#welcome">Welcome</a>
-    <a href="#install">Install</a>
-    <a href="#first-run">First run</a>
-    <a href="#concepts">Concepts</a>
-    <a href="#cli-overview">CLI overview</a>
-    <a href="#cli-commands" class="h3">Commands</a>
-    <a href="#cli-providers" class="h3">Providers &amp; keys</a>
-    <a href="#cli-voice" class="h3">Voice mode</a>
-    <a href="#ide-launch">IDE launch</a>
-    <a href="#ide-shortcuts" class="h3">Shortcuts</a>
-    <a href="#mcp-install">MCP install</a>
-    <a href="#mcp-claude" class="h3">Claude / Cursor</a>
-    <a href="#mcp-tools" class="h3">Tools</a>
-    <a href="#api-auth">API · auth</a>
-    <a href="#api-capsules" class="h3">Capsules</a>
-    <a href="#api-search" class="h3">Search &amp; recover</a>
-    <a href="#api-errors" class="h3">Errors</a>
-    <a href="#config">Configuration</a>
-    <a href="#telemetry" class="h3">Telemetry</a>
-    <a href="#troubleshoot" class="h3">Troubleshooting</a>
-    <a href="#changelog" class="h3">Changelog</a>
-  </aside>
 </div>
 
 <footer>
@@ -836,7 +899,6 @@ document.querySelectorAll('.copy-btn').forEach(btn=>{
 /* ── sidebar + TOC active link ── */
 const headings=[...document.querySelectorAll('h2.docs-h2[id], h3.docs-h3[id]')];
 const sideLinks=document.querySelectorAll('.docs-side .side-link');
-const tocLinks=document.querySelectorAll('.docs-toc a');
 function setActive(){
   const y=window.scrollY+120;
   let cur=headings[0];
@@ -844,7 +906,6 @@ function setActive(){
   if(!cur)return;
   const id='#'+cur.id;
   sideLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')===id));
-  tocLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')===id));
 }
 let raf;
 window.addEventListener('scroll',()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(setActive)},{passive:true});

@@ -801,6 +801,44 @@
       transition: all 0.25s; position: relative; z-index: 1;
     }
 
+    .faq-wrap {
+      margin-top: 44px;
+      border: 1px solid oklch(0.84 0.02 200);
+      border-radius: 14px;
+      overflow: hidden;
+      background: oklch(0.98 0.004 195);
+    }
+    .faq-head {
+      padding: 20px 24px;
+      border-bottom: 1px solid oklch(0.88 0.01 200);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: oklch(0.45 0.02 200);
+    }
+    .faq-item { border-top: 1px solid oklch(0.9 0.01 200); }
+    .faq-item:first-of-type { border-top: 0; }
+    .faq-item summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 16px 24px;
+      font-weight: 600;
+      color: var(--dark);
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item p {
+      margin: 0;
+      padding: 0 24px 18px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: oklch(0.35 0.02 200);
+      max-width: 920px;
+    }
+
     /* FOOTER */
     footer {
       position: relative; z-index: 2;
@@ -1173,17 +1211,36 @@
       <div class="sc-arrow">↗</div>
     </a>
   </div>
+  <div class="faq-wrap" aria-label="Frequently asked questions">
+    <div class="faq-head">Quick FAQ</div>
+    <details class="faq-item" open>
+      <summary><span>How is Mesh different from a normal coding chat?</span><span>+</span></summary>
+      <p>Mesh indexes your codebase into a capsule and retrieves exact spans on demand. That means lower token cost, deterministic references, and fewer invented paths compared to plain full-file chat.</p>
+    </details>
+    <details class="faq-item">
+      <summary><span>Do I need all four surfaces to start?</span><span>+</span></summary>
+      <p>No. Start with the CLI, then add IDE, MCP, or API only when your workflow needs them. All surfaces share the same capsule engine, so context carries across.</p>
+    </details>
+    <details class="faq-item">
+      <summary><span>Is the IDE available on Windows?</span><span>+</span></summary>
+      <p>Current downloadable builds target macOS. Windows support is planned. The stable download URL always serves the latest macOS DMG for now.</p>
+    </details>
+    <details class="faq-item">
+      <summary><span>Can teams run Mesh in CI?</span><span>+</span></summary>
+      <p>Yes. Teams usually combine CLI and API for CI pipelines, while MCP and IDE support day-to-day developer workflows. You can adopt incrementally without rewriting your stack.</p>
+    </details>
+  </div>
 </div>
 
 <footer>
   <a class="f-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg" aria-label="Mesh"><path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text></svg></a>
   <div class="f-links">
+    <a href="/quickstart">Quickstart</a>
+    <a href="/benchmarks">Benchmarks</a>
     <a href="/docs">Docs</a>
     <a href="https://github.com/dreddi-edit/homebrew-mesh.git">GitHub</a>
-    <a href="https://www.npmjs.com/package/@edgarelmo/mesh-agent-cli">npm</a>
-    <a href="https://twitter.com">Twitter</a>
   </div>
-  <div class="f-copy">© 2026 Mesh Intelligence</div>
+  <div class="f-copy">© 2026 Mesh Intelligence.</div>
 </footer>
 
 <script>

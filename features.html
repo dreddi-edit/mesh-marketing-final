@@ -563,7 +563,7 @@
       <div class="eyebrow">Features</div>
       <h1 class="hero-word">
         <div><span class="l">F</span><span class="l">o</span><span class="l">u</span><span class="l">r</span>&nbsp;<span class="l">s</span><span class="l">u</span><span class="l">r</span><span class="l">f</span><span class="l">a</span><span class="l">c</span><span class="l">e</span><span class="l">s</span><span class="l">.</span></div>
-        <div class="cyan-line"><span class="l">O</span><span class="l">n</span>&nbsp;<span class="l">e</span>&nbsp;<span class="l">e</span><span class="l">n</span><span class="l">g</span><span class="l">i</span><span class="l">n</span><span class="l">e</span><span class="l">.</span></div>
+        <div class="cyan-line"><span class="l">O</span><span class="l">n</span><span class="l">e</span>&nbsp;<span class="l">e</span><span class="l">n</span><span class="l">g</span><span class="l">i</span><span class="l">n</span><span class="l">e</span><span class="l">.</span></div>
       </h1>
       <p class="hero-copy">Mesh gives agents the code context they need without flooding the model. Terminal, IDE, MCP, and API all run on the same <strong>capsule compression engine</strong>: structural search, targeted reads, exact span recovery, and resumable sessions.</p>
       <div class="hero-actions">
@@ -571,77 +571,37 @@
         <a class="secondary-btn" href="#surfaces">Explore surfaces</a>
       </div>
     </div>
-    <div class="hub" id="hub" aria-hidden="true">
+    <div class="hub" aria-hidden="true">
       <div class="hub-top">
-        <span>mesh / hub.live</span>
-        <span class="live">connected</span>
+        <span>mesh / signal.view</span>
+        <span class="live">ready</span>
       </div>
-      <div class="hub-stage">
-        <svg class="hub-rings" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet">
-          <circle cx="200" cy="200" r="80"/>
-          <circle cx="200" cy="200" r="125"/>
-          <circle cx="200" cy="200" r="170"/>
-        </svg>
-        <svg class="hub-wires" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet">
-          <path id="w-cli" d="M200 200 L70 70"/>
-          <path id="w-ide" d="M200 200 L330 70"/>
-          <path id="w-mcp" d="M200 200 L70 330"/>
-          <path id="w-api" d="M200 200 L330 330"/>
-          <path class="glow w1" d="M200 200 L70 70"/>
-          <path class="glow w2" d="M200 200 L330 70"/>
-          <path class="glow w3" d="M200 200 L70 330"/>
-          <path class="glow w4" d="M200 200 L330 330"/>
-        </svg>
-        <div class="hub-core">
-          <div>
-            <div class="lbl">Capsule Engine</div>
-            <div class="ratio" id="hub-ratio">3.92×</div>
-            <div class="sub">tree-sitter · v0.9</div>
+      <div style="display:grid;gap:14px;padding:16px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div style="padding:14px;border:1px solid var(--line);border-radius:10px;background:oklch(0.11 0.04 200 / 0.65);">
+            <div style="font-family:var(--mono);font-size:10px;color:var(--cyan);letter-spacing:.08em;text-transform:uppercase;">CLI</div>
+            <div style="font-size:12px;color:var(--ink);margin-top:8px;">247 files indexed</div>
+          </div>
+          <div style="padding:14px;border:1px solid var(--line);border-radius:10px;background:oklch(0.11 0.04 200 / 0.65);">
+            <div style="font-family:var(--mono);font-size:10px;color:var(--cyan);letter-spacing:.08em;text-transform:uppercase;">IDE</div>
+            <div style="font-size:12px;color:var(--ink);margin-top:8px;">capsule loaded in 142ms</div>
           </div>
         </div>
-        <div class="hub-node n-cli" data-node="cli">
-          <div class="ic">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-            01 · CLI
-          </div>
-          <div class="nm">Terminal.</div>
-          <div class="meta" data-meta="cli">$ <span class="blink">mesh » indexing</span></div>
-          <svg class="spark" viewBox="0 0 100 14" preserveAspectRatio="none"><polyline data-spark="cli" points=""/></svg>
+        <div style="padding:18px;border:1px solid oklch(0.74 0.14 200 / 0.35);border-radius:12px;background:radial-gradient(circle at 50% 30%, oklch(0.74 0.14 200 / 0.18), oklch(0.09 0.038 200 / 0.9));text-align:center;">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--cyan);letter-spacing:.12em;text-transform:uppercase;">Capsule engine</div>
+          <div style="font-family:var(--display);font-style:italic;font-size:48px;line-height:.9;color:var(--ink);margin-top:8px;">3.9×</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:6px;">compression with full span recovery</div>
         </div>
-        <div class="hub-node n-ide" data-node="ide">
-          <div class="ic">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
-            02 · IDE
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div style="padding:14px;border:1px solid var(--line);border-radius:10px;background:oklch(0.11 0.04 200 / 0.65);">
+            <div style="font-family:var(--mono);font-size:10px;color:var(--cyan);letter-spacing:.08em;text-transform:uppercase;">MCP</div>
+            <div style="font-size:12px;color:var(--ink);margin-top:8px;">112+ tools online</div>
           </div>
-          <div class="nm">Desktop IDE.</div>
-          <div class="meta" data-meta="ide">cursor → invoices.ts:16</div>
-          <svg class="spark" viewBox="0 0 100 14" preserveAspectRatio="none"><polyline data-spark="ide" points=""/></svg>
-        </div>
-        <div class="hub-node n-mcp" data-node="mcp">
-          <div class="ic">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M3.5 12c0-2 1-4 3-5.5M20.5 12c0 2-1 4-3 5.5"/></svg>
-            03 · MCP
+          <div style="padding:14px;border:1px solid var(--line);border-radius:10px;background:oklch(0.11 0.04 200 / 0.65);">
+            <div style="font-family:var(--mono);font-size:10px;color:var(--cyan);letter-spacing:.08em;text-transform:uppercase;">API</div>
+            <div style="font-size:12px;color:var(--ink);margin-top:8px;">/v1/capsules · /v1/search</div>
           </div>
-          <div class="nm">Agent bridge.</div>
-          <div class="meta" data-meta="mcp">tool → search_code()</div>
-          <svg class="spark" viewBox="0 0 100 14" preserveAspectRatio="none"><polyline data-spark="mcp" points=""/></svg>
         </div>
-        <div class="hub-node n-api" data-node="api">
-          <div class="ic">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
-            04 · API
-          </div>
-          <div class="nm">Gateway.</div>
-          <div class="meta" data-meta="api">POST /capsules · 238ms</div>
-          <svg class="spark" viewBox="0 0 100 14" preserveAspectRatio="none"><polyline data-spark="api" points=""/></svg>
-        </div>
-        <svg class="hub-particles" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet">
-          <g id="hub-tokens"></g>
-        </svg>
-      </div>
-      <div class="hub-bot">
-        <span class="hub-feed" id="hub-feed">[00:00] booting <b>capsule.engine</b> …</span>
-        <span class="hub-stat"><b id="hub-files">3,174</b> files indexed</span>
       </div>
     </div>
   </section>
@@ -721,7 +681,7 @@
         <div class="fs-kicker">Surface 02</div>
         <h2 class="fs-title">Mesh IDE.</h2>
         <p class="fs-copy">A desktop-first VS Code-style workspace intelligence layer for deep sessions. Full file tree, structural search, and multi-file editing with live context compression. <strong>Built for complex refactors</strong>.</p>
-        <a class="secondary-btn" href="https://github.com/mesh-ide/mesh-ide/releases" target="_blank" rel="noreferrer">Download IDE</a>
+        <a class="secondary-btn" href="/download/ide-macos" target="_blank" rel="noreferrer">Download IDE for macOS</a>
       </div>
     </div>
     <!-- MCP -->
