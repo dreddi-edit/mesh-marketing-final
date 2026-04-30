@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,800;1,900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -368,174 +369,126 @@
       background: oklch(0.68 0.13 25 / 0.10);
       border-color: oklch(0.68 0.13 25 / 0.4);
     }
-    .trace-result.fail .res-label { color: oklch(0.82 0.12 25); }
 
-    /* ── BUDGET ── */
-    /* ── BUDGET — token-flow chamber ── */
-    .budget-chamber {
-      position: relative;
-      display: grid;
-      grid-template-columns: 220px 1fr 1fr;
-      gap: 0;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: linear-gradient(180deg, oklch(0.10 0.045 200 / 0.78), oklch(0.05 0.034 204 / 0.92));
-      overflow: hidden;
-      min-height: 460px;
+    /* ── A3 CONTEXT CHAMBER ── */
+    .context-chamber {
+      display: flex; flex-direction: column; gap: 32px;
+      padding: 40px;
+      border: 1px solid oklch(1 0 0 / 0.12);
+      border-radius: 20px;
+      background: linear-gradient(145deg, oklch(0.12 0.04 210 / 0.8), oklch(0.06 0.03 210 / 0.95));
+      backdrop-filter: blur(24px);
+      box-shadow: 0 40px 100px oklch(0 0 0 / 0.6), inset 0 1px 0 oklch(1 0 0 / 0.1);
+      position: relative; overflow: hidden;
+      min-height: 380px;
+      justify-content: center;
     }
-    .bc-source {
-      padding: 28px 22px;
-      border-right: 1px solid var(--line);
-      display: flex; flex-direction: column; justify-content: space-between;
-      position: relative;
+    .context-chamber::after {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(135deg, oklch(1 0 0 / 0.08) 0%, transparent 40%);
+      border-radius: 20px;
     }
-    .bc-source-label {
-      font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--dim);
-    }
-    .bc-source-num {
-      font-family: var(--display); font-style: italic; font-weight: 900;
-      font-size: 56px; line-height: 0.9; color: var(--ink);
-      margin-top: 10px; font-variant-numeric: tabular-nums;
-    }
-    .bc-source-num small {
-      display: block; font-size: 14px; color: var(--dim);
-      margin-top: 4px; letter-spacing: 0.05em;
-    }
-    .bc-source-grid {
-      margin-top: 18px;
-      display: grid; grid-template-columns: repeat(16, 1fr); gap: 2px;
-      max-width: 180px;
-    }
-    .bc-source-grid i {
-      aspect-ratio: 1 / 1; border-radius: 1px;
-      background: oklch(0.74 0.14 200 / 0.18);
-      animation: srcPulse 2.4s ease-in-out infinite;
-    }
-    @keyframes srcPulse {
-      0%,100% { opacity: 0.5 }
-      50% { opacity: 1; box-shadow: 0 0 4px var(--cyan); }
-    }
-    .bc-source-foot {
-      font-family: var(--mono); font-size: 10px; color: var(--dim);
-      margin-top: 18px; line-height: 1.5;
-    }
-    .bc-source-foot b { color: var(--cyan); font-weight: 500; }
 
-    /* tank columns */
-    .bc-col {
-      position: relative;
-      padding: 26px 24px 24px;
-      display: flex; flex-direction: column;
-      border-right: 1px solid var(--line);
+    .cc-track {
+      position: relative; z-index: 10;
     }
-    .bc-col:last-child { border-right: 0; }
-
-    .bc-col-head {
+    .cc-header {
       display: flex; justify-content: space-between; align-items: baseline;
-      font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--dim);
       margin-bottom: 14px;
     }
-    .bc-col.mesh .bc-col-head { color: var(--cyan); }
-    .bc-col-head .pct { font-size: 9.5px; }
-
-    .bc-tank {
-      position: relative;
-      flex: 1;
-      min-height: 280px;
-      border: 1px solid oklch(1 0 0 / 0.08);
-      border-radius: 12px;
-      overflow: hidden;
-      background: linear-gradient(180deg, oklch(1 0 0 / 0.02), oklch(0 0 0 / 0.18));
-    }
-    /* fill markers on the side */
-    .bc-tank::before, .bc-tank::after {
-      content: ''; position: absolute; left: 0; right: 0;
-      height: 1px; background: oklch(1 0 0 / 0.08);
-    }
-    .bc-tank::before { top: 50%; }
-    .bc-tank::after { top: 25%; }
-    .bc-tank .level-mark {
-      position: absolute; left: 6px; font-family: var(--mono);
-      font-size: 8.5px; color: oklch(1 0 0 / 0.22); letter-spacing: 0.05em;
-    }
-    .bc-tank .lm-100 { top: 4px; }
-    .bc-tank .lm-50  { top: calc(50% - 6px); }
-    .bc-tank .lm-25  { top: calc(75% - 6px); }
-    .bc-tank .lm-0   { bottom: 4px; }
-
-    .bc-fill {
-      position: absolute; left: 0; right: 0; bottom: 0;
-      height: 0;
-      transition: height 2s cubic-bezier(0.16,1,0.3,1);
-    }
-    .bc-col.mesh .bc-fill {
-      background: linear-gradient(180deg, oklch(0.74 0.14 200 / 0.65), oklch(0.55 0.13 200 / 0.85));
-      box-shadow: inset 0 1px 0 var(--cyan), 0 0 28px oklch(0.74 0.14 200 / 0.35);
-    }
-    .bc-col.raw .bc-fill {
-      background: linear-gradient(180deg, oklch(0.68 0.13 25 / 0.55), oklch(0.52 0.13 25 / 0.85));
-      box-shadow: inset 0 1px 0 oklch(0.78 0.13 25 / 0.6), 0 0 28px oklch(0.68 0.13 25 / 0.35);
-    }
-    .bc-fill::before {
-      content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px;
-      background: oklch(1 0 0 / 0.45);
-      animation: surface 3s ease-in-out infinite;
-    }
-    @keyframes surface { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-2px)} }
-
-    .bc-overflow {
-      position: absolute; top: -3px; left: 0; right: 0;
-      height: 12px;
-      background: linear-gradient(180deg, oklch(0.78 0.13 25 / 0.7), transparent);
-      opacity: 0; transition: opacity .8s;
-      pointer-events: none;
-    }
-    .bc-col.raw .bc-fill[data-overflow="1"] + .bc-overflow,
-    .bc-col.raw .bc-fill[data-overflow="1"] ~ .bc-overflow { opacity: 1; }
-
-    .bc-col svg.bc-stream {
-      position: absolute; left: 0; top: 0; width: 100%; height: 100%;
-      pointer-events: none;
-    }
-
-    /* metric inside tank */
-    .bc-tank-num {
-      position: absolute; left: 24px; bottom: 24px; right: 24px;
+    .cc-title {
       font-family: var(--display); font-style: italic; font-weight: 900;
-      font-size: clamp(48px, 7vw, 76px); line-height: 0.9;
-      color: var(--ink); pointer-events: none;
-      font-variant-numeric: tabular-nums;
-      text-shadow: 0 2px 18px oklch(0 0 0 / 0.5);
+      font-size: 28px; color: var(--ink);
     }
-    .bc-col.mesh .bc-tank-num { color: var(--cyan); }
-    .bc-tank-num small {
-      display: block; font-size: 0.32em; color: oklch(1 0 0 / 0.55);
-      margin-top: 4px; letter-spacing: 0.05em;
+    .mesh-track .cc-title { color: var(--cyan); text-shadow: 0 0 20px oklch(0.74 0.14 200 / 0.4); }
+    .raw-track .cc-title { color: oklch(1 0 0 / 0.8); }
+    .cc-sub {
+      font-family: var(--mono); font-size: 12px; color: var(--dim);
+      letter-spacing: 0.1em; text-transform: uppercase;
     }
-    .bc-tank-tag {
-      position: absolute; top: 14px; right: 14px;
-      font-family: var(--mono); font-size: 9.5px;
-      padding: 4px 9px; border-radius: 999px;
-      background: oklch(1 0 0 / 0.06); color: oklch(1 0 0 / 0.55);
-      letter-spacing: 0.05em; text-transform: uppercase;
-    }
-    .bc-col.mesh .bc-tank-tag {
-      background: oklch(0.74 0.14 200 / 0.16); color: var(--cyan);
-    }
-    .bc-col.raw .bc-tank-tag.exhausted {
-      background: oklch(0.68 0.13 25 / 0.16); color: var(--red);
-      animation: exhaustBlink 1.4s ease-in-out infinite;
-    }
-    @keyframes exhaustBlink { 50% { opacity: 0.45 } }
 
-    .bc-foot {
-      font-family: var(--mono); font-size: 10.5px; color: var(--dim);
-      margin-top: 14px; line-height: 1.55;
+    .cc-bar-wrap {
+      height: 72px;
+      border-radius: 12px;
+      background: oklch(0 0 0 / 0.6);
+      border: 1px solid oklch(1 0 0 / 0.1);
+      box-shadow: inset 0 4px 20px oklch(0 0 0 / 0.8);
+      position: relative; overflow: hidden;
+      display: flex; align-items: stretch;
     }
-    .bc-foot b { color: oklch(1 0 0 / 0.7); font-weight: 500; }
-    .bc-col.mesh .bc-foot b { color: var(--cyan); }
+
+    .cc-fill {
+      position: relative;
+      width: 0%; /* Animated via JS */
+      transition: width 2.5s cubic-bezier(0.16,1,0.3,1);
+      display: flex; align-items: center; padding: 0 24px;
+      overflow: hidden;
+    }
+    
+    .mesh-track .cc-fill {
+      background: linear-gradient(90deg, oklch(0.55 0.13 200 / 0.8), oklch(0.74 0.14 200 / 0.95));
+      box-shadow: inset 0 2px 4px oklch(1 0 0 / 0.4), 0 0 40px var(--cyan);
+      border-right: 2px solid oklch(1 0 0 / 0.9);
+    }
+    .mesh-track .cc-fill::before {
+      content:''; position:absolute; inset:0;
+      background: repeating-linear-gradient(45deg, transparent, transparent 10px, oklch(1 0 0 / 0.1) 10px, oklch(1 0 0 / 0.1) 20px);
+      animation: shiftLeft 20s linear infinite;
+    }
+    
+    .raw-track .cc-fill {
+      background: linear-gradient(90deg, oklch(0.52 0.13 25 / 0.8), oklch(0.68 0.13 25 / 0.95));
+      box-shadow: inset 0 2px 4px oklch(1 0 0 / 0.4), 0 0 40px var(--red);
+      border-right: 2px solid oklch(1 0 0 / 0.9);
+    }
+    .raw-track.exhausted .cc-fill {
+      animation: rawPulse 2s ease-in-out infinite;
+    }
+
+    .cc-value {
+      position: relative; z-index: 2;
+      font-family: var(--display); font-style: italic; font-weight: 900;
+      font-size: 36px; color: oklch(1 0 0 / 0.95);
+      text-shadow: 0 2px 10px oklch(0 0 0 / 0.5);
+    }
+    .cc-value small {
+      font-size: 14px; font-family: var(--mono); font-style: normal; font-weight: 500;
+      letter-spacing: 0.05em; color: oklch(1 0 0 / 0.8); margin-left: 8px;
+    }
+
+    .cc-space {
+      flex: 1; position: relative;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .cc-space-grid {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(oklch(1 0 0 / 0.05) 1px, transparent 1px), linear-gradient(90deg, oklch(1 0 0 / 0.05) 1px, transparent 1px);
+      background-size: 20px 20px;
+      background-position: center;
+      animation: panGrid 30s linear infinite;
+    }
+    .cc-space-lbl {
+      position: relative; z-index: 2;
+      font-family: var(--mono); font-size: 13px; color: var(--cyan);
+      letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600;
+      text-shadow: 0 0 12px var(--cyan);
+      background: oklch(0 0 0 / 0.4); padding: 4px 12px; border-radius: 999px; backdrop-filter: blur(4px);
+    }
+
+    .cc-alert {
+      position: absolute; right: 24px; top: 0; bottom: 0;
+      display: flex; align-items: center;
+      font-family: var(--mono); font-size: 13px; color: oklch(1 0 0 / 0.9);
+      letter-spacing: 0.05em; text-transform: uppercase; font-weight: 600;
+      text-shadow: 0 2px 10px oklch(0 0 0 / 0.8);
+      z-index: 20; opacity: 0; transition: opacity 0.5s 2.2s;
+    }
+    .raw-track.exhausted .cc-alert { opacity: 1; }
+
+    @keyframes shiftLeft { 0% { background-position: 0 0; } 100% { background-position: -282px 0; } }
+    @keyframes panGrid { 0% { background-position: 0 0; } 100% { background-position: -400px 0; } }
+    @keyframes rawPulse { 50% { filter: brightness(1.2); box-shadow: inset 0 2px 4px oklch(1 0 0 / 0.4), 0 0 60px var(--red); } }
 
     /* ── HALLUCINATION ── refusal grid ── */
     .halluc-card { padding: 28px; min-height: 360px; }
@@ -859,7 +812,7 @@
   </style>
 </head>
 <body>
-<canvas id="mesh-canvas"></canvas>
+<!-- <canvas id="mesh-canvas"></canvas> -->
 
 <div class="modal-bg" id="modalBg" onclick="closeModal(event)">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="wlTitle">
@@ -879,7 +832,7 @@
 <nav class="site-nav">
   <a class="nav-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg"><path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text></svg></a>
   <div class="nav-right">
-    <a href="/features">Features</a><a href="/quickstart">Quickstart</a><a href="/benchmarks" class="nav-active">Benchmarks</a><a href="/docs">Docs</a><a onclick="openModal()" class="nav-waitlist">Waitlist</a>
+    <a href=".html">Features</a><a href=".html">Quickstart</a><a href=".html" class="nav-active">Benchmarks</a><a href=".html">Docs</a><a onclick="openModal()" class="nav-waitlist">Waitlist</a>
   </div>
 </nav>
 
@@ -1082,59 +1035,40 @@
         <h2>Full coverage at 1/5 the cost.</h2>
         <p class="section-copy">Same coverage, same recall — Mesh saturates a 247-file workspace at <strong>4.5k tokens</strong>. Raw source needs <strong>24k tokens</strong> to cover the same surface area. Same model, same task, same answer.</p>
       </div>
-      <div class="budget-chamber" id="budgetChamber">
-        <div class="bc-source">
-          <div>
-            <div class="bc-source-label">Source workspace</div>
-            <div class="bc-source-num">247<small>files · 18,432 LOC</small></div>
-            <div class="bc-source-grid" id="bcSourceGrid"></div>
+      <div class="context-chamber" id="contextChamber">
+        
+        <div class="cc-track raw-track" id="rawTrack">
+          <div class="cc-header">
+            <span class="cc-title">Raw Source Code</span>
+            <span class="cc-sub">247 Files Covered</span>
           </div>
-          <div class="bc-source-foot">
-            Streaming all symbols + signatures into a fixed <b>24k token</b> budget. Watch what fits.
-          </div>
-        </div>
-        <div class="bc-col mesh">
-          <div class="bc-col-head">
-            <span>Mesh capsules</span>
-            <span class="pct" id="bcMeshPct">0% of budget</span>
-          </div>
-          <div class="bc-tank">
-            <span class="level-mark lm-100">100% — 24k</span>
-            <span class="level-mark lm-50">50% — 12k</span>
-            <span class="level-mark lm-25">25% — 6k</span>
-            <span class="level-mark lm-0">0</span>
-            <svg class="bc-stream" viewBox="0 0 200 300" preserveAspectRatio="none" id="bcMeshStream"></svg>
-            <div class="bc-fill" id="bcMeshFill"></div>
-            <div class="bc-overflow"></div>
-            <span class="bc-tank-tag">19% used</span>
-            <div class="bc-tank-num"><span id="bcMeshNum">0</span>k<small>covers all 247 files · 100% recall</small></div>
-          </div>
-          <div class="bc-foot">
-            <b>4.5k tokens</b> ship the structural index for the whole repo. <b>~19.5k tokens</b> of headroom remain for the model's own reasoning.
+          <div class="cc-bar-wrap">
+            <div class="cc-fill" id="ccRawFill" style="width: 0%">
+              <span class="cc-value"><span id="ccRawNum">0</span><small>Tokens</small></span>
+            </div>
+            <div class="cc-alert">
+              <span>⚠️ Context Exhausted. Zero Headroom.</span>
+            </div>
           </div>
         </div>
-        <div class="bc-col raw">
-          <div class="bc-col-head">
-            <span>Raw source</span>
-            <span class="pct" id="bcRawPct">0% of budget</span>
-          </div>
-          <div class="bc-tank">
-            <span class="level-mark lm-100">100% — 24k</span>
-            <span class="level-mark lm-50">50% — 12k</span>
-            <span class="level-mark lm-25">25% — 6k</span>
-            <span class="level-mark lm-0">0</span>
-            <svg class="bc-stream" viewBox="0 0 200 300" preserveAspectRatio="none" id="bcRawStream"></svg>
-            <div class="bc-fill" id="bcRawFill"></div>
-            <div class="bc-overflow"></div>
-            <span class="bc-tank-tag exhausted" id="bcRawTag">budget exhausted</span>
-            <div class="bc-tank-num"><span id="bcRawNum">0</span>k<small>same 247 files · <span style="color:var(--red)">5.3× more expensive</span></small></div>
-          </div>
-          <div class="bc-foot">
-            <b>24k tokens</b> floods the entire context. Zero headroom for reasoning — the model has to choose between <b>seeing the code</b> or <b>thinking about it</b>.
-          </div>
-        </div>
-      </div>
 
+        <div class="cc-track mesh-track">
+          <div class="cc-header">
+            <span class="cc-title">Mesh Capsules</span>
+            <span class="cc-sub">247 Files Covered</span>
+          </div>
+          <div class="cc-bar-wrap">
+            <div class="cc-fill" id="ccMeshFill" style="width: 0%">
+              <span class="cc-value"><span id="ccMeshNum">0</span><small>Tokens</small></span>
+            </div>
+            <div class="cc-space">
+              <div class="cc-space-grid"></div>
+              <span class="cc-space-lbl">~19.5k Tokens Free for Reasoning</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
       <!-- legacy hidden panel for back-compat -->
       <div class="budget-panel" id="budgetPanel" style="display:none">
         <div class="budget-card mesh" data-fill="19">
@@ -1274,18 +1208,11 @@
 
 <footer>
   <a class="f-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg"><path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text></svg></a>
-  <div class="f-links"><a href="/docs">Docs</a><a href="https://github.com/dreddi-edit/homebrew-mesh.git">GitHub</a><a href="https://twitter.com">Twitter</a></div>
+  <div class="f-links"><a href=".html">Docs</a><a href="https://github.com/dreddi-edit/homebrew-mesh.git">GitHub</a><a href="https://twitter.com">Twitter</a></div>
   <div class="f-copy">© 2026 Mesh Intelligence</div>
 </footer>
 
 <script>
-const canvas=document.getElementById('mesh-canvas'),ctx=canvas.getContext('2d');let W,H,pts;const mouse={x:-9999,y:-9999},LINK=155;
-function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}
-function mkPts(){const n=Math.min(80,Math.floor(W*H/12000));pts=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-0.5)*0.4,vy:(Math.random()-0.5)*0.4}))}
-function raf(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;const dx=p.x-mouse.x,dy=p.y-mouse.y,d=Math.hypot(dx,dy);if(d<100){p.vx+=dx/d*0.02;p.vy+=dy/d*0.02}});for(let i=0;i<pts.length;i++){for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.hypot(dx,dy);if(d<LINK){ctx.strokeStyle=`rgba(0,180,200,${(1-d/LINK)*0.25})`;ctx.lineWidth=0.6;ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.stroke()}}ctx.fillStyle='rgba(0,212,232,0.45)';ctx.beginPath();ctx.arc(pts[i].x,pts[i].y,1.6,0,Math.PI*2);ctx.fill()}requestAnimationFrame(raf)}
-resize();mkPts();raf();
-window.addEventListener('resize',()=>{resize();mkPts()});
-window.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY},{passive:true});
 setTimeout(()=>{document.querySelectorAll('.hero-word .l').forEach((el,i)=>setTimeout(()=>el.classList.add('in'),i*60+50))},50);
 
 /* ── modal ── */
@@ -1945,89 +1872,57 @@ document.querySelectorAll('.proof-cell, .radar-wrap, .bench-section').forEach(el
   },{threshold:0.25}).observe(root);
 })();
 
-/* ── BUDGET CHAMBER — animated token-flow into capacity tanks ── */
-(function budget(){
-  const root=document.getElementById('budgetChamber');
+/* ── A3 CONTEXT CHAMBER — animated bars ── */
+(function contextChamber(){
+  const root=document.getElementById('contextChamber');
   if(!root)return;
 
-  /* build source workspace dot grid (16×16 = 256 cells, ~247 files) */
-  const grid=document.getElementById('bcSourceGrid');
-  for(let i=0;i<247;i++){
-    const i_=document.createElement('i');
-    i_.style.animationDelay=((i%24)*0.05)+'s';
-    grid.appendChild(i_);
-  }
-
-  const meshFill=document.getElementById('bcMeshFill');
-  const rawFill =document.getElementById('bcRawFill');
-  const meshNum=document.getElementById('bcMeshNum');
-  const rawNum =document.getElementById('bcRawNum');
-  const meshPct=document.getElementById('bcMeshPct');
-  const rawPct =document.getElementById('bcRawPct');
-  const rawTag =document.getElementById('bcRawTag');
-  const meshStream=document.getElementById('bcMeshStream');
-  const rawStream =document.getElementById('bcRawStream');
+  const meshFill=document.getElementById('ccMeshFill');
+  const rawFill =document.getElementById('ccRawFill');
+  const meshNum=document.getElementById('ccMeshNum');
+  const rawNum =document.getElementById('ccRawNum');
+  const rawTrack =document.getElementById('rawTrack');
 
   const MESH_TARGET=4500, RAW_TARGET=24000, BUDGET=24000;
-
-  function spawnToken(svg, color, intensity){
-    const t=document.createElementNS('http://www.w3.org/2000/svg','rect');
-    const x=10+Math.random()*180;
-    t.setAttribute('x',x); t.setAttribute('y',-6);
-    t.setAttribute('width', 1.5+Math.random()*1.5);
-    t.setAttribute('height', 4+Math.random()*4);
-    t.setAttribute('fill', color);
-    t.setAttribute('opacity', 0.4+Math.random()*0.4);
-    svg.appendChild(t);
-    const dur=1100+Math.random()*900;
-    const start=performance.now();
-    function step(now){
-      const p=(now-start)/dur;
-      if(p>=1){ t.remove(); return; }
-      t.setAttribute('y', -6 + p*306);
-      requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }
-
   let started=false;
+
   function start(){
     if(started)return; started=true;
-
-    /* animate fill heights + counter */
-    const dur=2400, t0=performance.now();
+    
+    // Smooth counter
+    const dur=2500, t0=performance.now();
     function tick(now){
       const p=Math.min((now-t0)/dur,1);
       const e=1-Math.pow(1-p,3);
+      
       const meshTok=Math.round(MESH_TARGET*e);
       const rawTok =Math.round(RAW_TARGET*e);
-      meshNum.textContent=(meshTok/1000).toFixed(1);
-      rawNum.textContent =Math.round(rawTok/1000);
-      const meshPctV=(meshTok/BUDGET)*100;
-      const rawPctV =(rawTok/BUDGET)*100;
-      meshFill.style.height=meshPctV+'%';
-      rawFill.style.height=Math.min(rawPctV,100)+'%';
-      meshPct.textContent=Math.round(meshPctV)+'% of budget';
-      rawPct.textContent =Math.round(rawPctV)+'% of budget';
-      if(rawPctV>=98) rawTag.textContent='budget exhausted';
-      else if(rawPctV>=80) rawTag.textContent=Math.round(rawPctV)+'% — saturating';
-      else rawTag.textContent=Math.round(rawPctV)+'% used';
+      
+      // Update text values
+      meshNum.textContent=(meshTok/1000).toFixed(1)+'k';
+      rawNum.textContent =(rawTok/1000).toFixed(1)+'k';
+      
+      // The CSS transition handles the smooth width animation, we just set the target once
+      if (p < 0.1 && meshFill.style.width === '0%') {
+        meshFill.style.width = (MESH_TARGET/BUDGET)*100 + '%';
+        rawFill.style.width = '100%';
+      }
+
+      // Add exhausted class near the end to trigger pulse animation
+      if (p > 0.9) {
+        rawTrack.classList.add('exhausted');
+      }
+
       if(p<1) requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
-
-    /* token streams: mesh trickles, raw floods */
-    setInterval(()=>spawnToken(meshStream,'oklch(0.74 0.14 200 / 0.9)'),180);
-    setInterval(()=>{
-      for(let i=0;i<3;i++) setTimeout(()=>spawnToken(rawStream,'oklch(0.78 0.13 25 / 0.85)'), i*40);
-    }, 90);
   }
 
   new IntersectionObserver((entries,obs)=>{
     entries.forEach(e=>{
       if(e.isIntersecting){ start(); obs.unobserve(e.target); }
     });
-  },{threshold:0.25}).observe(root);
+  },{threshold:0.4}).observe(root);
 })();
 
 /* ── TEST RACK — five models running in parallel with live sparklines ── */

@@ -9,6 +9,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,800;1,900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -60,171 +63,24 @@
     .primary-btn { background: var(--cyan); color: var(--bg-deep); }
     .secondary-btn { background: oklch(1 0 0 / 0.035); border-color: var(--line); color: var(--ink); }
     .primary-btn:hover, .secondary-btn:hover { transform: translateY(-2px); }
-    /* ── HUB CONSTELLATION (FEATURES HERO) ── */
-    .hub {
+    /* ── 3D HERO WRAPPER ── */
+    .feature-3d-wrap {
       position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 500px;
       border: 1px solid var(--line);
       border-radius: 12px;
-      background:
-        radial-gradient(1100px circle at 50% 50%, oklch(0.74 0.14 200 / 0.05), transparent 55%),
-        linear-gradient(180deg, oklch(0.105 0.046 200 / 0.95), oklch(0.06 0.034 204 / 0.95));
+      background: oklch(0.06 0.034 204 / 0.95);
       box-shadow: 0 40px 110px oklch(0 0 0 / 0.5), inset 0 1px 0 oklch(1 0 0 / 0.04);
       overflow: hidden;
     }
-    .hub-top, .hub-bot {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 12px 16px;
-      font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--dim);
-    }
-    .hub-top { border-bottom: 1px solid var(--line); }
-    .hub-bot { border-top: 1px solid var(--line); }
-    .hub-top .live { display: inline-flex; gap: 8px; align-items: center; color: var(--green); }
-    .hub-top .live::before {
-      content: ''; width: 6px; height: 6px; border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 10px var(--green);
-      animation: hubPulse 1.6s ease-in-out infinite;
-    }
-    @keyframes hubPulse { 0%,100% { opacity: 0.55; } 50% { opacity: 1; } }
-    .hub-stat { display: inline-flex; gap: 8px; align-items: center; color: oklch(1 0 0 / 0.55); font-variant-numeric: tabular-nums; }
-    .hub-stat b { color: var(--ink); font-weight: 500; }
-
-    .hub-stage {
-      position: relative;
-      aspect-ratio: 1.05 / 1;
+    #featureHeroCanvas {
       width: 100%;
-      overflow: hidden;
-    }
-    .hub-rings {
-      position: absolute; inset: 0;
-      pointer-events: none;
-    }
-    .hub-rings circle {
-      fill: none;
-      stroke: oklch(0.74 0.14 200 / 0.12);
-      stroke-dasharray: 2 5;
-      transform-origin: 50% 50%;
-      animation: hubSpin 60s linear infinite;
-    }
-    .hub-rings circle:nth-child(2) { animation-duration: 90s; animation-direction: reverse; stroke-opacity: 0.5; }
-    .hub-rings circle:nth-child(3) { animation-duration: 120s; stroke-opacity: 0.3; }
-    @keyframes hubSpin { to { transform: rotate(360deg); } }
-
-    .hub-wires { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
-    .hub-wires path {
-      fill: none;
-      stroke: oklch(0.74 0.14 200 / 0.18);
-      stroke-width: 1;
-    }
-    .hub-wires .glow {
-      stroke: oklch(0.74 0.14 200 / 0.6);
-      stroke-width: 1.4;
-      stroke-dasharray: 240;
-      stroke-dashoffset: 240;
-      filter: drop-shadow(0 0 6px oklch(0.74 0.14 200 / 0.6));
-      animation: hubFlow 2.4s cubic-bezier(.5,.05,.5,.95) infinite;
-    }
-    .hub-wires .glow.w1 { animation-delay: 0s; }
-    .hub-wires .glow.w2 { animation-delay: 0.6s; }
-    .hub-wires .glow.w3 { animation-delay: 1.2s; }
-    .hub-wires .glow.w4 { animation-delay: 1.8s; }
-    @keyframes hubFlow {
-      0% { stroke-dashoffset: 240; opacity: 0; }
-      20% { opacity: 1; }
-      100% { stroke-dashoffset: 0; opacity: 0; }
+      height: 100%;
+      display: block;
     }
 
-    .hub-core {
-      position: absolute; left: 50%; top: 50%;
-      transform: translate(-50%, -50%);
-      width: 132px; height: 132px;
-      border-radius: 50%;
-      background:
-        radial-gradient(circle at 50% 35%, oklch(0.74 0.14 200 / 0.45), oklch(0.74 0.14 200 / 0.05) 65%),
-        oklch(0.08 0.04 200);
-      border: 1px solid oklch(0.74 0.14 200 / 0.4);
-      box-shadow: 0 0 60px oklch(0.74 0.14 200 / 0.35), inset 0 0 40px oklch(0.74 0.14 200 / 0.18);
-      display: grid; place-items: center;
-      text-align: center;
-    }
-    .hub-core::before {
-      content: ''; position: absolute; inset: -2px;
-      border-radius: 50%;
-      border: 1px dashed oklch(0.74 0.14 200 / 0.55);
-      animation: hubSpin 24s linear infinite;
-    }
-    .hub-core .lbl {
-      font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em;
-      text-transform: uppercase; color: var(--cyan);
-    }
-    .hub-core .ratio {
-      font-family: var(--display); font-style: italic; font-weight: 900;
-      font-size: 38px; line-height: 1; color: var(--white);
-      letter-spacing: -0.02em; margin: 4px 0 2px;
-      font-variant-numeric: tabular-nums;
-    }
-    .hub-core .sub {
-      font-family: var(--mono); font-size: 9px; color: oklch(1 0 0 / 0.5);
-      letter-spacing: 0.06em;
-    }
-
-    .hub-node {
-      position: absolute; width: 142px;
-      padding: 12px 12px 11px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: oklch(0.07 0.034 200 / 0.92);
-      backdrop-filter: blur(8px);
-      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-    }
-    .hub-node[data-active="1"] {
-      border-color: oklch(0.74 0.14 200 / 0.55);
-      box-shadow: 0 0 28px oklch(0.74 0.14 200 / 0.25);
-    }
-    .hub-node .ic {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em;
-      color: var(--cyan); text-transform: uppercase;
-    }
-    .hub-node .ic svg { width: 11px; height: 11px; opacity: 0.9; }
-    .hub-node .nm {
-      font-family: var(--display); font-style: italic; font-weight: 800;
-      font-size: 19px; line-height: 1.05; color: var(--white);
-      margin-top: 6px;
-    }
-    .hub-node .meta {
-      font-family: var(--mono); font-size: 9.5px;
-      color: oklch(1 0 0 / 0.45);
-      margin-top: 5px; min-height: 13px;
-      font-variant-numeric: tabular-nums;
-    }
-    .hub-node .meta .blink { color: var(--cyan); }
-    .hub-node .spark {
-      margin-top: 7px; height: 14px;
-      width: 100%;
-      stroke: oklch(0.74 0.14 200 / 0.7);
-      stroke-width: 1; fill: none;
-    }
-    .hub-node.n-cli { left: 14px; top: 14px; }
-    .hub-node.n-ide { right: 14px; top: 14px; }
-    .hub-node.n-mcp { left: 14px; bottom: 14px; }
-    .hub-node.n-api { right: 14px; bottom: 14px; }
-
-    .hub-particles { position: absolute; inset: 0; pointer-events: none; }
-    .hub-particles circle {
-      fill: oklch(0.85 0.13 200);
-      filter: drop-shadow(0 0 4px oklch(0.74 0.14 200 / 0.9));
-    }
-
-    .hub-feed {
-      font-family: var(--mono); font-size: 10px; color: oklch(1 0 0 / 0.45);
-      flex: 1; min-width: 0;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-      letter-spacing: 0.02em; text-transform: none;
-    }
-    .hub-feed b { color: var(--cyan); font-weight: 500; }
-    .hub-feed .t { color: oklch(1 0 0 / 0.32); }
     .surfaces-section { padding: 100px 0; }
     .feature-surface { width: min(1180px, calc(100% - 64px)); margin: 0 auto 64px; border: 1px solid var(--line); border-radius: 12px; background: oklch(0.10 0.046 200 / 0.6); display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16,1,0.3,1); }
     .feature-surface.visible { opacity: 1; transform: none; }
@@ -550,10 +406,10 @@
 <nav class="site-nav">
   <a class="nav-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg"><path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text></svg></a>
   <div class="nav-right">
-    <a href="/features" class="nav-active">Features</a>
-    <a href="/quickstart">Quickstart</a>
-    <a href="/benchmarks">Benchmarks</a>
-    <a href="/docs">Docs</a>
+    <a href=".html" class="nav-active">Features</a>
+    <a href=".html">Quickstart</a>
+    <a href=".html">Benchmarks</a>
+    <a href=".html">Docs</a>
     <a onclick="openModal()" class="nav-waitlist">Waitlist</a>
   </div>
 </nav>
@@ -571,38 +427,8 @@
         <a class="secondary-btn" href="#surfaces">Explore surfaces</a>
       </div>
     </div>
-    <div class="hub" aria-hidden="true">
-      <div class="hub-top">
-        <span>mesh / signal.view</span>
-        <span class="live">ready</span>
-      </div>
-      <div style="display:grid;gap:14px;padding:16px;">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-          <div style="padding:14px;border:1px solid var(--line);border-radius:10px;background:oklch(0.11 0.04 200 / 0.65);">
-            <div style="font-family:var(--mono);font-size:10px;color:var(--cyan);letter-spacing:.08em;text-transform:uppercase;">CLI</div>
-            <div style="font-size:12px;color:var(--ink);margin-top:8px;">247 files indexed</div>
-          </div>
-          <div style="padding:14px;border:1px solid var(--line);border-radius:10px;background:oklch(0.11 0.04 200 / 0.65);">
-            <div style="font-family:var(--mono);font-size:10px;color:var(--cyan);letter-spacing:.08em;text-transform:uppercase;">IDE</div>
-            <div style="font-size:12px;color:var(--ink);margin-top:8px;">capsule loaded in 142ms</div>
-          </div>
-        </div>
-        <div style="padding:18px;border:1px solid oklch(0.74 0.14 200 / 0.35);border-radius:12px;background:radial-gradient(circle at 50% 30%, oklch(0.74 0.14 200 / 0.18), oklch(0.09 0.038 200 / 0.9));text-align:center;">
-          <div style="font-family:var(--mono);font-size:10px;color:var(--cyan);letter-spacing:.12em;text-transform:uppercase;">Capsule engine</div>
-          <div style="font-family:var(--display);font-style:italic;font-size:48px;line-height:.9;color:var(--ink);margin-top:8px;">3.9×</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:6px;">compression with full span recovery</div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-          <div style="padding:14px;border:1px solid var(--line);border-radius:10px;background:oklch(0.11 0.04 200 / 0.65);">
-            <div style="font-family:var(--mono);font-size:10px;color:var(--cyan);letter-spacing:.08em;text-transform:uppercase;">MCP</div>
-            <div style="font-size:12px;color:var(--ink);margin-top:8px;">112+ tools online</div>
-          </div>
-          <div style="padding:14px;border:1px solid var(--line);border-radius:10px;background:oklch(0.11 0.04 200 / 0.65);">
-            <div style="font-family:var(--mono);font-size:10px;color:var(--cyan);letter-spacing:.08em;text-transform:uppercase;">API</div>
-            <div style="font-size:12px;color:var(--ink);margin-top:8px;">/v1/capsules · /v1/search</div>
-          </div>
-        </div>
-      </div>
+    <div class="feature-3d-wrap" id="feature3dWrap" aria-hidden="true">
+      <canvas id="featureHeroCanvas"></canvas>
     </div>
   </section>
   <section id="surfaces" class="surfaces-section">
@@ -768,202 +594,20 @@
         <div class="fs-kicker">Surface 04</div>
         <h2 class="fs-title">Gateway API.</h2>
         <p class="fs-copy">Build your own agentic tools on top of Mesh. A fully programmable endpoint for indexing, searching, and recovering code context at scale. <strong>Integrate Mesh into your CI/CD</strong>.</p>
-        <a href="/docs" class="secondary-btn">Read API Docs</a>
+        <a href=".html" class="secondary-btn">Read API Docs</a>
       </div>
     </div>
   </section>
 </main>
 <footer>
   <a class="f-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg"><path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text></svg></a>
-  <div class="f-links"><a href="/docs">Docs</a><a href="https://github.com/dreddi-edit/homebrew-mesh.git">GitHub</a><a href="https://twitter.com">Twitter</a></div>
+  <div class="f-links"><a href=".html">Docs</a><a href="https://github.com/dreddi-edit/homebrew-mesh.git">GitHub</a><a href="https://twitter.com">Twitter</a></div>
   <div class="f-copy">© 2026 Mesh Intelligence</div>
 </footer>
 <script>
 const canvas=document.getElementById('mesh-canvas'),ctx=canvas.getContext('2d');let W,H,pts;const mouse={x:-9999,y:-9999},LINK=155;function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}function mkPts(){const n=Math.min(80,Math.floor(W*H/12000));pts=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-0.5)*0.4,vy:(Math.random()-0.5)*0.4}))}function raf(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;const dx=p.x-mouse.x,dy=p.y-mouse.y,d=Math.hypot(dx,dy);if(d<100){p.vx+=dx/d*0.02;p.vy+=dy/d*0.02}});for(let i=0;i<pts.length;i++){for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.hypot(dx,dy);if(d<LINK){ctx.strokeStyle=`rgba(0,180,200,${(1-d/LINK)*0.25})`;ctx.lineWidth=0.6;ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.stroke()}}ctx.fillStyle='rgba(0,212,232,0.45)';ctx.beginPath();ctx.arc(pts[i].x,pts[i].y,1.6,0,Math.PI*2);ctx.fill()}requestAnimationFrame(raf)}resize();mkPts();raf();window.addEventListener('resize',()=>{resize();mkPts()});window.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY},{passive:true});setTimeout(()=>{document.querySelectorAll('.hero-word .l').forEach((el,i)=>setTimeout(()=>el.classList.add('in'),i*60+50))},50);const spotlightElements=document.querySelectorAll('.feature-surface');spotlightElements.forEach(el=>{el.addEventListener('mousemove',e=>{const r=el.getBoundingClientRect();el.style.setProperty('--x',`${e.clientX-r.left}px`);el.style.setProperty('--y',`${e.clientY-r.top}px`)},{passive:true})});function openModal(){document.getElementById('modalBg').classList.add('open')}function closeModal(e){const m=document.getElementById('modalBg');if(!e||e.target===m||e.currentTarget?.classList?.contains('modal-close'))m.classList.remove('open')}async function submitWaitlist(){const e=document.getElementById('wlEmail'),f=document.getElementById('wlFirst'),l=document.getElementById('wlLast'),m=document.getElementById('wlMsg'),v=e.value.trim();if(!/^\S+@\S+\.\S+$/.test(v)){m.textContent='Please enter a valid email address.';return}m.textContent='Submitting...';try{const r=await fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:v,firstName:f.value,lastName:l.value})});const p=await r.json();m.textContent=p.message||'Thanks. You are now on the waitlist.'}catch(err){m.textContent='Subscription failed.'}}const revealObserver=new IntersectionObserver((entries)=>{entries.forEach((entry)=>{if(entry.isIntersecting){entry.target.classList.add('visible');revealObserver.unobserve(entry.target)}})},{threshold:0.15});document.querySelectorAll('.feature-surface').forEach((section)=>revealObserver.observe(section));
 
-/* ── HUB CONSTELLATION ── */
-(function initHub(){
-  const hub = document.getElementById('hub');
-  if (!hub) return;
 
-  const NODES = {
-    cli: { sx: 200, sy: 200, ex: 70,  ey: 70  },
-    ide: { sx: 200, sy: 200, ex: 330, ey: 70  },
-    mcp: { sx: 200, sy: 200, ex: 70,  ey: 330 },
-    api: { sx: 200, sy: 200, ex: 330, ey: 330 },
-  };
-
-  const META = {
-    cli: [
-      '$ mesh » fix broken auth',
-      '$ mesh search "session"',
-      '$ mesh diff src/auth.ts',
-      '$ mesh » indexing 247 files',
-      '$ mesh resume cap_6w',
-      '$ mesh test --capsule',
-    ],
-    ide: [
-      'cursor → invoices.ts:16',
-      'open billing.ts',
-      'symbol → finalizeInvoice',
-      'capsule reload · 142ms',
-      'refs → 14 in 8 files',
-      'edit → invoices.ts:42',
-    ],
-    mcp: [
-      'tool → search_code()',
-      'tool → read_span()',
-      'tool → find_refs()',
-      'tool → recover()',
-      'claude.exec · 211ms',
-      'cursor.query · 184ms',
-    ],
-    api: [
-      'POST /capsules · 238ms',
-      'GET  /search   · 51ms',
-      'POST /spans    · 87ms',
-      'POST /capsules · 244ms',
-      'GET  /refs     · 64ms',
-      'POST /reindex  · 312ms',
-    ],
-  };
-
-  const FEED_VERBS = [
-    ['cli', 'mesh.search_code'],
-    ['ide', 'workspace.open'],
-    ['mcp', 'mesh.read_span'],
-    ['api', 'POST /capsules'],
-    ['cli', 'mesh.recover'],
-    ['mcp', 'mesh.find_refs'],
-    ['ide', 'capsule.reload'],
-    ['api', 'GET /search'],
-    ['cli', 'mesh.bench'],
-    ['mcp', 'tools.list'],
-  ];
-
-  const feedEl = document.getElementById('hub-feed');
-  const filesEl = document.getElementById('hub-files');
-  const ratioEl = document.getElementById('hub-ratio');
-  const tokenLayer = document.getElementById('hub-tokens');
-  const SVGNS = 'http://www.w3.org/2000/svg';
-
-  // sparkline state
-  const sparks = {};
-  Object.keys(NODES).forEach(k => { sparks[k] = Array.from({length: 24}, () => 0.5 + Math.random()*0.4); });
-  function drawSparks() {
-    Object.keys(sparks).forEach(k => {
-      const arr = sparks[k];
-      const pts = arr.map((v, i) => `${(i/(arr.length-1))*100},${14 - v*12}`).join(' ');
-      const el = hub.querySelector(`polyline[data-spark="${k}"]`);
-      if (el) el.setAttribute('points', pts);
-    });
-  }
-  drawSparks();
-
-  // pad
-  const pad = n => String(n).padStart(2,'0');
-  function nowStamp() {
-    const d = new Date();
-    return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-  }
-
-  // animate one token along a wire
-  function emitToken(target) {
-    const n = NODES[target];
-    if (!n) return;
-    const c = document.createElementNS(SVGNS, 'circle');
-    c.setAttribute('r', '2.4');
-    c.setAttribute('cx', n.sx);
-    c.setAttribute('cy', n.sy);
-    tokenLayer.appendChild(c);
-    const dur = 900 + Math.random()*300;
-    const start = performance.now();
-    function step(t) {
-      const k = Math.min(1, (t-start)/dur);
-      const e = 1 - Math.pow(1-k, 2.4);
-      const x = n.sx + (n.ex - n.sx) * e;
-      const y = n.sy + (n.ey - n.sy) * e;
-      c.setAttribute('cx', x);
-      c.setAttribute('cy', y);
-      c.setAttribute('opacity', 1 - k*0.6);
-      if (k < 1) requestAnimationFrame(step);
-      else {
-        c.remove();
-        // flash the receiving node
-        const node = hub.querySelector(`.hub-node[data-node="${target}"]`);
-        if (node) {
-          node.dataset.active = '1';
-          // bump sparkline
-          sparks[target].push(0.6 + Math.random()*0.4);
-          if (sparks[target].length > 24) sparks[target].shift();
-          drawSparks();
-          setTimeout(() => { node.dataset.active = '0'; }, 480);
-        }
-      }
-    }
-    requestAnimationFrame(step);
-  }
-
-  // rotating meta line per node
-  let metaIdx = { cli: 0, ide: 0, mcp: 0, api: 0 };
-  function bumpMeta(target) {
-    metaIdx[target] = (metaIdx[target] + 1) % META[target].length;
-    const el = hub.querySelector(`[data-meta="${target}"]`);
-    if (!el) return;
-    el.style.opacity = '0';
-    setTimeout(() => {
-      const t = META[target][metaIdx[target]];
-      if (target === 'cli') el.innerHTML = '$ <span class="blink">' + t.replace(/^\$\s*/, '') + '</span>';
-      else el.textContent = t;
-      el.style.transition = 'opacity 0.3s ease';
-      el.style.opacity = '1';
-    }, 120);
-  }
-
-  // ratio drift
-  let ratio = 3.92;
-  function driftRatio() {
-    ratio = Math.max(3.6, Math.min(4.2, ratio + (Math.random()-0.5)*0.06));
-    if (ratioEl) ratioEl.textContent = ratio.toFixed(2) + '×';
-  }
-
-  // file count drift
-  let files = 3174;
-  function driftFiles() {
-    files += Math.floor(Math.random()*4);
-    if (filesEl) filesEl.textContent = files.toLocaleString();
-  }
-
-  // event feed
-  let feedIdx = 0;
-  function tickFeed() {
-    const [t, verb] = FEED_VERBS[feedIdx % FEED_VERBS.length];
-    feedIdx++;
-    if (feedEl) feedEl.innerHTML = `<span class="t">[${nowStamp()}]</span> ${t.toUpperCase()} ← <b>${verb}</b>`;
-    emitToken(t);
-    bumpMeta(t);
-  }
-
-  let started = false;
-  const io = new IntersectionObserver((es) => {
-    es.forEach(e => {
-      if (e.isIntersecting && !started) {
-        started = true;
-        tickFeed();
-        setInterval(tickFeed, 1100);
-        setInterval(driftRatio, 1700);
-        setInterval(driftFiles, 1300);
-        // continuous ambient tokens too
-        setInterval(() => {
-          const keys = Object.keys(NODES);
-          emitToken(keys[Math.floor(Math.random()*keys.length)]);
-        }, 280);
-        io.disconnect();
-      }
-    });
-  }, { threshold: 0.2 });
-  io.observe(hub);
-})();
 
 /* ── CLI · typed terminal playback ── */
 (function cli(){
@@ -1318,5 +962,6 @@ const canvas=document.getElementById('mesh-canvas'),ctx=canvas.getContext('2d');
   io.observe(mock);
 })();
 </script>
+<script src="/feature-hero-animation.js"></script>
 </body>
 </html>
