@@ -532,9 +532,9 @@
 
   <!-- ── MAIN ── -->
   <main class="docs-main">
-    <div class="docs-eyebrow">Documentation · v0.9 (preview)</div>
+    <div class="docs-eyebrow">Documentation · CLI 0.3.x private alpha</div>
     <h1 class="docs-title">Mesh in <em>five minutes.</em></h1>
-    <p class="docs-lede">Mesh is a deterministic <strong>code-context engine</strong> that compresses your workspace 3.9× while keeping 100% recall. Same engine, four surfaces — terminal CLI, desktop IDE, MCP server, and the raw Gateway API. This is everything you need to ship.</p>
+    <p class="docs-lede">Mesh is a terminal-first <strong>AI engineering operating system</strong>: capsule context, verified timelines, runtime autopsy, issue autopilot, durable company memory, and MCP access for external agents. CLI is canonical; IDE, MCP, and API wrap the same engine at different maturity levels.</p>
 
     <!-- Surface grid -->
     <h2 class="docs-h2" id="welcome">Pick a <em>surface.</em></h2>
@@ -542,19 +542,19 @@
       <a class="surface-card" href="#cli-overview">
         <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
         <h3>CLI</h3>
-        <p>Terminal-native agent. Three commands to install, one to launch.</p>
+        <p>Terminal-native agent with /start, /change, /autopilot, timelines, and proof trails.</p>
         <span class="arrow">Read · CLI ↗</span>
       </a>
       <a class="surface-card" href="#ide-launch">
         <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div>
         <h3>IDE</h3>
-        <p>Desktop-first workspace with file tree, structural search, and inline chat.</p>
+        <p>Desktop workbench shell for Mesh workflows. Preview status: runtime bridge in progress.</p>
         <span class="arrow">Read · IDE ↗</span>
       </a>
       <a class="surface-card" href="#mcp-install">
         <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M3.5 12c0-2 1-4 3-5.5M20.5 12c0 2-1 4-3 5.5M12 3.5c2 0 4 1 5.5 3M12 20.5c-2 0-4-1-5.5-3"/></svg></div>
         <h3>MCP</h3>
-        <p>Bring Mesh to Claude Desktop or Cursor through Model Context Protocol.</p>
+        <p>Bring 112+ Mesh tools and guided prompts into Claude Code, Cursor, Windsurf, and VS Code.</p>
         <span class="arrow">Read · MCP ↗</span>
       </a>
       <a class="surface-card" href="#api-auth">
@@ -580,7 +580,7 @@ $ <span class="c">yarn global add @edgarelmo/mesh-agent-cli</span>
 
 <span class="d"># verify</span>
 $ <span class="c">mesh --version</span>
-<span class="g">mesh 0.9.0</span></pre>
+<span class="g">mesh 0.3.x</span></pre>
     </div>
     <p>Global install is the recommended default. For one-off runs without installing, use <code>npx -y @edgarelmo/mesh-agent-cli</code>.</p>
 
@@ -591,29 +591,30 @@ $ <span class="c">mesh --version</span>
 
     <!-- First run -->
     <h2 class="docs-h2" id="first-run">First run.</h2>
-    <p>Mesh always opens against your current working directory. Drop into any repo and launch — it'll index the workspace before the agent says a word.</p>
+    <p>Mesh opens against your current working directory. New users should run the golden path first: doctor, optional safe fixes, index, status, and repo briefing.</p>
 
     <div class="code">
       <div class="code-head"><span class="lang">bash</span><span>session</span><button class="copy-btn" data-copy="cd my-project && mesh">copy</button></div>
 <pre>$ <span class="c">cd my-project</span>
 $ <span class="c">mesh</span>
 
-<span class="d">▸ scanning workspace…</span>
-<span class="g">✓ 247 files · 12 languages indexed in 1.4s</span>
-<span class="d">▸ building capsule (3.9× compression)…</span>
-<span class="g">✓ capsule cap_8kX9z2a ready</span>
+mesh › <span class="s">/start</span>
+<span class="d">▸ running doctor · checking gateway · reading git state</span>
+<span class="g">✓ workspace healthy · 247 files indexed</span>
+<span class="d">▸ company brain: no durable memory yet</span>
+<span class="g">✓ repo briefing ready</span>
 
-mesh › <span class="s">why are voided invoices being charged?</span>
-<span class="d">▸ pulled: invoices.ts:14, webhooks.ts:88, billing.spec.ts:42</span>
-<span class="g">✓ proposed patch · src/billing/invoices.ts</span>
-<span class="d">  press ↵ to apply, e to edit, q to skip</span></pre>
+mesh › <span class="s">/change fix voided invoices being charged</span>
+<span class="d">▸ scoped: invoices.ts, webhooks.ts, billing.spec.ts</span>
+<span class="g">✓ patch drafted · verification detected: npm test</span>
+<span class="d">  review diff, then promote only after checks pass</span></pre>
     </div>
 
     <h3 class="docs-h3">What just happened?</h3>
     <ol>
-      <li><strong>Scan</strong> — Mesh walks the working tree and skips <code>.gitignore</code> entries by default.</li>
-      <li><strong>Compress</strong> — A capsule of structural symbols, signatures, and call edges is built (Tree-sitter under the hood).</li>
-      <li><strong>Recover</strong> — When the agent needs full context, Mesh pulls the exact byte-range from disk — never from a hallucination.</li>
+      <li><strong>Brief</strong> — <code>/start</code> runs diagnostics, indexes the repo, and gives the agent a grounded project briefing.</li>
+      <li><strong>Scope</strong> — <code>/change</code> narrows the edit to likely files before any patch is written.</li>
+      <li><strong>Verify</strong> — Risky work flows through timelines, tests, audit logs, and proof artifacts before promotion.</li>
     </ol>
 
     <!-- Concepts -->
@@ -627,7 +628,9 @@ mesh › <span class="s">why are voided invoices being charged?</span>
           <tr><td><code>capsule</code></td><td>A compressed structural index of a workspace. ~600 tokens / 1k LOC.</td></tr>
           <tr><td><code>span</code></td><td>A byte-range in a real file. Returned verbatim — never paraphrased.</td></tr>
           <tr><td><code>recall</code></td><td>The percent of NIAH probes Mesh answers correctly. Standard track: 100%.</td></tr>
-          <tr><td><code>provider</code></td><td>The LLM that does the reasoning. Mesh is provider-agnostic.</td></tr>
+          <tr><td><code>company brain</code></td><td>Durable repo memory for decisions, owners, risks, rules, and accepted patterns.</td></tr>
+          <tr><td><code>timeline</code></td><td>An isolated worktree or copy where risky patches can be tested before promotion.</td></tr>
+          <tr><td><code>proof bundle</code></td><td>Evidence package: diff, risks, checks, rollback notes, and audit trail.</td></tr>
           <tr><td><code>session</code></td><td>An interactive mesh shell with full capsule + chat history. Resumable.</td></tr>
           <tr><td><code>workspace</code></td><td>Any directory Mesh has built a capsule for. Stored in <code>~/.mesh/</code>.</td></tr>
         </tbody>
@@ -635,30 +638,41 @@ mesh › <span class="s">why are voided invoices being charged?</span>
     </div>
 
     <h2 class="docs-h2" id="slash-command-reference">Slash commands · <em>operator surface</em>.</h2>
-    <p>Mesh's slash commands are the terminal controls for its 122-feature system: capsules, local voice, neural retrieval, isolated timelines, runtime autopsy, UI-to-code inspection, digital twin analysis, multi-agent work, and safety policy.</p>
+    <p>Mesh's slash commands are the operator controls for its current CLI: golden path onboarding, narrow verified changes, company memory, issue autopilot, capsules, local voice, timelines, runtime autopsy, UI inspection, model routing, and safety policy.</p>
 
     <div class="slash-console">
       <div class="slash-hero">
         <div>
           <div class="slash-label">Command registry</div>
           <div class="slash-title">One prompt line.<br><em>Many engines behind it.</em></div>
-          <p class="slash-lede">The commands below are grouped by the job they unlock. Some are simple session controls; others activate deeper Mesh systems such as fix racing, Hologram tracing, predictive repair, or semantic contract checks.</p>
+          <p class="slash-lede">The commands below are grouped by the job they unlock. Some are simple session controls; others activate deeper Mesh systems such as issue autopilot, company brain, timeline verification, Hologram tracing, predictive repair, or semantic contract checks.</p>
         </div>
         <div class="slash-stats">
-          <div class="slash-stat"><b>122</b>features, tools, moonshots, and agents in the current Mesh map</div>
-          <div class="slash-stat"><b>8</b>command families: context, voice, timelines, runtime, UI, safety, memory, and setup</div>
-          <div class="slash-stat"><b>1</b>shared capsule engine behind CLI, IDE, MCP, and API surfaces</div>
+          <div class="slash-stat"><b>45+</b>slash commands and aliases exposed by the current CLI registry</div>
+          <div class="slash-stat"><b>112+</b>MCP tools for context, patching, timelines, runtime, and discovery</div>
+          <div class="slash-stat"><b>1</b>capsule and verification engine behind CLI, MCP, IDE bridge, and API surfaces</div>
         </div>
       </div>
 
       <div class="slash-runway">
-        <div><code>/status</code><span>See session state, model routing, git state, index health, and active capsule context.</span></div>
-        <div><code>/capsule</code><span>Inspect, compact, clear, or export the compressed memory attached to the current run.</span></div>
-        <div><code>/hologram start &lt;cmd&gt;</code><span>Run a Node command under runtime observation and collect crash evidence.</span></div>
-        <div><code>/fork</code><span>Generate and score alternate implementation paths before touching main.</span></div>
+        <div><code>/start</code><span>Run the first-user golden path: doctor, optional fixes, index, status, and repo briefing.</span></div>
+        <div><code>/change &lt;goal&gt;</code><span>Make one narrow code change, run detected verification, and summarize the diff.</span></div>
+        <div><code>/autopilot</code><span>Turn a GitHub, Linear, Jira, or manual issue into a timeline patch and proof bundle.</span></div>
+        <div><code>/company</code><span>Build or query durable repo memory before planning changes.</span></div>
       </div>
 
       <div class="cmd-clusters">
+        <details class="cmd-cluster" open>
+          <summary><span><span class="cmd-title">Golden Path &amp; Autopilot</span><span class="cmd-desc">Move from first run to verified patches without hand-waving.</span></span><span class="cmd-count">ship</span></summary>
+          <div class="cmd-body">
+            <div class="cmd-line"><code>/start</code><span>Run doctor, optional safe setup fixes, index, status, and repo briefing for a fresh workspace.</span></div>
+            <div class="cmd-line"><code>/change &lt;small goal&gt;</code><span>Scope a narrow edit, apply a surgical patch, run detected verification, and report the diff.</span></div>
+            <div class="cmd-line"><code>/autopilot plan|run|pr</code><span>Convert an issue or manual title into a verified timeline patch, proof bundle, and optional PR.</span></div>
+            <div class="cmd-line"><code>/issues</code><span>Scan GitHub, Linear, or Jira tickets and prepare issue-to-PR work drafts.</span></div>
+            <div class="cmd-line"><code>/doctor fix</code><span>Apply safe local setup repairs while leaving shell, Git, and auth changes manual.</span></div>
+          </div>
+        </details>
+
         <details class="cmd-cluster" open>
           <summary><span><span class="cmd-title">Context &amp; Capsules</span><span class="cmd-desc">Turn raw repos into model-sized structure with exact span recovery.</span></span><span class="cmd-count">core</span></summary>
           <div class="cmd-body">
@@ -719,8 +733,11 @@ mesh › <span class="s">why are voided invoices being charged?</span>
           <div class="cmd-body">
             <div class="cmd-line"><code>/twin</code><span>Build or read a digital twin of routes, package shape, risk zones, and code relationships.</span></div>
             <div class="cmd-line"><code>/repair</code><span>Prioritize predictive repair opportunities from diagnostics and runtime signals.</span></div>
+            <div class="cmd-line"><code>/company</code><span>Build, query, or record durable company codebase memory: decisions, risks, owners, and patterns.</span></div>
             <div class="cmd-line"><code>/learn</code><span>Extract durable engineering patterns from accepted work, git history, and team conventions.</span></div>
             <div class="cmd-line"><code>/intent</code><span>Compile a product request into implementation constraints, files, tests, and rollback checkpoints.</span></div>
+            <div class="cmd-line"><code>/brain</code><span>Query Mesh Brain global fix patterns and inspect telemetry contribution status.</span></div>
+            <div class="cmd-line"><code>/lab</code><span>Run the Autonomous Discovery Lab over causal, repair, and workspace signals.</span></div>
             <div class="cmd-line"><code>/ghost</code><span>Replay local implementation style learned from previous commits and accepted patches.</span></div>
             <div class="cmd-line"><code>/resurrect</code><span>Restore saved intent, open questions, and next actions from a previous cognitive checkpoint.</span></div>
           </div>
@@ -753,7 +770,7 @@ mesh › <span class="s">why are voided invoices being charged?</span>
 
       <div class="slash-note">
         <div class="ic">i</div>
-        <p>The 122-feature map includes user-facing slash commands, lower-level workspace tools, moonshot workflows, and sub-agents. Slash commands are the operator entry points; the deeper tool calls run behind them when a workflow needs indexing, timelines, runtime capture, semantic search, or multi-agent delegation.</p>
+        <p>The 122-feature map still describes the broader product ambition. The live CLI registry is the source of truth for what users can type today; deeper tool calls run behind slash commands when a workflow needs indexing, timelines, runtime capture, semantic search, issue automation, or multi-agent delegation.</p>
       </div>
     </div>
 
@@ -768,53 +785,51 @@ mesh › <span class="s">why are voided invoices being charged?</span>
       <table>
         <thead><tr><th>Command</th><th>Purpose</th></tr></thead>
         <tbody>
-          <tr><td><code>mesh</code></td><td>Open an interactive session in the current directory.</td></tr>
-          <tr><td><code>mesh ask "&lt;query&gt;"</code></td><td>One-shot query without opening the shell.</td></tr>
-          <tr><td><code>mesh index</code></td><td>Build (or rebuild) the capsule for the current workspace.</td></tr>
-          <tr><td><code>mesh resume &lt;id&gt;</code></td><td>Continue any previous session by id.</td></tr>
-          <tr><td><code>mesh recover &lt;path:line&gt;</code></td><td>Pull the exact span Mesh returned to the model.</td></tr>
-          <tr><td><code>mesh providers</code></td><td>List available providers and active key status.</td></tr>
-          <tr><td><code>mesh doctor</code></td><td>Verify Node version, env, and provider routing.</td></tr>
-          <tr><td><code>mesh bench</code></td><td>Run the benchmark suite locally.</td></tr>
+          <tr><td><code>mesh</code></td><td>Open an interactive agent session in the current directory.</td></tr>
+          <tr><td><code>mesh init</code></td><td>Initialize the first-user golden path for a workspace.</td></tr>
+          <tr><td><code>/start</code></td><td>Run doctor, safe setup fixes, index, status, and repo briefing from inside the shell.</td></tr>
+          <tr><td><code>/change &lt;goal&gt;</code></td><td>Make one narrow verified edit with detected checks and a diff summary.</td></tr>
+          <tr><td><code>/company query &lt;question&gt;</code></td><td>Search durable company codebase memory before planning a change.</td></tr>
+          <tr><td><code>/autopilot run &lt;issue&gt;</code></td><td>Plan, patch in a timeline, verify, review, and write a proof bundle.</td></tr>
+          <tr><td><code>/doctor</code></td><td>Verify auth, gateway connectivity, local environment, and optional fixes.</td></tr>
+          <tr><td><code>mesh support</code></td><td>Collect auth-free bug report diagnostics for support.</td></tr>
         </tbody>
       </table>
     </div>
 
-    <h3 class="docs-h3" id="cli-providers">Providers &amp; keys</h3>
-    <p>Mesh supports six providers out of the box. Set the env var, point <code>MESH_PROVIDER</code> at it, and go.</p>
+    <h3 class="docs-h3" id="cli-providers">Models &amp; keys</h3>
+    <p>The current CLI defaults to the Mesh LLM gateway with Claude 4.6 Sonnet. Power users can switch models with <code>/model</code>, use NVIDIA-hosted code models through <code>NVIDIA_API_KEY</code>, or point <code>BEDROCK_ENDPOINT</code> at a BYOK endpoint.</p>
 
     <div class="code">
-      <div class="code-head"><span class="lang">bash</span><span>~/.zshrc · provider env</span><button class="copy-btn" data-copy="export ANTHROPIC_API_KEY=sk-...
-export MESH_PROVIDER=anthropic
-export MESH_MODEL=claude-sonnet-4.6">copy</button></div>
-<pre><span class="d"># Anthropic (default)</span>
-<span class="k">export</span> ANTHROPIC_API_KEY=<span class="s">sk-ant-...</span>
+      <div class="code-head"><span class="lang">bash</span><span>models · current CLI</span><button class="copy-btn" data-copy="mesh
+/model list
+/model qwen3-coder
+export NVIDIA_API_KEY=nvapi-...">copy</button></div>
+<pre><span class="d"># default through the Mesh gateway</span>
+$ <span class="c">mesh</span>
+mesh › <span class="s">/model list</span>
 
-<span class="d"># OpenAI</span>
-<span class="k">export</span> OPENAI_API_KEY=<span class="s">sk-...</span>
+<span class="d"># switch inside the shell</span>
+mesh › <span class="s">/model qwen3-coder</span>
 
-<span class="d"># OpenRouter (any model)</span>
-<span class="k">export</span> OPENROUTER_API_KEY=<span class="s">sk-or-...</span>
+<span class="d"># optional direct NVIDIA route</span>
+<span class="k">export</span> NVIDIA_API_KEY=<span class="s">nvapi-...</span>
 
-<span class="d"># Local: Ollama</span>
-<span class="k">export</span> MESH_PROVIDER=ollama
-<span class="k">export</span> MESH_MODEL=llama3.3:70b
-
-<span class="d"># Switch active provider</span>
-<span class="k">export</span> MESH_PROVIDER=anthropic
-<span class="k">export</span> MESH_MODEL=claude-sonnet-4.6</pre>
+<span class="d"># optional BYOK endpoint</span>
+<span class="k">export</span> BEDROCK_ENDPOINT=<span class="s">https://your-bedrock-compatible-endpoint</span>
+<span class="k">export</span> BEDROCK_API_KEY=<span class="s">...</span></pre>
     </div>
 
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Provider</th><th><code>MESH_PROVIDER</code></th><th>Notes</th></tr></thead>
+        <thead><tr><th>Model</th><th>Catalog id / route</th><th>Notes</th></tr></thead>
         <tbody>
-          <tr><td>Anthropic</td><td><code>anthropic</code></td><td>Default. Recommended.</td></tr>
-          <tr><td>OpenAI</td><td><code>openai</code></td><td>GPT-5, GPT-5-mini.</td></tr>
-          <tr><td>OpenRouter</td><td><code>openrouter</code></td><td>Any model, any host.</td></tr>
-          <tr><td>Groq</td><td><code>groq</code></td><td>Fastest inference. Llama, Qwen.</td></tr>
-          <tr><td>DeepSeek</td><td><code>deepseek</code></td><td>v3, Coder v2.</td></tr>
-          <tr><td>Ollama</td><td><code>ollama</code></td><td>100% local. No internet.</td></tr>
+          <tr><td>Claude 4.6 Sonnet</td><td><code>us.anthropic.claude-sonnet-4-6</code></td><td>Default Mesh gateway model.</td></tr>
+          <tr><td>Claude 4.6 Opus</td><td><code>us.anthropic.claude-opus-4-6-v1</code></td><td>Higher-depth planning and review.</td></tr>
+          <tr><td>Qwen 3 Coder 480B</td><td><code>qwen/qwen3-coder-480b-a35b-instruct</code></td><td>NVIDIA code default.</td></tr>
+          <tr><td>Kimi K2.5 / DeepSeek V3.2 / Devstral 2</td><td><code>nvidia</code></td><td>Specialized reasoning and coding fallbacks.</td></tr>
+          <tr><td>Gemini 3.1 Pro / Gemini 3 Flash</td><td><code>google/*</code></td><td>Google route for powerful or fast runs.</td></tr>
+          <tr><td>Grok 4.20</td><td><code>xai/*</code></td><td>Preview reasoning or fast mode through the Google route.</td></tr>
         </tbody>
       </table>
     </div>
@@ -834,22 +849,20 @@ $ <span class="c">mesh --voice</span>            <span class="d"># launch in voi
     <hr>
 
     <!-- ─────────── IDE ─────────── -->
-    <h2 class="docs-h2" id="ide-launch">IDE · <em>launch</em>.</h2>
-    <p>The Mesh IDE is a desktop-first workspace with a VS Code-style file tree, structural search, and inline chat — all powered by the same capsule engine.</p>
-    <p><strong>macOS build:</strong> download directly from <a href="/download/ide-macos" target="_blank" rel="noreferrer">try-mesh.com/download/ide-macos</a> (DMG). This link always points to the latest stable macOS build. Windows support is coming later.</p>
+    <h2 class="docs-h2" id="ide-launch">IDE · <em>preview status</em>.</h2>
+    <p>The Mesh IDE is a desktop-first workbench shell: React/Electron UI, Monaco editor, file explorer, terminal SSE, git status/diff/commit APIs, and an assistant/action contract.</p>
+    <p><strong>Status:</strong> the current IDE is not the canonical production agent yet. The assistant bridge to the real Mesh runtime is in progress; use the CLI or MCP server for verified agent work today.</p>
 
     <ol>
-      <li>Download <code>mesh-ide-macos.dmg</code> from the macOS download link.</li>
-      <li>Open the DMG and drag <code>Mesh IDE</code> to <code>Applications</code>.</li>
-      <li>Launch Mesh IDE and sign in with GitHub.</li>
-      <li>Pick a repository (read-only or read-write).</li>
-      <li>Press <kbd>⌘K</kbd> → <code>Index workspace</code>.</li>
-      <li>Open the chat panel (<kbd>⌘L</kbd>) and start asking.</li>
+      <li>Use Mesh CLI as the source of truth for agent execution.</li>
+      <li>Run <code>mesh</code>, <code>/start</code>, and <code>/index</code> in your repository first.</li>
+      <li>Use the IDE preview for workbench exploration, file navigation, terminal, and git surfaces.</li>
+      <li>Watch the runtime bridge milestone before relying on IDE chat for production changes.</li>
     </ol>
 
     <div class="note">
       <div class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
-      <p><strong>Capsules are reused.</strong> If you ran <code>mesh index</code> in your CLI, the IDE will pick up the same capsule via <code>~/.mesh/</code>. Index once, query everywhere.</p>
+      <p><strong>Runtime bridge in progress.</strong> The planned architecture keeps the IDE as a separate product, but routes assistant turns through the shared Mesh runtime instead of a stub response layer.</p>
     </div>
 
     <h3 class="docs-h3" id="ide-shortcuts">Shortcuts</h3>
@@ -871,42 +884,50 @@ $ <span class="c">mesh --voice</span>            <span class="d"># launch in voi
 
     <!-- ─────────── MCP ─────────── -->
     <h2 class="docs-h2" id="mcp-install">MCP · <em>install &amp; run</em>.</h2>
-    <p>The Mesh MCP server exposes capsule operations as Model Context Protocol tools. Any MCP-compatible client (Claude Desktop, Cursor, Zed) can use Mesh as a code-context backend.</p>
+    <p>The Mesh MCP distribution exposes the Mesh engineering agent as a high-performance MCP server. Claude Code, Claude Desktop, Cursor, Windsurf, and VS Code can use it as a structured context, patching, timeline, and runtime-debugging layer.</p>
 
     <div class="code">
-      <div class="code-head"><span class="lang">bash</span><span>mcp · install &amp; serve</span><button class="copy-btn" data-copy="npm i -g @edgarelmo/mesh-mcp
-mesh mcp serve --port 7400">copy</button></div>
-<pre>$ <span class="c">npm i -g @edgarelmo/mesh-mcp</span>
-$ <span class="c">mesh mcp serve --port 7400</span>
+      <div class="code-head"><span class="lang">bash</span><span>mcp · install &amp; doctor</span><button class="copy-btn" data-copy="npx @edgarelmo/mesh-mcp install
+npx @edgarelmo/mesh-mcp doctor">copy</button></div>
+<pre>$ <span class="c">npx @edgarelmo/mesh-mcp install</span>
+$ <span class="c">npx @edgarelmo/mesh-mcp doctor</span>
 
-<span class="d">▸ binding 127.0.0.1:7400</span>
-<span class="g">✓ MCP server ready · 112+ tools registered</span>
-  <span class="d">• mesh.search_code</span>
-  <span class="d">• mesh.read_span</span>
-  <span class="d">• mesh.find_refs</span>
-  <span class="d">• mesh.recover</span></pre>
+<span class="d">▸ detecting Claude Desktop, Claude Code, Cursor, Windsurf</span>
+<span class="g">✓ MCP config installed</span>
+<span class="g">✓ 112+ Mesh tools available</span>
+  <span class="d">• workspace.ask_codebase</span>
+  <span class="d">• workspace.patch_surgical</span>
+  <span class="d">• workspace.timeline_*</span>
+  <span class="d">• runtime.start</span></pre>
     </div>
-    <p>Global install is recommended for daily usage. For ephemeral runs, use <code>npx -y @edgarelmo/mesh-mcp</code>.</p>
+    <p>For local development and freshest features, Mesh MCP automatically bridges to a local <code>@edgarelmo/mesh-agent-cli</code> when found on the desktop.</p>
 
-    <h3 class="docs-h3" id="mcp-claude">Add to Claude Desktop / Cursor</h3>
-    <p>For clients that support HTTP MCP servers, keep <code>mesh mcp serve --port 7400</code> running and use this config:</p>
+    <h3 class="docs-h3" id="mcp-claude">Manual Claude / Cursor config</h3>
+    <p>The installer handles common clients automatically. For manual stdio setup, point your MCP client at <code>npx -y @edgarelmo/mesh-mcp</code> and set the workspace path:</p>
 
     <div class="code">
-      <div class="code-head"><span class="lang">json</span><span>~/Library/Application Support/Claude/mcp.json</span><button class="copy-btn" data-copy='{
+      <div class="code-head"><span class="lang">json</span><span>mcp config</span><button class="copy-btn" data-copy='{
   "mcpServers": {
-    "mesh": { "url": "http://localhost:7400" }
+    "mesh": {
+      "command": "npx",
+      "args": ["-y", "@edgarelmo/mesh-mcp"],
+      "env": { "MESH_WORKSPACE_PATH": "/absolute/path/to/your/project" }
+    }
   }
 }'>copy</button></div>
 <pre>{
   <span class="s">"mcpServers"</span>: {
     <span class="s">"mesh"</span>: {
-      <span class="s">"url"</span>: <span class="s">"http://localhost:7400"</span>,
-      <span class="s">"description"</span>: <span class="s">"Mesh code context"</span>
+      <span class="s">"command"</span>: <span class="s">"npx"</span>,
+      <span class="s">"args"</span>: [<span class="s">"-y"</span>, <span class="s">"@edgarelmo/mesh-mcp"</span>],
+      <span class="s">"env"</span>: {
+        <span class="s">"MESH_WORKSPACE_PATH"</span>: <span class="s">"/absolute/path/to/your/project"</span>
+      }
     }
   }
 }</pre>
     </div>
-    <p>For stdio-based clients (or quick tests), use <code>npx -y @edgarelmo/mesh-mcp</code> as command instead of a localhost URL.</p>
+    <p>Cursor and Windsurf use the same stdio command. Claude Code users can keep the generated config and let the installer update it.</p>
 
     <h3 class="docs-h3" id="mcp-tools">Common tools (subset)</h3>
     <p>Mesh MCP exposes a broad tool surface. The table below lists only the most common entry points.</p>
@@ -914,10 +935,12 @@ $ <span class="c">mesh mcp serve --port 7400</span>
       <table>
         <thead><tr><th>Tool</th><th>Args</th><th>Returns</th></tr></thead>
         <tbody>
-          <tr><td><code>mesh.search_code</code></td><td><code>{ query, limit }</code></td><td>Top-N symbol matches w/ file paths.</td></tr>
-          <tr><td><code>mesh.read_span</code></td><td><code>{ path, line }</code></td><td>Exact byte-range from the file.</td></tr>
-          <tr><td><code>mesh.find_refs</code></td><td><code>{ symbol }</code></td><td>Every reference site across the workspace.</td></tr>
-          <tr><td><code>mesh.recover</code></td><td><code>{ capsule_id }</code></td><td>Full source for any capsule reference.</td></tr>
+          <tr><td><code>workspace.ask_codebase</code></td><td><code>{ query, mode }</code></td><td>Semantic answer with source-backed file references.</td></tr>
+          <tr><td><code>workspace.patch_surgical</code></td><td><code>{ path, patch }</code></td><td>Pinpoint file edits without dumping whole files into context.</td></tr>
+          <tr><td><code>workspace.timeline_*</code></td><td><code>{ action, command }</code></td><td>Create, patch, run, compare, and promote isolated timelines.</td></tr>
+          <tr><td><code>runtime.start</code></td><td><code>{ command }</code></td><td>Run commands under runtime observation and capture failure evidence.</td></tr>
+          <tr><td><code>workspace.company_brain</code></td><td><code>{ action, query }</code></td><td>Build or query durable repo memory.</td></tr>
+          <tr><td><code>workspace.issue_autopilot</code></td><td><code>{ action, issue }</code></td><td>Plan issue-to-PR workflows with timelines and proof bundles.</td></tr>
         </tbody>
       </table>
     </div>
@@ -1009,32 +1032,28 @@ $ <span class="c">mesh mcp serve --port 7400</span>
 
     <!-- ─────────── Reference ─────────── -->
     <h2 class="docs-h2" id="config">Configuration.</h2>
-    <p>Mesh reads from three places, in order: CLI flags → env vars → <code>~/.mesh/config.toml</code>. Later wins.</p>
+    <p>Mesh reads local settings, user settings, and environment variables. The current CLI centers on <code>BEDROCK_ENDPOINT</code>, <code>BEDROCK_*</code> limits, the model catalog, and optional NVIDIA keys for direct code-model routing.</p>
 
     <div class="code">
-      <div class="code-head"><span class="lang">toml</span><span>~/.mesh/config.toml</span><button class="copy-btn" data-copy='[provider]
-default = "anthropic"
-model = "claude-sonnet-4.6"
+      <div class="code-head"><span class="lang">bash</span><span>environment</span><button class="copy-btn" data-copy='export BEDROCK_ENDPOINT=https://mesh-llm-proxy.example.com
+export BEDROCK_MAX_TOKENS=3000
+export BEDROCK_TEMPERATURE=0
+export MESH_ENABLE_EMBEDDINGS=1
+export MESH_DISABLE_WATCHERS=1'>copy</button></div>
+<pre><span class="d"># optional custom proxy / BYOK endpoint</span>
+<span class="k">export</span> BEDROCK_ENDPOINT=<span class="s">https://mesh-llm-proxy.example.com</span>
+<span class="k">export</span> BEDROCK_API_KEY=<span class="s">...</span>
 
-[capsule]
-max_tokens = 6000
-compression = "high"
-exclude = ["node_modules", "dist", ".next"]'>copy</button></div>
-<pre>[provider]
-default = <span class="s">"anthropic"</span>
-model = <span class="s">"claude-sonnet-4.6"</span>
-temperature = <span class="n">0.2</span>
+<span class="d"># runtime limits</span>
+<span class="k">export</span> BEDROCK_MAX_TOKENS=<span class="n">3000</span>
+<span class="k">export</span> BEDROCK_TEMPERATURE=<span class="n">0</span>
 
-[capsule]
-max_tokens = <span class="n">6000</span>
-compression = <span class="s">"high"</span>     <span class="d"># "low" | "balanced" | "high"</span>
-exclude = [<span class="s">"node_modules"</span>, <span class="s">"dist"</span>, <span class="s">".next"</span>]
+<span class="d"># opt-in expensive local features</span>
+<span class="k">export</span> MESH_ENABLE_EMBEDDINGS=<span class="n">1</span>
+<span class="k">export</span> MESH_ENABLE_BACKGROUND_RESOLVER=<span class="n">1</span>
 
-[ide]
-auto_index = <span class="k">true</span>
-
-[telemetry]
-enabled = <span class="k">false</span>          <span class="d"># opt-in, off by default</span></pre>
+<span class="d"># deterministic CI/local runs</span>
+<span class="k">export</span> MESH_DISABLE_WATCHERS=<span class="n">1</span></pre>
     </div>
 
     <h3 class="docs-h3" id="telemetry">Telemetry</h3>
@@ -1045,27 +1064,27 @@ enabled = <span class="k">false</span>          <span class="d"># opt-in, off by
       <table>
         <thead><tr><th>Symptom</th><th>Fix</th></tr></thead>
         <tbody>
-          <tr><td>"Provider not configured"</td><td>Run <code>mesh providers</code> and set the matching env var.</td></tr>
-          <tr><td>Stale answers after editing files</td><td>Run <code>mesh index --force</code> or set <code>auto_index = true</code>.</td></tr>
-          <tr><td>Slow first run</td><td>Capsule build is single-threaded. Pass <code>--workers 4</code>.</td></tr>
-          <tr><td>MCP client can't see Mesh</td><td>Confirm <code>mesh mcp serve</code> is running. Check the port matches the client config.</td></tr>
-          <tr><td>Voice mode silent</td><td>Re-run <code>mesh voice install</code>. Check microphone permissions.</td></tr>
+          <tr><td>First run feels unclear</td><td>Run <code>/start</code>; it executes doctor, indexing, status, and repo briefing.</td></tr>
+          <tr><td>Gateway/model errors</td><td>Run <code>/doctor full</code>, then <code>/model list</code>; set <code>NVIDIA_API_KEY</code> only for direct NVIDIA routing.</td></tr>
+          <tr><td>Too many file watchers</td><td>Set <code>MESH_DISABLE_WATCHERS=1</code>; current releases avoid recursive full-repo watchers by default.</td></tr>
+          <tr><td>MCP client can't see Mesh</td><td>Run <code>npx @edgarelmo/mesh-mcp doctor</code> and verify <code>MESH_WORKSPACE_PATH</code>.</td></tr>
+          <tr><td>Voice mode silent</td><td>Run <code>/doctor voice fix</code>. Check FFmpeg/model assets and microphone permissions.</td></tr>
         </tbody>
       </table>
     </div>
 
     <div class="note danger">
       <div class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
-      <p><strong>Preview release.</strong> Mesh is in private preview (v0.9). The API surface and config schema may change before 1.0. Pin <code>@edgarelmo/mesh-agent-cli@0.9.x</code> in CI.</p>
+      <p><strong>Private alpha.</strong> Mesh CLI is in the 0.3.x line. Pin the exact package version used by your team, and treat IDE/API surfaces as preview until their runtime bridge and hosted quotas are production-complete.</p>
     </div>
 
     <h3 class="docs-h3" id="changelog">Changelog</h3>
     <ul>
-      <li><strong>0.9.0</strong> — Multi-hop reasoning benchmark added. <code>mesh recover</code> now byte-exact across all providers.</li>
-      <li><strong>0.8.4</strong> — MCP server ships standalone (<code>@edgarelmo/mesh-mcp</code>). <code>find_refs</code> tool added.</li>
-      <li><strong>0.8.0</strong> — Desktop IDE preview. Capsule sharing via <code>~/.mesh/</code>.</li>
-      <li><strong>0.7.0</strong> — Voice mode (Whisper turbo, local-only).</li>
-      <li><strong>0.6.0</strong> — Provider plugin system. Ollama support.</li>
+      <li><strong>0.3.20</strong> — Critical stability and auth fixes; local source is ahead of the published npm latest if not yet released.</li>
+      <li><strong>0.3.11</strong> — Username login polish for email-or-username terminal login.</li>
+      <li><strong>0.3.10</strong> — Private alpha readiness: <code>/start</code>, <code>/change</code>, <code>mesh init</code>, release smoke checks, support diagnostics, safer doctor fixes, and watcher hardening.</li>
+      <li><strong>MCP 2.1.1</strong> — Standalone MCP distribution with installer, doctor, 112+ tools, and prompts for debug, implementation, review, codebase ask, synthesize, and setup.</li>
+      <li><strong>IDE preview</strong> — React/Electron workbench exists; production assistant runtime bridge is still in progress.</li>
     </ul>
 
     <hr>

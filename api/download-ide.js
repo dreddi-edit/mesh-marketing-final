@@ -16,10 +16,8 @@ export default async function handler(req, res) {
 
     const exactMatches = blobs.filter((blob) => blob.pathname === TARGET_PATHNAME);
     if (exactMatches.length === 0) {
-      return res.status(503).json({
-        ok: false,
-        message: 'IDE download is not available yet. Please try again soon.'
-      });
+      res.setHeader('Cache-Control', 'no-store');
+      return res.redirect(302, '/docs#ide-launch');
     }
 
     // If multiple versions exist with same pathname, prefer the freshest upload.
@@ -33,10 +31,7 @@ export default async function handler(req, res) {
     res.setHeader('Cache-Control', 'no-store');
     return res.redirect(302, target);
   } catch (error) {
-    return res.status(503).json({
-      ok: false,
-      message: 'IDE download is temporarily unavailable.',
-      detail: error instanceof Error ? error.message : 'unknown_error'
-    });
+    res.setHeader('Cache-Control', 'no-store');
+    return res.redirect(302, '/docs#ide-launch');
   }
 }

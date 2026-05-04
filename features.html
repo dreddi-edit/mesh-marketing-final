@@ -421,7 +421,7 @@
         <div><span class="l">F</span><span class="l">o</span><span class="l">u</span><span class="l">r</span>&nbsp;<span class="l">s</span><span class="l">u</span><span class="l">r</span><span class="l">f</span><span class="l">a</span><span class="l">c</span><span class="l">e</span><span class="l">s</span><span class="l">.</span></div>
         <div class="cyan-line"><span class="l">O</span><span class="l">n</span><span class="l">e</span>&nbsp;<span class="l">e</span><span class="l">n</span><span class="l">g</span><span class="l">i</span><span class="l">n</span><span class="l">e</span><span class="l">.</span></div>
       </h1>
-      <p class="hero-copy">Mesh gives agents the code context they need without flooding the model. Terminal, IDE, MCP, and API all run on the same <strong>capsule compression engine</strong>: structural search, targeted reads, exact span recovery, and resumable sessions.</p>
+      <p class="hero-copy">Mesh gives agents the code context and execution discipline they need: capsules, timelines, runtime autopsy, issue autopilot, company memory, and MCP access. The CLI is the source of truth today; IDE and API are preview surfaces around the same engine.</p>
       <div class="hero-actions">
         <a class="primary-btn" onclick="openModal()">Join waitlist</a>
         <a class="secondary-btn" href="#surfaces">Explore surfaces</a>
@@ -437,7 +437,7 @@
       <div class="fs-content">
         <div class="fs-kicker">Surface 01</div>
         <h2 class="fs-title">The CLI.</h2>
-        <p class="fs-copy">Install globally. Runs in any terminal. <strong>Local Whisper voice</strong>, auto-exec shell, no browser required. Features interactive diffing, symbol search, and multi-file editing directly from your shell.</p>
+        <p class="fs-copy">Install globally. Runs in any terminal. <strong>/start</strong> gives a repo briefing, <strong>/change</strong> makes one verified edit, and <strong>/autopilot</strong> turns issues into timeline-tested patches with proof bundles.</p>
         <button class="primary-btn" onclick="openModal()">Get started</button>
       </div>
       <div class="fs-visual">
@@ -506,8 +506,8 @@
       <div class="fs-content">
         <div class="fs-kicker">Surface 02</div>
         <h2 class="fs-title">Mesh IDE.</h2>
-        <p class="fs-copy">A desktop-first VS Code-style workspace intelligence layer for deep sessions. Full file tree, structural search, and multi-file editing with live context compression. <strong>Built for complex refactors</strong>.</p>
-        <a class="secondary-btn" href="/download/ide-macos" target="_blank" rel="noreferrer">Download IDE for macOS</a>
+        <p class="fs-copy">A desktop-first React/Electron workbench shell with Monaco, file explorer, terminal SSE, and git surfaces. <strong>Preview status:</strong> the shared Mesh runtime bridge is still in progress, so verified agent work should run through CLI or MCP today.</p>
+        <a class="secondary-btn" href="/docs#ide-launch">Read IDE status</a>
       </div>
     </div>
     <!-- MCP -->
@@ -515,8 +515,8 @@
       <div class="fs-content">
         <div class="fs-kicker">Surface 03</div>
         <h2 class="fs-title">MCP Server.</h2>
-        <p class="fs-copy">Bring Mesh to Claude Desktop or Cursor. Any agent supporting <strong>Model Context Protocol</strong> can query your codebase through Mesh's capsule engine and access the full toolset, not just a small fixed subset.</p>
-        <button class="secondary-btn" onclick="navigator.clipboard.writeText('npm i -g @edgarelmo/mesh-mcp && mesh mcp serve --port 7400'); alert('Copied')">Copy install + run</button>
+        <p class="fs-copy">Bring Mesh to Claude Code, Claude Desktop, Cursor, Windsurf, and VS Code. The current MCP package installs client configs, runs diagnostics, and exposes <strong>112+ tools</strong> for context, surgical patching, timelines, and runtime debugging.</p>
+        <button class="secondary-btn" onclick="navigator.clipboard.writeText('npx @edgarelmo/mesh-mcp install && npx @edgarelmo/mesh-mcp doctor'); alert('Copied')">Copy MCP setup</button>
       </div>
       <div class="fs-visual">
         <div class="mcp-mock" id="mcpMock" aria-hidden="true">
@@ -537,7 +537,7 @@
               <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 6L2 12l3 6M11 6L8 12l3 6M17 6l-3 6 3 6M22 6l-3 6 3 6"/></svg></div>
               <div>
                 <div class="nm">Mesh MCP Server</div>
-                <div class="sub">localhost:7400 · 247 files</div>
+                <div class="sub">stdio · 112+ tools</div>
               </div>
             </div>
           </div>
@@ -559,10 +559,10 @@
             </div>
           </div>
           <div class="mcp-tools" id="mcpTools">
-            <div class="mcp-tool" data-tool="search">mesh.search_code()</div>
-            <div class="mcp-tool" data-tool="read">mesh.read_span()</div>
-            <div class="mcp-tool" data-tool="refs">mesh.find_refs()</div>
-            <div class="mcp-tool" data-tool="recover">mesh.recover()</div>
+            <div class="mcp-tool" data-tool="search">workspace.ask_codebase()</div>
+            <div class="mcp-tool" data-tool="patch">workspace.patch_surgical()</div>
+            <div class="mcp-tool" data-tool="timeline">workspace.timeline_run()</div>
+            <div class="mcp-tool" data-tool="runtime">runtime.start()</div>
           </div>
         </div>
       </div>
@@ -617,25 +617,25 @@ const canvas=document.getElementById('mesh-canvas'),ctx=canvas.getContext('2d');
   if (!body || !stream || !input) return;
 
   const SCRIPTS = [
-    { cmd: 'mesh', out: [
-      ['mute', '→ Indexing 247 files…'],
-      ['mute', '→ Tree-sitter AST · 12 langs · 1.1s'],
-      ['ok',   '✓ Capsule cap_8kX9z2a · 612k tokens · 3.92× ratio'],
+    { cmd: 'mesh › /start', out: [
+      ['mute', '→ Doctor · gateway · git · index'],
+      ['mute', '→ Repo briefing and status assembled'],
+      ['ok',   '✓ Workspace healthy · 247 files indexed'],
     ]},
-    { cmd: 'mesh » fix broken auth', out: [
-      ['mute', '→ Span recovery · src/auth.ts:47–112'],
-      ['mute', '→ Patched session expiry guard'],
-      ['ok',   '✓ 47 / 47 tests pass · pushed cap_9p2'],
+    { cmd: 'mesh › /change fix broken auth', out: [
+      ['mute', '→ Scoped src/auth.ts + auth.spec.ts'],
+      ['mute', '→ Surgical patch prepared'],
+      ['ok',   '✓ Verification detected · npm test'],
     ]},
-    { cmd: 'mesh search "finalizeInvoice"', out: [
-      ['mute', '→ 14 references in 8 files'],
-      ['hit',  '  invoices.ts:14   · billing.ts:88'],
-      ['hit',  '  webhooks.ts:42   · billing.spec.ts:33'],
+    { cmd: 'mesh › /company query billing ownership', out: [
+      ['mute', '→ Durable repo memory searched'],
+      ['hit',  '  owner: payments-platform'],
+      ['hit',  '  risk: invoice/webhook ordering'],
     ]},
-    { cmd: 'mesh diff src/billing.ts', out: [
+    { cmd: 'mesh › /autopilot run "voided invoice bug"', out: [
       ['add',  '+ if (inv.status === "void") return;'],
-      ['del',  '- // TODO: handle voided invoices'],
-      ['ok',   '✓ Capsule reload · 142ms'],
+      ['mute', '→ timeline verified · proof bundle written'],
+      ['ok',   '✓ Ready for review before promote'],
     ]},
   ];
 
@@ -833,11 +833,11 @@ const canvas=document.getElementById('mesh-canvas'),ctx=canvas.getContext('2d');
   const tools = mock.querySelectorAll('.mcp-tool');
 
   const SEQ = [
-    { from: 'claude', tool: 'search', label: 'claude → search_code()' },
-    { from: 'cursor', tool: 'read',   label: 'cursor → read_span()' },
-    { from: 'claude', tool: 'refs',   label: 'claude → find_refs()' },
-    { from: 'cursor', tool: 'recover',label: 'cursor → recover()' },
-    { from: 'claude', tool: 'read',   label: 'claude → read_span()' },
+    { from: 'claude', tool: 'search',   label: 'claude → ask_codebase()' },
+    { from: 'cursor', tool: 'patch',    label: 'cursor → patch_surgical()' },
+    { from: 'claude', tool: 'timeline', label: 'claude → timeline_run()' },
+    { from: 'cursor', tool: 'runtime',  label: 'cursor → runtime.start()' },
+    { from: 'claude', tool: 'search',   label: 'claude → ask_codebase()' },
   ];
 
   function sendPacket(connEl, dirClass) {
