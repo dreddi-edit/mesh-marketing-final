@@ -70,16 +70,16 @@
     .side-h::before { content:''; width: 14px; height: 1px; background: var(--cyan); opacity: 0.6; }
     .side-link {
       display: block;
-      padding: 7px 12px;
+      padding: 8px 12px;
       margin-left: -12px;
       font-size: 13.5px; color: oklch(1 0 0 / 0.62);
       border-radius: 7px;
       border-left: 2px solid transparent;
       transition: color .15s, background .15s, border-color .15s;
-      line-height: 1.35;
+      line-height: 1.45;
     }
     .side-link:hover { color: var(--ink); background: oklch(1 0 0 / 0.025); }
-    .side-link.active { color: var(--cyan); background: oklch(0.74 0.14 200 / 0.06); border-left-color: var(--cyan); }
+    .side-link.active { color: var(--cyan); background: oklch(0.74 0.14 200 / 0.08); border-left-color: var(--cyan); }
 
     /* Main */
     .docs-main { min-width: 0; padding-top: 18px; }
@@ -221,9 +221,9 @@
     }
     .slash-hero {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
-      gap: 28px;
-      padding: 28px;
+      grid-template-columns: 1fr 280px;
+      gap: 32px;
+      padding: 32px;
       border-bottom: 1px solid var(--line);
     }
     .slash-label {
@@ -238,18 +238,18 @@
       font-family: var(--display);
       font-style: italic;
       font-weight: 900;
-      font-size: clamp(40px, 5vw, 64px);
-      line-height: 0.92;
+      font-size: clamp(32px, 5vw, 56px);
+      line-height: 0.95;
       letter-spacing: -0.02em;
       color: var(--ink);
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
     .slash-title em { color: var(--cyan); font-style: inherit; }
     .slash-lede {
-      max-width: 680px;
+      max-width: 600px;
       color: oklch(1 0 0 / 0.68);
       font-size: 15px;
-      line-height: 1.65;
+      line-height: 1.6;
     }
     .slash-stats {
       display: grid;
@@ -258,54 +258,56 @@
       border-radius: 10px;
       overflow: hidden;
       background: oklch(1 0 0 / 0.06);
+      height: fit-content;
     }
     .slash-stat {
-      padding: 14px 16px;
+      padding: 12px 14px;
       background: oklch(0.035 0.026 204 / 0.72);
       font-family: var(--mono);
       color: oklch(1 0 0 / 0.44);
-      font-size: 10.5px;
-      line-height: 1.45;
+      font-size: 9.5px;
+      line-height: 1.4;
     }
     .slash-stat b {
       display: block;
       font-family: var(--display);
       font-style: italic;
-      font-size: 34px;
-      line-height: 0.9;
+      font-size: 26px;
+      line-height: 0.95;
       color: var(--ink);
-      margin-bottom: 5px;
+      margin-bottom: 3px;
     }
     .slash-runway {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 1px;
       background: var(--line);
       border-bottom: 1px solid var(--line);
     }
     .slash-runway div {
-      padding: 16px;
+      padding: 18px 20px;
       background: oklch(0.045 0.03 204 / 0.78);
       min-width: 0;
     }
     .slash-runway code {
       display: inline-block;
-      margin-bottom: 7px;
+      margin-bottom: 8px;
       color: var(--cyan);
       background: oklch(0.74 0.14 200 / 0.09);
       border: 1px solid oklch(0.74 0.14 200 / 0.18);
       border-radius: 5px;
       padding: 3px 6px;
+      font-size: 13px;
     }
     .slash-runway span {
       display: block;
-      font-size: 12.5px;
+      font-size: 13px;
       color: oklch(1 0 0 / 0.54);
       line-height: 1.45;
     }
     .cmd-clusters {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 1px;
       background: var(--line);
     }
@@ -316,11 +318,11 @@
     .cmd-cluster summary {
       list-style: none;
       cursor: pointer;
-      min-height: 98px;
-      padding: 18px 18px;
+      min-height: 86px;
+      padding: 18px 20px;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 18px;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
       align-items: center;
       color: var(--ink);
       transition: background .2s;
@@ -332,27 +334,28 @@
       font-family: var(--display);
       font-style: italic;
       font-weight: 900;
-      font-size: 30px;
-      line-height: 0.95;
+      font-size: 28px;
+      line-height: 1.0;
       letter-spacing: -0.01em;
-      margin-bottom: 7px;
+      margin-bottom: 4px;
     }
     .cmd-desc {
       display: block;
       color: oklch(1 0 0 / 0.50);
-      font-size: 13px;
-      line-height: 1.45;
+      font-size: 12.5px;
+      line-height: 1.4;
     }
     .cmd-count {
-      align-self: start;
+      align-self: center;
       font-family: var(--mono);
       font-size: 10px;
       color: var(--cyan);
       border: 1px solid oklch(0.74 0.14 200 / 0.22);
       border-radius: 999px;
-      padding: 4px 8px;
+      padding: 4px 10px;
       white-space: nowrap;
       background: oklch(0.74 0.14 200 / 0.08);
+      letter-spacing: 0.04em;
     }
     .cmd-body {
       border-top: 1px solid var(--line);
@@ -940,8 +943,7 @@ $ <span class="c">mesh mcp serve --port 7400</span>
     <div class="code">
       <div class="code-head"><span class="lang">bash</span><span>POST /v1/capsules</span><button class="copy-btn" data-copy='curl -X POST https://api.mesh.dev/v1/capsules \
   -H "Authorization: Bearer $MESH_KEY" \
-  -d "{\"repo\":\"github.com/acme/payments\",\"branch\":\"main\"}"'>copy</button></div>
-<pre>$ <span class="c">curl -X POST https://api.mesh.dev/v1/capsules \</span>
+  -d "{"repo":"github.com/acme/payments","branch":"main"}"'>copy</button></div><pre>$ <span class="c">curl -X POST https://api.mesh.dev/v1/capsules \</span>
     <span class="c">-H</span> <span class="s">"Authorization: Bearer $MESH_KEY"</span> \
     <span class="c">-d</span> <span class="s">'{"repo":"github.com/acme/payments","branch":"main"}'</span>
 

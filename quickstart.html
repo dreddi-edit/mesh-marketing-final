@@ -311,7 +311,7 @@
         <div class="console-grid">
           <div class="command-stack">
             <div class="command-card"><div class="command-num">1</div><div class="command-title">Download Mesh IDE (macOS)</div><button class="copy-line" onclick="window.open('/download/ide-macos','_blank')"><span class="t-cyan">↗</span><span>try-mesh.com/download/ide-macos</span></button></div>
-            <div class="command-card"><div class="command-num">2</div><div class="command-title">Launch desktop IDE</div><button class="copy-line" onclick="copyCmd(this,'open -a \"Mesh IDE\"')"><span class="t-cyan">$</span><span>open -a "Mesh IDE"</span></button></div>
+            <div class="command-card"><div class="command-num">2</div><div class="command-title">Launch desktop IDE</div><button class="copy-line" onclick='copyCmd(this,"open -a \"Mesh IDE\"")'><span class="t-cyan">$</span><span>open -a "Mesh IDE"</span></button></div>
             <div class="command-card"><div class="command-num">3</div><div class="command-title">Pick a repo &amp; index</div><button class="copy-line" onclick="copyCmd(this,'⌘K  →  Index workspace')"><span class="t-cyan">⌘</span><span>⌘K → Index workspace</span></button></div>
           </div>
           <div class="terminal-wrap">
@@ -343,7 +343,7 @@
         <div class="console-grid">
           <div class="command-stack">
             <div class="command-card"><div class="command-num">1</div><div class="command-title">Get an API key</div><button class="copy-line" onclick="window.open('https://app.try-mesh.com/keys','_blank')"><span class="t-cyan">↗</span><span>app.try-mesh.com/keys</span></button></div>
-            <div class="command-card"><div class="command-num">2</div><div class="command-title">Index a repo</div><button class="copy-line" onclick="copyCmd(this,'curl -X POST https://api.mesh.dev/v1/capsules \\n  -H \\\"Authorization: Bearer $MESH_KEY\\\" \\n  -d \\'{\\\"repo\\\":\\\"github.com/acme/payments\\\"}\\'')"><span class="t-cyan">$</span><span>curl POST /v1/capsules</span></button></div>
+            <div class="command-card"><div class="command-num">2</div><div class="command-title">Index a repo</div><button class="copy-line" onclick='copyCmd(this,"curl -X POST https://api.mesh.dev/v1/capsules \\n  -H \"Authorization: Bearer $MESH_KEY\" \\n  -d \"{\\\"repo\\\":\\\"github.com/acme/payments\\\"}\"")'><span class="t-cyan">$</span><span>curl POST /v1/capsules</span></button></div>
             <div class="command-card"><div class="command-num">3</div><div class="command-title">Query context</div><button class="copy-line" onclick="copyCmd(this,'curl https://api.mesh.dev/v1/search?q=auth&capsule=cap_8kX9z2a')"><span class="t-cyan">$</span><span>curl GET /v1/search</span></button></div>
           </div>
           <div class="terminal-wrap">
