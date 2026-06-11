@@ -28,8 +28,9 @@ const ROUTES = new Map([
 ]);
 
 function routeKey(slug) {
-  if (!slug) return '';
-  return Array.isArray(slug) ? slug.join('/') : String(slug);
+  if (slug == null || slug === '') return '';
+  if (Array.isArray(slug)) return slug.filter(Boolean).join('/');
+  return decodeURIComponent(String(slug)).replace(/^\/+|\/+$/g, '');
 }
 
 export default async function router(req, res) {

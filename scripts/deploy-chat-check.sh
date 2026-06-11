@@ -15,6 +15,10 @@ status_chat_method=$(curl -sS -o /dev/null -w "%{http_code}" "$BASE/api/chat")
 echo "GET /api/chat -> $status_chat_method (expect 405)"
 [[ "$status_chat_method" == "405" ]] || echo "WARN: expected 405 for GET"
 
+status_poll=$(curl -sS -o /dev/null -w "%{http_code}" "$BASE/api/auth/cli/poll?session_id=00000000000000000000000000000000")
+echo "GET /api/auth/cli/poll -> $status_poll (expect 204)"
+[[ "$status_poll" == "204" ]] || echo "WARN: expected 204 for empty CLI poll"
+
 echo
 echo "POST /api/chat (SSE smoke)..."
 tmp=$(mktemp)

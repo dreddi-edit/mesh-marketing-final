@@ -42,8 +42,9 @@
     { "source": "/auth/login", "destination": "/auth/login.html" },
     { "source": "/auth/signup", "destination": "/auth/signup.html" },
     { "source": "/auth/welcome", "destination": "/auth/welcome.html" },
-    { "source": "/api/admin/status", "destination": "/api/admin/metrics?action=status" },
-    { "source": "/api/:path*", "destination": "/api/:path*" }
+    { "source": "/api/admin/status", "destination": "/api/router?slug=admin/metrics&action=status" },
+    { "source": "/api/chat", "destination": "/api/chat" },
+    { "source": "/api/:path*", "destination": "/api/router?slug=:path*" }
   ],
   "headers": [
     {
