@@ -2,6 +2,9 @@
   if (window.__meshQaChatLoaded) return;
   window.__meshQaChatLoaded = true;
 
+  const LS_TOAST = 'mesh-qa-help-toast-dismissed';
+  const LS_VOICE_TIP = 'mesh-qa-voice-tip-seen';
+
   const SUGGESTIONS = [
     'How do I install Mesh CLI?',
     'What is the MCP server?',
@@ -17,8 +20,10 @@
     <path d="M30 10L35 20L30 30" stroke="#7ceeff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>`;
 
-  const PHONE_ICON = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+  const MIC_ICON = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
+    <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+    <line x1="12" y1="19" x2="12" y2="22"/>
   </svg>`;
 
   const style = document.createElement('style');
@@ -32,6 +37,24 @@
       font-family: var(--mq-sans);
       position: fixed; right: 24px; bottom: 24px; z-index: 99990;
     }
+    #mesh-qa-toast {
+      display: none; position: absolute; right: 0; bottom: 64px;
+      max-width: 220px; padding: 10px 14px; border-radius: 14px 14px 4px 14px;
+      border: 1px solid oklch(0.74 0.14 200 / 0.35);
+      background: oklch(0.14 0.05 200 / 0.96);
+      color: oklch(0.94 0.02 200); font-size: 13px; line-height: 1.45;
+      box-shadow: 0 12px 40px oklch(0 0 0 / 0.4);
+      cursor: pointer; animation: mq-toast-in 0.35s ease;
+    }
+    #mesh-qa-toast[data-show="true"] { display: block; }
+    #mesh-qa-toast::after {
+      content: ''; position: absolute; right: 18px; bottom: -6px;
+      width: 12px; height: 12px; background: inherit;
+      border-right: 1px solid oklch(0.74 0.14 200 / 0.35);
+      border-bottom: 1px solid oklch(0.74 0.14 200 / 0.35);
+      transform: rotate(45deg);
+    }
+    @keyframes mq-toast-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
     #mesh-qa-toggle {
       width: 52px; height: 52px; padding: 0; border-radius: 14px;
       border: 1px solid oklch(0.74 0.14 200 / 0.35);
@@ -49,9 +72,24 @@
       border: 1px solid oklch(1 0 0 / 0.08);
       background: linear-gradient(165deg, oklch(0.12 0.045 200 / 0.98), oklch(0.09 0.04 200 / 0.98));
       backdrop-filter: blur(20px); box-shadow: 0 28px 80px oklch(0 0 0 / 0.55);
-      overflow: hidden; flex-direction: column;
+      overflow: hidden; flex-direction: column; position: relative;
     }
     #mesh-qa-root[data-open="true"] #mesh-qa-panel { display: flex; }
+    #mesh-qa-voice-tip {
+      display: none; position: absolute; left: 18px; right: 18px; bottom: 78px;
+      padding: 10px 36px 10px 12px; border-radius: 12px;
+      border: 1px solid oklch(0.74 0.14 200 / 0.35);
+      background: oklch(0.1 0.05 200 / 0.98);
+      color: oklch(0.92 0.02 200); font-size: 13px; line-height: 1.45;
+      box-shadow: 0 8px 28px oklch(0 0 0 / 0.35); z-index: 2;
+    }
+    #mesh-qa-voice-tip[data-show="true"] { display: block; animation: mq-toast-in 0.3s ease; }
+    #mesh-qa-voice-tip strong { color: var(--mq-cyan); font-weight: 600; }
+    #mesh-qa-voice-tip-close {
+      position: absolute; top: 6px; right: 8px; width: 24px; height: 24px;
+      border: none; background: transparent; color: oklch(0.7 0.02 200);
+      cursor: pointer; font-size: 16px; line-height: 1;
+    }
     #mesh-qa-head {
       display: flex; align-items: center; justify-content: space-between;
       padding: 16px 14px 16px 18px; border-bottom: 1px solid oklch(1 0 0 / 0.06);
@@ -128,20 +166,21 @@
       padding: 14px 18px 16px; border-top: 1px solid oklch(1 0 0 / 0.06);
       background: oklch(0 0 0 / 0.15);
     }
-    #mesh-qa-phone {
+    #mesh-qa-mic {
       width: 42px; height: 42px; flex-shrink: 0; border-radius: 12px;
       border: 1px solid oklch(0.74 0.14 200 / 0.28);
       background: oklch(0.74 0.14 200 / 0.06); color: var(--mq-cyan);
       cursor: pointer; display: grid; place-items: center;
       transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
     }
-    #mesh-qa-phone:hover { background: oklch(0.74 0.14 200 / 0.14); }
-    #mesh-qa-root[data-voice="on"] #mesh-qa-phone {
-      background: oklch(0.55 0.18 25 / 0.2); border-color: oklch(0.65 0.2 25 / 0.5);
-      color: oklch(0.75 0.18 25); box-shadow: 0 0 0 3px oklch(0.65 0.2 25 / 0.15);
-      animation: mq-call 1.6s ease-in-out infinite;
+    #mesh-qa-mic:hover { background: oklch(0.74 0.14 200 / 0.14); }
+    #mesh-qa-mic:disabled { opacity: 0.45; cursor: wait; }
+    #mesh-qa-root[data-voice="on"] #mesh-qa-mic {
+      background: oklch(0.74 0.14 200 / 0.2); border-color: oklch(0.74 0.14 200 / 0.55);
+      color: var(--mq-cyan); box-shadow: 0 0 0 3px oklch(0.74 0.14 200 / 0.15);
+      animation: mq-mic-pulse 1.6s ease-in-out infinite;
     }
-    @keyframes mq-call { 0%,100%{box-shadow:0 0 0 3px oklch(0.65 0.2 25 / 0.12)} 50%{box-shadow:0 0 0 8px oklch(0.65 0.2 25 / 0)} }
+    @keyframes mq-mic-pulse { 0%,100%{box-shadow:0 0 0 3px oklch(0.74 0.14 200 / 0.12)} 50%{box-shadow:0 0 0 8px oklch(0.74 0.14 200 / 0)} }
     #mesh-qa-input {
       flex: 1; border-radius: 12px; border: 1px solid oklch(1 0 0 / 0.1);
       background: oklch(0 0 0 / 0.35); color: oklch(0.98 0.01 200);
@@ -162,6 +201,7 @@
   root.id = 'mesh-qa-root';
   root.dataset.voice = 'off';
   root.innerHTML = `
+    <div id="mesh-qa-toast" role="status">Need help? Ask me anything.</div>
     <div id="mesh-qa-panel" role="dialog" aria-label="Mesh assistant">
       <div id="mesh-qa-head">
         <div class="mq-head-brand">${MESH_ICON}<strong>Ask Mesh</strong></div>
@@ -169,9 +209,13 @@
       </div>
       <div id="mesh-qa-log"></div>
       <div id="mesh-qa-suggestions"></div>
-      <div id="mesh-qa-voice-hint">● Live voice</div>
+      <div id="mesh-qa-voice-hint"></div>
+      <div id="mesh-qa-voice-tip" role="note">
+        <button id="mesh-qa-voice-tip-close" type="button" aria-label="Dismiss">×</button>
+        You can also <strong>talk to Mesh</strong> — tap the mic and speak.
+      </div>
       <form id="mesh-qa-form">
-        <button id="mesh-qa-phone" type="button" aria-label="Talk to Mesh" title="Talk to Mesh">${PHONE_ICON}</button>
+        <button id="mesh-qa-mic" type="button" aria-label="Talk to Mesh" title="Talk to Mesh">${MIC_ICON}</button>
         <input id="mesh-qa-input" type="text" placeholder="Ask anything…" maxlength="500" autocomplete="off" />
         <button id="mesh-qa-send" type="submit">Send</button>
       </form>
@@ -181,14 +225,17 @@
   document.body.appendChild(root);
 
   const toggle = root.querySelector('#mesh-qa-toggle');
+  const toast = root.querySelector('#mesh-qa-toast');
   const closeBtn = root.querySelector('#mesh-qa-close');
   const log = root.querySelector('#mesh-qa-log');
   const form = root.querySelector('#mesh-qa-form');
   const input = root.querySelector('#mesh-qa-input');
   const send = root.querySelector('#mesh-qa-send');
-  const phoneBtn = root.querySelector('#mesh-qa-phone');
+  const micBtn = root.querySelector('#mesh-qa-mic');
   const suggestions = root.querySelector('#mesh-qa-suggestions');
   const voiceHint = root.querySelector('#mesh-qa-voice-hint');
+  const voiceTip = root.querySelector('#mesh-qa-voice-tip');
+  const voiceTipClose = root.querySelector('#mesh-qa-voice-tip-close');
 
   let busy = false;
   let activeChips = null;
@@ -196,6 +243,7 @@
   let voiceLiveEl = null;
   let voiceUserEl = null;
   let voiceBotEl = null;
+  let voiceConnecting = false;
 
   function escapeHtml(t) {
     return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -204,17 +252,44 @@
     return escapeHtml(t).replace(/`([^`]+)`/g, '<code>$1</code>');
   }
 
+  function dismissToast() {
+    toast.dataset.show = 'false';
+    try { localStorage.setItem(LS_TOAST, '1'); } catch { /* ignore */ }
+  }
+
+  function dismissVoiceTip() {
+    voiceTip.dataset.show = 'false';
+    try { localStorage.setItem(LS_VOICE_TIP, '1'); } catch { /* ignore */ }
+  }
+
+  function maybeShowVoiceTip() {
+    try {
+      if (localStorage.getItem(LS_VOICE_TIP)) return;
+    } catch { /* ignore */ }
+    voiceTip.dataset.show = 'true';
+  }
+
   function setOpen(open) {
     root.dataset.open = open ? 'true' : 'false';
     toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-    if (!open) hangUpVoice();
-    else input.focus();
+    if (open) {
+      dismissToast();
+      input.focus();
+      if (!log.childElementCount) {
+        appendBubble(GREETING, 'bot');
+        renderSuggestions();
+        maybeShowVoiceTip();
+      }
+    } else {
+      hangUpVoice();
+      voiceTip.dataset.show = 'false';
+    }
   }
 
   function setVoiceOn(on) {
     root.dataset.voice = on ? 'on' : 'off';
-    phoneBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
-    voiceHint.textContent = on ? '● Live voice — tap phone to hang up' : '';
+    micBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    voiceHint.textContent = on ? '● Live voice — tap mic to stop' : '';
   }
 
   function appendBubble(text, role, { live = false } = {}) {
@@ -267,18 +342,26 @@
   }
 
   async function hangUpVoice() {
+    voiceConnecting = false;
     voice?.disconnect();
     voice = null;
     voiceLiveEl = voiceUserEl = voiceBotEl = null;
     setVoiceOn(false);
+    micBtn.disabled = false;
     input.disabled = false;
   }
 
   async function startVoice() {
-    if (root.dataset.voice === 'on') {
-      hangUpVoice();
+    if (root.dataset.voice === 'on' || voiceConnecting) {
+      if (root.dataset.voice === 'on') hangUpVoice();
       return;
     }
+    dismissVoiceTip();
+    voiceConnecting = true;
+    micBtn.disabled = true;
+    voiceHint.textContent = '● Connecting…';
+    voiceHint.style.display = 'block';
+
     try {
       await loadVoiceScript();
       voice = new window.MeshVoiceLive({
@@ -305,22 +388,30 @@
           } else appendBubble(t, 'bot');
           voiceBotEl = null;
         },
-        onDisconnected: () => hangUpVoice(),
+        onDisconnected: () => {
+          if (!voiceConnecting) hangUpVoice();
+        },
       });
       await voice.connect();
+      voiceConnecting = false;
       setVoiceOn(true);
+      micBtn.disabled = false;
       input.disabled = true;
       suggestions.innerHTML = '';
       clearChips();
     } catch (e) {
+      voiceConnecting = false;
       hangUpVoice();
       if (e?.message === 'VOICE_UNAVAILABLE') {
         appendBubble(
-          'Live voice uses the same Gemini engine as ADK — it needs the voice proxy on our server. Text chat works now; for hands-free, run `mesh` and `/config voice` in your terminal.',
+          'Live voice is not available right now. Text chat works — type your question below.',
           'bot',
         );
       } else {
-        appendBubble('Could not start voice. Check mic permissions and try again.', 'bot');
+        appendBubble(
+          e?.message || 'Could not start voice. Check mic permissions and try again.',
+          'bot',
+        );
       }
     }
   }
@@ -423,20 +514,23 @@
     }
   }
 
-  toggle.addEventListener('click', () => {
-    const open = root.dataset.open !== 'true';
-    setOpen(open);
-    if (open && !log.childElementCount) {
-      appendBubble(GREETING, 'bot');
-      renderSuggestions();
-    }
-  });
+  toggle.addEventListener('click', () => setOpen(root.dataset.open !== 'true'));
   closeBtn.addEventListener('click', () => setOpen(false));
-  phoneBtn.addEventListener('click', startVoice);
+  micBtn.addEventListener('click', startVoice);
+  voiceTipClose.addEventListener('click', (e) => { e.stopPropagation(); dismissVoiceTip(); });
+  toast.addEventListener('click', () => setOpen(true));
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const msg = input.value.trim();
     input.value = '';
     ask(msg);
   });
+
+  try {
+    if (!localStorage.getItem(LS_TOAST)) {
+      setTimeout(() => {
+        if (root.dataset.open !== 'true') toast.dataset.show = 'true';
+      }, 10000);
+    }
+  } catch { /* ignore */ }
 })();

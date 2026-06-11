@@ -71,3 +71,11 @@
     if (e.key === STORAGE_KEY) applySignedInState();
   });
 })();
+
+(function meshQaChatLoader() {
+  if (window.__meshQaChatLoaded) return;
+  var s = document.createElement('script');
+  s.src = '/assets/mesh-qa-chat.js';
+  s.defer = true;
+  document.head.appendChild(s);
+})();

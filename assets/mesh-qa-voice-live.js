@@ -1,5 +1,5 @@
 /**
- * Gemini Live voice client (ADK-style) — needs MESH_VOICE_PROXY_URL WebSocket proxy.
+ * Gemini Live voice client — needs MESH_VOICE_PROXY_URL WebSocket proxy.
  */
 (() => {
   const CAPTURE_WORKLET = `
@@ -74,6 +74,8 @@
       this.playNode = null;
       this.userLine = '';
       this.botLine = '';
+      this._connectResolve = null;
+      this._connectReject = null;
     }
 
     async loadConfig() {
@@ -93,7 +95,26 @@
         'wss://us-central1-aiplatform.googleapis.com/ws/google.cloud.aiplatform.v1beta1.LlmBidiService/BidiGenerateContent';
       const modelUri = `projects/${cfg.projectId}/locations/us-central1/publishers/google/models/${cfg.model}`;
 
+      await this.startMic();
+
       await new Promise((resolve, reject) => {
+        let settled = false;
+        const settle = (fn, value) => {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timeout);
+          this._connectResolve = null;
+          this._connectReject = null;
+          fn(value);
+        };
+
+        const timeout = setTimeout(() => {
+          settle(reject, new Error('Voice connection timed out'));
+        }, 20000);
+
+        this._connectResolve = () => settle(resolve);
+        this._connectReject = (err) => settle(reject, err);
+
         this.ws = new WebSocket(cfg.proxyUrl);
         this.ws.onopen = () => {
           this.connected = true;
@@ -114,21 +135,32 @@
               },
             }),
           );
-          resolve();
         };
-        this.ws.onerror = () => reject(new Error('WebSocket failed'));
-        this.ws.onclose = () => this.disconnect(false);
-        this.ws.onmessage = (ev) => this.onMessage(JSON.parse(ev.data));
+        this.ws.onerror = () => settle(reject, new Error('WebSocket connection failed'));
+        this.ws.onclose = (ev) => {
+          this.connected = false;
+          if (!settled) {
+            settle(reject, new Error(`Voice disconnected (${ev.code})`));
+            return;
+          }
+          this.streaming = false;
+          this.ws = null;
+          this.hooks.onDisconnected?.();
+        };
+        this.ws.onmessage = (ev) => {
+          this.onMessage(JSON.parse(ev.data)).catch((e) => {
+            if (!settled) settle(reject, e);
+          });
+        };
       });
 
-      await this.startMic();
       this.hooks.onStatus?.('Live — speak anytime');
     }
 
     async startMic() {
       if (this.streaming) return;
       this.captureStream = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: true, noiseSuppression: true, sampleRate: 16000 },
+        audio: { echoCancellation: true, noiseSuppression: true },
       });
       this.captureCtx = new AudioContext({ sampleRate: 16000 });
       await this.captureCtx.audioWorklet.addModule(workletUrl(CAPTURE_WORKLET));
@@ -155,8 +187,12 @@
     }
 
     async onMessage(data) {
+      if (data.error) {
+        throw new Error(data.error.message || 'Voice error');
+      }
       if (data.setupComplete) {
         this.hooks.onStatus?.('Listening…');
+        this._connectResolve?.();
         return;
       }
       const sc = data.serverContent;
@@ -192,6 +228,8 @@
     disconnect(userInitiated = true) {
       this.streaming = false;
       this.connected = false;
+      this._connectResolve = null;
+      this._connectReject = null;
       try {
         this.ws?.close();
       } catch { /* ignore */ }
@@ -206,7 +244,7 @@
       this.playNode = null;
       this.playCtx?.close();
       this.playCtx = null;
-      if (userInitiated) this.hooks.onStatus?.('Call ended');
+      if (userInitiated) this.hooks.onStatus?.('Stopped');
       this.hooks.onDisconnected?.();
     }
   }
