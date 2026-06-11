@@ -10,6 +10,7 @@ import contact from './_contact.js';
 import subscribe from './_subscribe.js';
 import downloadIde from './_download-ide.js';
 import ambassadorApply from './_ambassador-apply.js';
+import voiceSession from './_voice-session.js';
 
 /** Vercel Hobby caps serverless functions at 12 — route non-chat APIs here. */
 const ROUTES = new Map([
@@ -25,6 +26,7 @@ const ROUTES = new Map([
   ['subscribe', subscribe],
   ['download-ide', downloadIde],
   ['ambassador-apply', ambassadorApply],
+  ['voice/session', voiceSession],
 ]);
 
 function routeKey(slug) {
