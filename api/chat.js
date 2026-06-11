@@ -15,7 +15,7 @@ const COLLECTION = process.env.DISCOVERY_COLLECTION || 'default_collection';
 const ENGINE_ID = process.env.DISCOVERY_ENGINE_ID || 'mesh-docs-search';
 const CHAT_MODEL = process.env.CHAT_MODEL || 'gemini-2.5-flash';
 const DAILY_LIMIT = Number(process.env.CHAT_DAILY_LIMIT || 40);
-const CACHE_VERSION = process.env.CHAT_CACHE_VERSION || '7';
+const CACHE_VERSION = process.env.CHAT_CACHE_VERSION || '8';
 const MAX_SENTENCES = 4;
 const MAX_BODY_CHARS = 520;
 const MIN_BODY_CHARS = 48;
@@ -244,6 +244,8 @@ function parseOptionsBlock(text) {
 
 function sanitizeBody(body) {
   let clean = String(body || '')
+    .replace(/^Source:\s*/i, '')
+    .replace(/^Overview:\s*/i, '')
     .replace(/^\s*#{1,6}\s+.+$/gm, '')
     .replace(/^\s*[-*•]\s+.+$/gm, '')
     .replace(/^\s*\d+[.)]\s+.+$/gm, '')
@@ -304,13 +306,13 @@ function isWeakAnswer(body) {
   );
 }
 
-function formatAnswer(text, query, { fallbackContext = '', results = [] } = {}) {
+function formatAnswer(text, query, { summaryText = '', results = [] } = {}) {
   const { body, options } = parseOptionsBlock(text);
   let safeBody = sanitizeBody(body);
   if (isWeakAnswer(safeBody)) {
-    const fromContext = sanitizeBody(fallbackContext);
-    if (!isWeakAnswer(fromContext) && fromContext.length >= MIN_BODY_CHARS) {
-      safeBody = fromContext;
+    const fromSummary = sanitizeBody(summaryText);
+    if (!isWeakAnswer(fromSummary) && fromSummary.length >= MIN_BODY_CHARS) {
+      safeBody = fromSummary;
     } else {
       safeBody = sanitizeBody(fallbackAnswer(results, query));
     }
@@ -482,7 +484,7 @@ export default async function handler(req, res) {
     }
 
     const shaped = formatAnswer(answer, query, {
-      fallbackContext: summaryText || context,
+      summaryText,
       results: payload.results || [],
     });
     sendSse(res, 'answer', { text: shaped.body });
