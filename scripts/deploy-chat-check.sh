@@ -36,8 +36,8 @@ if [[ "$code" != "200" ]]; then
   exit 1
 fi
 
-if ! grep -q 'event: delta' "$tmp" && ! grep -q '"text"' "$tmp"; then
-  echo "WARN: no delta events in response"
+if ! grep -q 'event: answer' "$tmp" && ! grep -q '"text"' "$tmp"; then
+  echo "WARN: no answer event in response"
 fi
 
 rm -f "$tmp"

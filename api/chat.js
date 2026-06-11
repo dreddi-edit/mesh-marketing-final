@@ -15,11 +15,21 @@ const COLLECTION = process.env.DISCOVERY_COLLECTION || 'default_collection';
 const ENGINE_ID = process.env.DISCOVERY_ENGINE_ID || 'mesh-docs-search';
 const CHAT_MODEL = process.env.CHAT_MODEL || 'gemini-2.5-flash';
 const DAILY_LIMIT = Number(process.env.CHAT_DAILY_LIMIT || 40);
-const CACHE_VERSION = process.env.CHAT_CACHE_VERSION || '5';
-const MAX_SENTENCES = 3;
-const MAX_BODY_CHARS = 380;
+const CACHE_VERSION = process.env.CHAT_CACHE_VERSION || '6';
+const MAX_SENTENCES = 4;
+const MAX_BODY_CHARS = 520;
+const MIN_BODY_CHARS = 48;
 
-const CHAT_SYSTEM = `You are the Mesh website chat bot. MAX 2-3 short sentences (~70 words). NO lists, NO numbered sections, NO command catalogs unless user asked for ONE specific command. End with <<options>> block (2-3 lines: label|question). Match user language.`;
+const CHAT_SYSTEM = `You are the Mesh website assistant. Answer ONLY from the provided doc excerpts.
+
+Rules:
+- Give a complete, useful answer in 2-4 short sentences (max ~90 words).
+- Include concrete facts: commands, paths, or product names when relevant (wrap commands in backticks).
+- Finish every sentence — never stop mid-thought.
+- No bullet lists, no headings, no command catalogs unless the user asked about one specific command.
+- Match the user's language (German question → German answer).
+- End with a <<options>> block: exactly 2 lines, format label|full follow-up question.
+- Follow-ups must be specific to what you just answered — never repeat the same question or generic "how to install" if install was already covered.`;
 
 const OPTIONS_RE = /<<options>>([\s\S]*?)<\/options>>/i;
 const CACHE_TTL_MS = Number(process.env.CHAT_CACHE_TTL_DAYS || 30) * 24 * 60 * 60 * 1000;
@@ -180,13 +190,26 @@ function buildSearchContext(payload) {
   return lines.join('\n\n');
 }
 
-function fallbackAnswer(results) {
-  const bit = (results || []).map((r) => firstSnippet(r)).find(Boolean);
+function completeSentences(text, maxSentences = MAX_SENTENCES) {
+  const clean = String(text || '').replace(/\s+/g, ' ').trim();
+  if (!clean) return '';
+  const parts = clean.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [clean];
+  const complete = parts.filter((p) => /[.!?]$/.test(p.trim()));
+  const chosen = (complete.length ? complete : parts).slice(0, maxSentences).join(' ').trim();
+  if (/[.!?]$/.test(chosen)) return chosen;
+  if (complete.length) return complete.slice(0, maxSentences).join(' ').trim();
+  return chosen.endsWith('…') ? chosen : `${chosen}.`;
+}
+
+function fallbackAnswer(results, query) {
+  const snippets = (results || []).map((r) => firstSnippet(r)).filter(Boolean);
+  const bit = snippets.find((s) => s.length >= MIN_BODY_CHARS) || snippets[0];
   if (!bit) {
-    return 'Not in the docs — try /quickstart or /docs.';
+    return /[äöüß]|(\b(wie|was|installier)\b)/i.test(query)
+      ? 'Siehe /quickstart für Installation oder /docs für die vollständige Referenz.'
+      : 'See /quickstart for install steps or /docs for the full reference.';
   }
-  const sentence = bit.split(/(?<=[.!?])\s+/)[0] || bit;
-  return sentence.slice(0, MAX_BODY_CHARS);
+  return completeSentences(bit.replace(/<[^>]+>/g, ''));
 }
 
 function parseOptionsBlock(text) {
@@ -217,34 +240,58 @@ function sanitizeBody(body) {
     .replace(/\s+/g, ' ')
     .trim();
 
-  const parts = clean.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [clean];
-  clean = parts.slice(0, MAX_SENTENCES).join(' ').trim();
+  clean = completeSentences(clean);
   if (clean.length > MAX_BODY_CHARS) {
-    clean = `${clean.slice(0, MAX_BODY_CHARS - 1).replace(/\s+\S*$/, '')}…`;
+    const clipped = clean.slice(0, MAX_BODY_CHARS);
+    const lastEnd = Math.max(clipped.lastIndexOf('.'), clipped.lastIndexOf('!'), clipped.lastIndexOf('?'));
+    clean = lastEnd > MIN_BODY_CHARS ? clipped.slice(0, lastEnd + 1) : `${clipped.replace(/\s+\S*$/, '')}…`;
   }
   return clean;
 }
 
-function defaultOptions(query) {
-  const de = /[äöüß]|(\b(wie|was|der|die|das|für|ist)\b)/i.test(query);
+function defaultOptions(query, body = '') {
+  const de = /[äöüß]|(\b(wie|was|der|die|das|für|ist|mesh)\b)/i.test(query);
+  const topic = `${query} ${body}`.toLowerCase();
+  const askedInstall = /install|npm|quickstart|einricht/i.test(topic);
+  const askedMcp = /\bmcp\b/i.test(topic);
+  const askedModels = /model|gemini|flash|llm/i.test(topic);
+
   if (de) {
-    return [
-      { label: 'Installation', query: 'Wie installiere ich Mesh CLI?' },
-      { label: 'MCP Server', query: 'Was ist der MCP Server?' },
-      { label: 'Etwas anderes', query: 'Was kann Mesh noch?' },
-    ];
+    const opts = [];
+    if (!askedInstall) opts.push({ label: 'Installation', query: 'Wie installiere ich die Mesh CLI?' });
+    if (!askedMcp) opts.push({ label: 'MCP Server', query: 'Was macht der Mesh MCP Server?' });
+    if (!askedModels) opts.push({ label: 'Modelle', query: 'Welche Modelle unterstützt Mesh?' });
+    if (!opts.length) {
+      opts.push(
+        { label: 'Workspace-Index', query: 'Wie baue ich den Workspace-Index?' },
+        { label: 'IDE', query: 'Wie nutze ich Mesh in der IDE?' },
+      );
+    }
+    return opts.slice(0, 2);
   }
-  return [
-    { label: 'Install', query: 'How do I install Mesh CLI?' },
-    { label: 'MCP', query: 'What is the MCP server?' },
-    { label: 'Something else', query: 'What else can Mesh do?' },
-  ];
+
+  const opts = [];
+  if (!askedInstall) opts.push({ label: 'Install steps', query: 'How do I install the Mesh CLI?' });
+  if (!askedMcp) opts.push({ label: 'MCP server', query: 'What does the Mesh MCP server do?' });
+  if (!askedModels) opts.push({ label: 'Models', query: 'Which models does Mesh support?' });
+  if (!opts.length) {
+    opts.push(
+      { label: 'Workspace index', query: 'How do I build the workspace index?' },
+      { label: 'IDE workflow', query: 'How does Mesh work in the IDE?' },
+    );
+  }
+  return opts.slice(0, 2);
 }
 
-function formatAnswer(text, query) {
+function formatAnswer(text, query, { fallbackContext = '' } = {}) {
   const { body, options } = parseOptionsBlock(text);
-  const safeBody = sanitizeBody(body) || 'See /docs for details.';
-  const safeOptions = options.length ? options : defaultOptions(query);
+  let safeBody = sanitizeBody(body);
+  if (!safeBody || safeBody.length < MIN_BODY_CHARS || !/[.!?]$/.test(safeBody)) {
+    const fromContext = sanitizeBody(fallbackContext);
+    if (fromContext.length >= MIN_BODY_CHARS) safeBody = fromContext;
+  }
+  if (!safeBody) safeBody = /[äöüß]|(\b(wie|was)\b)/i.test(query) ? 'Details stehen in /docs.' : 'See /docs for details.';
+  const safeOptions = options.length ? options.slice(0, 2) : defaultOptions(query, safeBody);
   const optionsBlock = safeOptions.map((o) => `${o.label}|${o.query}`).join('\n');
   return {
     body: safeBody,
@@ -272,13 +319,6 @@ function sendSse(res, event, data) {
   if (event) res.write(`event: ${event}\n`);
   res.write(`data: ${JSON.stringify(data)}\n\n`);
   if (typeof res.flush === 'function') res.flush();
-}
-
-async function streamTextChunks(res, text, { chunkSize = 32, delayMs = 0 }) {
-  for (let i = 0; i < text.length; i += chunkSize) {
-    sendSse(res, 'delta', { text: text.slice(i, i + chunkSize) });
-    if (delayMs > 0) await new Promise((r) => setTimeout(r, delayMs));
-  }
 }
 
 async function searchDocs(query, token) {
@@ -314,16 +354,16 @@ async function searchDocs(query, token) {
   return response.json();
 }
 
-async function streamGeminiAnswer(res, query, context, token) {
+async function generateGeminiAnswer(query, context, token) {
   const projectId = gcpProjectId();
-  const url = `${vertexHost()}/v1/projects/${projectId}/locations/${VERTEX_LOCATION}/publishers/google/models/${CHAT_MODEL}:streamGenerateContent?alt=sse`;
+  const url = `${vertexHost()}/v1/projects/${projectId}/locations/${VERTEX_LOCATION}/publishers/google/models/${CHAT_MODEL}:generateContent`;
 
-  const prompt = `Excerpts from try-mesh.com docs:
+  const prompt = `Doc excerpts from try-mesh.com:
 ${context}
 
 User question: ${query}
 
-Reply in 2-3 sentences max, then <<options>> with 2 follow-ups.`;
+Write a complete helpful answer, then <<options>> with 2 specific follow-up questions.`;
 
   const response = await fetch(url, {
     method: 'POST',
@@ -335,51 +375,18 @@ Reply in 2-3 sentences max, then <<options>> with 2 follow-ups.`;
     body: JSON.stringify({
       systemInstruction: { parts: [{ text: CHAT_SYSTEM }] },
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      generationConfig: { temperature: 0.15, maxOutputTokens: 220 },
+      generationConfig: { temperature: 0.2, maxOutputTokens: 512 },
     }),
   });
 
   if (!response.ok) {
     const detail = await response.text();
-    throw new Error(`Gemini stream ${response.status}: ${detail.slice(0, 300)}`);
+    throw new Error(`Gemini ${response.status}: ${detail.slice(0, 300)}`);
   }
 
-  const reader = response.body.getReader();
-  const decoder = new TextDecoder();
-  let buffer = '';
-  let full = '';
-
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true });
-    const lines = buffer.split('\n');
-    buffer = lines.pop() || '';
-
-    for (const line of lines) {
-      if (!line.startsWith('data:')) continue;
-      const jsonStr = line.slice(5).trim();
-      if (!jsonStr || jsonStr === '[DONE]') continue;
-      try {
-        const parsed = JSON.parse(jsonStr);
-        const parts = parsed.candidates?.[0]?.content?.parts || [];
-        const chunk = parts.map((p) => p.text || '').join('');
-        if (!chunk) continue;
-        let piece = chunk;
-        if (chunk.startsWith(full)) {
-          piece = chunk.slice(full.length);
-          full = chunk;
-        } else {
-          full += chunk;
-        }
-        if (piece) sendSse(res, 'delta', { text: piece });
-      } catch {
-        // skip malformed SSE chunk
-      }
-    }
-  }
-
-  return full.trim();
+  const payload = await response.json();
+  const parts = payload.candidates?.[0]?.content?.parts || [];
+  return parts.map((p) => p.text || '').join('').trim();
 }
 
 export default async function handler(req, res) {
@@ -409,7 +416,7 @@ export default async function handler(req, res) {
       const shaped = formatAnswer(cached.answer, query);
       initSse(res);
       sendSse(res, 'meta', { cached: true, sources: cached.sources });
-      sendSse(res, 'replace', { text: shaped.body });
+      sendSse(res, 'answer', { text: shaped.body });
       sendSse(res, 'options', { items: shaped.options });
       sendSse(res, 'done', { ok: true, cached: true });
       return res.end();
@@ -433,21 +440,22 @@ export default async function handler(req, res) {
 
     sendSse(res, 'meta', { cached: false, sources });
 
+    const summaryText = String(payload.summary?.summaryText || '').trim();
     let answer = '';
     try {
       if (context.trim()) {
-        answer = await streamGeminiAnswer(res, query, context, token);
+        answer = await generateGeminiAnswer(query, context, token);
       }
     } catch (geminiErr) {
-      console.error('[api/chat] gemini stream failed, using fallback', geminiErr);
+      console.error('[api/chat] gemini failed, using fallback', geminiErr);
     }
 
     if (!answer) {
-      answer = fallbackAnswer(payload.results || []);
+      answer = fallbackAnswer(payload.results || [], query);
     }
 
-    const shaped = formatAnswer(answer, query);
-    sendSse(res, 'replace', { text: shaped.body });
+    const shaped = formatAnswer(answer, query, { fallbackContext: summaryText || context });
+    sendSse(res, 'answer', { text: shaped.body });
     sendSse(res, 'options', { items: shaped.options });
 
     await writeAnswerCache(query, shaped.storage, sources);
