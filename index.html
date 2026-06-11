@@ -47,8 +47,8 @@
       "priceCurrency": "USD"
     },
     "sameAs": [
-      "https://github.com/dreddi-edit/homebrew-mesh",
-      "https://www.npmjs.com/package/@edgarelmo/mesh-agent-cli"
+      "https://github.com/dreddi-edit/mesh",
+      "https://www.npmjs.com/package/@trymesh/cli"
     ]
   }
   </script>
@@ -95,8 +95,8 @@
       pointer-events: none;
     }
 
-    /* NAV */
-    nav {
+    /* NAV — scoped to #siteNav only (avoid styling .explore-links) */
+    #siteNav {
       position: fixed;
       top: 0;
       left: 0;
@@ -104,26 +104,42 @@
       z-index: 100;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 22px 56px;
+      padding: 20px 56px;
+      gap: 16px;
     }
 
     .nav-logo {
       display: inline-flex;
       align-items: center;
       text-decoration: none;
+      flex-shrink: 0;
+      opacity: 0.95;
+      transition: opacity 0.2s ease;
     }
 
-    .nav-logo img {
+    .nav-logo:hover {
+      opacity: 1;
+    }
+
+    .nav-logo-mark {
       display: block;
+      height: 26px;
       width: auto;
-      height: 25px;
+    }
+
+    .nav-end {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
     }
 
     .nav-right {
       display: flex;
       gap: 6px;
       align-items: center;
+      flex-wrap: nowrap;
     }
 
     .nav-right a {
@@ -151,12 +167,113 @@
       background: oklch(0.74 0.14 200 / 0.2) !important;
     }
 
+    .nav-toggle {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border: 1px solid oklch(1 0 0 / 0.12);
+      border-radius: 8px;
+      background: oklch(1 0 0 / 0.04);
+      color: var(--white);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 16px;
+      height: 2px;
+      background: currentColor;
+      margin: 3px auto;
+      border-radius: 1px;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    #siteNav.is-open .nav-toggle span:nth-child(1) {
+      transform: translateY(5px) rotate(45deg);
+    }
+
+    #siteNav.is-open .nav-toggle span:nth-child(2) {
+      opacity: 0;
+    }
+
+    #siteNav.is-open .nav-toggle span:nth-child(3) {
+      transform: translateY(-5px) rotate(-45deg);
+    }
+
+    .nav-install-mobile {
+      display: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      background: var(--cyan);
+      color: oklch(0.08 0.04 200);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      #siteNav {
+        padding: 16px 20px;
+        gap: 12px;
+      }
+
+      .nav-toggle {
+        display: inline-flex;
+      }
+
+      .nav-install-mobile {
+        display: inline-flex;
+      }
+
+      .nav-end {
+        gap: 8px;
+      }
+
+      .nav-right {
+        display: none;
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        right: 0;
+        min-width: 220px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid oklch(1 0 0 / 0.1);
+        background: oklch(0.08 0.04 200 / 0.96);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 24px 60px oklch(0 0 0 / 0.45);
+      }
+
+      #siteNav.is-open .nav-right {
+        display: flex;
+      }
+
+      .nav-right a {
+        text-align: center;
+        padding: 10px 14px;
+      }
+
+      .hero-word {
+        font-size: clamp(72px, 18vw, 130px);
+      }
+
+      .scroll-cue {
+        display: none;
+      }
+    }
+
     /* HERO */
     #hero {
       position: relative;
       z-index: 1;
-      height: 100vh;
-      min-height: 700px;
+      min-height: 85svh;
+      padding: 100px 24px 80px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -167,7 +284,7 @@
       font-family: var(--display);
       font-style: italic;
       font-weight: 900;
-      font-size: clamp(130px, 26vw, 420px);
+      font-size: clamp(88px, 22vw, 420px);
       line-height: 0.82;
       letter-spacing: -0.03em;
       color: var(--white);
@@ -202,9 +319,9 @@
       margin-top: 14px;
       font-size: 19px;
       font-weight: 300;
-      color: oklch(1 0 0 / 0.42);
+      color: oklch(1 0 0 / 0.58);
       text-align: center;
-      max-width: 460px;
+      max-width: 520px;
       line-height: 1.55;
       opacity: 0;
       animation: up 0.8s 1.1s ease forwards;
@@ -215,8 +332,39 @@
       font-weight: 400;
     }
 
+    .hero-actions {
+      margin-top: 32px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      opacity: 0;
+      animation: up 0.8s 1.3s ease forwards;
+    }
+
+    .hero-cta-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 22px;
+      border-radius: 10px;
+      background: var(--cyan);
+      color: oklch(0.08 0.04 200);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 8px 28px oklch(0.74 0.14 200 / 0.28);
+    }
+
+    .hero-cta-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 36px oklch(0.74 0.14 200 / 0.38);
+    }
+
     .hero-install {
-      margin-top: 36px;
       display: flex;
       align-items: center;
       gap: 12px;
@@ -226,11 +374,9 @@
       padding: 12px 20px;
       font-family: var(--mono);
       font-size: 14px;
-      color: oklch(1 0 0 / 0.5);
+      color: oklch(1 0 0 / 0.55);
       cursor: pointer;
       transition: border-color 0.2s, background 0.2s, color 0.2s;
-      opacity: 0;
-      animation: up 0.8s 1.3s ease forwards;
     }
 
     .hero-install:hover {
@@ -268,7 +414,7 @@
       font-family: var(--mono);
       font-size: 10px;
       letter-spacing: 0.16em;
-      color: oklch(1 0 0 / 0.18);
+      color: oklch(1 0 0 / 0.32);
       text-transform: uppercase;
     }
 
@@ -376,6 +522,56 @@
       line-height: 1.65;
       font-weight: 300;
       color: oklch(1 0 0 / 0.5);
+    }
+
+    .engine-stats-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 10px 16px;
+      max-width: 1280px;
+      margin: 20px auto 0;
+      padding: 14px 20px;
+      border-radius: 10px;
+      border: 1px solid oklch(1 0 0 / 0.08);
+      background: oklch(0.10 0.045 200 / 0.65);
+      font-family: var(--mono);
+      font-size: 12px;
+      color: oklch(1 0 0 / 0.48);
+      letter-spacing: 0.04em;
+    }
+
+    .engine-stats-bar b {
+      color: var(--cyan);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .engine-stats-arr {
+      color: oklch(1 0 0 / 0.28);
+    }
+
+    .engine-stats-sep {
+      color: oklch(1 0 0 / 0.2);
+    }
+
+    .engine-benchmark-nudge {
+      text-align: center;
+      margin-top: 28px;
+      font-size: 14px;
+      color: oklch(1 0 0 / 0.45);
+    }
+
+    .engine-benchmark-nudge a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid oklch(0.74 0.14 200 / 0.35);
+    }
+
+    .engine-benchmark-nudge a:hover {
+      color: var(--white);
+      border-bottom-color: var(--white);
     }
 
     /* The capsule instrument */
@@ -1469,6 +1665,12 @@
       font-weight: 400;
     }
 
+    .ss-grids {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
     .ss-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -1477,6 +1679,44 @@
       overflow: hidden;
       border: 1px solid oklch(1 0 0 / 0.07);
       background: oklch(1 0 0 / 0.02);
+    }
+
+    .ss-grid-preview {
+      border-radius: 14px;
+    }
+
+    .surface-card.preview {
+      min-height: 280px;
+      padding: 28px 28px 24px;
+      opacity: 0.72;
+    }
+
+    .surface-card.preview:hover {
+      opacity: 1;
+    }
+
+    .surface-card.preview .sc-num {
+      font-size: 48px;
+    }
+
+    .surface-card.preview .sc-word {
+      font-size: clamp(32px, 4vw, 44px);
+      margin-bottom: 14px;
+    }
+
+    .surface-card.preview .sc-mt-body {
+      min-height: 72px;
+      padding: 12px 14px;
+      font-size: 11px;
+    }
+
+    .surface-card.preview .sc-desc {
+      font-size: 13px;
+    }
+
+    .sc-badge-preview {
+      background: oklch(1 0 0 / 0.06) !important;
+      color: oklch(1 0 0 / 0.45) !important;
     }
 
     .surface-card {
@@ -1749,13 +1989,18 @@
         align-items: flex-start;
       }
 
-      .ss-grid {
+      .ss-grid,
+      .ss-grid-preview {
         grid-template-columns: 1fr;
       }
 
       .surface-card {
         min-height: auto;
         padding: 36px 28px;
+      }
+
+      .surface-card.preview {
+        min-height: auto;
       }
 
       .sc-num {
@@ -1767,7 +2012,95 @@
       }
     }
 
-    /* SUBPAGE CARDS */
+    /* HOME BOTTOM — explore links + FAQ */
+    .home-bottom {
+      position: relative;
+      z-index: 2;
+      background: oklch(0.046 0.034 204);
+      padding: 80px 80px 100px;
+    }
+
+    .home-bottom-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .explore-links {
+      position: static;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 8px 20px;
+      margin-bottom: 48px;
+      padding: 0;
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      color: oklch(1 0 0 / 0.38);
+    }
+
+    .explore-links a {
+      color: oklch(1 0 0 / 0.55);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .explore-links a:hover {
+      color: var(--cyan);
+    }
+
+    .explore-links .sep {
+      color: oklch(1 0 0 / 0.18);
+      user-select: none;
+    }
+
+    .mobile-install-bar {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+      background: oklch(0.08 0.04 200 / 0.94);
+      border-top: 1px solid oklch(1 0 0 / 0.1);
+      backdrop-filter: blur(12px);
+      transform: translateY(110%);
+      transition: transform 0.3s ease;
+    }
+
+    .mobile-install-bar.show {
+      transform: translateY(0);
+    }
+
+    .mobile-install-bar button {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 16px;
+      border: 1px solid oklch(0.74 0.14 200 / 0.35);
+      border-radius: 10px;
+      background: oklch(0.74 0.14 200 / 0.12);
+      color: var(--cyan);
+      font-family: var(--mono);
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .mobile-install-bar {
+        display: block;
+      }
+
+      body.has-install-bar {
+        padding-bottom: 72px;
+      }
+    }
+
+    /* legacy cards-section (unused) */
     .cards-section {
       position: relative;
       z-index: 2;
@@ -1882,250 +2215,438 @@
       z-index: 1;
     }
 
-    .faq-wrap {
-      margin-top: 58px;
-      border-radius: 14px;
-      overflow: hidden;
-      background:
-        radial-gradient(760px 360px at 84% 18%, oklch(0.74 0.14 200 / 0.16), transparent 64%),
-        radial-gradient(560px 320px at 18% 100%, oklch(0.78 0.16 145 / 0.10), transparent 70%),
-        linear-gradient(180deg, oklch(0.09 0.04 200), oklch(0.045 0.028 200));
-      border: 1px solid oklch(0.08 0.035 200);
-      box-shadow: 0 34px 90px oklch(0 0 0 / 0.20);
-      color: var(--white);
+    /* FAQ — dark stage */
+    .faq-section {
+      margin-top: 0;
     }
 
-    .faq-head {
-      display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
-      gap: 34px;
-      padding: 36px 38px 32px;
-      border-bottom: 1px solid oklch(1 0 0 / 0.07);
+    .faq-stage {
+      border-radius: 18px;
+      overflow: hidden;
+      color: var(--white);
+      border: 1px solid oklch(1 0 0 / 0.08);
+      box-shadow:
+        0 40px 100px oklch(0 0 0 / 0.28),
+        inset 0 1px 0 oklch(1 0 0 / 0.06);
+      background:
+        radial-gradient(900px 420px at 92% 0%, oklch(0.74 0.14 200 / 0.18), transparent 58%),
+        radial-gradient(640px 380px at 4% 100%, oklch(0.78 0.16 145 / 0.09), transparent 62%),
+        linear-gradient(165deg, oklch(0.11 0.045 200), oklch(0.055 0.034 200));
       position: relative;
     }
 
-    .faq-head::after {
+    .faq-stage::before {
       content: '';
       position: absolute;
-      left: 38px;
-      right: 38px;
-      bottom: -1px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-      opacity: 0.55;
+      inset: 0;
+      background-image:
+        linear-gradient(oklch(1 0 0 / 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, oklch(1 0 0 / 0.03) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: linear-gradient(180deg, oklch(0 0 0 / 0.5), transparent 72%);
+      pointer-events: none;
     }
 
-    .faq-kicker {
+    .faq-topbar {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 22px;
+      border-bottom: 1px solid oklch(1 0 0 / 0.07);
+      background: oklch(0 0 0 / 0.22);
       font-family: var(--mono);
       font-size: 10.5px;
-      letter-spacing: 0.14em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--cyan);
-      margin-bottom: 14px;
+      color: oklch(1 0 0 / 0.42);
     }
 
-    .faq-title {
+    .faq-topbar-dots {
+      display: flex;
+      gap: 7px;
+    }
+
+    .faq-topbar-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: oklch(1 0 0 / 0.12);
+      border: 1px solid oklch(1 0 0 / 0.08);
+    }
+
+    .faq-topbar-dots span:first-child {
+      background: oklch(0.62 0.2 25 / 0.55);
+    }
+
+    .faq-topbar-dots span:nth-child(2) {
+      background: oklch(0.78 0.14 85 / 0.45);
+    }
+
+    .faq-topbar-dots span:nth-child(3) {
+      background: oklch(0.72 0.16 145 / 0.45);
+    }
+
+    .faq-layout {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+      min-height: 520px;
+    }
+
+    .faq-aside {
+      padding: 36px 32px 32px;
+      border-right: 1px solid oklch(1 0 0 / 0.07);
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      background: linear-gradient(180deg, oklch(0 0 0 / 0.14), transparent);
+    }
+
+    .faq-eyebrow {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 12px;
+    }
+
+    .faq-heading {
       font-family: var(--display);
       font-style: italic;
       font-weight: 900;
-      font-size: clamp(46px, 5.8vw, 86px);
+      font-size: clamp(42px, 4.2vw, 64px);
       line-height: 0.9;
       letter-spacing: -0.025em;
       color: var(--white);
     }
 
-    .faq-title em {
+    .faq-heading em {
       color: var(--cyan);
       font-style: inherit;
     }
 
-    .faq-copy {
-      align-self: end;
-      font-size: 15.5px;
+    .faq-lead {
+      font-size: 14px;
       line-height: 1.65;
-      color: oklch(1 0 0 / 0.58);
+      color: oklch(1 0 0 / 0.52);
       font-weight: 300;
-      max-width: 440px;
     }
 
-    .faq-copy strong {
-      color: oklch(1 0 0 / 0.86);
-      font-weight: 500;
+    .faq-lead a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid oklch(0.74 0.14 200 / 0.35);
     }
 
-    .faq-signal {
-      margin-top: 20px;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      border: 1px solid oklch(1 0 0 / 0.08);
-      border-radius: 8px;
-      overflow: hidden;
-      background: oklch(0 0 0 / 0.18);
-    }
-
-    .faq-signal span {
-      padding: 12px 14px;
-      border-right: 1px solid oklch(1 0 0 / 0.06);
-      font-family: var(--mono);
-      font-size: 10px;
-      color: oklch(1 0 0 / 0.42);
-      line-height: 1.45;
-    }
-
-    .faq-signal span:last-child {
-      border-right: 0;
-    }
-
-    .faq-signal b {
-      display: block;
+    .faq-lead a:hover {
       color: var(--white);
+      border-bottom-color: var(--white);
+    }
+
+    .faq-rail {
+      display: grid;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .faq-rail-item {
+      padding: 14px 16px;
+      border-radius: 10px;
+      border: 1px solid oklch(1 0 0 / 0.08);
+      background: oklch(1 0 0 / 0.03);
+      backdrop-filter: blur(8px);
+    }
+
+    .faq-rail-val {
+      display: block;
       font-family: var(--display);
       font-style: italic;
-      font-size: 28px;
+      font-weight: 900;
+      font-size: 32px;
       line-height: 0.95;
+      color: var(--white);
       margin-bottom: 4px;
     }
 
-    .faq-list {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 1px;
-      background: oklch(1 0 0 / 0.07);
+    .faq-rail-val em {
+      color: var(--cyan);
+      font-style: inherit;
     }
 
-    .faq-item {
-      background: oklch(0.055 0.034 200 / 0.92);
-      min-width: 0;
-      display: grid;
-      grid-template-rows: auto 0fr;
-      transition: grid-template-rows 0.3s ease-out;
+    .faq-rail-lbl {
+      font-family: var(--mono);
+      font-size: 9.5px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: oklch(1 0 0 / 0.38);
+      line-height: 1.4;
+    }
+
+    .faq-main {
+      padding: 22px 22px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .faq-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .faq-card {
+      border-radius: 11px;
+      border: 1px solid oklch(1 0 0 / 0.07);
+      background: oklch(1 0 0 / 0.025);
       overflow: hidden;
+      transition: border-color 0.28s, background 0.28s, box-shadow 0.28s;
+      position: relative;
     }
 
-    .faq-item[open] {
-      grid-template-rows: auto 1fr;
+    .faq-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 12px;
+      bottom: 12px;
+      width: 3px;
+      border-radius: 0 3px 3px 0;
+      background: transparent;
+      transition: background 0.28s, box-shadow 0.28s;
     }
 
-    .faq-item summary {
-      list-style: none;
+    .faq-card:hover {
+      border-color: oklch(0.74 0.14 200 / 0.22);
+      background: oklch(0.74 0.14 200 / 0.04);
+    }
+
+    .faq-card.is-open {
+      border-color: oklch(0.74 0.14 200 / 0.38);
+      background: oklch(0.74 0.14 200 / 0.07);
+      box-shadow: 0 12px 40px oklch(0 0 0 / 0.22);
+    }
+
+    .faq-card.is-open::before {
+      background: var(--cyan);
+      box-shadow: 0 0 18px oklch(0.74 0.14 200 / 0.55);
+    }
+
+    .faq-trigger {
+      width: 100%;
+      border: 0;
+      background: transparent;
       cursor: pointer;
-      padding: 20px 22px;
-      min-height: 86px;
-      font-weight: 600;
-      color: var(--white);
+      text-align: left;
+      padding: 18px 18px 18px 20px;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 28px;
-      gap: 18px;
+      grid-template-columns: minmax(0, 1fr) 34px;
+      gap: 14px;
       align-items: center;
-      transition: color 0.2s, background 0.2s;
+      color: var(--white);
+      font: inherit;
     }
 
-    .faq-item summary::-webkit-details-marker {
-      display: none;
+    .faq-trigger-main {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 0;
     }
 
-    .faq-item summary:hover {
-      background: oklch(0.74 0.14 200 / 0.055);
+    .faq-tag {
+      align-self: flex-start;
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: oklch(1 0 0 / 0.42);
+      padding: 0;
     }
 
-    .faq-q {
-      display: block;
-      font-size: 15px;
-      line-height: 1.35;
-      letter-spacing: -0.005em;
+    .faq-card.is-open .faq-tag {
+      color: var(--cyan);
     }
 
-    .faq-plus {
-      width: 28px;
-      height: 28px;
+    .faq-question {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 800;
+      font-size: clamp(18px, 1.6vw, 22px);
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      color: oklch(1 0 0 / 0.88);
+    }
+
+    .faq-card.is-open .faq-question {
+      color: var(--white);
+    }
+
+    .faq-trigger code {
+      font-family: var(--mono);
+      font-style: normal;
+      font-weight: 500;
+      font-size: 0.82em;
+      color: var(--cyan);
+    }
+
+    .faq-chevron {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      border: 1px solid oklch(1 0 0 / 0.1);
       display: grid;
       place-items: center;
-      border-radius: 6px;
-      border: 1px solid oklch(0.74 0.14 200 / 0.26);
-      color: var(--cyan);
+      color: oklch(1 0 0 / 0.45);
+      transition: transform 0.28s ease, border-color 0.28s, color 0.28s, background 0.28s;
+      flex-shrink: 0;
       font-family: var(--mono);
-      font-size: 18px;
+      font-size: 20px;
       line-height: 1;
-      transition: transform 0.2s, background 0.2s;
     }
 
-    .faq-item[open] .faq-plus {
+    .faq-chevron::before {
+      content: '+';
+    }
+
+    .faq-card.is-open .faq-chevron {
       transform: rotate(45deg);
+      color: var(--cyan);
+      border-color: oklch(0.74 0.14 200 / 0.45);
       background: oklch(0.74 0.14 200 / 0.12);
     }
 
-    .faq-item .faq-content {
+    .faq-panel {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.28s ease;
+    }
+
+    .faq-card.is-open .faq-panel {
+      grid-template-rows: 1fr;
+    }
+
+    .faq-panel-inner {
       overflow: hidden;
     }
 
-    .faq-item p {
+    .faq-panel p {
       margin: 0;
-      padding: 0 22px 24px;
+      padding: 16px 20px 20px;
       font-size: 14px;
-      line-height: 1.68;
+      line-height: 1.72;
       color: oklch(1 0 0 / 0.58);
-      max-width: 560px;
+      max-width: 62ch;
+      border-top: 1px solid oklch(1 0 0 / 0.06);
     }
 
-    .faq-item code {
-      padding: 2px 5px;
+    .faq-panel code {
+      padding: 2px 6px;
       border-radius: 4px;
-      background: oklch(0.74 0.14 200 / 0.10);
-      border: 1px solid oklch(0.74 0.14 200 / 0.18);
+      background: oklch(0.74 0.14 200 / 0.12);
+      border: 1px solid oklch(0.74 0.14 200 / 0.22);
       color: var(--cyan);
-      font-size: 0.88em;
+      font-family: var(--mono);
+      font-size: 0.86em;
+    }
+
+    .faq-panel a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid oklch(0.74 0.14 200 / 0.28);
+    }
+
+    .faq-panel a:hover {
+      color: var(--white);
+      border-bottom-color: var(--white);
+    }
+
+    .faq-panel strong {
+      color: oklch(1 0 0 / 0.9);
+      font-weight: 500;
+    }
+
+    .faq-foot {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid oklch(1 0 0 / 0.07);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .faq-foot-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: oklch(1 0 0 / 0.35);
+      margin-right: 4px;
+    }
+
+    .faq-foot a {
+      padding: 8px 14px;
+      border-radius: 7px;
+      border: 1px solid oklch(1 0 0 / 0.1);
+      background: oklch(1 0 0 / 0.04);
+      color: oklch(1 0 0 / 0.62);
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+
+    .faq-foot a:hover {
+      color: var(--cyan);
+      border-color: oklch(0.74 0.14 200 / 0.45);
+      background: oklch(0.74 0.14 200 / 0.1);
     }
 
     @media (max-width: 900px) {
-      .cards-section {
-        padding: 80px 24px 96px;
+      .home-bottom {
+        padding: 64px 24px 80px;
       }
 
-      .cards-grid {
+      .faq-layout {
         grid-template-columns: 1fr;
       }
 
-      .faq-head {
-        grid-template-columns: 1fr;
-        padding: 30px 24px 26px;
-        gap: 20px;
+      .faq-aside {
+        border-right: 0;
+        border-bottom: 1px solid oklch(1 0 0 / 0.07);
+        padding: 28px 22px 24px;
       }
 
-      .faq-head::after {
-        left: 24px;
-        right: 24px;
+      .faq-rail {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        margin-top: 8px;
       }
 
-      .faq-copy {
-        max-width: none;
+      .faq-rail-val {
+        font-size: 24px;
       }
 
-      .faq-list {
-        grid-template-columns: 1fr;
+      .faq-main {
+        padding: 16px;
       }
     }
 
     @media (max-width: 560px) {
-      .faq-signal {
+      .faq-rail {
         grid-template-columns: 1fr;
       }
 
-      .faq-signal span {
-        border-right: 0;
-        border-bottom: 1px solid oklch(1 0 0 / 0.06);
-      }
-
-      .faq-signal span:last-child {
-        border-bottom: 0;
-      }
-
-      .faq-item summary {
-        min-height: auto;
-        padding: 18px 18px;
-      }
-
-      .faq-item p {
-        padding: 0 18px 20px;
+      .faq-topbar span:last-child {
+        display: none;
       }
     }
 
@@ -2133,12 +2654,14 @@
     footer {
       position: relative;
       z-index: 2;
-      background: oklch(0.06 0.04 200);
+      background: oklch(0.045 0.032 204);
       padding: 44px 80px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-top: 1px solid oklch(1 0 0 / 0.05);
+      border-top: 1px solid oklch(1 0 0 / 0.08);
+      flex-wrap: wrap;
+      gap: 16px;
     }
 
     .f-logo {
@@ -2160,7 +2683,7 @@
 
     .f-links a {
       font-size: 13px;
-      color: oklch(1 0 0/0.22);
+      color: oklch(1 0 0/0.38);
       text-decoration: none;
       transition: color 0.2s;
     }
@@ -2168,6 +2691,8 @@
     .f-links a:hover {
       color: oklch(1 0 0/0.6);
     }
+
+    .f-copy { color: oklch(1 0 0 / 0.18); font-family: var(--mono); font-size: 11px; }
 
     .nav-waitlist {
       background: oklch(0.74 0.14 200 / 0.12) !important;
@@ -2310,21 +2835,25 @@
 
   <canvas id="mesh-canvas"></canvas>
 
-  <nav>
-    <a class="nav-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg"
-        aria-label="Mesh">
-        <path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round"
-          stroke-linejoin="round" />
-        <path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round"
-          stroke-linejoin="round" /><text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif"
-          font-weight="700" font-size="17" fill="#ffffff">Mesh.</text>
-      </svg></a>
-    <div class="nav-right">
-      <a href="/features">Features</a>
-      <a href="/quickstart">Quickstart</a>
-      <a href="/benchmarks">Benchmarks</a>
-      <a href="/docs">Docs</a>
-      <a onclick="openModal(true)" class="nav-waitlist">Waitlist</a>
+  <nav id="siteNav">
+    <a class="nav-logo" href="/" aria-label="Mesh home">
+      <svg class="nav-logo-mark" viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="26" y="20" font-family="'DM Sans', system-ui, sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text>
+      </svg>
+    </a>
+    <div class="nav-end">
+      <a href="/quickstart" class="nav-install-mobile">Install</a>
+      <button type="button" class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false"
+        aria-controls="navMenu"><span></span><span></span><span></span></button>
+      <div class="nav-right" id="navMenu">
+        <a href="/about">About</a>
+        <a href="/quickstart">Quickstart</a>
+        <a href="/benchmarks">Benchmarks</a>
+        <a href="/docs">Docs</a>
+        <a href="/auth/login" class="nav-cta">Sign in</a>
+      </div>
     </div>
   </nav>
 
@@ -2333,13 +2862,16 @@
     <div class="hero-word">
       <span class="l">M</span><span class="l">E</span><span class="l">S</span><span class="l">H</span>
     </div>
-    <div class="hero-tag">Terminal &nbsp;·&nbsp; IDE &nbsp;·&nbsp; MCP &nbsp;·&nbsp; API</div>
-    <p class="hero-sub">A terminal-first <strong>AI engineering OS</strong>. Capsules, verified timelines, runtime autopsy,
-      issue autopilot, company memory, and MCP access for the agents you already use.</p>
-    <div class="hero-install" id="installBtn" onclick="copyInstall()">
-      <span class="prompt">$</span>
-      <span>npm i -g @edgarelmo/mesh-agent-cli</span>
-      <span class="copy-hint" id="copyHint">click to copy</span>
+    <div class="hero-tag">CLI &nbsp;·&nbsp; MCP &nbsp;·&nbsp; local-first</div>
+    <p class="hero-sub">Give AI agents <strong>source-backed repo context</strong> — not full-tree paste on every turn.</p>
+    <div class="hero-actions">
+      <a href="/quickstart" class="hero-cta-primary">Quickstart →</a>
+      <div class="hero-install" id="installBtn" onclick="copyInstall()" role="button" tabindex="0"
+        onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();copyInstall()}">
+        <span class="prompt">$</span>
+        <span>npm i -g @trymesh/cli</span>
+        <span class="copy-hint" id="copyHint">click to copy</span>
+      </div>
     </div>
     <a href="#how"
       style="margin-top:12px;font-family:var(--mono);font-size:12px;color:oklch(1 0 0/0.28);text-decoration:none;transition:color 0.2s"
@@ -2365,14 +2897,14 @@
         position: relative;
         max-width: 1280px;
         margin: 0 auto;
-        height: 70vh;
-        min-height: 500px;
-        max-height: 800px;
-        border-radius: 14px;
-        border: 1px solid oklch(1 0 0 / 0.08);
-        background: oklch(0.045 0.028 200 / 0.97);
+        height: 52vh;
+        min-height: 380px;
+        max-height: 520px;
+        border-radius: 0;
+        border: 0;
+        background: transparent;
         overflow: hidden;
-        box-shadow: 0 60px 160px oklch(0 0 0 / 0.5), inset 0 1px 0 oklch(1 0 0 / 0.06);
+        box-shadow: none;
       }
       #engineCanvas {
         display: block;
@@ -2427,57 +2959,36 @@
           <span class="engine-step-text">Structure Retained</span>
         </div>
         <div class="engine-step" id="step3">
-          <span class="engine-step-num">3.9×</span>
+          <span class="engine-step-num">26.0×</span>
           <span class="engine-step-text">Context Density</span>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- PLAYGROUND SECTION -->
-  <section class="playground-section" id="try-it">
-    <div class="pg-container">
-      <div class="pg-top">
-        <div class="pg-title">Capsule Playground</div>
-        <div class="pg-samples">
-          <button class="pg-sample-btn act" onclick="loadSample('auth')">Auth Service</button>
-          <button class="pg-sample-btn" onclick="loadSample('react')">React UI</button>
-          <button class="pg-sample-btn" onclick="loadSample('api')">Express API</button>
-        </div>
-      </div>
-      <div class="pg-grid">
-        <div class="pg-pane">
-          <div class="pg-pane-head">Raw Source Code <span id="rawTokens">0 tokens</span></div>
-          <div class="pg-editor-wrap">
-            <textarea class="pg-editor" id="pgInput" spellcheck="false" placeholder="Paste your code here..."></textarea>
-          </div>
-        </div>
-        <div class="pg-pane">
-          <div class="pg-pane-head">Distilled Capsule <span id="capTokens">0 tokens</span></div>
-          <div class="pg-editor-wrap">
-            <div class="pg-output" id="pgOutput"></div>
-          </div>
-        </div>
-      </div>
-      <div class="pg-stats">
-        <div class="pg-stat-item">Files: <b>1</b></div>
-        <div class="pg-stat-item">CDT: <b style="color:var(--cyan)">Active</b></div>
-        <div class="pg-stat-item">S0 Context: <b style="color:var(--cyan)">Live</b></div>
-        <div class="pg-stat-ratio" id="pgRatio">4.2× Compression</div>
-      </div>
+    <div class="engine-stats-bar" aria-label="Compression summary">
+      <span><b>87,030</b> raw</span>
+      <span class="engine-stats-arr">→</span>
+      <span><b>3,347</b> capsule</span>
+      <span class="engine-stats-sep">·</span>
+      <span><b>26×</b> density</span>
+      <span class="engine-stats-sep">·</span>
+      <span><b>100%</b> recall</span>
     </div>
+    <p class="engine-benchmark-nudge">Try the live compressor on <a href="/benchmarks">Benchmarks →</a></p>
   </section>
 
-  <!-- FOUR SURFACES GRID -->
+  <!-- PRODUCT SURFACES -->
   <section class="surfaces-section">
     <div class="ss-header">
       <div class="ss-eyebrow">The Platform</div>
       <h2 class="ss-title">Four surfaces.<br><em>One engine.</em></h2>
-      <p class="ss-desc">Start with the CLI for verified execution. Add MCP to give Claude Code, Cursor, Windsurf, and
-        VS Code the same structured workspace tools. IDE and API are preview surfaces around the shared runtime.</p>
+      <p class="ss-desc">Start with the <strong>CLI</strong> for verified execution. Add <strong>MCP</strong> for Claude Code, Cursor, and VS Code.
+        IDE and Gateway API are preview surfaces around the same engine.</p>
     </div>
 
-    <div class="ss-grid">
+    <div class="ss-grids">
+
+    <div class="ss-grid ss-grid-primary">
 
       <a class="surface-card" data-i="0" href="/quickstart">
         <div class="sc-head">
@@ -2501,61 +3012,9 @@
         <span class="sc-cta">Install now →</span>
       </a>
 
-      <a class="surface-card" data-i="1" href="/features">
+      <a class="surface-card" data-i="2" href="/docs#mcp-install">
         <div class="sc-head">
           <span class="sc-num">02</span>
-          <span class="sc-badge">Desktop IDE</span>
-        </div>
-        <div class="sc-word">The IDE.</div>
-        <div class="sc-mt">
-          <div class="sc-mt-bar"><span class="d r"></span><span class="d y"></span><span class="d g"></span><span
-              class="t">mesh workspace - billing-api</span></div>
-          <div class="sc-mt-body" style="display:grid;grid-template-columns:88px 1fr;gap:14px;align-items:start">
-            <div style="display:flex;flex-direction:column;gap:6px;font-size:10px;color:oklch(1 0 0 / 0.32)">
-              <div style="color:var(--cyan)">EXPLORER</div>
-              <div>src/</div>
-              <div style="padding-left:10px">auth.ts</div>
-              <div style="padding-left:10px;color:var(--white)">session.ts</div>
-              <div style="padding-left:10px">billing.ts</div>
-              <div style="padding-left:10px">dashboard.tsx</div>
-            </div>
-            <div>
-              <div
-                style="display:flex;justify-content:space-between;gap:10px;font-size:10px;color:oklch(1 0 0 / 0.24);margin-bottom:10px">
-                <span>session.ts</span>
-                <span style="color:var(--cyan)">247 files indexed</span>
-              </div>
-              <div style="display:flex;flex-direction:column;gap:4px;font-size:11px;line-height:1.6">
-                <div><span class="to">12</span> <span class="tc">export async function</span> <span
-                    class="tw">refreshSession</span><span class="td">(ctx)</span> <span class="tc">{</span></div>
-                <div><span class="to">13</span> &nbsp; <span class="td">const</span> <span class="tw">token</span> <span
-                    class="tc">=</span> <span class="tw">await</span> <span class="tw">ctx</span>.<span
-                    class="tw">cookies</span>.<span class="tw">get</span><span class="tc">(</span><span
-                    class="ts">'mesh.sid'</span><span class="tc">)</span></div>
-                <div><span class="to">14</span> &nbsp; <span class="tw">if</span> <span class="tc">(</span><span
-                    class="tw">isExpired</span><span class="tc">(</span><span class="tw">token</span><span
-                    class="tc">))</span> <span class="tw">return</span> <span class="tw">redirect</span><span
-                    class="tc">(</span><span class="ts">'/login'</span><span class="tc">)</span></div>
-                <div><span class="to">15</span> &nbsp; <span class="tw">return</span> <span
-                    class="tw">resumeWorkspace</span><span class="tc">(</span><span class="tw">ctx</span><span
-                    class="tc">)</span></div>
-                <div><span class="to">16</span> <span class="tc">}</span></div>
-              </div>
-              <div
-                style="margin-top:12px;padding:8px 10px;border-radius:8px;background:oklch(1 0 0 / 0.04);border:1px solid oklch(1 0 0 / 0.08);font-size:10px;line-height:1.5">
-                <span class="tc">Mesh</span> <span class="td">- capsule context attached - suggested fix ready</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <p class="sc-desc">A desktop-first preview workbench with <strong>Monaco, file tree, terminal SSE, git APIs</strong>,
-          and a runtime bridge currently in progress.</p>
-        <span class="sc-cta">IDE status →</span>
-      </a>
-
-      <a class="surface-card" data-i="2" href="/docs">
-        <div class="sc-head">
-          <span class="sc-num">03</span>
           <span class="sc-badge">MCP For Agents</span>
         </div>
         <div class="sc-word">Agent Native.</div>
@@ -2566,157 +3025,214 @@
             <div class="td">// Claude Code / Cursor using Mesh MCP</div>
             <div><span class="tp">claude » </span><span class="tw">investigate the session timeout bug</span></div>
             <div>&nbsp;</div>
-            <div><span class="tc">tool</span> <span class="tw">workspace.ask_codebase("session expiry")</span></div>
+            <div><span class="tc">tool</span> <span class="tw">mesh_search("session expiry")</span></div>
             <div class="ts"> → src/session/store.ts:44</div>
             <div class="ts"> → src/auth/middleware.ts:88</div>
             <div>&nbsp;</div>
-            <div><span class="tc">tool</span> <span class="tw">workspace.patch_surgical("handleExpiry")</span></div>
+            <div><span class="tc">tool</span> <span class="tw">mesh_read_targeted(…)</span></div>
             <div><span class="ts"> → timeline check</span> <span class="td">(proof bundle ready)</span></div>
-            <div class="td">→ agent edits only the relevant span</div>
           </div>
         </div>
-        <p class="sc-desc">Mesh plugs into <strong>Claude Code, Claude Desktop, Cursor, Windsurf, and VS Code</strong>
-          with 112+ tools and guided MCP prompts.</p>
-        <span class="sc-cta">MCP docs →</span>
+        <p class="sc-desc">Plugs into <strong>Claude Code, Cursor, Windsurf, and VS Code</strong> via
+          <code>@trymesh/mcp</code> (~25 <code>mesh_*</code> tools). Full <code>workspace.*</code> stays in the CLI.</p>
+        <span class="sc-cta">MCP setup →</span>
       </a>
 
-      <a class="surface-card" data-i="3" href="/docs">
+    </div>
+
+    <div class="ss-grid ss-grid-preview">
+
+      <a class="surface-card preview" data-i="1" href="/docs#ide-launch">
+        <div class="sc-head">
+          <span class="sc-num">03</span>
+          <span class="sc-badge sc-badge-preview">Preview · IDE</span>
+        </div>
+        <div class="sc-word">The IDE.</div>
+        <div class="sc-mt">
+          <div class="sc-mt-bar"><span class="d r"></span><span class="d y"></span><span class="d g"></span><span
+              class="t">mesh workspace</span></div>
+          <div class="sc-mt-body">
+            <div><span class="tc">Monaco</span> <span class="td">· file tree · terminal · git</span></div>
+            <div class="ts">→ runtime bridge in progress</div>
+          </div>
+        </div>
+        <p class="sc-desc">Desktop workbench preview — same capsule engine, early access.</p>
+        <span class="sc-cta">IDE status →</span>
+      </a>
+
+      <a class="surface-card preview" data-i="3" href="/docs#api-auth">
         <div class="sc-head">
           <span class="sc-num">04</span>
-          <span class="sc-badge">Gateway API</span>
+          <span class="sc-badge sc-badge-preview">Coming soon · API</span>
         </div>
         <div class="sc-word">The API.</div>
         <div class="sc-mt">
           <div class="sc-mt-bar"><span class="d r"></span><span class="d y"></span><span class="d g"></span><span
-              class="t">api.mesh.dev</span></div>
-          <div class="sc-mt-body" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-            <div
-              style="padding:10px;border-radius:8px;background:oklch(1 0 0 / 0.03);border:1px solid oklch(1 0 0 / 0.06)">
-              <div class="td" style="margin-bottom:8px">REQUEST · POST /agent</div>
-              <div><span class="tw">task</span>: <span class="ts">"review PR #204"</span></div>
-              <div><span class="tw">workspace</span>: <span class="ts">"org/api"</span></div>
-              <div><span class="tw">tools</span>: <span class="ts">["github"]</span></div>
-              <div><span class="tw">model</span>: <span class="ts">"claude-sonnet-4-6"</span></div>
-            </div>
-            <div
-              style="padding:10px;border-radius:8px;background:oklch(0.74 0.1 50 / 0.05);border:1px solid oklch(0.78 0.1 50 / 0.18)">
-              <div class="to" style="margin-bottom:8px">RESPONSE · 200 OK</div>
-              <div><span class="tw">result</span>: <span class="ts">"2 files need changes"</span></div>
-              <div><span class="tw">tokens_used</span>: <span class="ts">1204</span></div>
-              <div><span class="tw">tokens_saved</span>: <span class="ts">8621</span></div>
-              <div><span class="tw">sources</span>: <span class="ts">2 spans</span></div>
-            </div>
+              class="t">gateway · blueprint</span></div>
+          <div class="sc-mt-body">
+            <div><span class="tw">POST</span> <span class="ts">/agent</span> <span class="td">· capsule search &amp; recover</span></div>
+            <div class="td">Use CLI/MCP for production today.</div>
           </div>
         </div>
-        <p class="sc-desc">Embed Mesh-style capsule search, recovery, and agent workflows through a <strong>preview HTTP
-            surface</strong>. Use CLI/MCP for production execution today.</p>
-        <span class="sc-cta">API docs →</span>
+        <p class="sc-desc">Hosted HTTP surface for capsule workflows — preview blueprint only.</p>
+        <span class="sc-cta">API blueprint →</span>
       </a>
+
+    </div>
 
     </div>
   </section>
 
-  <!-- SUBPAGE CARDS -->
-  <div class="cards-section">
-    <div class="cards-eyebrow">Explore</div>
-    <div class="cards-title">Go<br>deeper.</div>
-    <div class="cards-grid">
-      <a class="s-card" href="/features.html" data-n="01">
-        <div class="sc-title">Features</div>
-        <p class="sc-desc">Capsules, /start, /change, issue autopilot, company brain, MCP tools, timelines, and runtime autopsy.
-        </p>
-        <div class="sc-arrow">↗</div>
-      </a>
-      <a class="s-card" href="/quickstart.html" data-n="02">
-        <div class="sc-title">Quickstart</div>
-        <p class="sc-desc">Install the CLI, run /start, then ship one narrow verified change with /change.</p>
-        <div class="sc-arrow">↗</div>
-      </a>
-      <a class="s-card" href="/benchmarks.html" data-n="03">
-        <div class="sc-title">Benchmarks</div>
-        <p class="sc-desc">100% NIAH recall. 5× token efficiency. 0% hallucination. Real LLM benchmark data.</p>
-        <div class="sc-arrow">↗</div>
-      </a>
+  <section class="home-bottom">
+    <div class="home-bottom-inner">
+    <div class="explore-links" aria-label="Explore more">
+      <a href="/about">About</a>
+      <span class="sep">·</span>
+      <a href="/quickstart">Quickstart</a>
+      <span class="sep">·</span>
+      <a href="/benchmarks">Benchmarks</a>
     </div>
-    <div class="faq-wrap" aria-label="Frequently asked questions">
-      <div class="faq-head">
-        <div>
-          <div class="faq-kicker">Operator FAQ</div>
-          <div class="faq-title">What Mesh<br><em>actually does.</em></div>
+
+    <section class="faq-section" aria-label="FAQ">
+      <div class="faq-stage">
+        <div class="faq-topbar">
+          <div class="faq-topbar-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+          <span>mesh › help</span>
+          <span>4 topics</span>
         </div>
-        <div class="faq-copy">
-          <p><strong>Mesh is not just another chat window.</strong> It is a code-context engine that turns a real
-            workspace into capsules, exact spans, timelines, and agent-ready commands.</p>
-          <div class="faq-signal">
-            <span><b>/start</b>golden path</span>
-            <span><b>/change</b>verified edit</span>
-            <span><b>112+</b>MCP tools</span>
+
+        <div class="faq-layout">
+          <aside class="faq-aside">
+            <div>
+              <div class="faq-eyebrow">FAQ</div>
+              <h2 class="faq-heading">Before you<br><em>install.</em></h2>
+            </div>
+            <p class="faq-lead">Mesh is a code-context engine — not another chat pane. Still deciding? Read the
+              <a href="/benchmarks">benchmarks</a> or jump to the <a href="/quickstart">quickstart</a>.</p>
+            <div class="faq-rail" aria-hidden="true">
+              <div class="faq-rail-item">
+                <span class="faq-rail-val"><em>26×</em></span>
+                <span class="faq-rail-lbl">capsule compression</span>
+              </div>
+              <div class="faq-rail-item">
+                <span class="faq-rail-val">100+</span>
+                <span class="faq-rail-lbl">CLI workspace tools</span>
+              </div>
+              <div class="faq-rail-item">
+                <span class="faq-rail-val">local</span>
+                <span class="faq-rail-lbl">index &amp; memory</span>
+              </div>
+            </div>
+          </aside>
+
+          <div class="faq-main">
+            <div class="faq-stack" id="faq-stack">
+        <article class="faq-card" data-faq-card>
+          <button type="button" class="faq-trigger" aria-expanded="false">
+            <span class="faq-trigger-main">
+              <span class="faq-tag">Product</span>
+              <span class="faq-question">What is Mesh, in one sentence?</span>
+            </span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="faq-panel" hidden>
+            <div class="faq-panel-inner">
+              <p>A terminal-first platform that turns a real git workspace into structured capsules, exact file spans, and
+                agent commands — so models plan from architecture instead of guessing from pasted source. Four surfaces
+                share one engine: CLI, MCP, preview IDE, and Gateway API.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-card" data-faq-card>
+          <button type="button" class="faq-trigger" aria-expanded="false">
+            <span class="faq-trigger-main">
+              <span class="faq-tag">Compression</span>
+              <span class="faq-question">What does the 26× number mean?</span>
+            </span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="faq-panel" hidden>
+            <div class="faq-panel-inner">
+              <p>On a live workspace trace shown above, Mesh reduced roughly 87k tokens of raw source to about 3.3k tokens
+                of capsule context for the model — about <strong>26× fewer input tokens</strong> for the same coverage.
+                Benchmarks break down NIAH recall, audit workloads, and per-model runs on the <a href="/benchmarks">benchmarks
+                  page</a>.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-card" data-faq-card>
+          <button type="button" class="faq-trigger" aria-expanded="false">
+            <span class="faq-trigger-main">
+              <span class="faq-tag">Workflow</span>
+              <span class="faq-question">What are <code>/start</code> and <code>/change</code>?</span>
+            </span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="faq-panel" hidden>
+            <div class="faq-panel-inner">
+              <p><code>/start</code> is the golden path: doctor check, workspace index, and a repo briefing so the agent
+                knows the layout before it edits. <code>/change &lt;goal&gt;</code> takes a small, verifiable task and
+                returns a patch plus optional verification (tests, lint, or a command you choose).</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-card" data-faq-card>
+          <button type="button" class="faq-trigger" aria-expanded="false">
+            <span class="faq-trigger-main">
+              <span class="faq-tag">Integrations</span>
+              <span class="faq-question">Do I have to leave Cursor or Claude Code?</span>
+            </span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="faq-panel" hidden>
+            <div class="faq-panel-inner">
+              <p>No. Run Mesh as the terminal agent, or add <code>@trymesh/mcp</code> so Claude Code, Cursor, Windsurf,
+                and VS Code can call ~25 <code>mesh_*</code> tools for search, targeted reads, and proof bundles. The
+                full <code>workspace.*</code> surface (~100+ tools) stays in the CLI today.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-card" data-faq-card>
+          <button type="button" class="faq-trigger" aria-expanded="false">
+            <span class="faq-trigger-main">
+              <span class="faq-tag">Start</span>
+              <span class="faq-question">How do I try it in five minutes?</span>
+            </span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="faq-panel" hidden>
+            <div class="faq-panel-inner">
+              <p>Install globally with <code>npm i -g @trymesh/cli</code>, open any repo, run <code>mesh</code>, then type
+                <code>/start</code>. Follow the <a href="/quickstart">quickstart</a> for one narrow verified change with
+                <code>/change</code> — that is the fastest way to see capsules and verification in action.</p>
+            </div>
+          </div>
+        </article>
+            </div>
+
+            <div class="faq-foot">
+              <span class="faq-foot-label">More detail</span>
+              <a href="/docs">All questions in docs →</a>
+              <a href="/quickstart">Quickstart</a>
+              <a href="/benchmarks">Benchmarks</a>
+            </div>
           </div>
         </div>
       </div>
-      <div class="faq-list">
-        <details class="faq-item" open>
-          <summary><span class="faq-q">How is Mesh different from a normal coding chat?</span><span
-              class="faq-plus">+</span></summary>
-          <div class="faq-content">
-            <p>Mesh builds a structural capsule of the repo before the model answers. The agent sees symbols, signatures,
-              relationships, summaries, and can recover exact file spans instead of guessing from pasted raw source.</p>
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary><span class="faq-q">What is inside a capsule?</span><span class="faq-plus">+</span></summary>
-          <div class="faq-content">
-            <p>Capsules combine low-tier file summaries, medium-tier AST structure, and high-tier semantic context for
-              files that matter. Smart cache invalidation keeps unchanged files from being re-indexed every run.</p>
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary><span class="faq-q">Does Mesh replace Claude Code, Codex, Cursor, or Windsurf?</span><span
-              class="faq-plus">+</span></summary>
-          <div class="faq-content">
-            <p>No. Mesh can be the terminal agent, but it also exposes the same workspace intelligence through MCP and API
-              surfaces, so existing coding assistants can ask Mesh for structured context.</p>
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary><span class="faq-q">What are timelines and fix racing?</span><span class="faq-plus">+</span>
-          </summary>
-          <div class="faq-content">
-            <p>Risky changes can run in isolated worktree-backed timelines. Mesh can test alternate fixes, compare
-              results, and only promote the version that passes the chosen verification command.</p>
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary><span class="faq-q">Can Mesh help with runtime bugs?</span><span class="faq-plus">+</span></summary>
-          <div class="faq-content">
-            <p>Yes. Hologram and runtime autopsy workflows start commands under observation, capture failures, stack
-              traces, and runtime evidence, then connect the symptom back to code paths.</p>
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary><span class="faq-q">Can I use it hands-free?</span><span class="faq-plus">+</span></summary>
-          <div class="faq-content">
-            <p>Voice mode uses local speech-to-text and native system speech output, so you can dictate architecture
-              thoughts or coding requests without sending audio through a cloud transcription API.</p>
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary><span class="faq-q">Can data stay local?</span><span class="faq-plus">+</span></summary>
-          <div class="faq-content">
-            <p>Indexing, capsules, timelines, and company memory are local-first. Model calls go through the selected Mesh
-              gateway, NVIDIA, Google, or BYOK route, and Mesh sends only the prompt/context needed for the active workflow.</p>
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary><span class="faq-q">Where should a new user start?</span><span class="faq-plus">+</span></summary>
-          <div class="faq-content">
-            <p>Install the CLI, run <code>mesh</code> in a repo, then type <code>/start</code>. After the briefing, use
-              <code>/change &lt;small goal&gt;</code> for one verified patch. Add MCP once you want Claude Code, Cursor,
-              Windsurf, or VS Code to use the same Mesh tools.</p>
-          </div>
-        </details>
-      </div>
+    </section>
     </div>
+  </section>
+
+  <div class="mobile-install-bar" id="mobileInstallBar" aria-hidden="true">
+    <button type="button" onclick="copyInstall()">
+      <span>$</span>
+      <span>npm i -g @trymesh/cli</span>
+      <span id="mobileCopyHint">Copy</span>
+    </button>
   </div>
 
   <footer>
@@ -2729,12 +3245,14 @@
           font-weight="700" font-size="17" fill="#ffffff">Mesh.</text>
       </svg></a>
     <div class="f-links">
-      <a href="/quickstart">Quickstart</a>
-      <a href="/benchmarks">Benchmarks</a>
-      <a href="/docs">Docs</a>
-      <a href="https://github.com/dreddi-edit/homebrew-mesh.git">GitHub</a>
+      <a href="https://github.com/dreddi-edit/mesh">GitHub</a>
+      <a href="https://www.npmjs.com/package/@trymesh/cli">NPM</a>
+      <a href="/license">License</a>
+      <a href="/contact">Contact</a>
+      <a href="/socials">Socials</a>
+      <a href="#" onclick="openModal(true); return false;">Waitlist</a>
     </div>
-    <div class="f-copy">© 2026 Mesh Intelligence.</div>
+    <div class="f-copy">© 2026 Mesh</div>
   </footer>
 
   <script>
@@ -2868,173 +3386,52 @@
 
     /* ── COPY INSTALL ── */
     function copyInstall() {
-      navigator.clipboard.writeText('npm i -g @edgarelmo/mesh-agent-cli').then(() => {
+      navigator.clipboard.writeText('npm i -g @trymesh/cli').then(() => {
         const h = document.getElementById('copyHint');
-        h.textContent = 'copied!'; h.style.color = 'var(--cyan)';
-        setTimeout(() => { h.textContent = 'click to copy'; h.style.color = ''; }, 2000);
+        if (h) {
+          h.textContent = 'copied!';
+          h.style.color = 'var(--cyan)';
+          setTimeout(() => { h.textContent = 'click to copy'; h.style.color = ''; }, 2000);
+        }
+        const mh = document.getElementById('mobileCopyHint');
+        if (mh) {
+          mh.textContent = 'Copied!';
+          setTimeout(() => { mh.textContent = 'Copy'; }, 2000);
+        }
       });
     }
 
-    /* ── REPO TO CAPSULE INSTRUMENT (REMOVED) ── */
-
-    /* ── PLAYGROUND LOGIC ── */
-    const SAMPLES = {
-      auth: `import { hash, compare } from 'bcrypt';
-import { sign } from 'jsonwebtoken';
-
-/**
- * Handles user authentication logic.
- * This class is responsible for verifying credentials
- * and issuing JWT tokens.
- */
-export class AuthService {
-  private rounds = 12;
-
-  async register(email, password) {
-    const salt = await hash(password, this.rounds);
-    const user = await db.user.create({ data: { email, salt } });
-    return user;
-  }
-
-  async login(email, password) {
-    const user = await db.user.findUnique({ where: { email } });
-    if (!user) throw new Error('Not found');
-    
-    const ok = await compare(password, user.salt);
-    if (!ok) throw new Error('Invalid');
-
-    return sign({ id: user.id }, process.env.SECRET);
-  }
-
-  // Internal helper for validation
-  private validate(email) {
-    return email.includes('@');
-  }
-}`,
-      react: `import React, { useState, useEffect } from 'react';
-
-export function Dashboard({ userId }) {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function load() {
-      const res = await fetch(\`/api/stats/\${userId}\`);
-      const json = await res.json();
-      setData(json);
-      setLoading(false);
-    }
-    load();
-  }, [userId]);
-
-  if (loading) return <div>Loading capsule stats...</div>;
-
-  return (
-    <div className="grid">
-      {data.map(stat => (
-        <Card key={stat.id} title={stat.label} value={stat.val} />
-      ))}
-    </div>
-  );
-}`,
-      api: `const express = require('express');
-const router = express.Router();
-
-// GET /v1/capsules/:id
-// Returns a structural summary of the requested capsule.
-router.get('/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const capsule = await Mesh.engine.getCapsule(id);
-    
-    if (!capsule) {
-      return res.status(404).json({ error: 'Capsule not found' });
-    }
-
-    res.json({
-      id: capsule.id,
-      files: capsule.fileCount,
-      compression: capsule.stats.ratio,
-      status: 'ready'
+    /* ── MOBILE NAV ── */
+    const siteNav = document.getElementById('siteNav');
+    const navToggle = document.getElementById('navToggle');
+    navToggle?.addEventListener('click', () => {
+      const open = siteNav.classList.toggle('is-open');
+      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      navToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
     });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-module.exports = router;`
-    };
-
-    const pgInput = document.getElementById('pgInput');
-    const pgOutput = document.getElementById('pgOutput');
-    const rawTokens = document.getElementById('rawTokens');
-    const capTokens = document.getElementById('capTokens');
-    const pgRatio = document.getElementById('pgRatio');
-
-    function loadSample(key) {
-      document.querySelectorAll('.pg-sample-btn').forEach(b => b.classList.toggle('act', b.innerText.toLowerCase().includes(key)));
-      if (pgInput) {
-        pgInput.value = SAMPLES[key];
-        processCode();
-      }
-    }
-
-    function processCode() {
-      if (!pgInput || !pgOutput) return;
-      const code = pgInput.value;
-      const rawCount = Math.ceil(code.length / 4);
-      
-      // Advanced 'Mesh Power' distillation logic (Simulating CDT + S0)
-      let distilled = code
-        // 1. Strip all comments
-        .replace(/\/\*([\s\S]*?)\*\//g, '')
-        .replace(/\/\/.*/gm, '')
-        
-        // 2. S0: Remove private members and internal implementation details
-        .replace(/private\s+\w+.*?;/g, '')
-        .replace(/#\w+.*?;/g, '')
-        
-        // 3. CDT: Prune non-exported types and interfaces unless referenced
-        .replace(/interface\s+\w+\s*\{[\s\S]*?\}/g, (m) => m.includes('export') ? m : '/* CDT: internal type pruned */')
-        .replace(/type\s+\w+\s*=[\s\S]*?;/g, (m) => m.includes('export') ? m : '/* CDT: internal type pruned */')
-        
-        // 4. Mesh Core: Aggressive Body Collapsing (S0)
-        // Collapses almost everything to just the structural signature
-        .replace(/\{[\s\S]*?\}/g, (match) => {
-          const lines = match.split('\n').length;
-          if (lines <= 2) return match;
-          // Keep only the first line of the body if it's very short, otherwise total collapse
-          return `{ /* S0: implementation hidden — logic cached in capsule */ }`;
-        })
-        
-        // 5. Cleanup imports (keeping only used ones is hard via regex, so we simulate grouping)
-        .replace(/(import|const|let).*?require.*?\n/g, (m) => Math.random() > 0.5 ? m : '')
-        
-        // Final polish
-        .replace(/^\s*[\r\n]/gm, '')
-        .replace(/\n\s*\n/g, '\n')
-        .trim();
-
-      // Ensure we always show impressive compression (Mesh Power)
-      // Real Mesh often hits 5-10x on large files
-      const capCount = Math.ceil(distilled.length / 4);
-      let ratio = (rawCount / Math.max(1, capCount));
-      
-      // Floor the ratio at 3.9 but allow it to scale with 'Mesh Power'
-      if (ratio < 4.2) ratio = 4.2 + (Math.random() * 0.5);
-
-      pgOutput.textContent = distilled;
-      rawTokens.innerText = `${rawCount} tokens`;
-      capTokens.innerText = `${Math.round(rawCount / ratio)} tokens`;
-      pgRatio.innerText = `${ratio.toFixed(1)}× Compression`;
-      pgRatio.style.color = 'var(--cyan)';
-      pgRatio.style.textShadow = '0 0 12px var(--cyan)';
-    }
-
-    if (pgInput) pgInput.addEventListener('input', processCode);
-    window.addEventListener('DOMContentLoaded', () => {
-      if (pgInput) loadSample('auth');
+    document.getElementById('navMenu')?.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        siteNav.classList.remove('is-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+        navToggle.setAttribute('aria-label', 'Open menu');
+      });
     });
+
+    /* ── MOBILE INSTALL BAR ── */
+    const mobileInstallBar = document.getElementById('mobileInstallBar');
+    const surfacesSection = document.querySelector('.surfaces-section');
+    if (mobileInstallBar && surfacesSection && window.matchMedia('(max-width: 768px)').matches) {
+      document.body.classList.add('has-install-bar');
+      const onScroll = () => {
+        const pastHero = window.scrollY > window.innerHeight * 0.45;
+        const beforeSurfacesEnd = surfacesSection.getBoundingClientRect().bottom > 0;
+        const show = pastHero && beforeSurfacesEnd;
+        mobileInstallBar.classList.toggle('show', show);
+        mobileInstallBar.setAttribute('aria-hidden', show ? 'false' : 'true');
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    }
 
     /* ── SURFACE GRID: spotlight + pulse + stagger ── */
     const cards = document.querySelectorAll('.surface-card');
@@ -3075,24 +3472,37 @@ module.exports = router;`
       pulseI = (pulseI + 1) % cards.length;
     }, 1900);
 
-    /* ── FAQ INTERACTION ── */
-    document.querySelectorAll('.faq-item summary').forEach(summary => {
-      summary.addEventListener('click', (e) => {
-        e.preventDefault();
-        const details = summary.parentElement;
-        const isOpen = details.hasAttribute('open');
+    /* ── FAQ ACCORDION (single column, one open at a time) ── */
+    document.querySelectorAll('[data-faq-card]').forEach(card => {
+      const trigger = card.querySelector('.faq-trigger');
+      const panel = card.querySelector('.faq-panel');
 
-        if (isOpen) {
-          // Close: first trigger the transition, then remove attribute
-          details.removeAttribute('open');
+      const setOpen = (open) => {
+        card.classList.toggle('is-open', open);
+        trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (open) {
+          panel.removeAttribute('hidden');
         } else {
-          // Open: add attribute to trigger transition
-          details.setAttribute('open', '');
+          panel.setAttribute('hidden', '');
         }
+      };
+
+      trigger.addEventListener('click', () => {
+        const willOpen = !card.classList.contains('is-open');
+        document.querySelectorAll('[data-faq-card].is-open').forEach(other => {
+          if (other !== card) {
+            other.classList.remove('is-open');
+            other.querySelector('.faq-trigger').setAttribute('aria-expanded', 'false');
+            other.querySelector('.faq-panel').setAttribute('hidden', '');
+          }
+        });
+        setOpen(willOpen);
       });
     });
   </script>
   <!-- 3D Engine Animation Script -->
   <script src="/engine-animation.js"></script>
+<script src="/assets/nav-auth.js" defer></script>
+<script src="/assets/mesh-qa-chat.js" defer></script>
 </body>
 </html>

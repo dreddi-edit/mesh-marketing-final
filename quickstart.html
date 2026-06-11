@@ -5,6 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mesh Quickstart - Install the Mesh Agent CLI</title>
   <meta name="description" content="Install Mesh in seconds with npm, launch the terminal AI agent, index your project, connect MCP tools, and enable local voice mode.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://try-mesh.com/quickstart">
+  <meta property="og:site_name" content="Mesh">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Mesh Quickstart">
+  <meta property="og:description" content="Install Mesh CLI, start a session, index your repo, and connect MCP tools.">
+  <meta property="og:url" content="https://try-mesh.com/quickstart">
+  <meta property="og:image" content="https://try-mesh.com/assets/brand/og-image.svg">
+  <meta property="og:image:type" content="image/svg+xml">
+  <meta property="og:image:alt" content="Mesh quickstart for AI coding agents">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mesh Quickstart">
+  <meta name="twitter:description" content="Install Mesh CLI, start a session, index your repo, and connect MCP tools.">
+  <meta name="twitter:image" content="https://try-mesh.com/assets/brand/og-image.svg">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Mesh Quickstart",
+    "url": "https://try-mesh.com/quickstart",
+    "isPartOf": { "@type": "WebSite", "url": "https://try-mesh.com/" },
+    "description": "Install Mesh CLI, start a session, index your repo, and connect MCP tools."
+  }
+  </script>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,13 +47,14 @@
     body { background: var(--bg); color: var(--ink); font-family: var(--sans); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
     #mesh-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
     a { color: inherit; text-decoration: none; }
-    .site-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 22px 56px; background: oklch(0.078 0.038 200 / 0.82); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+    .site-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 22px 56px; }
     .nav-logo img { height: 25px; width: auto; }
     .nav-right { display: flex; gap: 6px; align-items: center; }
     .nav-right a { font-size: 13px; color: oklch(1 0 0 / 0.42); padding: 6px 14px; border-radius: 6px; border: 1px solid transparent; transition: all 0.2s; }
     .nav-right a:hover { color: var(--ink); border-color: oklch(1 0 0 / 0.12); }
     .nav-active { color: var(--ink) !important; }
     .nav-waitlist { background: var(--cyan-soft) !important; border-color: var(--line-strong) !important; color: var(--cyan) !important; cursor: pointer; }
+    .nav-cta { color: var(--cyan) !important; border-color: var(--line-strong) !important; }
     .page-shell { width: min(1180px, calc(100% - 64px)); margin: 0 auto; position: relative; z-index: 1; }
     .hero { padding-top: 130px; padding-bottom: 60px; display: grid; grid-template-columns: 1fr; gap: 38px; align-items: start; }
     .hero-top { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.85fr); gap: 56px; align-items: end; }
@@ -64,6 +89,23 @@
     .command-title { color: var(--ink); font-size: 15px; font-weight: 700; }
     .copy-line { display: flex; align-items: center; gap: 8px; width: 100%; margin-top: 11px; padding: 10px 11px; border: 1px solid var(--line); border-radius: 7px; background: oklch(0.045 0.032 204 / 0.72); color: var(--ink); cursor: pointer; font-family: var(--mono); font-size: 11px; text-align: left; }
     .copy-line:hover { border-color: var(--line-strong); }
+    .ide-download { position: relative; display: flex; flex-direction: column; gap: 16px; width: 100%; padding: 20px 20px 18px; border: 1px solid var(--cyan); border-radius: 12px; background: linear-gradient(135deg, oklch(0.74 0.14 200 / 0.28), oklch(0.74 0.14 200 / 0.08) 60%, oklch(0.10 0.045 200 / 0.7)); color: var(--ink); font-family: var(--sans); text-align: left; box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06), 0 18px 48px oklch(0.74 0.14 200 / 0.32); overflow: hidden; }
+    .ide-download::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(120% 80% at 100% 0%, oklch(0.74 0.14 200 / 0.22), transparent 55%); }
+    .ide-download-head { position: relative; z-index: 1; display: flex; align-items: center; gap: 14px; }
+    .ide-download-ic { width: 46px; height: 46px; flex: 0 0 46px; display: grid; place-items: center; border-radius: 11px; background: oklch(0.046 0.034 204 / 0.85); border: 1px solid var(--line-strong); box-shadow: inset 0 0 18px oklch(0.74 0.14 200 / 0.18); }
+    .ide-download-tx { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
+    .ide-download-tx b { font-size: 16px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; }
+    .ide-download-tx small { font-family: var(--mono); font-size: 10px; color: oklch(1 0 0 / 0.6); letter-spacing: 0.04em; text-transform: uppercase; }
+    .ide-os-row { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .ide-os-btn { display: flex; align-items: center; gap: 11px; padding: 11px 13px; border: 1px solid var(--line); border-radius: 9px; background: oklch(0.046 0.034 204 / 0.65); color: var(--ink); cursor: pointer; text-decoration: none; transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease; }
+    .ide-os-btn:hover { transform: translateY(-1px); border-color: var(--cyan); background: oklch(0.74 0.14 200 / 0.12); box-shadow: 0 10px 26px oklch(0.74 0.14 200 / 0.22); }
+    .ide-os-ic { width: 30px; height: 30px; flex: 0 0 30px; display: grid; place-items: center; border-radius: 7px; background: oklch(0.10 0.045 200 / 0.85); border: 1px solid var(--line); color: oklch(1 0 0 / 0.86); }
+    .ide-os-btn:hover .ide-os-ic { color: var(--cyan); border-color: var(--line-strong); }
+    .ide-os-tx { display: flex; flex-direction: column; gap: 1px; flex: 1; min-width: 0; }
+    .ide-os-tx b { font-size: 13px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; }
+    .ide-os-tx small { font-family: var(--mono); font-size: 9.5px; color: oklch(1 0 0 / 0.48); letter-spacing: 0.04em; }
+    .ide-os-dl { display: grid; place-items: center; width: 28px; height: 28px; flex: 0 0 28px; border-radius: 7px; background: var(--cyan); color: var(--bg-deep); box-shadow: 0 6px 16px oklch(0.74 0.14 200 / 0.34); transition: transform .18s ease; }
+    .ide-os-btn:hover .ide-os-dl { transform: scale(1.06); }
     .terminal-wrap { display: flex; flex-direction: column; min-width: 0; }
     .terminal-bar { display: flex; align-items: center; gap: 8px; height: 42px; padding: 0 16px; border-bottom: 1px solid var(--line); background: oklch(1 0 0 / 0.025); }
     .dot { width: 10px; height: 10px; border-radius: 50%; background: oklch(0.72 0.12 24); }
@@ -167,6 +209,8 @@
     .pipeline-foot .v { margin-top: 4px; font-family: var(--display); font-style: italic; font-weight: 900; font-size: 26px; color: var(--cyan); line-height: 1; }
     .pipeline-foot .v small { font-family: var(--mono); font-size: 10px; color: oklch(1 0 0 / 0.4); font-style: normal; font-weight: 400; margin-left: 2px; }
     .closing-cta { width: min(1180px, calc(100% - 64px)); margin: 28px auto 88px; padding: 52px 58px; border: 1px solid var(--line-strong); border-radius: 10px; background: radial-gradient(circle at 78% 40%, oklch(0.74 0.14 200 / 0.18), transparent 28rem), oklch(0.105 0.045 200); display: flex; align-items: center; justify-content: space-between; gap: 34px; }
+    .closing-cta h2 { line-height: 1.04; margin-bottom: 14px; }
+    .closing-cta p { color: var(--muted); font-size: 14px; line-height: 1.55; max-width: 520px; }
     footer { background: oklch(0.045 0.032 204); padding: 44px 80px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--line); }
     .f-logo { display: inline-flex; align-items: center; }
     .f-links { display: flex; gap: 24px; }
@@ -236,7 +280,7 @@
 <nav class="site-nav">
   <a class="nav-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg"><path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text></svg></a>
   <div class="nav-right">
-    <a href="/features">Features</a><a href="/quickstart" class="nav-active">Quickstart</a><a href="/benchmarks">Benchmarks</a><a href="/docs">Docs</a><a onclick="openModal()" class="nav-waitlist">Waitlist</a>
+    <a href="/about">About</a><a href="/quickstart" class="nav-active">Quickstart</a><a href="/benchmarks">Benchmarks</a><a href="/docs">Docs</a><a href="/auth/login" class="nav-cta">Sign in</a><a onclick="openModal()" class="nav-waitlist">Waitlist</a>
   </div>
 </nav>
 <main>
@@ -248,7 +292,7 @@
           <div><span class="l">S</span><span class="l">t</span><span class="l">a</span><span class="l">r</span><span class="l">t</span>&nbsp;<span class="l">M</span><span class="l">e</span><span class="l">s</span><span class="l">h</span></div>
           <div class="cyan-line"><span class="l">i</span><span class="l">n</span>&nbsp;<span class="l">3</span><span class="l">0</span>&nbsp;<span class="l">s</span><span class="l">e</span><span class="l">c</span><span class="l">o</span><span class="l">n</span><span class="l">d</span><span class="l">s</span><span class="l">.</span></div>
         </h1>
-        <p class="hero-copy">Start with the terminal CLI: install, run the golden path, then make one verified change. MCP brings the same engine into Claude Code, Cursor, Windsurf, and VS Code; IDE/API remain preview surfaces.</p>
+        <p class="hero-copy">Start with the terminal CLI: install, run the golden path, then make one verified change. The CLI ships <strong>20 top-level slash commands</strong> (namespaces) and <strong>100+ workspace tools</strong>. Default model: <strong>Gemini 3.5 Flash</strong>. MCP adds a focused tool profile; IDE and Gateway API remain preview.</p>
         <div class="hero-actions">
           <a class="primary-btn" href="#install">Install now</a>
           <a class="secondary-btn" href="/docs">Read docs</a>
@@ -257,7 +301,7 @@
       <aside class="hero-aside" aria-label="What you get">
         <div class="hero-aside-row">
           <div class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-          <div class="tx"><b>CLI first, MCP next.</b>The current production path is terminal execution plus MCP access for external agents.</div>
+          <div class="tx"><b>CLI first, MCP next.</b>Full agent surface in the terminal; MCP exposes a smaller <code>mesh_*</code> profile for Claude Code, Cursor, and VS Code.</div>
         </div>
         <div class="hero-aside-row">
           <div class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
@@ -265,7 +309,7 @@
         </div>
         <div class="hero-aside-row">
           <div class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-          <div class="tx"><b>Private alpha reality.</b>Some features are production-near; IDE/API and some moonshots are still preview.</div>
+          <div class="tx"><b>Private alpha.</b>CLI and MCP are production-near; IDE and Gateway API remain preview surfaces.</div>
         </div>
       </aside>
     </div>
@@ -275,13 +319,13 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
           CLI
         </button>
-        <button class="surface-tab" role="tab" data-tab="ide" aria-selected="false">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-          IDE
-        </button>
         <button class="surface-tab" role="tab" data-tab="mcp" aria-selected="false">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M3.5 12c0-2 1-4 3-5.5M20.5 12c0 2-1 4-3 5.5M12 3.5c2 0 4 1 5.5 3M12 20.5c-2 0-4-1-5.5-3"/></svg>
           MCP
+        </button>
+        <button class="surface-tab" role="tab" data-tab="ide" aria-selected="false">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+          IDE
         </button>
         <button class="surface-tab" role="tab" data-tab="api" aria-selected="false">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
@@ -294,7 +338,7 @@
         <div class="console-top"><span>mesh/cli · launch-console</span><span class="console-live">ready</span></div>
         <div class="console-grid">
           <div class="command-stack">
-            <div class="command-card"><div class="command-num">1</div><div class="command-title">Install Mesh CLI</div><button class="copy-line" onclick="copyCmd(this,'npm i -g @edgarelmo/mesh-agent-cli')"><span class="t-cyan">$</span><span>npm i -g @edgarelmo/mesh-agent-cli</span></button></div>
+            <div class="command-card"><div class="command-num">1</div><div class="command-title">Install Mesh CLI</div><button class="copy-line" onclick="copyCmd(this,'npm i -g @trymesh/cli')"><span class="t-cyan">$</span><span>npm i -g @trymesh/cli</span></button></div>
             <div class="command-card"><div class="command-num">2</div><div class="command-title">Open your project</div><button class="copy-line" onclick="copyCmd(this,'cd my-project && mesh')"><span class="t-cyan">$</span><span>cd my-project && mesh</span></button></div>
             <div class="command-card"><div class="command-num">3</div><div class="command-title">Run the golden path</div><button class="copy-line" onclick="copyCmd(this,'/start')"><span class="t-cyan">›</span><span>/start</span></button></div>
           </div>
@@ -310,9 +354,33 @@
         <div class="console-top"><span>mesh/ide · preview workbench</span><span class="console-live">preview</span></div>
         <div class="console-grid">
           <div class="command-stack">
-            <div class="command-card"><div class="command-num">1</div><div class="command-title">Use CLI as runtime</div><button class="copy-line" onclick="copyCmd(this,'npm i -g @edgarelmo/mesh-agent-cli && mesh')"><span class="t-cyan">$</span><span>npm i -g @edgarelmo/mesh-agent-cli && mesh</span></button></div>
-            <div class="command-card"><div class="command-num">2</div><div class="command-title">Preview the workbench</div><button class="copy-line" onclick="copyCmd(this,'mesh-ide preview: runtime bridge in progress')"><span class="t-cyan">i</span><span>runtime bridge in progress</span></button></div>
-            <div class="command-card"><div class="command-num">3</div><div class="command-title">Do verified work in CLI/MCP</div><button class="copy-line" onclick="copyCmd(this,'/change add validation for empty project names')"><span class="t-cyan">›</span><span>/change &lt;small goal&gt;</span></button></div>
+            <div class="ide-download" role="group" aria-label="Download Mesh IDE">
+              <div class="ide-download-head">
+                <span class="ide-download-ic" aria-hidden="true">
+                  <svg width="22" height="22" viewBox="0 0 22 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 4L3 14L7 24" stroke="#00d4e8" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M15 4L19 14L15 24" stroke="#7ceeff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                <span class="ide-download-tx">
+                  <b>Download Mesh IDE</b>
+                  <small>everything bundled — no CLI install needed</small>
+                </span>
+              </div>
+              <div class="ide-os-row">
+                <a class="ide-os-btn" href="/download/ide-macos" data-os="macos">
+                  <span class="ide-os-ic" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16.365 1.43c0 1.14-.493 2.27-1.177 3.08-.744.9-1.99 1.57-2.987 1.57-.12 0-.23-.02-.3-.03-.01-.06-.04-.22-.04-.39 0-1.15.572-2.27 1.206-2.98.804-.94 2.142-1.64 3.248-1.68.03.13.05.28.05.43zm4.565 15.71c-.03.07-.463 1.58-1.518 3.12-.945 1.34-1.94 2.71-3.43 2.71-1.517 0-1.9-.88-3.63-.88-1.698 0-2.302.91-3.67.91-1.377 0-2.332-1.26-3.428-2.8-1.287-1.82-2.323-4.63-2.323-7.28 0-4.28 2.797-6.55 5.552-6.55 1.448 0 2.675.95 3.6.95.865 0 2.222-1.01 3.902-1.01.613 0 2.886.06 4.374 2.19-.13.09-2.383 1.37-2.383 4.19 0 3.26 2.854 4.42 2.955 4.45z"/></svg>
+                  </span>
+                  <span class="ide-os-tx"><b>macOS</b><small>.dmg · Apple Silicon</small></span>
+                  <span class="ide-os-dl" aria-hidden="true">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13"/><polyline points="6 11 12 17 18 11"/><line x1="4" y1="21" x2="20" y2="21"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+            <div class="command-card"><div class="command-num">1</div><div class="command-title">Open the IDE on your repo</div><button class="copy-line" onclick="copyCmd(this,'File → Open Folder → /path/to/repo')"><span class="t-cyan">›</span><span>File → Open Folder</span></button></div>
+            <div class="command-card"><div class="command-num">2</div><div class="command-title">Run a verified change</div><button class="copy-line" onclick="copyCmd(this,'/change add validation for empty project names')"><span class="t-cyan">›</span><span>/change &lt;small goal&gt;</span></button></div>
           </div>
           <div class="terminal-wrap">
             <div class="terminal-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--dim)">ide://acme/payments</span></div>
@@ -326,9 +394,9 @@
         <div class="console-top"><span>mesh/mcp · model-context-protocol</span><span class="console-live">stdio</span></div>
         <div class="console-grid">
           <div class="command-stack">
-            <div class="command-card"><div class="command-num">1</div><div class="command-title">Install into clients</div><button class="copy-line" onclick="copyCmd(this,'npx @edgarelmo/mesh-mcp install')"><span class="t-cyan">$</span><span>npx @edgarelmo/mesh-mcp install</span></button></div>
-            <div class="command-card"><div class="command-num">2</div><div class="command-title">Run diagnostics</div><button class="copy-line" onclick="copyCmd(this,'npx @edgarelmo/mesh-mcp doctor')"><span class="t-cyan">$</span><span>npx @edgarelmo/mesh-mcp doctor</span></button></div>
-            <div class="command-card"><div class="command-num">3</div><div class="command-title">Manual stdio command</div><button class="copy-line" onclick="copyCmd(this,'npx -y @edgarelmo/mesh-mcp')"><span class="t-cyan">$</span><span>npx -y @edgarelmo/mesh-mcp</span></button></div>
+            <div class="command-card"><div class="command-num">1</div><div class="command-title">Add MCP server</div><button class="copy-line" onclick="copyCmd(this,'npx -y @trymesh/mcp')"><span class="t-cyan">$</span><span>npx -y @trymesh/mcp</span></button></div>
+            <div class="command-card"><div class="command-num">2</div><div class="command-title">Set workspace path</div><button class="copy-line" onclick="copyCmd(this,'export MESH_WORKSPACE_PATH=/absolute/path/to/repo')"><span class="t-cyan">$</span><span>MESH_WORKSPACE_PATH=…</span></button></div>
+            <div class="command-card"><div class="command-num">3</div><div class="command-title">Full agent in CLI</div><button class="copy-line" onclick="copyCmd(this,'npm i -g @trymesh/cli && mesh')"><span class="t-cyan">$</span><span>npm i -g @trymesh/cli && mesh</span></button></div>
           </div>
           <div class="terminal-wrap">
             <div class="terminal-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--dim)">mcp.json</span></div>
@@ -339,15 +407,15 @@
 
       <!-- API -->
       <aside class="launch-console surface-pane" data-pane="api">
-        <div class="console-top"><span>mesh/api · gateway endpoint</span><span class="console-live">api.mesh.dev</span></div>
+        <div class="console-top"><span>mesh/api · coming soon</span><span class="console-live">use CLI today</span></div>
         <div class="console-grid">
           <div class="command-stack">
-            <div class="command-card"><div class="command-num">1</div><div class="command-title">Get an API key</div><button class="copy-line" onclick="window.open('https://app.try-mesh.com/keys','_blank')"><span class="t-cyan">↗</span><span>app.try-mesh.com/keys</span></button></div>
-            <div class="command-card"><div class="command-num">2</div><div class="command-title">Index a repo</div><button class="copy-line" onclick='copyCmd(this,"curl -X POST https://api.mesh.dev/v1/capsules \\n  -H \"Authorization: Bearer $MESH_KEY\" \\n  -d \"{\\\"repo\\\":\\\"github.com/acme/payments\\\"}\"")'><span class="t-cyan">$</span><span>curl POST /v1/capsules</span></button></div>
-            <div class="command-card"><div class="command-num">3</div><div class="command-title">Query context</div><button class="copy-line" onclick="copyCmd(this,'curl https://api.mesh.dev/v1/search?q=auth&capsule=cap_8kX9z2a')"><span class="t-cyan">$</span><span>curl GET /v1/search</span></button></div>
+            <div class="command-card"><div class="command-num">1</div><div class="command-title">Open project</div><button class="copy-line" onclick="copyCmd(this,'cd my-project && mesh')"><span class="t-cyan">$</span><span>cd my-project && mesh</span></button></div>
+            <div class="command-card"><div class="command-num">2</div><div class="command-title">Index locally</div><button class="copy-line" onclick="copyCmd(this,'mesh index')"><span class="t-cyan">$</span><span>mesh index</span></button></div>
+            <div class="command-card"><div class="command-num">3</div><div class="command-title">Ask the agent</div><button class="copy-line" onclick="copyCmd(this,'mesh \"find auth middleware\"')"><span class="t-cyan">$</span><span>mesh "…"</span></button></div>
           </div>
           <div class="terminal-wrap">
-            <div class="terminal-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--dim)">https · api.mesh.dev</span></div>
+            <div class="terminal-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--dim)">cli · ~/.mesh</span></div>
             <div class="terminal-body" id="terminalApi"></div>
           </div>
         </div>
@@ -357,9 +425,9 @@
   <section class="quick-grid" id="miniGrid">
     <!-- VOICE — animated waveform mic -->
     <article class="mini-demo" id="miniVoice">
-      <div class="mini-top"><span class="lbl">live · whisper</span><span class="meta">mesh voice</span></div>
+      <div class="mini-top"><span class="lbl">live · gemini stt</span><span class="meta">/config voice</span></div>
       <h3 class="mini-h3">Voice.</h3>
-      <div class="mini-sub">hands-free terminal · whisper.cpp local</div>
+      <div class="mini-sub">hands-free terminal · Gemini 3.5 Flash speech-to-speech</div>
       <div class="mini-stage">
         <div class="voice-wave" id="voiceWave"></div>
         <div class="voice-mic" aria-hidden="true">
@@ -373,7 +441,7 @@
     <article class="mini-demo" id="miniResume">
       <div class="mini-top"><span class="lbl">session · cap_8kX9z2a</span><span class="meta">12 turns</span></div>
       <h3 class="mini-h3">Resume.</h3>
-      <div class="mini-sub">continue any session · full capsule history</div>
+      <div class="mini-sub">on exit you get a one-line command to pick up where you stopped</div>
       <div class="mini-stage resume-stage">
         <div class="resume-track">
           <span class="resume-cap l">10:42</span>
@@ -382,7 +450,7 @@
           <div class="resume-checkpoints" id="resumeCps"></div>
           <span class="resume-now" id="resumeNow" style="left:50%">turn 7</span>
         </div>
-        <div class="resume-cmd"><span class="t-cyan">$</span>mesh resume <span style="color:var(--cyan)">cap_8kX9z2a</span></div>
+        <div class="resume-cmd"><span class="t-cyan">$</span>mesh --resume <span style="color:var(--cyan)">cap_8kX9z2a</span></div>
       </div>
     </article>
 
@@ -398,7 +466,7 @@
     <article class="mini-demo" id="miniKeys">
       <div class="mini-top"><span class="lbl">router · /model</span><span class="meta">catalog</span></div>
       <h3 class="mini-h3">Pick models.</h3>
-      <div class="mini-sub">Claude · NVIDIA · Gemini · Grok · BYOK</div>
+      <div class="mini-sub">Gemini · xAI · NVIDIA NIM (Qwen, Kimi, GLM) · custom proxy</div>
       <div class="mini-stage keys-stage">
         <div class="keys-ring" id="keysRing">
           <svg viewBox="0 0 110 110">
@@ -415,7 +483,7 @@
           <div class="orb" id="orb-3" style="left:27%;top:84%;transform:translate(-50%,-50%)">X</div>
           <div class="orb" id="orb-4" style="left:12%;top:38%;transform:translate(-50%,-50%)">B</div>
         </div>
-        <div class="keys-active"><span class="dim">active →</span> <span id="keysActive">claude 4.6</span></div>
+        <div class="keys-active"><span class="dim">active →</span> <span id="keysActive">gemini 2.5 flash</span></div>
       </div>
     </article>
   </section>
@@ -449,9 +517,9 @@
               <text class="pl-stage-num" x="36" y="86">step · 01</text>
               <text class="pl-stage-title" x="36" y="116">Workspace</text>
               <text class="pl-stage-sub" x="36" y="136">tree-walk · ignore</text>
-              <!-- file dot grid -->
-              <g id="pl-files" transform="translate(36,160)"></g>
-              <text class="pl-stage-stat" id="pl-files-count" x="36" y="244">0 files</text>
+              <!-- file dot grid (7 rows × 12 cols = 84 slots) -->
+              <g id="pl-files" transform="translate(36,150)"></g>
+              <text class="pl-stage-stat" id="pl-files-count" x="36" y="248">0 files</text>
             </g>
 
             <!-- ── stage 02 — AST parse ── -->
@@ -511,8 +579,14 @@
 </main>
 <footer>
   <a class="f-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg"><path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text></svg></a>
-  <div class="f-links"><a href="/docs">Docs</a><a href="https://github.com/dreddi-edit/homebrew-mesh.git">GitHub</a><a href="https://twitter.com">Twitter</a></div>
-  <div class="f-copy">© 2026 Mesh Intelligence</div>
+  <div class="f-links">
+    <a href="https://github.com/dreddi-edit/mesh">Github</a>
+    <a href="https://www.npmjs.com/package/@trymesh/cli">NPM</a>
+    <a href="/license">License</a>
+    <a href="/contact">Contact</a>
+    <a href="/socials">Socials</a>
+  </div>
+  <div class="f-copy">© 2026 Mesh</div>
 </footer>
 <script>
 const canvas=document.getElementById('mesh-canvas'),ctx=canvas.getContext('2d');let W,H,pts;const mouse={x:-9999,y:-9999},LINK=155;
@@ -553,10 +627,10 @@ function copyCmd(btn,cmd){
 
 /* ── tabs + per-tab terminal scripts ── */
 const TERM_SCRIPTS={
-  cli:[['cyan','$ npm i -g @edgarelmo/mesh-agent-cli'],['green','✓ global install complete'],['cyan','$ mesh'],['white','mesh › /start'],['dim','▸ doctor · gateway · git · index'],['green','✓ workspace healthy · 247 files indexed'],['white','mesh › /change fix voided invoices being charged'],['dim','▸ scoped: invoices.ts, webhooks.ts, billing.spec.ts'],['cyan','▸ verification detected: npm test'],['green','✓ patch drafted · proof trail ready'],['dim','review diff, then promote after checks pass']],
-  ide:[['cyan','▸ Mesh IDE preview status'],['green','✓ React/Electron workbench shell'],['green','✓ Monaco editor · file explorer · terminal SSE'],['green','✓ git status/diff/commit APIs'],['dim','▸ assistant/action UI contract exists'],['dim','▸ shared runtime bridge in progress'],['dim','! use CLI or MCP for production agent execution today'],['white','mesh › /change refactor stripe charge flow'],['cyan','▸ verified work stays in the CLI runtime'],['green','✓ IDE becomes the visual shell over that runtime']],
-  mcp:[['cyan','$ npx @edgarelmo/mesh-mcp install'],['dim','▸ detecting Claude Desktop, Claude Code, Cursor, Windsurf'],['green','✓ MCP config installed'],['cyan','$ npx @edgarelmo/mesh-mcp doctor'],['green','✓ 112+ Mesh tools available'],['dim','  • workspace.ask_codebase'],['dim','  • workspace.patch_surgical'],['dim','  • workspace.timeline_*'],['dim','  • runtime.start'],['white','claude › "find every place we call stripe.charge"'],['cyan','▸ tool call: workspace.ask_codebase(query="stripe.charge")'],['green','✓ source-backed answer returned to agent']],
-  api:[['cyan','$ curl -X POST https://api.mesh.dev/v1/capsules \\'],['cyan','    -H "Authorization: Bearer $MESH_KEY" \\'],['cyan','    -d \'{"repo":"github.com/acme/payments"}\''],['dim','▸ event: capsule.indexing'],['dim','▸ files: 3,174 · tokens_in: 2.4M'],['green','✓ event: capsule.ready'],['white','{ "capsule_id": "cap_8kX9z2a",'],['white','  "ratio": 3.92, "recall": 1.00 }']]
+  cli:[['cyan','$ npm i -g @trymesh/cli'],['green','✓ @trymesh/cli@0.4.98'],['cyan','$ mesh'],['dim','▸ mesh login · gemini-3.5-flash default'],['white','mesh › /start'],['dim','▸ doctor · gateway · git · index'],['green','✓ workspace healthy · 247 files indexed'],['white','mesh › /status'],['dim','▸ model · tokens · index health'],['white','mesh › /change fix voided invoices being charged'],['dim','▸ scoped: invoices.ts, webhooks.ts, billing.spec.ts'],['cyan','▸ verification detected: npm test'],['green','✓ patch drafted · proof trail ready'],['dim','20 top-level cmds · 100+ workspace tools']],
+  ide:[['cyan','▸ Mesh IDE — preview build'],['green','✓ Embedded Mesh runtime · no CLI install'],['green','✓ Monaco editor · file explorer · terminal'],['green','✓ git status/diff/commit · capsule timeline'],['white','mesh › /change refactor stripe charge flow'],['dim','▸ scoped: stripe.ts, charges.spec.ts'],['cyan','▸ verification: pnpm test'],['green','✓ patch · proof bundle · diff review in-app'],['dim','▸ macOS · Windows · Linux']],
+  mcp:[['cyan','$ npx -y @trymesh/mcp'],['dim','▸ stdio MCP · profile: core (8 mesh_* tools) · 26 across all profiles'],['green','✓ mesh_search · mesh_read_capsule · mesh_recover_span · …'],['dim','▸ full agent: npm i -g @trymesh/cli'],['white','claude › "find every place we call stripe.charge"'],['cyan','▸ tool: mesh_search(query="stripe.charge")'],['green','✓ compact matches returned to agent']],
+  api:[['cyan','▸ Gateway API — coming soon'],['dim','▸ use CLI today: mesh index or /debug index'],['white','$ mesh index'],['green','✓ index stored in .mesh/'],['white','mesh › /status'],['dim','▸ 247 files · embeddings · git'],['dim','▸ HTTP gateway not available yet — local-only for now']]
 };
 
 const playing={};
@@ -628,12 +702,12 @@ document.querySelectorAll('.command-card, .mini-demo').forEach(el=>revealObserve
   const stage=document.getElementById('doctorStage');
   if(!stage)return;
   const ROWS=[
-    {lbl:'node version',     val:'v22.4.1', state:'ok'},
-    {lbl:'mesh.config.json', val:'valid',   state:'ok'},
-    {lbl:'capsule cache',    val:'247 MB',  state:'ok'},
-    {lbl:'router · anthropic', val:'reachable', state:'ok'},
-    {lbl:'router · openai',  val:'rate-limited', state:'warn'},
-    {lbl:'env · MESH_KEY',   val:'set',     state:'ok'},
+    {lbl:'node version',       val:'v22.4.1', state:'ok'},
+    {lbl:'.mesh/config.json',  val:'valid',   state:'ok'},
+    {lbl:'capsule cache',      val:'247 MB',  state:'ok'},
+    {lbl:'router · gemini',    val:'reachable', state:'ok'},
+    {lbl:'router · nvidia',    val:'rate-limited', state:'warn'},
+    {lbl:'workspace path',     val:'detected', state:'ok'},
   ];
   const tickIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
   const warnIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="8" x2="12" y2="13"/><circle cx="12" cy="17" r="0.6" fill="currentColor"/></svg>';
@@ -670,7 +744,7 @@ document.querySelectorAll('.command-card, .mini-demo').forEach(el=>revealObserve
   const ring=document.getElementById('keysRing');
   const active=document.getElementById('keysActive');
   if(!ring||!active)return;
-  const PROVIDERS=['claude 4.6','qwen coder','gemini 3','grok 4.20','BYOK endpoint'];
+  const PROVIDERS=['gemini 3.5 flash','gemini 3.1 pro','qwen 3 coder','kimi k2.6','grok 4.20'];
   let idx=0;
   function tick(){
     for(let i=0;i<5;i++){
@@ -877,5 +951,7 @@ document.querySelectorAll('.command-card, .mini-demo').forEach(el=>revealObserve
   obs.observe(card);
 })();
 </script>
+<script src="/assets/nav-auth.js" defer></script>
+<script src="/assets/mesh-qa-chat.js" defer></script>
 </body>
 </html>

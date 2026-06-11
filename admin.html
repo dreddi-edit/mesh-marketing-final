@@ -1,0 +1,1902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mesh Admin — Private Alpha Console</title>
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,800;1,900&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cyan: oklch(0.74 0.14 200);
+      --cyan-soft: oklch(0.74 0.14 200 / 0.12);
+      --green: oklch(0.75 0.12 145);
+      --amber: oklch(0.78 0.10 58);
+      --red: oklch(0.68 0.13 25);
+      --bg: oklch(0.078 0.038 200);
+      --bg-deep: oklch(0.046 0.034 204);
+      --panel: oklch(0.105 0.045 200);
+      --panel-2: oklch(0.132 0.052 199);
+      --line: oklch(1 0 0 / 0.08);
+      --line-strong: oklch(0.74 0.14 200 / 0.28);
+      --ink: oklch(0.985 0.004 195);
+      --muted: oklch(0.72 0.026 198 / 0.58);
+      --dim: oklch(0.74 0.026 198 / 0.36);
+      --mono: 'Geist Mono', monospace;
+      --display: 'Barlow Condensed', sans-serif;
+      --sans: 'DM Sans', sans-serif;
+    }
+    html, body { height: 100%; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(900px 460px at 12% -8%, oklch(0.74 0.14 200 / 0.14), transparent 62%),
+        radial-gradient(700px 360px at 88% 12%, oklch(0.75 0.12 145 / 0.07), transparent 70%),
+        linear-gradient(180deg, transparent, var(--bg-deep) 88%);
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
+
+    .auth-screen {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .auth-card {
+      width: min(400px, 100%);
+      background: oklch(0.052 0.034 204 / 0.92);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 36px 32px;
+      box-shadow: 0 40px 100px oklch(0 0 0 / 0.45);
+    }
+    .auth-kicker {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 8px;
+    }
+    .auth-title {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 900;
+      font-size: 42px;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .auth-sub { color: var(--muted); font-size: 13px; margin-bottom: 28px; }
+    .auth-back {
+      display: inline-block;
+      margin-top: 20px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--dim);
+    }
+    .auth-back:hover { color: var(--cyan); }
+    .auth-card.recovery-terminal {
+      width: min(760px, 100%);
+      padding: 0;
+      overflow: hidden;
+      border-radius: 16px;
+      background: #060c12;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 50px 100px rgba(0,0,0,0.8), 0 0 40px rgba(0, 212, 232, 0.03);
+    }
+    .recovery-terminal-bar {
+      background: rgba(255, 255, 255, 0.02);
+      padding: 14px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .recovery-terminal-dots { display: flex; gap: 8px; }
+    .recovery-terminal-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.05); }
+    .recovery-terminal-title {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: rgba(255, 255, 255, 0.2);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+    .recovery-terminal-body {
+      padding: 36px;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.8;
+      color: rgba(255,255,255,0.55);
+    }
+    .recovery-ascii-logo {
+      color: #00d4e8;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 11px;
+      line-height: 1.1;
+      letter-spacing: 0;
+      white-space: pre;
+      margin: 0 0 24px 0;
+      display: block;
+      font-weight: bold;
+    }
+    .recovery-line { margin-bottom: 6px; }
+    .recovery-message-block {
+      margin-top: 26px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 24px;
+    }
+    .recovery-greeting {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 900;
+      font-size: 52px;
+      line-height: 0.9;
+      color: #ffffff;
+      text-transform: uppercase;
+      margin: 0 0 16px;
+    }
+    .recovery-sub {
+      font-family: var(--sans);
+      font-size: 17px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.46);
+      margin: 0 0 24px;
+      max-width: 600px;
+    }
+    .recovery-form-wrap {
+      margin-top: 20px;
+      max-width: 540px;
+    }
+    .recovery-form-wrap .field label { color: rgba(255,255,255,0.5); }
+    .recovery-form-wrap .field input {
+      background: rgba(255,255,255,0.02);
+      border-color: rgba(255,255,255,0.09);
+      color: #fff;
+    }
+    .recovery-form-wrap .field input:focus { border-color: rgba(0, 212, 232, 0.45); }
+    .recovery-form-wrap .btn-primary {
+      background: #00d4e8;
+      color: #020406;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 16px 28px;
+      border-radius: 4px;
+      width: auto;
+    }
+
+    .field { margin-bottom: 14px; }
+    .field label {
+      display: block;
+      font-size: 10px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .field input, .field select, .search-input {
+      width: 100%;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--ink);
+      font-size: 13px;
+      font-family: var(--mono);
+      padding: 10px 12px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .field input:focus, .field select:focus, .search-input:focus {
+      border-color: var(--line-strong);
+    }
+    .field input::placeholder, .search-input::placeholder { color: var(--dim); }
+
+    .plan-select {
+      background: var(--panel);
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      outline: none;
+      transition: border-color 0.15s;
+      cursor: pointer;
+    }
+    .plan-select:focus { border-color: var(--line-strong); }
+    .plan-select:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 9px 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: opacity 0.15s, background 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+    .btn:hover { opacity: 0.9; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-primary { background: var(--cyan); color: var(--bg-deep); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--line);
+    }
+    .btn-ghost:hover { color: var(--ink); border-color: var(--line-strong); opacity: 1; }
+    .btn-danger {
+      background: oklch(from var(--red) l c h / 0.12);
+      color: var(--red);
+      border: 1px solid oklch(from var(--red) l c h / 0.28);
+    }
+    .btn-warn {
+      background: oklch(from var(--amber) l c h / 0.12);
+      color: var(--amber);
+      border: 1px solid oklch(from var(--amber) l c h / 0.28);
+    }
+    .btn-sm { padding: 6px 11px; font-size: 11px; }
+    .btn-block { width: 100%; }
+    .err { color: var(--red); font-size: 12px; margin-top: 10px; font-family: var(--mono); min-height: 18px; }
+
+    #app {
+      display: none;
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+    }
+    .shell {
+      display: grid;
+      grid-template-columns: 240px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+    @media (max-width: 900px) {
+      .shell { grid-template-columns: 1fr; }
+      .side-nav { position: sticky; top: 0; z-index: 10; border-right: 0; border-bottom: 1px solid var(--line); }
+      .side-links { display: flex; flex-wrap: wrap; gap: 4px; padding-bottom: 12px; }
+      .side-link { margin-bottom: 0; }
+    }
+
+    .side-nav {
+      background: oklch(0.052 0.034 204 / 0.88);
+      border-right: 1px solid var(--line);
+      padding: 20px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .side-brand {
+      padding: 8px 10px 18px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 8px;
+    }
+    .side-brand strong {
+      display: block;
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 900;
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .side-brand span {
+      display: block;
+      margin-top: 6px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--cyan);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .side-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      cursor: pointer;
+      background: none;
+      text-align: left;
+      width: 100%;
+      margin-bottom: 2px;
+    }
+    .side-link:hover { color: var(--ink); background: oklch(1 0 0 / 0.04); }
+    .side-link.active {
+      color: var(--cyan);
+      border-color: var(--line-strong);
+      background: var(--cyan-soft);
+    }
+    .side-link .count {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 20px;
+      background: oklch(1 0 0 / 0.06);
+      color: var(--muted);
+    }
+    .side-link.active .count { color: var(--cyan); }
+    .side-foot {
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .side-foot a {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--dim);
+      padding: 6px 10px;
+    }
+    .side-foot a:hover { color: var(--cyan); }
+
+    .main-col { display: flex; flex-direction: column; min-width: 0; }
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--line);
+      background: oklch(0.052 0.034 204 / 0.65);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    .top-title {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 800;
+      font-size: 28px;
+      line-height: 1;
+    }
+    .top-meta { font-family: var(--mono); font-size: 11px; color: var(--dim); margin-top: 4px; }
+    .top-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .user-pill {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      max-width: 220px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .content { padding: 22px 24px 40px; flex: 1; }
+    .panel { display: none; animation: fade 0.2s ease; }
+    .panel.active { display: block; }
+    @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .stat-label {
+      font-size: 10px;
+      color: var(--muted);
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+    .stat-val {
+      font-size: 26px;
+      font-family: var(--mono);
+      color: var(--cyan);
+      margin-top: 4px;
+      line-height: 1.15;
+    }
+    .stat-val.sm { font-size: 14px; word-break: break-all; }
+    .stat-hint { font-size: 11px; color: var(--dim); margin-top: 6px; font-family: var(--mono); }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .panel-head h2 {
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--cyan);
+    }
+    .panel-tools { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .search-input { width: min(280px, 100%); }
+
+    .tbl-wrap {
+      overflow-x: auto;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: oklch(0.052 0.034 204 / 0.5);
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: var(--panel); }
+    th {
+      text-align: left;
+      padding: 11px 14px;
+      font-size: 10px;
+      font-family: var(--mono);
+      color: var(--muted);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border-bottom: 1px solid var(--line);
+      white-space: nowrap;
+    }
+    td {
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+      vertical-align: middle;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: oklch(1 0 0 / 0.03); }
+    .mono { font-family: var(--mono); font-size: 12px; }
+    .dim { color: var(--muted); }
+    .actions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      font-family: var(--mono);
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+    .badge-green { background: oklch(from var(--green) l c h / 0.12); color: var(--green); }
+    .badge-red { background: oklch(from var(--red) l c h / 0.12); color: var(--red); }
+    .badge-yellow { background: oklch(from var(--amber) l c h / 0.12); color: var(--amber); }
+    .badge-cyan { background: var(--cyan-soft); color: var(--cyan); }
+    .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 800px) { .two-col { grid-template-columns: 1fr; } }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .card h3 { font-family: var(--mono); font-size: 13px; margin-bottom: 8px; color: var(--ink); }
+    .card p { color: var(--muted); font-size: 13px; margin-bottom: 16px; line-height: 1.6; }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+    .status-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .status-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .status-name { font-family: var(--mono); font-size: 12px; }
+    .status-meta { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+    .note {
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: var(--cyan-soft);
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 16px;
+      line-height: 1.55;
+    }
+    .note strong { color: var(--cyan); }
+
+    .no-data {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 13px;
+      padding: 36px;
+      text-align: center;
+      border: 1px dashed var(--line);
+      border-radius: 10px;
+    }
+
+    #drawer-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: oklch(0 0 0 / 0.55);
+      z-index: 40;
+    }
+    #drawer {
+      position: fixed;
+      top: 0;
+      right: -440px;
+      width: min(440px, 100vw);
+      height: 100vh;
+      background: oklch(0.052 0.034 204 / 0.98);
+      border-left: 1px solid var(--line);
+      z-index: 41;
+      transition: right 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    #drawer.open { right: 0; }
+    .drawer-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    .drawer-title { font-family: var(--mono); font-size: 13px; }
+    .drawer-body { flex: 1; padding: 20px; }
+    .drawer-foot {
+      padding: 18px 20px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .close-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 22px;
+      line-height: 1;
+      padding: 2px 8px;
+    }
+    .close-btn:hover { color: var(--ink); }
+    .divider { height: 1px; background: var(--line); margin: 16px 0; }
+    .danger-zone {
+      background: oklch(from var(--red) l c h / 0.06);
+      border: 1px solid oklch(from var(--red) l c h / 0.2);
+      border-radius: 10px;
+      padding: 14px;
+    }
+    .danger-zone h4 {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--red);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border: 2px solid var(--line);
+      border-top-color: var(--cyan);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-row td { color: var(--muted); font-family: var(--mono); text-align: center; padding: 32px; }
+
+    #toast {
+      position: fixed;
+      bottom: 22px;
+      right: 22px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-family: var(--mono);
+      font-size: 12px;
+      z-index: 99;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none;
+      max-width: min(360px, calc(100vw - 40px));
+    }
+    #toast.show { opacity: 1; transform: translateY(0); }
+    #toast.ok { border-color: var(--green); color: var(--green); }
+    #toast.fail { border-color: var(--red); color: var(--red); }
+    #toast.warn { border-color: var(--amber); color: var(--amber); }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 900px) { .overview-grid { grid-template-columns: 1fr; } }
+    .quick-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .quick-list li {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .quick-list li:last-child { border-bottom: none; }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen" class="auth-screen">
+  <div class="auth-card">
+    <div class="auth-kicker">Private alpha</div>
+    <div class="auth-title">Admin.</div>
+    <div class="auth-sub">Sign in with your Mesh operator account.</div>
+    <div class="field"><label>Email</label><input type="email" id="l-email" placeholder="you@try-mesh.com" autocomplete="email"></div>
+    <div class="field"><label>Password</label><input type="password" id="l-pw" placeholder="••••••••" autocomplete="current-password"></div>
+    <button class="btn btn-primary btn-block" id="l-btn" onclick="doLogin()">Sign in</button>
+    <div class="err" id="l-err"></div>
+    <a class="auth-back" href="/">← Back to try-mesh.com</a>
+  </div>
+</div>
+
+<!-- RECOVERY -->
+<div id="recovery-screen" class="auth-screen" style="display:none">
+  <div class="auth-card recovery-terminal">
+    <div class="recovery-terminal-bar">
+      <div class="recovery-terminal-dots">
+        <div class="recovery-terminal-dot"></div>
+        <div class="recovery-terminal-dot"></div>
+        <div class="recovery-terminal-dot"></div>
+      </div>
+      <div class="recovery-terminal-title">mesh/auth-recovery</div>
+    </div>
+    <div class="recovery-terminal-body">
+<pre class="recovery-ascii-logo">
+███╗   ███╗███████╗███████╗██╗  ██╗
+████╗ ████║██╔════╝██╔════╝██║  ██║
+██╔████╔██║█████╗  ███████╗███████║
+██║╚██╔╝██║██╔══╝  ╚════██║██╔══██║
+██║ ╚═╝ ██║███████╗███████║██║  ██║
+╚═╝     ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝</pre>
+      <div class="recovery-line"><span class="cyan">action:</span> <span class="white">PASSWORD_RESET_REQUESTED</span></div>
+      <div class="recovery-line"><span class="cyan">status:</span> <span class="white">TOKEN_VERIFIED</span></div>
+      <div class="recovery-line"><span class="muted">----------------------------</span></div>
+      <div class="recovery-line"><span class="muted">$</span> <span class="white">mesh auth --recover --force</span></div>
+      <div class="recovery-line"><span class="muted">ready to rotate credentials...</span> <span class="cyan">OK</span></div>
+
+      <div class="recovery-message-block">
+        <h2 class="recovery-greeting">Reset<br><span style="color:#00d4e8;">Required.</span></h2>
+        <p class="recovery-sub">Set a new password for your operator account.</p>
+
+        <div class="recovery-form-wrap">
+          <div class="field"><label>New password</label><input type="password" id="r-pw" placeholder="min 8 characters" autocomplete="new-password"></div>
+          <div class="field"><label>Confirm</label><input type="password" id="r-pw-conf" placeholder="repeat password" autocomplete="new-password"></div>
+          <button class="btn btn-primary" id="r-btn" onclick="doUpdatePassword()">Update password</button>
+          <div class="err" id="r-err"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div id="success-screen" class="auth-screen" style="display:none">
+  <div class="auth-card" style="text-align:center">
+    <div class="auth-kicker" style="color:var(--green)">Done</div>
+    <div class="auth-title">Updated.</div>
+    <div class="auth-sub">Password saved. Redirecting in <span id="s-timer" style="color:var(--ink)">5</span>s…</div>
+    <a href="/" class="btn btn-ghost btn-block" style="margin-top:16px">Go to homepage</a>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="shell">
+    <aside class="side-nav">
+      <div class="side-brand">
+        <strong>Mesh.</strong>
+        <span>Admin console</span>
+      </div>
+      <button class="side-link active" data-panel="overview" onclick="switchPanel('overview', this)">Overview</button>
+      <button class="side-link" data-panel="users" onclick="switchPanel('users', this)">Users <span class="count" id="nav-users">—</span></button>
+      <button class="side-link" data-panel="waitlist" onclick="switchPanel('waitlist', this)">Waitlist <span class="count" id="nav-waitlist">—</span></button>
+      <button class="side-link" data-panel="metrics" onclick="switchPanel('metrics', this)">CLI metrics</button>
+      <button class="side-link" data-panel="access" onclick="switchPanel('access', this)">Access</button>
+      <button class="side-link" data-panel="status" onclick="switchPanel('status', this)">System</button>
+      <div class="side-foot">
+        <a href="/docs" target="_blank" rel="noreferrer">Docs ↗</a>
+        <a href="/quickstart" target="_blank" rel="noreferrer">Quickstart ↗</a>
+        <button class="side-link" style="margin-top:4px" onclick="doLogout()">Sign out</button>
+      </div>
+    </aside>
+
+    <div class="main-col">
+      <header class="top-bar">
+        <div>
+          <div class="top-title" id="top-title">Overview</div>
+          <div class="top-meta" id="top-meta">@trymesh/cli private alpha · operator tools</div>
+        </div>
+        <div class="top-actions">
+          <span class="user-pill" id="h-role" style="display:none"></span>
+          <span class="user-pill" id="h-email"></span>
+          <button class="btn btn-ghost btn-sm" id="btn-refresh" onclick="refreshCurrentPanel()">Refresh</button>
+        </div>
+      </header>
+
+      <div class="content">
+        <!-- OVERVIEW -->
+        <section class="panel active" id="panel-overview">
+          <div class="stats-row" id="overview-stats">
+            <div class="stat"><div class="stat-label">Users</div><div class="stat-val" id="s-total">—</div></div>
+            <div class="stat"><div class="stat-label">Confirmed</div><div class="stat-val" id="s-confirmed">—</div></div>
+            <div class="stat"><div class="stat-label">Joined · 7d</div><div class="stat-val" id="s-recent">—</div></div>
+            <div class="stat"><div class="stat-label">Waitlist</div><div class="stat-val" id="s-waitlist">—</div></div>
+            <div class="stat"><div class="stat-label">CLI sessions</div><div class="stat-val" id="s-sessions">—</div></div>
+            <div class="stat"><div class="stat-label">Active · 7d</div><div class="stat-val" id="s-active7">—</div></div>
+            <div class="stat"><div class="stat-label">npm CLI</div><div class="stat-val sm" id="s-ver">—</div></div>
+            <div class="stat"><div class="stat-label">Tokens in</div><div class="stat-val sm" id="s-tin">—</div></div>
+            <div class="stat"><div class="stat-label">Tokens out</div><div class="stat-val sm" id="s-tout">—</div></div>
+          </div>
+          <div class="overview-grid">
+            <div class="card">
+              <h3>Operator quick actions</h3>
+              <ul class="quick-list">
+                <li><span>Invite from waitlist</span><button class="btn btn-ghost btn-sm" onclick="switchPanel('waitlist', document.querySelector('.side-link[data-panel=waitlist]'))">Open</button></li>
+                <li><span>Create CLI account</span><button class="btn btn-ghost btn-sm" onclick="switchPanel('access', document.querySelector('.side-link[data-panel=access]'))">Open</button></li>
+                <li><span>Check gateway health</span><button class="btn btn-ghost btn-sm" onclick="switchPanel('status', document.querySelector('.side-link[data-panel=status]'))">Open</button></li>
+              </ul>
+              <p class="stat-hint" style="margin-top:12px">CLI metrics only include users who opted into <code>telemetry</code> in settings.</p>
+            </div>
+            <div class="card">
+              <h3>Service snapshot</h3>
+              <div class="status-grid" id="overview-status" style="margin-top:4px">
+                <div class="dim mono" style="padding:8px"><span class="spinner"></span> Loading…</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- USERS -->
+        <section class="panel" id="panel-users">
+          <div class="panel-head">
+            <h2>Registered users</h2>
+            <div class="panel-tools">
+              <input class="search-input" id="user-search" placeholder="Search email, username, name…" oninput="filterUsers()">
+              <select id="user-filter" onchange="filterUsers()" style="width:auto;padding:9px 12px">
+                <option value="all">All</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="pending">Pending</option>
+                <option value="active">CLI active (7d)</option>
+              </select>
+              <button class="btn btn-ghost btn-sm" onclick="loadUsers()"><span class="spinner" id="u-spin" style="display:none"></span> Refresh</button>
+            </div>
+          </div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr>
+                <th>Username</th><th>Name</th><th>Email</th><th>Plan</th><th>Console</th><th>Status</th>
+                <th>Joined</th><th>Last sign-in</th><th>Last CLI</th><th>Model</th><th></th>
+              </tr></thead>
+              <tbody id="u-tbody"><tr class="loading-row"><td colspan="11"><span class="spinner"></span> Loading…</td></tr></tbody>
+            </table>
+          </div>
+          <p class="stat-hint" id="user-count-hint" style="margin-top:10px"></p>
+        </section>
+
+        <!-- WAITLIST -->
+        <section class="panel" id="panel-waitlist">
+          <div class="panel-head">
+            <h2>Marketing waitlist</h2>
+            <div class="panel-tools">
+              <input class="search-input" id="wl-search" placeholder="Search email or name…" oninput="filterWaitlist()">
+              <button class="btn btn-ghost btn-sm" onclick="loadWaitlist()"><span class="spinner" id="wl-spin" style="display:none"></span> Refresh</button>
+            </div>
+          </div>
+          <div class="card write-only" id="wl-broadcast-card" style="margin-bottom:16px">
+            <h3>Broadcast to waitlist</h3>
+            <p class="stat-hint" style="margin-bottom:12px">Sends a branded Mesh email to everyone on the waitlist (excludes removed addresses).</p>
+            <div class="field"><label>Email subject</label><input type="text" id="bc-subject" placeholder="3 days until early access"></div>
+            <div class="field"><label>Headline (large title)</label><input type="text" id="bc-headline" placeholder="3 days until release"></div>
+            <div class="field"><label>Header tagline</label><input type="text" id="bc-kicker" placeholder="WAITLIST · UPDATE"></div>
+            <div class="field"><label>Message</label><textarea id="bc-message" rows="4" placeholder="We're opening early access on Friday…" style="width:100%;background:var(--panel);border:1px solid var(--line);border-radius:8px;color:var(--ink);font-family:var(--mono);font-size:13px;padding:10px 12px;resize:vertical"></textarea></div>
+            <div class="two-col" style="gap:12px">
+              <div class="field">
+                <label>Button target</label>
+                <select id="bc-cta-target" onchange="updateBroadcastCtaFields()">
+                  <option value="none">No button</option>
+                  <option value="account">Account page</option>
+                  <option value="docs">Docs page</option>
+                  <option value="custom">Custom URL</option>
+                </select>
+              </div>
+              <div class="field"><label>CTA label (optional)</label><input type="text" id="bc-cta-label" placeholder="Visit try-mesh.com"></div>
+              <div class="field"><label>CTA URL (optional)</label><input type="url" id="bc-cta-url" placeholder="https://try-mesh.com"></div>
+            </div>
+            <button class="btn btn-primary" id="bc-btn" onclick="sendWaitlistBroadcast()">Send to all</button>
+            <div class="err" id="bc-err"></div>
+          </div>
+          <div class="note"><strong>Workflow:</strong> entries live in Firestore + Resend audiences. <em>Invite</em> sends a Supabase magic-link. <em>Remove</em> suppresses the email from future lists and broadcasts.</div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr>
+                <th>Email</th><th>Name</th><th>Signed up</th><th>Account</th><th></th>
+              </tr></thead>
+              <tbody id="wl-tbody"><tr class="loading-row"><td colspan="5"><span class="spinner"></span> Loading…</td></tr></tbody>
+            </table>
+          </div>
+          <p class="stat-hint" id="wl-hint" style="margin-top:10px"></p>
+        </section>
+
+        <!-- METRICS -->
+        <section class="panel" id="panel-metrics">
+          <div class="panel-head">
+            <h2>CLI usage (telemetry)</h2>
+            <div class="panel-tools">
+              <button class="btn btn-ghost btn-sm" onclick="exportMetricsCsv()">Export CSV</button>
+              <button class="btn btn-ghost btn-sm" onclick="loadMetrics()">Refresh</button>
+            </div>
+          </div>
+          <div class="stats-row">
+            <div class="stat"><div class="stat-label">Sessions</div><div class="stat-val" id="m-sessions">—</div></div>
+            <div class="stat"><div class="stat-label">Tokens in</div><div class="stat-val sm" id="m-tin">—</div></div>
+            <div class="stat"><div class="stat-label">Tokens out</div><div class="stat-val sm" id="m-tout">—</div></div>
+            <div class="stat"><div class="stat-label">Tokens saved</div><div class="stat-val sm" id="m-saved">—</div></div>
+            <div class="stat"><div class="stat-label">Active users · 7d</div><div class="stat-val" id="m-active7">—</div></div>
+          </div>
+          <div id="m-warning" class="note" style="display:none"></div>
+          <div class="tbl-wrap" id="m-table-wrap">
+            <table>
+              <thead><tr>
+                <th>User</th><th>Sessions</th><th>7d</th><th>Tokens in</th><th>Tokens out</th>
+                <th>Saved</th><th>Last active</th><th>Model</th><th>CLI</th>
+              </tr></thead>
+              <tbody id="m-tbody"><tr class="loading-row"><td colspan="9"><span class="spinner"></span> Loading…</td></tr></tbody>
+            </table>
+          </div>
+          <div id="m-nodata" class="no-data" style="display:none">No CLI sessions recorded yet. Users must opt in to telemetry on first run.</div>
+        </section>
+
+        <!-- ACCESS -->
+        <section class="panel write-only" id="panel-access">
+          <div class="panel-head"><h2>Grant access</h2></div>
+          <div class="two-col">
+            <div class="card">
+              <h3>Magic-link invite</h3>
+              <p>Sends a Supabase invite email. User sets their password via the link (redirects to this admin URL for recovery flow).</p>
+              <div class="field"><label>Email</label><input type="email" id="inv-email" placeholder="user@example.com"></div>
+              <div class="field"><label>Username (optional)</label><input type="text" id="inv-username" placeholder="jane"></div>
+              <button class="btn btn-primary" id="inv-btn" onclick="doInvite()">Send invite</button>
+              <div class="err" id="inv-err"></div>
+            </div>
+            <div class="card">
+              <h3>Create account directly</h3>
+              <p>Instant confirmed account — hand over email + password securely (e.g. 1Password).</p>
+              <div class="field"><label>Email</label><input type="email" id="cr-email" placeholder="user@example.com"></div>
+              <div class="field"><label>Username</label><input type="text" id="cr-username" placeholder="jane"></div>
+              <div class="field"><label>Display name</label><input type="text" id="cr-name" placeholder="Jane Doe"></div>
+              <div class="field"><label>Password</label><input type="password" id="cr-pw" placeholder="min 8 characters"></div>
+              <button class="btn btn-primary" id="cr-btn" onclick="doCreate()">Create account</button>
+              <div class="err" id="cr-err"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- STATUS -->
+        <section class="panel" id="panel-status">
+          <div class="panel-head">
+            <h2>System health</h2>
+            <button class="btn btn-ghost btn-sm" onclick="loadStatus()">Refresh</button>
+          </div>
+          <div class="status-grid" id="st-grid">
+            <div class="dim mono" style="padding:16px"><span class="spinner"></span> Checking…</div>
+          </div>
+          <p class="stat-hint" id="st-ts" style="margin-top:14px"></p>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DRAWER -->
+<div id="drawer-backdrop" onclick="closeDrawer()"></div>
+<div id="drawer">
+  <div class="drawer-head">
+    <span class="drawer-title" id="dr-title">Edit user</span>
+    <button class="close-btn" onclick="closeDrawer()" aria-label="Close">×</button>
+  </div>
+  <div class="drawer-body">
+    <input type="hidden" id="dr-uid">
+    <div class="field"><label>Email</label><input type="email" id="dr-email"></div>
+    <div class="field"><label>Username</label><input type="text" id="dr-username" placeholder="username"></div>
+    <div class="field"><label>Display name</label><input type="text" id="dr-name" placeholder="Full name"></div>
+    <div class="field write-only" id="dr-role-wrap" style="display:none">
+      <label>Console role</label>
+      <select id="dr-console-role" onchange="setUserConsoleRoleFromDrawer()">
+        <option value="">— none —</option>
+        <option value="admin">admin</option>
+        <option value="maintainer">maintainer</option>
+        <option value="watcher">watcher</option>
+      </select>
+      <p class="stat-hint" style="margin-top:6px">Owner is fixed to edgar@mailbaumann.de only.</p>
+    </div>
+    <div class="err" id="dr-err"></div>
+  </div>
+  <div class="drawer-foot write-only">
+    <button class="btn btn-primary btn-block" id="dr-save" onclick="saveUser()">Save changes</button>
+    <button class="btn btn-warn btn-block" id="dr-reset" onclick="sendReset()">Send password reset email</button>
+    <div class="divider"></div>
+    <div class="danger-zone">
+      <h4>Danger zone</h4>
+      <button class="btn btn-danger btn-sm btn-block" id="dr-del" onclick="deleteFromDrawer()">Delete user</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL = 'https://msmonxiacxhendxehezw.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zbW9ueGlhY3hoZW5keGVoZXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5NDU3NTMsImV4cCI6MjA5MjUyMTc1M30.K-FQFpcOwtJAIAfn5lTzmrox_6cv_8qqXGxi9IgosB8';
+const API = '/api/admin';
+
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+let _token = null;
+let _role = null;
+let _permissions = { canRead: false, canWrite: false, canManageConsoleRoles: false };
+let _users = [];
+let _usersFiltered = [];
+let _metrics = {};
+let _metricsRows = [];
+let _waitlist = [];
+let _waitlistFiltered = [];
+let _registeredEmails = new Set();
+let _currentPanel = 'overview';
+let _statusCache = null;
+
+const PANEL_TITLES = {
+  overview: 'Overview',
+  users: 'Users',
+  waitlist: 'Waitlist',
+  metrics: 'CLI metrics',
+  access: 'Access',
+  status: 'System'
+};
+
+const token = () => _token;
+
+function setText(id, text) {
+  const el = $(id);
+  if (el) el.textContent = text;
+}
+
+function applyPermissionsUI() {
+  const write = !!_permissions.canWrite;
+  document.querySelectorAll('.write-only').forEach((el) => {
+    el.style.display = write ? '' : 'none';
+  });
+  const accessNav = document.querySelector('.side-link[data-panel=access]');
+  if (accessNav) accessNav.style.display = write ? '' : 'none';
+  const roleEl = $('h-role');
+  if (roleEl && _role) {
+    roleEl.style.display = 'inline-flex';
+    roleEl.textContent = _role;
+    roleEl.className = 'user-pill';
+    if (_role === 'owner') roleEl.style.borderColor = 'var(--cyan)';
+  }
+  $('dr-role-wrap').style.display =
+    write && _permissions.canManageConsoleRoles ? 'block' : 'none';
+}
+
+async function api(path, opts = {}) {
+  const r = await fetch(`${API}${path}`, {
+    ...opts,
+    headers: {
+      Authorization: `Bearer ${token()}`,
+      'Content-Type': 'application/json',
+      ...(opts.headers ?? {})
+    }
+  });
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) {
+    const err = new Error(d.error ?? `HTTP ${r.status}`);
+    err.status = r.status;
+    err.code = d.code;
+    err.hint = d.hint;
+    err.needs = d.needs;
+    throw err;
+  }
+  return d;
+}
+
+async function verifyOperatorSession(session) {
+  _token = session.access_token;
+  try {
+    const me = await api('/users?action=me');
+    _role = me.role;
+    _permissions = me.permissions ?? _permissions;
+    return { ok: true, apiOk: true, role: me.role };
+  } catch (e) {
+    if (e.status === 401 || e.code === 'not_admin') {
+      return {
+        ok: false,
+        message: e.hint || 'Access denied — no console role for this account.'
+      };
+    }
+    return {
+      ok: true,
+      apiOk: false,
+      apiWarning:
+        e.status === 503
+          ? 'Admin API: Supabase keys missing on Vercel (SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY).'
+          : e.status === 404
+            ? 'Admin API not found — run vercel dev in sites/marketing or use the deployed site.'
+            : `Admin API error: ${e.message}`
+    };
+  }
+}
+
+function showApiWarning(msg) {
+  let el = $('api-warning');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'api-warning';
+    el.className = 'note';
+    el.style.margin = '0 24px 16px';
+    $('app').querySelector('.main-col')?.insertBefore(el, $('app').querySelector('.content'));
+  }
+  el.style.display = 'block';
+  el.innerHTML = `<strong>API warning:</strong> ${esc(msg)}`;
+}
+
+async function handleRecoveryHash() {
+  const hash = window.location.hash.replace(/^#/, '');
+  if (!hash) return false;
+  const params = new URLSearchParams(hash);
+  const access_token = params.get('access_token');
+  const refresh_token = params.get('refresh_token');
+  const type = params.get('type');
+  if ((type === 'recovery' || access_token) && access_token && refresh_token) {
+    $('login-screen').style.display = 'none';
+    $('recovery-screen').style.display = 'flex';
+    const { error } = await sb.auth.setSession({ access_token, refresh_token });
+    if (error) $('r-err').textContent = error.message;
+    history.replaceState(null, '', '/admin');
+    return true;
+  }
+  return false;
+}
+
+async function init() {
+  if (await handleRecoveryHash()) return;
+
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session?.user) return;
+
+  const gate = await verifyOperatorSession(session);
+  if (!gate.ok) {
+    await sb.auth.signOut();
+    _token = null;
+    $('l-err').textContent = gate.message;
+    return;
+  }
+  await showApp(session.user.email, gate.apiWarning);
+}
+
+window.doLogin = async () => {
+  const email = $('l-email').value.trim();
+  const pw = $('l-pw').value;
+  const btn = $('l-btn');
+  $('l-err').textContent = '';
+  btn.disabled = true;
+  btn.textContent = 'Signing in…';
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pw });
+  btn.disabled = false;
+  btn.textContent = 'Sign in';
+  if (error) {
+    $('l-err').textContent = error.message;
+    return;
+  }
+  const gate = await verifyOperatorSession(data.session);
+  if (!gate.ok) {
+    await sb.auth.signOut();
+    _token = null;
+    $('l-err').textContent = gate.message;
+    return;
+  }
+  await showApp(data.user.email, gate.apiWarning);
+};
+
+window.doUpdatePassword = async () => {
+  const pw = $('r-pw').value;
+  const conf = $('r-pw-conf').value;
+  const btn = $('r-btn');
+  $('r-err').textContent = '';
+  if (pw.length < 8) {
+    $('r-err').textContent = 'Password must be at least 8 characters';
+    return;
+  }
+  if (pw !== conf) {
+    $('r-err').textContent = 'Passwords do not match';
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = 'Updating…';
+  const { error } = await sb.auth.updateUser({ password: pw });
+  btn.disabled = false;
+  btn.textContent = 'Update password';
+  if (error) {
+    $('r-err').textContent = error.message;
+    return;
+  }
+  $('recovery-screen').style.display = 'none';
+  $('success-screen').style.display = 'flex';
+  let count = 5;
+  const timer = setInterval(() => {
+    count--;
+    $('s-timer').textContent = count;
+    if (count <= 0) {
+      clearInterval(timer);
+      window.location.href = '/';
+    }
+  }, 1000);
+};
+
+window.doLogout = async () => {
+  await sb.auth.signOut();
+  _token = null;
+  _role = null;
+  _permissions = { canRead: false, canWrite: false, canManageConsoleRoles: false };
+  $('app').style.display = 'none';
+  $('login-screen').style.display = 'flex';
+};
+
+async function showApp(email, apiWarning) {
+  $('login-screen').style.display = 'none';
+  $('recovery-screen').style.display = 'none';
+  $('app').style.display = 'block';
+  $('h-email').textContent = email;
+  applyPermissionsUI();
+  const warnEl = $('api-warning');
+  if (warnEl) warnEl.style.display = 'none';
+  if (apiWarning) showApiWarning(apiWarning);
+  await Promise.all([loadUsers(), loadMetrics(), loadWaitlist(), loadStatus(true)]);
+  renderOverviewStatus();
+}
+
+window.switchPanel = (name, el) => {
+  _currentPanel = name;
+  document.querySelectorAll('.side-link[data-panel]').forEach((b) => b.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.querySelectorAll('.panel').forEach((p) => p.classList.remove('active'));
+  $('panel-' + name).classList.add('active');
+  $('top-title').textContent = PANEL_TITLES[name] ?? name;
+  if (name === 'status') {
+    if (_statusCache) renderStatusGrid(_statusCache, 'st-grid', 'st-ts');
+    else loadStatus(false);
+  }
+};
+
+window.refreshCurrentPanel = () => {
+  if (_currentPanel === 'overview') {
+    Promise.all([loadUsers(), loadMetrics(), loadWaitlist(), loadStatus(true)]).then(renderOverviewStatus);
+    return;
+  }
+  if (_currentPanel === 'users') loadUsers();
+  else if (_currentPanel === 'waitlist') loadWaitlist();
+  else if (_currentPanel === 'metrics') loadMetrics();
+  else if (_currentPanel === 'status') loadStatus(false);
+  else if (_currentPanel === 'access' && _permissions.canWrite) toast('Access forms ready', 'ok');
+};
+
+window.loadUsers = async () => {
+  $('u-spin').style.display = 'inline-block';
+  try {
+    const { users } = await api('/users');
+    _users = users ?? [];
+    _registeredEmails = new Set(_users.map((u) => u.email?.toLowerCase()).filter(Boolean));
+    $('nav-users').textContent = String(_users.length);
+    updateUserStats(_users);
+    filterUsers();
+    if (_metricsRows.length) renderMetricRows(_metricsRows);
+  } catch (e) {
+    $('u-tbody').innerHTML = errRow(11, e.message);
+  } finally {
+    $('u-spin').style.display = 'none';
+  }
+};
+
+function updateUserStats(users) {
+  const week = Date.now() - 7 * 86400_000;
+  $('s-total').textContent = users.length;
+  $('s-confirmed').textContent = users.filter((u) => u.confirmed).length;
+  $('s-recent').textContent = users.filter((u) => new Date(u.created_at) > week).length;
+}
+
+window.filterUsers = () => {
+  const q = $('user-search').value.trim().toLowerCase();
+  const f = $('user-filter').value;
+  const week = Date.now() - 7 * 86400_000;
+  _usersFiltered = _users.filter((u) => {
+    const m = _metrics[u.id];
+    if (f === 'confirmed' && !u.confirmed) return false;
+    if (f === 'pending' && u.confirmed) return false;
+    if (f === 'active') {
+      if (!m?.last_active || new Date(m.last_active) <= week) return false;
+    }
+    if (!q) return true;
+    const hay = [u.email, u.username, u.display_name].filter(Boolean).join(' ').toLowerCase();
+    return hay.includes(q);
+  });
+  renderUsers(_usersFiltered);
+  $('user-count-hint').textContent = `Showing ${_usersFiltered.length} of ${_users.length} users`;
+};
+
+function consoleRoleCell(u) {
+  const role = u.console_role || '';
+  if (role === 'owner') {
+    return '<span class="badge badge-green"><span class="dot"></span>owner</span>';
+  }
+  if (!_permissions.canManageConsoleRoles) {
+    return role ? `<span class="mono dim">${esc(role)}</span>` : '<span class="dim">—</span>';
+  }
+  const opts = ['', 'admin', 'maintainer', 'watcher']
+    .map((v) => {
+      const sel = (!v && !role) || (v && v === role);
+      return `<option value="${v}"${sel ? ' selected' : ''}>${v || '— none —'}</option>`;
+    })
+    .join('');
+  return `<select class="plan-select" data-uid="${u.id}" onchange="setUserConsoleRole(this)">${opts}</select>`;
+}
+
+function renderUsers(users) {
+  const sorted = [...users].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  const canEditPlan = _permissions.canWrite;
+  $('u-tbody').innerHTML =
+    sorted
+      .map((u) => {
+        const m = _metrics[u.id];
+        const plan = (u.plan || 'basic').toLowerCase();
+        const planSelect = canEditPlan
+          ? `<select class="plan-select" data-uid="${u.id}" onchange="setUserPlan(this)">
+          <option value="basic"${plan === 'basic' ? ' selected' : ''}>basic</option>
+          <option value="pro"${plan === 'pro' ? ' selected' : ''}>pro</option>
+          <option value="ultra"${plan === 'ultra' ? ' selected' : ''}>ultra</option>
+        </select>`
+          : `<span class="mono dim">${esc(plan)}</span>`;
+        const editBtn = _permissions.canWrite
+          ? `<button class="btn btn-ghost btn-sm" onclick="openEdit('${u.id}')">Edit</button>`
+          : `<button class="btn btn-ghost btn-sm" onclick="openEdit('${u.id}')">View</button>`;
+        return `<tr>
+      <td class="mono" style="color:var(--cyan)">${u.username ? esc(u.username) : '<span class="dim">—</span>'}</td>
+      <td>${u.display_name ? esc(u.display_name) : '<span class="dim">—</span>'}</td>
+      <td class="mono">${esc(u.email ?? '')}</td>
+      <td>${planSelect}</td>
+      <td>${consoleRoleCell(u)}</td>
+      <td>${statusBadge(u.confirmed)}</td>
+      <td class="mono dim">${fmtDate(u.created_at)}</td>
+      <td class="mono dim">${u.last_sign_in_at ? fmtDate(u.last_sign_in_at) : '—'}</td>
+      <td class="mono dim">${m?.last_active ? fmtDate(m.last_active) : '—'}</td>
+      <td class="mono dim" title="${esc(m?.latest_model ?? '')}">${m?.latest_model ? esc(shortModel(m.latest_model)) : '—'}</td>
+      <td><div class="actions">${editBtn}</div></td>
+    </tr>`;
+      })
+      .join('') || '<tr class="loading-row"><td colspan="11" class="dim">No users match.</td></tr>';
+}
+
+window.setUserConsoleRole = async (selectEl) => {
+  const userId = selectEl.getAttribute('data-uid');
+  const consoleRole = selectEl.value;
+  selectEl.disabled = true;
+  try {
+    await api('/users', {
+      method: 'POST',
+      body: JSON.stringify({ action: 'set-console-role', userId, consoleRole })
+    });
+    toast('Console role updated', 'ok');
+    loadUsers();
+  } catch (e) {
+    toast(e.message, 'fail');
+  } finally {
+    selectEl.disabled = false;
+  }
+};
+
+window.setUserPlan = async (selectEl) => {
+  if (!_permissions.canWrite) return;
+  const userId = selectEl.getAttribute('data-uid');
+  const plan = selectEl.value;
+  const prev = selectEl.dataset.prev || '';
+  selectEl.dataset.prev = plan;
+  selectEl.disabled = true;
+  try {
+    await api('/users', {
+      method: 'POST',
+      body: JSON.stringify({ action: 'set-plan', userId, plan })
+    });
+    selectEl.style.borderColor = 'var(--cyan)';
+    setTimeout(() => { selectEl.style.borderColor = ''; }, 800);
+    // Reflect in cached _users so renders stay in sync.
+    const target = _users.find((u) => u.id === userId);
+    if (target) target.plan = plan;
+  } catch (e) {
+    alert(`Plan update failed: ${e.message}`);
+    if (prev) selectEl.value = prev;
+  } finally {
+    selectEl.disabled = false;
+  }
+};
+
+window.loadWaitlist = async () => {
+  $('wl-spin').style.display = 'inline-block';
+  try {
+    const { entries, total, truncated, error } = await api('/waitlist');
+    if (error) throw new Error(error);
+    _waitlist = entries ?? [];
+    $('nav-waitlist').textContent = String(total ?? _waitlist.length);
+    $('s-waitlist').textContent = String(total ?? _waitlist.length);
+    filterWaitlist();
+    let hint = `${_waitlist.length} entries loaded`;
+    if (truncated) hint += ' (truncated — showing newest entries)';
+    $('wl-hint').textContent = hint;
+  } catch (e) {
+    $('wl-tbody').innerHTML = errRow(5, e.message);
+    $('wl-hint').textContent = e.message;
+  } finally {
+    $('wl-spin').style.display = 'none';
+  }
+};
+
+window.filterWaitlist = () => {
+  const q = $('wl-search').value.trim().toLowerCase();
+  _waitlistFiltered = _waitlist.filter((e) => {
+    if (!q) return true;
+    const hay = [e.email, e.firstName, e.lastName].filter(Boolean).join(' ').toLowerCase();
+    return hay.includes(q);
+  });
+  renderWaitlist(_waitlistFiltered);
+};
+
+function renderWaitlist(entries) {
+  $('wl-tbody').innerHTML = entries
+    .map((e) => {
+      const registered = _registeredEmails.has(e.email?.toLowerCase());
+      const name = [e.firstName, e.lastName].filter(Boolean).join(' ') || '—';
+      return `<tr>
+        <td class="mono">${esc(e.email)}</td>
+        <td>${esc(name)}</td>
+        <td class="mono dim">${fmtDate(e.createdAt)}</td>
+        <td>${registered ? '<span class="badge badge-green"><span class="dot"></span>has account</span>' : '<span class="badge badge-yellow"><span class="dot"></span>waitlist only</span>'}</td>
+        <td><div class="actions">
+          ${_permissions.canWrite ? `<button class="btn btn-primary btn-sm" onclick="inviteFromWaitlist('${escAttr(e.email)}', '${escAttr(e.firstName || '')}')">Invite</button>` : ''}
+          ${_permissions.canRemoveWaitlist !== false && _permissions.canWrite ? `<button class="btn btn-danger btn-sm" onclick="removeFromWaitlist('${escAttr(e.email)}', '${escAttr(e.blobPath || '')}')">Remove</button>` : ''}
+        </div></td>
+      </tr>`;
+    })
+    .join('') || '<tr class="loading-row"><td colspan="5" class="dim">No waitlist entries.</td></tr>';
+}
+
+window.inviteFromWaitlist = (email, firstName) => {
+  switchPanel('access', document.querySelector('[data-panel=access]'));
+  $('inv-email').value = email;
+  if (firstName && !$('inv-username').value) {
+    $('inv-username').value = firstName.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 24);
+  }
+  toast(`Ready to invite ${email}`, 'ok');
+};
+
+window.removeFromWaitlist = async (email, blobPath) => {
+  if (!_permissions.canWrite) return;
+  if (!confirm(`Remove ${email} from the waitlist?`)) return;
+  try {
+    await api('/waitlist', {
+      method: 'DELETE',
+      body: JSON.stringify({ email, blobPath: blobPath || undefined })
+    });
+    toast(`Removed ${email}`, 'ok');
+    loadWaitlist();
+  } catch (e) {
+    toast(e.message, 'fail');
+  }
+};
+
+const BROADCAST_CTA_PRESETS = {
+  none: { label: '', url: '' },
+  account: { label: 'Open Account', url: 'https://try-mesh.com/account' },
+  docs: { label: 'Open Docs', url: 'https://try-mesh.com/docs' }
+};
+
+window.updateBroadcastCtaFields = () => {
+  const target = $('bc-cta-target')?.value || 'none';
+  const labelEl = $('bc-cta-label');
+  const urlEl = $('bc-cta-url');
+  if (!labelEl || !urlEl) return;
+  if (target === 'custom') {
+    labelEl.disabled = false;
+    urlEl.disabled = false;
+    if (!labelEl.value) labelEl.placeholder = 'Open page';
+    if (!urlEl.value) urlEl.placeholder = 'https://example.com';
+    return;
+  }
+  const preset = BROADCAST_CTA_PRESETS[target] || BROADCAST_CTA_PRESETS.none;
+  labelEl.value = preset.label;
+  urlEl.value = preset.url;
+  labelEl.disabled = target === 'none';
+  urlEl.disabled = target === 'none';
+};
+
+window.sendWaitlistBroadcast = async () => {
+  if (!_permissions.canWrite) return;
+  const subject = $('bc-subject').value.trim();
+  const headline = $('bc-headline').value.trim();
+  const kicker = $('bc-kicker').value.trim();
+  const message = $('bc-message').value.trim();
+  const ctaTarget = $('bc-cta-target').value;
+  let ctaLabel = $('bc-cta-label').value.trim();
+  let ctaUrl = $('bc-cta-url').value.trim();
+  if (ctaTarget === 'none') {
+    ctaLabel = '';
+    ctaUrl = '';
+  } else if (ctaTarget !== 'custom') {
+    const preset = BROADCAST_CTA_PRESETS[ctaTarget];
+    ctaLabel = preset?.label || ctaLabel;
+    ctaUrl = preset?.url || ctaUrl;
+  }
+  $('bc-err').textContent = '';
+  if (!subject || !headline || !message) {
+    $('bc-err').textContent = 'Subject, headline and message are required';
+    return;
+  }
+  if ((ctaLabel && !ctaUrl) || (!ctaLabel && ctaUrl)) {
+    $('bc-err').textContent = 'For a button, please set both label and URL';
+    return;
+  }
+  if (!confirm(`Send this update to ${_waitlist.length} waitlist contacts?`)) return;
+  const btn = $('bc-btn');
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+  try {
+    const r = await api('/waitlist', {
+      method: 'POST',
+      body: JSON.stringify({ subject, headline, kicker, message, ctaLabel, ctaUrl })
+    });
+    toast(`Sent ${r.sent}/${r.total}${r.failed ? ` (${r.failed} failed)` : ''}`, r.failed ? 'warn' : 'ok');
+  } catch (e) {
+    $('bc-err').textContent = e.message;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Send to all';
+  }
+};
+
+window.loadMetrics = async () => {
+  try {
+    const { perUser, totals, warning } = await api('/metrics');
+    _metrics = Object.fromEntries((perUser ?? []).map((r) => [r.user_id, r]));
+    _metricsRows = perUser ?? [];
+
+    setText('s-sessions', totals.sessions ?? 0);
+    setText('s-tin', fmtNum(totals.tokens_in));
+    setText('s-tout', fmtNum(totals.tokens_out));
+    setText('m-sessions', totals.sessions ?? 0);
+    setText('m-tin', fmtNum(totals.tokens_in));
+    setText('m-tout', fmtNum(totals.tokens_out));
+    setText('m-saved', fmtNum(totals.tokens_saved));
+    setText('m-active7', totals.active_users_7d ?? 0);
+    setText('s-active7', totals.active_users_7d ?? 0);
+
+    if (warning) {
+      $('m-warning').style.display = 'block';
+      $('m-warning').innerHTML = `<strong>Note:</strong> ${esc(warning)}`;
+    } else {
+      $('m-warning').style.display = 'none';
+    }
+
+    if (!perUser?.length) {
+      $('m-table-wrap').style.display = 'none';
+      $('m-nodata').style.display = 'block';
+      return;
+    }
+    $('m-table-wrap').style.display = '';
+    $('m-nodata').style.display = 'none';
+    renderMetricRows(perUser);
+    if (_users.length) filterUsers();
+  } catch (e) {
+    $('m-tbody').innerHTML = errRow(9, e.message);
+  }
+};
+
+function renderMetricRows(perUser) {
+  const sorted = [...perUser].sort((a, b) => new Date(b.last_active ?? 0) - new Date(a.last_active ?? 0));
+  const userMap = Object.fromEntries(_users.map((u) => [u.id, u]));
+  $('m-tbody').innerHTML = sorted
+    .map((r) => {
+      const u = userMap[r.user_id] ?? {};
+      const label = u.username || u.email || String(r.user_id).slice(0, 8);
+      return `<tr>
+      <td class="mono" style="color:var(--cyan)">${esc(label)}</td>
+      <td class="mono">${r.sessions}</td>
+      <td class="mono">${r.sessions_this_week ?? 0}</td>
+      <td class="mono">${fmtNum(r.tokens_in)}</td>
+      <td class="mono">${fmtNum(r.tokens_out)}</td>
+      <td class="mono">${fmtNum(r.tokens_saved)}</td>
+      <td class="mono dim">${r.last_active ? fmtDate(r.last_active) : '—'}</td>
+      <td class="mono dim" title="${esc(r.latest_model ?? '')}">${r.latest_model ? esc(r.latest_model) : '—'}</td>
+      <td class="mono dim">${r.latest_cli ?? '—'}</td>
+    </tr>`;
+    })
+    .join('');
+}
+
+window.exportMetricsCsv = () => {
+  if (!_metricsRows.length) {
+    toast('No metrics to export', 'warn');
+    return;
+  }
+  const userMap = Object.fromEntries(_users.map((u) => [u.id, u]));
+  const header = ['user_id', 'email', 'username', 'sessions', 'sessions_7d', 'tokens_in', 'tokens_out', 'tokens_saved', 'last_active', 'model', 'cli'];
+  const rows = _metricsRows.map((r) => {
+    const u = userMap[r.user_id] ?? {};
+    return [
+      r.user_id,
+      u.email ?? '',
+      u.username ?? '',
+      r.sessions,
+      r.sessions_this_week ?? 0,
+      r.tokens_in,
+      r.tokens_out,
+      r.tokens_saved,
+      r.last_active ?? '',
+      r.latest_model ?? '',
+      r.latest_cli ?? ''
+    ];
+  });
+  const csv = [header, ...rows].map((row) => row.map(csvCell).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `mesh-cli-metrics-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast('CSV exported', 'ok');
+};
+
+window.loadStatus = async (forOverview = false) => {
+  const gridId = forOverview ? 'overview-status' : 'st-grid';
+  const tsId = forOverview ? null : 'st-ts';
+  $(gridId).innerHTML =
+    '<div class="dim mono" style="padding:16px"><span class="spinner"></span> Checking…</div>';
+  try {
+    const { checks, timestamp } = await api('/status');
+    _statusCache = checks;
+    renderStatusGrid(checks, gridId, tsId);
+    const cli = checks.find((c) => c.name === 'npm @trymesh/cli');
+    if (cli?.version) setText('s-ver', `v${cli.version}`);
+    if (tsId) {
+      setText('st-ts', 'Checked at ' + new Date(timestamp).toLocaleString());
+    }
+  } catch (e) {
+    $(gridId).innerHTML = `<div style="color:var(--red);font-family:var(--mono);font-size:12px">${esc(e.message)}</div>`;
+  }
+};
+
+function renderOverviewStatus() {
+  if (!_statusCache?.length) return;
+  renderStatusGrid(_statusCache.slice(0, 6), 'overview-status', null);
+}
+
+function renderStatusGrid(checks, elId, tsId) {
+  $(elId).innerHTML = checks
+    .map(
+      (c) => `
+      <div class="status-card">
+        <div class="status-top">
+          <span class="status-name">${esc(c.name)}</span>
+          ${c.ok ? '<span class="badge badge-green"><span class="dot"></span>up</span>' : '<span class="badge badge-red"><span class="dot"></span>down</span>'}
+        </div>
+        ${c.version ? `<div class="status-meta">v${esc(String(c.version))}</div>` : ''}
+        ${c.weeklyDownloads != null ? `<div class="status-meta">${fmtNum(c.weeklyDownloads)} npm / week</div>` : ''}
+        ${c.stars != null ? `<div class="status-meta">★ ${c.stars}</div>` : ''}
+        ${c.rows != null ? `<div class="status-meta">${c.rows} profiles</div>` : ''}
+        ${c.status != null ? `<div class="status-meta">HTTP ${c.status}</div>` : ''}
+        ${c.error ? `<div class="status-meta" style="color:var(--red)">${esc(c.error)}</div>` : ''}
+        ${c.detail ? `<div class="status-meta">${esc(c.detail)}</div>` : ''}
+        <div class="status-meta" style="margin-top:6px">${c.latencyMs ?? '—'}ms</div>
+      </div>`
+    )
+    .join('');
+  if (tsId && checks.length) {
+    $(tsId).textContent = 'Last check · ' + new Date().toLocaleTimeString();
+  }
+}
+
+window.openEdit = (userId) => {
+  const u = _users.find((x) => x.id === userId);
+  if (!u) return;
+  const readOnly = !_permissions.canWrite;
+  $('dr-uid').value = u.id;
+  $('dr-email').value = u.email ?? '';
+  $('dr-username').value = u.username ?? '';
+  $('dr-name').value = u.display_name ?? '';
+  $('dr-email').disabled = readOnly;
+  $('dr-username').disabled = readOnly;
+  $('dr-name').disabled = readOnly;
+  const roleSel = $('dr-console-role');
+  if (roleSel) {
+    const r = u.console_role === 'owner' ? '' : u.console_role || '';
+    roleSel.value = r;
+    roleSel.disabled = readOnly || u.console_role === 'owner' || !_permissions.canManageConsoleRoles;
+  }
+  $('dr-err').textContent = '';
+  $('dr-title').textContent = u.username
+    ? `${readOnly ? 'View' : 'Edit'} · ${u.username}`
+    : readOnly
+      ? 'View user'
+      : 'Edit user';
+  $('drawer').classList.add('open');
+  $('drawer-backdrop').style.display = 'block';
+};
+
+window.setUserConsoleRoleFromDrawer = async () => {
+  if (!_permissions.canManageConsoleRoles) return;
+  const userId = $('dr-uid').value;
+  const consoleRole = $('dr-console-role').value;
+  try {
+    await api('/users', {
+      method: 'POST',
+      body: JSON.stringify({ action: 'set-console-role', userId, consoleRole })
+    });
+    toast('Console role updated', 'ok');
+    loadUsers();
+  } catch (e) {
+    $('dr-err').textContent = e.message;
+  }
+};
+
+window.closeDrawer = () => {
+  $('drawer').classList.remove('open');
+  $('drawer-backdrop').style.display = 'none';
+};
+
+window.saveUser = async () => {
+  if (!_permissions.canWrite) return;
+  const btn = $('dr-save');
+  btn.disabled = true;
+  $('dr-err').textContent = '';
+  try {
+    await api('/users', {
+      method: 'POST',
+      body: JSON.stringify({
+        action: 'update',
+        userId: $('dr-uid').value,
+        email: $('dr-email').value.trim() || undefined,
+        username: $('dr-username').value.trim() || undefined,
+        displayName: $('dr-name').value.trim() || undefined
+      })
+    });
+    toast('Saved', 'ok');
+    closeDrawer();
+    loadUsers();
+  } catch (e) {
+    $('dr-err').textContent = e.message;
+  } finally {
+    btn.disabled = false;
+  }
+};
+
+window.sendReset = async () => {
+  if (!_permissions.canWrite) return;
+  const email = $('dr-email').value.trim();
+  if (!email) {
+    $('dr-err').textContent = 'Email required';
+    return;
+  }
+  const btn = $('dr-reset');
+  btn.disabled = true;
+  try {
+    await api('/users', { method: 'POST', body: JSON.stringify({ action: 'reset-password', email }) });
+    toast('Reset email sent', 'ok');
+  } catch (e) {
+    $('dr-err').textContent = e.message;
+  } finally {
+    btn.disabled = false;
+  }
+};
+
+window.deleteFromDrawer = async () => {
+  if (!_permissions.canWrite) return;
+  const email = $('dr-email').value;
+  if (!confirm(`Delete ${email}? This cannot be undone.`)) return;
+  try {
+    await api('/users', { method: 'DELETE', body: JSON.stringify({ userId: $('dr-uid').value }) });
+    toast('User deleted', 'ok');
+    closeDrawer();
+    loadUsers();
+  } catch (e) {
+    toast(e.message, 'fail');
+  }
+};
+
+window.doInvite = async () => {
+  if (!_permissions.canWrite) return;
+  const email = $('inv-email').value.trim();
+  const username = $('inv-username').value.trim();
+  const btn = $('inv-btn');
+  $('inv-err').textContent = '';
+  if (!email) {
+    $('inv-err').textContent = 'Email required';
+    return;
+  }
+  btn.disabled = true;
+  try {
+    await api('/users', {
+      method: 'POST',
+      body: JSON.stringify({ action: 'invite', email, username: username || undefined })
+    });
+    toast(`Invite sent to ${email}`, 'ok');
+    $('inv-email').value = '';
+    $('inv-username').value = '';
+    loadUsers();
+  } catch (e) {
+    $('inv-err').textContent = e.message;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Send invite';
+  }
+};
+
+window.doCreate = async () => {
+  if (!_permissions.canWrite) return;
+  const email = $('cr-email').value.trim();
+  const username = $('cr-username').value.trim();
+  const name = $('cr-name').value.trim();
+  const pw = $('cr-pw').value;
+  const btn = $('cr-btn');
+  $('cr-err').textContent = '';
+  if (!email || !pw) {
+    $('cr-err').textContent = 'Email and password required';
+    return;
+  }
+  if (pw.length < 8) {
+    $('cr-err').textContent = 'Password must be at least 8 characters';
+    return;
+  }
+  btn.disabled = true;
+  try {
+    await api('/users', {
+      method: 'POST',
+      body: JSON.stringify({
+        action: 'create',
+        email,
+        username: username || undefined,
+        displayName: name || undefined,
+        password: pw
+      })
+    });
+    toast(`Account created for ${email}`, 'ok');
+    $('cr-email').value = '';
+    $('cr-username').value = '';
+    $('cr-name').value = '';
+    $('cr-pw').value = '';
+    loadUsers();
+  } catch (e) {
+    $('cr-err').textContent = e.message;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Create account';
+  }
+};
+
+function statusBadge(confirmed) {
+  return confirmed
+    ? '<span class="badge badge-green"><span class="dot"></span>confirmed</span>'
+    : '<span class="badge badge-yellow"><span class="dot"></span>pending</span>';
+}
+
+function $(id) {
+  return document.getElementById(id);
+}
+function esc(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function escAttr(s) {
+  return String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+}
+function fmtDate(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
+function fmtNum(n) {
+  if (n == null) return '—';
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
+  if (n >= 1_000) return (n / 1_000).toFixed(1) + 'k';
+  return String(n);
+}
+function shortModel(m) {
+  if (!m) return '—';
+  if (m.startsWith('google/')) return m.replace('google/', 'g/');
+  return m.length > 28 ? m.slice(0, 26) + '…' : m;
+}
+function csvCell(v) {
+  const s = String(v ?? '');
+  return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+}
+function errRow(cols, msg) {
+  return `<tr class="loading-row"><td colspan="${cols}" style="color:var(--red)">${esc(msg)}</td></tr>`;
+}
+
+let _toastTimer;
+function toast(msg, type) {
+  const el = $('toast');
+  el.textContent = msg;
+  el.className = `show ${type}`;
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('show'), 3200);
+}
+window.toast = toast;
+
+$('l-pw').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') window.doLogin();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') window.closeDrawer();
+});
+
+updateBroadcastCtaFields();
+init();
+</script>
+</body>
+</html>

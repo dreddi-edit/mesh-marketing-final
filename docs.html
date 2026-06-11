@@ -3,8 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mesh Docs — CLI, IDE, MCP &amp; Gateway API</title>
-  <meta name="description" content="Mesh documentation: install the CLI, set up the IDE, run the MCP server, query the Gateway API, configure providers, recover spans, and more.">
+  <title>Mesh Docs — CLI, IDE &amp; MCP</title>
+  <meta name="description" content="Mesh documentation: install @trymesh/cli, slash commands, models, voice, MCP server, configuration, and troubleshooting. CLI-first; Gateway API coming soon.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://try-mesh.com/docs">
+  <meta property="og:site_name" content="Mesh">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Mesh Docs">
+  <meta property="og:description" content="Documentation for the Mesh CLI, MCP server, IDE preview, voice mode, and configuration.">
+  <meta property="og:url" content="https://try-mesh.com/docs">
+  <meta property="og:image" content="https://try-mesh.com/assets/brand/og-image.svg">
+  <meta property="og:image:type" content="image/svg+xml">
+  <meta property="og:image:alt" content="Mesh documentation for AI coding agents">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mesh Docs">
+  <meta name="twitter:description" content="Documentation for the Mesh CLI, MCP server, IDE preview, voice mode, and configuration.">
+  <meta name="twitter:image" content="https://try-mesh.com/assets/brand/og-image.svg">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Mesh Docs",
+    "url": "https://try-mesh.com/docs",
+    "isPartOf": { "@type": "WebSite", "url": "https://try-mesh.com/" },
+    "description": "Documentation for the Mesh CLI, MCP server, IDE preview, voice mode, and configuration."
+  }
+  </script>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,12 +52,13 @@
     p { color: oklch(1 0 0 / 0.78); }
 
     /* ── NAV ── */
-    .site-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 18px 32px; background: oklch(0.078 0.038 200 / 0.85); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+    .site-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 18px 32px; }
     .nav-right { display: flex; gap: 4px; align-items: center; }
     .nav-right a { font-size: 13px; color: oklch(1 0 0 / 0.42); padding: 6px 12px; border-radius: 6px; border: 1px solid transparent; transition: all 0.2s; cursor: pointer; }
     .nav-right a:hover { color: var(--ink); border-color: oklch(1 0 0 / 0.12); }
     .nav-active { color: var(--ink) !important; }
     .nav-waitlist { background: var(--cyan-soft) !important; border-color: var(--line-strong) !important; color: var(--cyan) !important; }
+    .nav-cta { color: var(--cyan) !important; border-color: var(--line-strong) !important; }
 
     /* ── DOCS LAYOUT ── */
     .docs-layout {
@@ -57,9 +82,59 @@
     }
     .docs-side::-webkit-scrollbar { width: 4px; }
     .docs-side::-webkit-scrollbar-thumb { background: oklch(1 0 0 / 0.12); border-radius: 2px; }
-    .docs-search { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: oklch(0.05 0.03 200 / 0.6); margin-bottom: 24px; color: oklch(1 0 0 / 0.5); font-size: 13px; cursor: text; transition: border-color .2s; }
-    .docs-search:hover { border-color: oklch(1 0 0 / 0.18); }
+    .docs-search-wrap { margin-bottom: 24px; }
+    .docs-search { width: 100%; display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: oklch(0.05 0.03 200 / 0.6); color: oklch(1 0 0 / 0.5); font-family: var(--sans); font-size: 13px; cursor: text; transition: border-color .2s, background .2s; }
+    .docs-search:hover, .docs-search:focus-within { border-color: oklch(1 0 0 / 0.18); background: oklch(0.06 0.035 200 / 0.72); }
+    .docs-search input { min-width: 0; flex: 1; appearance: none; -webkit-appearance: none; border: 0; outline: 0; background: transparent; color: var(--ink); font: inherit; }
+    .docs-search input::placeholder { color: oklch(1 0 0 / 0.48); opacity: 1; }
     .docs-search kbd { padding: 2px 6px; border: 1px solid var(--line); border-radius: 4px; background: oklch(1 0 0 / 0.04); color: oklch(1 0 0 / 0.6); font-size: 10.5px; }
+    .docs-search-results {
+      display: none;
+      margin-top: 8px;
+      max-height: 382px;
+      overflow-y: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: oklch(0.052 0.034 204 / 0.96);
+      box-shadow: 0 18px 48px rgba(0,0,0,0.32);
+    }
+    .docs-search-results.open { display: block; }
+    .docs-search-result {
+      display: block;
+      padding: 11px 12px;
+      border-bottom: 1px solid oklch(1 0 0 / 0.055);
+      color: oklch(1 0 0 / 0.72);
+    }
+    .docs-search-result:last-child { border-bottom: 0; }
+    .docs-search-result:hover, .docs-search-result:focus {
+      outline: 0;
+      background: oklch(0.74 0.14 200 / 0.08);
+      color: var(--ink);
+    }
+    .docs-search-result strong {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--cyan);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .docs-search-result span {
+      display: block;
+      font-size: 12px;
+      line-height: 1.45;
+      color: oklch(1 0 0 / 0.54);
+    }
+    .docs-search-result mark {
+      background: oklch(0.74 0.14 200 / 0.18);
+      color: var(--ink);
+      border-radius: 3px;
+      padding: 0 2px;
+    }
+    .docs-search-empty {
+      padding: 12px;
+      color: oklch(1 0 0 / 0.46);
+      font-size: 12.5px;
+    }
     .side-group { margin-bottom: 28px; }
     .side-h {
       display: flex; align-items: center; gap: 8px;
@@ -207,24 +282,47 @@
     .surface-card p { color: var(--muted); font-size: 14px; line-height: 1.55; margin: 0; flex: 1; }
     .surface-card .arrow { display: inline-flex; align-items: center; gap: 6px; color: var(--cyan); font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
 
+    .docs-section-break {
+      margin: 72px 0 40px;
+      padding-top: 28px;
+      border-top: 1px solid oklch(1 0 0 / 0.14);
+      position: relative;
+    }
+    .docs-section-break span {
+      position: absolute;
+      top: -10px;
+      left: 0;
+      padding-right: 16px;
+      background: var(--bg);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cyan);
+    }
+    .docs-section-break + .docs-h2 { margin-top: 0; }
+
+    .side-group + .side-group {
+      margin-top: 22px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+    }
+
     /* slash command explorer */
     .slash-console {
-      margin: 24px 0 34px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      overflow: hidden;
-      background:
-        radial-gradient(760px 360px at 80% 0%, oklch(0.74 0.14 200 / 0.13), transparent 68%),
-        radial-gradient(620px 340px at 0% 100%, oklch(0.78 0.16 145 / 0.08), transparent 70%),
-        oklch(0.052 0.032 204 / 0.88);
-      box-shadow: 0 28px 80px rgba(0,0,0,0.25), inset 0 1px 0 oklch(1 0 0 / 0.04);
+      margin: 28px 0 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
     .slash-hero {
       display: grid;
-      grid-template-columns: 1fr 280px;
-      gap: 32px;
-      padding: 32px;
-      border-bottom: 1px solid var(--line);
+      grid-template-columns: 1fr 260px;
+      gap: 28px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: oklch(0.058 0.034 200 / 0.55);
     }
     .slash-label {
       font-family: var(--mono);
@@ -238,11 +336,11 @@
       font-family: var(--display);
       font-style: italic;
       font-weight: 900;
-      font-size: clamp(32px, 5vw, 56px);
+      font-size: clamp(28px, 4vw, 44px);
       line-height: 0.95;
       letter-spacing: -0.02em;
       color: var(--ink);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
     .slash-title em { color: var(--cyan); font-style: inherit; }
     .slash-lede {
@@ -279,14 +377,14 @@
     }
     .slash-runway {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1px;
-      background: var(--line);
-      border-bottom: 1px solid var(--line);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
     }
     .slash-runway div {
-      padding: 18px 20px;
-      background: oklch(0.045 0.03 204 / 0.78);
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: oklch(0.058 0.034 200 / 0.5);
       min-width: 0;
     }
     .slash-runway code {
@@ -306,71 +404,94 @@
       line-height: 1.45;
     }
     .cmd-clusters {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1px;
-      background: var(--line);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
     .cmd-cluster {
-      background: oklch(0.058 0.034 200 / 0.86);
-      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: oklch(0.058 0.034 200 / 0.45);
+      overflow: hidden;
+      transition: border-color .2s;
+    }
+    .cmd-cluster[open] {
+      border-color: oklch(0.74 0.14 200 / 0.28);
+      background: oklch(0.058 0.034 200 / 0.65);
     }
     .cmd-cluster summary {
       list-style: none;
       cursor: pointer;
-      min-height: 86px;
-      padding: 18px 20px;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 16px;
-      align-items: center;
+      padding: 16px 18px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
       color: var(--ink);
       transition: background .2s;
     }
-    .cmd-cluster summary:hover { background: oklch(0.74 0.14 200 / 0.055); }
+    .cmd-cluster summary:hover { background: oklch(0.74 0.14 200 / 0.04); }
     .cmd-cluster summary::-webkit-details-marker { display: none; }
+    .cmd-summary-main {
+      flex: 1;
+      min-width: 0;
+    }
+    .cmd-cluster summary::after {
+      content: '+';
+      flex-shrink: 0;
+      font-family: var(--mono);
+      font-size: 15px;
+      line-height: 1;
+      color: oklch(1 0 0 / 0.32);
+      margin-top: 2px;
+    }
+    .cmd-cluster[open] summary::after {
+      content: '−';
+      color: var(--cyan);
+    }
     .cmd-title {
       display: block;
-      font-family: var(--display);
-      font-style: italic;
-      font-weight: 900;
-      font-size: 28px;
-      line-height: 1.0;
-      letter-spacing: -0.01em;
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 1.25;
+      color: var(--ink);
       margin-bottom: 4px;
     }
     .cmd-desc {
       display: block;
-      color: oklch(1 0 0 / 0.50);
-      font-size: 12.5px;
-      line-height: 1.4;
+      color: oklch(1 0 0 / 0.52);
+      font-size: 13px;
+      line-height: 1.45;
     }
     .cmd-count {
-      align-self: center;
+      flex-shrink: 0;
       font-family: var(--mono);
-      font-size: 10px;
+      font-size: 9px;
       color: var(--cyan);
       border: 1px solid oklch(0.74 0.14 200 / 0.22);
-      border-radius: 999px;
-      padding: 4px 10px;
+      border-radius: 4px;
+      padding: 4px 8px;
       white-space: nowrap;
-      background: oklch(0.74 0.14 200 / 0.08);
-      letter-spacing: 0.04em;
+      background: oklch(0.74 0.14 200 / 0.06);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-top: 2px;
     }
     .cmd-body {
       border-top: 1px solid var(--line);
-      padding: 0;
-      display: grid;
+      padding: 4px 0 8px;
     }
     .cmd-line {
       display: grid;
-      grid-template-columns: minmax(130px, 0.34fr) minmax(0, 1fr);
-      gap: 14px;
-      padding: 13px 18px;
-      border-bottom: 1px solid oklch(1 0 0 / 0.055);
+      grid-template-columns: minmax(148px, 0.32fr) minmax(0, 1fr);
+      gap: 12px 16px;
+      padding: 10px 18px;
       align-items: baseline;
     }
-    .cmd-line:last-child { border-bottom: 0; }
+    .cmd-line + .cmd-line {
+      border-top: 1px solid oklch(1 0 0 / 0.04);
+    }
     .cmd-line code {
       width: max-content;
       max-width: 100%;
@@ -387,13 +508,14 @@
       line-height: 1.55;
     }
     .slash-note {
-      padding: 18px 20px;
-      border-top: 1px solid var(--line);
+      padding: 16px 18px;
+      border: 1px solid var(--line-strong);
+      border-radius: 10px;
       display: grid;
       grid-template-columns: 22px minmax(0, 1fr);
       gap: 12px;
       align-items: start;
-      background: oklch(0.74 0.14 200 / 0.045);
+      background: oklch(0.74 0.14 200 / 0.05);
     }
     .slash-note .ic {
       width: 22px; height: 22px;
@@ -419,8 +541,8 @@
       .docs-side { position: relative; top: 0; max-height: none; padding-right: 0; border-right: 0; border-bottom: 1px solid var(--line); padding-bottom: 22px; }
       .surface-grid { grid-template-columns: 1fr; }
       .slash-hero { padding: 22px; }
-      .slash-stats, .slash-runway, .cmd-clusters { grid-template-columns: 1fr; }
-      .cmd-cluster summary { min-height: auto; }
+      .slash-stats, .slash-runway { grid-template-columns: 1fr; }
+      .cmd-line { grid-template-columns: 1fr; gap: 6px; }
     }
 
     /* MODAL */
@@ -465,7 +587,7 @@
 <nav class="site-nav">
   <a class="nav-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg"><path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text></svg></a>
   <div class="nav-right">
-    <a href="/features">Features</a><a href="/quickstart">Quickstart</a><a href="/benchmarks">Benchmarks</a><a href="/docs" class="nav-active">Docs</a><a onclick="openModal()" class="nav-waitlist">Waitlist</a>
+    <a href="/about">About</a><a href="/quickstart">Quickstart</a><a href="/benchmarks">Benchmarks</a><a href="/docs" class="nav-active">Docs</a><a href="/auth/login" class="nav-cta">Sign in</a><a onclick="openModal()" class="nav-waitlist">Waitlist</a>
   </div>
 </nav>
 
@@ -473,10 +595,13 @@
 
   <!-- ── SIDEBAR ── -->
   <aside class="docs-side" aria-label="Documentation navigation">
-    <div class="docs-search" role="button" tabindex="0" onclick="alert('Search coming soon — for now use ⌘F')">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <span style="flex:1">Search docs…</span>
-      <kbd>⌘K</kbd>
+    <div class="docs-search-wrap">
+      <label class="docs-search" for="meshDocsSearchInput">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="meshDocsSearchInput" type="search" placeholder="Search docs..." autocomplete="off" spellcheck="false" aria-label="Search docs" aria-controls="docsSearchResults">
+        <kbd>⌘K</kbd>
+      </label>
+      <div class="docs-search-results" id="docsSearchResults" role="listbox" aria-label="Documentation search results"></div>
     </div>
 
     <div class="side-group">
@@ -532,9 +657,9 @@
 
   <!-- ── MAIN ── -->
   <main class="docs-main">
-    <div class="docs-eyebrow">Documentation · CLI 0.3.x private alpha</div>
+    <div class="docs-eyebrow">Documentation · @trymesh/cli 0.4.98 · @trymesh/mcp 2.1.8 · private alpha</div>
     <h1 class="docs-title">Mesh in <em>five minutes.</em></h1>
-    <p class="docs-lede">Mesh is a terminal-first <strong>AI engineering operating system</strong>: capsule context, verified timelines, runtime autopsy, issue autopilot, durable company memory, and MCP access for external agents. CLI is canonical; IDE, MCP, and API wrap the same engine at different maturity levels.</p>
+    <p class="docs-lede">Mesh is a terminal-first <strong>code-context platform</strong> for AI-assisted software work: repository capsules, verified change workflows, runtime diagnostics, issue automation, and durable workspace memory. The <strong>CLI</strong> is the canonical product — slash commands and 100+ <code>workspace.*</code> agent tools. MCP exposes a focused subset for external clients; IDE and Gateway API are preview surfaces.</p>
 
     <!-- Surface grid -->
     <h2 class="docs-h2" id="welcome">Pick a <em>surface.</em></h2>
@@ -554,35 +679,37 @@
       <a class="surface-card" href="#mcp-install">
         <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M3.5 12c0-2 1-4 3-5.5M20.5 12c0 2-1 4-3 5.5M12 3.5c2 0 4 1 5.5 3M12 20.5c-2 0-4-1-5.5-3"/></svg></div>
         <h3>MCP</h3>
-        <p>Bring 112+ Mesh tools and guided prompts into Claude Code, Cursor, Windsurf, and VS Code.</p>
+        <p>Expose a focused Mesh tool profile to Claude Code, Cursor, Windsurf, and VS Code — same runtime, smaller MCP surface than the CLI.</p>
         <span class="arrow">Read · MCP ↗</span>
       </a>
       <a class="surface-card" href="#api-auth">
         <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
         <h3>Gateway API</h3>
-        <p>Programmable HTTPS endpoint. Index, search, recover spans at scale.</p>
+        <p>Hosted HTTP API coming soon. Use the CLI for indexing, search, and span recovery today.</p>
         <span class="arrow">Read · API ↗</span>
       </a>
     </div>
+
+    <div class="docs-section-break" aria-hidden="true"><span>Get started</span></div>
 
     <!-- Install -->
     <h2 class="docs-h2" id="install">Install.</h2>
     <p>Mesh is shipped as a single npm binary. macOS, Linux, and WSL2 are first-class. Node 20+ required.</p>
 
     <div class="code">
-      <div class="code-head"><span class="lang">bash</span><span>install · 1 line</span><button class="copy-btn" data-copy="npm i -g @edgarelmo/mesh-agent-cli">copy</button></div>
+      <div class="code-head"><span class="lang">bash</span><span>install · 1 line</span><button class="copy-btn" data-copy="npm i -g @trymesh/cli">copy</button></div>
 <pre><span class="d"># global install (recommended)</span>
-$ <span class="c">npm i -g @edgarelmo/mesh-agent-cli</span>
+$ <span class="c">npm i -g @trymesh/cli</span>
 
 <span class="d"># or with pnpm / yarn</span>
-$ <span class="c">pnpm add -g @edgarelmo/mesh-agent-cli</span>
-$ <span class="c">yarn global add @edgarelmo/mesh-agent-cli</span>
+$ <span class="c">pnpm add -g @trymesh/cli</span>
+$ <span class="c">yarn global add @trymesh/cli</span>
 
 <span class="d"># verify</span>
 $ <span class="c">mesh --version</span>
-<span class="g">mesh 0.3.x</span></pre>
+<span class="g">mesh 0.4.98</span></pre>
     </div>
-    <p>Global install is the recommended default. For one-off runs without installing, use <code>npx -y @edgarelmo/mesh-agent-cli</code>.</p>
+    <p>Global install is the recommended default. For one-off runs without installing, use <code>npx -y @trymesh/cli</code>. First launch prompts Mesh login for the shared LLM gateway (no AWS/Bedrock credentials required).</p>
 
     <div class="note">
       <div class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
@@ -625,9 +752,9 @@ mesh › <span class="s">/change fix voided invoices being charged</span>
       <table>
         <thead><tr><th>Concept</th><th>What it is</th></tr></thead>
         <tbody>
-          <tr><td><code>capsule</code></td><td>A compressed structural index of a workspace. ~600 tokens / 1k LOC.</td></tr>
+          <tr><td><code>capsule</code></td><td>A compressed structural index of a workspace (Tree-sitter AST, summaries, relationships). Typical reference workspaces compress ~4× vs raw source — see <a href="/benchmarks">benchmarks</a>.</td></tr>
           <tr><td><code>span</code></td><td>A byte-range in a real file. Returned verbatim — never paraphrased.</td></tr>
-          <tr><td><code>recall</code></td><td>The percent of NIAH probes Mesh answers correctly. Standard track: 100%.</td></tr>
+          <tr><td><code>recall</code></td><td>Benchmark metric: needle-in-a-haystack retrieval accuracy on the capsule track (not a CLI setting). Reported runs: 100% on the standard track — <a href="/benchmarks">details</a>.</td></tr>
           <tr><td><code>company brain</code></td><td>Durable repo memory for decisions, owners, risks, rules, and accepted patterns.</td></tr>
           <tr><td><code>timeline</code></td><td>An isolated worktree or copy where risky patches can be tested before promotion.</td></tr>
           <tr><td><code>proof bundle</code></td><td>Evidence package: diff, risks, checks, rollback notes, and audit trail.</td></tr>
@@ -637,146 +764,117 @@ mesh › <span class="s">/change fix voided invoices being charged</span>
       </table>
     </div>
 
+    <div class="docs-section-break" aria-hidden="true"><span>Slash commands</span></div>
     <h2 class="docs-h2" id="slash-command-reference">Slash commands · <em>operator surface</em>.</h2>
-    <p>Mesh's slash commands are the operator controls for its current CLI: golden path onboarding, narrow verified changes, company memory, issue autopilot, capsules, local voice, timelines, runtime autopsy, UI inspection, model routing, and safety policy.</p>
+    <p>Mesh slash commands are the operator controls for the CLI: onboarding, verified changes, workspace memory, issue automation, capsules, voice, isolated timelines, runtime diagnostics, visual inspection, model routing, and safety policy.</p>
 
     <div class="slash-console">
       <div class="slash-hero">
         <div>
           <div class="slash-label">Command registry</div>
           <div class="slash-title">One prompt line.<br><em>Many engines behind it.</em></div>
-          <p class="slash-lede">The commands below are grouped by the job they unlock. Some are simple session controls; others activate deeper Mesh systems such as issue autopilot, company brain, timeline verification, Hologram tracing, predictive repair, or semantic contract checks.</p>
+          <p class="slash-lede">Commands are grouped by function. Some are session controls; others enable issue automation, workspace memory, timeline verification, runtime tracing, predictive repair, or contract checks.</p>
         </div>
         <div class="slash-stats">
-          <div class="slash-stat"><b>45+</b>slash commands and aliases exposed by the current CLI registry</div>
-          <div class="slash-stat"><b>112+</b>MCP tools for context, patching, timelines, runtime, and discovery</div>
-          <div class="slash-stat"><b>1</b>capsule and verification engine behind CLI, MCP, IDE bridge, and API surfaces</div>
+          <div class="slash-stat"><b>20</b>top-level slash commands (namespaces + actions; legacy names auto-migrate)</div>
+          <div class="slash-stat"><b>100+</b><code>workspace.*</code> agent tools behind those commands in the terminal CLI</div>
+          <div class="slash-stat"><b>25</b>built-in MCP tools (<code>mesh_*</code>) across profiles — core ships 8</div>
         </div>
       </div>
 
       <div class="slash-runway">
-        <div><code>/start</code><span>Run the first-user golden path: doctor, optional fixes, index, status, and repo briefing.</span></div>
-        <div><code>/change &lt;goal&gt;</code><span>Make one narrow code change, run detected verification, and summarize the diff.</span></div>
-        <div><code>/autopilot</code><span>Turn a GitHub, Linear, Jira, or manual issue into a timeline patch and proof bundle.</span></div>
-        <div><code>/company</code><span>Build or query durable repo memory before planning changes.</span></div>
+        <div><code>/start</code><span>Golden path: doctor, index, status, repo briefing.</span></div>
+        <div><code>/status</code><span>One card: model, context budget, tokens, cost &amp; savings (<code>/status full</code> for detail).</span></div>
+        <div><code>/change &lt;goal&gt;</code><span>Focused edit, verification, diff summary.</span></div>
+        <div><code>/ship autopilot</code><span>Issue → verified patch → optional PR.</span></div>
       </div>
 
       <div class="cmd-clusters">
         <details class="cmd-cluster" open>
-          <summary><span><span class="cmd-title">Golden Path &amp; Autopilot</span><span class="cmd-desc">Move from first run to verified patches without hand-waving.</span></span><span class="cmd-count">ship</span></summary>
+          <summary><span class="cmd-summary-main"><span class="cmd-title">Actions</span><span class="cmd-desc">Everyday loop — plan, change, fix, compact, exit.</span></span><span class="cmd-count">11</span></summary>
           <div class="cmd-body">
-            <div class="cmd-line"><code>/start</code><span>Run doctor, optional safe setup fixes, index, status, and repo briefing for a fresh workspace.</span></div>
-            <div class="cmd-line"><code>/change &lt;small goal&gt;</code><span>Scope a narrow edit, apply a surgical patch, run detected verification, and report the diff.</span></div>
-            <div class="cmd-line"><code>/autopilot plan|run|pr</code><span>Convert an issue or manual title into a verified timeline patch, proof bundle, and optional PR.</span></div>
-            <div class="cmd-line"><code>/issues</code><span>Scan GitHub, Linear, or Jira tickets and prepare issue-to-PR work drafts.</span></div>
-            <div class="cmd-line"><code>/doctor fix</code><span>Apply safe local setup repairs while leaving shell, Git, and auth changes manual.</span></div>
+            <div class="cmd-line"><code>/help [command]</code><span>Command tree or detail for one command (<code>/commands</code> migrates here).</span></div>
+            <div class="cmd-line"><code>/plan</code><span>Toggle read-only plan mode (investigate without editing files).</span></div>
+            <div class="cmd-line"><code>/start [fix|reindex]</code><span>Onboarding: doctor + index + status + briefing.</span></div>
+            <div class="cmd-line"><code>/change &lt;goal&gt;</code><span>Focused change, run verification, summarize the diff.</span></div>
+            <div class="cmd-line"><code>/fix</code><span>Apply a background-resolved fix for the current error.</span></div>
+            <div class="cmd-line"><code>/undo</code><span>Revert the last agent file change.</span></div>
+            <div class="cmd-line"><code>/compact</code><span>Compress transcript into the session capsule.</span></div>
+            <div class="cmd-line"><code>/model [pick|list|id] [save]</code><span>Switch or persist the active model (default: Gemini 3.5 Flash).</span></div>
+            <div class="cmd-line"><code>/goal [show|set|done|block|clear]</code><span>Structured session goal.</span></div>
+            <div class="cmd-line"><code>/clear</code><span>Clear the terminal UI.</span></div>
+            <div class="cmd-line"><code>/exit</code><span>Quit (<code>/quit</code> migrates here).</span></div>
           </div>
         </details>
 
         <details class="cmd-cluster" open>
-          <summary><span><span class="cmd-title">Context &amp; Capsules</span><span class="cmd-desc">Turn raw repos into model-sized structure with exact span recovery.</span></span><span class="cmd-count">core</span></summary>
+          <summary><span class="cmd-summary-main"><span class="cmd-title">/status</span><span class="cmd-desc">Unified runtime card — replaces <code>/cost</code>, <code>/savings</code>, <code>/context</code>, <code>/why</code>.</span></span><span class="cmd-count">1</span></summary>
           <div class="cmd-body">
-            <div class="cmd-line"><code>/index</code><span>Rebuild the workspace index: summaries, AST structure, file relationships, and cache metadata.</span></div>
-            <div class="cmd-line"><code>/capsule</code><span>Inspect active capsule state, token shape, compacted memory, and exportable context artifacts.</span></div>
-            <div class="cmd-line"><code>/memory</code><span>Alias for capsule memory operations in long-running coding sessions.</span></div>
-            <div class="cmd-line"><code>/compact</code><span>Compress transcript and tool history back into the session capsule to reclaim context budget.</span></div>
-            <div class="cmd-line"><code>/distill</code><span>Refresh project-level distilled context from repository signals: symbols, dependencies, risks, and summaries.</span></div>
-          </div>
-        </details>
-
-        <details class="cmd-cluster" open>
-          <summary><span><span class="cmd-title">Voice &amp; Local Control</span><span class="cmd-desc">Operate Mesh without leaving the terminal, including local speech workflows.</span></span><span class="cmd-count">hands-free</span></summary>
-          <div class="cmd-body">
-            <div class="cmd-line"><code>/voice on</code><span>Enable voice interaction with local speech-to-text and native speech output.</span></div>
-            <div class="cmd-line"><code>/voice off</code><span>Return to typed interaction without changing the active session or capsule.</span></div>
-            <div class="cmd-line"><code>/voice setup</code><span>Initialize the local audio loop, microphone access, and speech dependencies.</span></div>
-            <div class="cmd-line"><code>/doctor voice fix</code><span>Diagnose and repair missing voice dependencies such as FFmpeg or local model assets.</span></div>
-            <div class="cmd-line"><code>/clear</code><span>Clear the terminal UI while keeping the session state intact.</span></div>
+            <div class="cmd-line"><code>/status [full]</code><span>Model, index health, context budget, token counters, and session cost in one view.</span></div>
           </div>
         </details>
 
         <details class="cmd-cluster">
-          <summary><span><span class="cmd-title">Timelines &amp; Fix Racing</span><span class="cmd-desc">Try risky changes in isolated worktrees before promotion.</span></span><span class="cmd-count">verification</span></summary>
+          <summary><span class="cmd-summary-main"><span class="cmd-title">/ship</span><span class="cmd-desc">Issue → verified change → PR pipeline.</span></span><span class="cmd-count">namespace</span></summary>
           <div class="cmd-body">
-            <div class="cmd-line"><code>/fork</code><span>Create competing implementation paths and compare their blast radius, tests, and maintainability.</span></div>
-            <div class="cmd-line"><code>/whatif</code><span>Simulate migrations or architecture changes in alternate timelines before committing.</span></div>
-            <div class="cmd-line"><code>/bisect</code><span>Run symptom-driven git bisect with verification commands to locate the introducing commit.</span></div>
-            <div class="cmd-line"><code>/fix</code><span>Apply prepared speculative fixes for currently detected compiler, lint, or runtime failures.</span></div>
-            <div class="cmd-line"><code>/undo</code><span>Surgically roll back the latest agent-applied file change without resetting unrelated work.</span></div>
+            <div class="cmd-line"><code>/ship autopilot …</code><span>Turn an issue into a verified patch + proof bundle (<code>/autopilot</code>).</span></div>
+            <div class="cmd-line"><code>/ship issues …</code><span>Scan GitHub / Linear / Jira issues (<code>/issues</code>).</span></div>
+            <div class="cmd-line"><code>/ship intent …</code><span>Compile product intent into a phased contract (<code>/intent</code>).</span></div>
+            <div class="cmd-line"><code>/ship fork …</code><span>Competing implementations in isolated branches (<code>/fork</code>).</span></div>
+            <div class="cmd-line"><code>/ship production …</code><span>Production telemetry / readiness gate (<code>/production</code>).</span></div>
+            <div class="cmd-line"><code>/ship audit …</code><span>Verify or replay the audit trail (<code>/audit</code>).</span></div>
           </div>
         </details>
 
         <details class="cmd-cluster">
-          <summary><span><span class="cmd-title">Runtime Autopsy</span><span class="cmd-desc">Capture why a program broke, not just where the stack trace ended.</span></span><span class="cmd-count">hologram</span></summary>
+          <summary><span class="cmd-summary-main"><span class="cmd-title">/debug</span><span class="cmd-desc">Diagnostics, indexing, bisect, runtime traces.</span></span><span class="cmd-count">namespace</span></summary>
           <div class="cmd-body">
-            <div class="cmd-line"><code>/hologram start &lt;cmd&gt;</code><span>Inject runtime observation into a command and persist stack traces, logs, and crash artifacts.</span></div>
-            <div class="cmd-line"><code>/replay</code><span>Replay production traces locally and compare observed behavior against expected code paths.</span></div>
-            <div class="cmd-line"><code>/production</code><span>Read production signal summaries and prioritize the highest-risk regressions.</span></div>
-            <div class="cmd-line"><code>/causal</code><span>Build or query causal links across files, tests, churn, failures, and risk zones.</span></div>
-            <div class="cmd-line"><code>/audit</code><span>Verify hash-chained logs for tool actions, decisions, and promotion trails.</span></div>
+            <div class="cmd-line"><code>/debug doctor [fix]</code><span>Environment + gateway diagnostics (<code>/doctor</code>).</span></div>
+            <div class="cmd-line"><code>/debug index [repair]</code><span>Diagnose or rebuild workspace index (<code>/index</code>). Or run <code>mesh index</code> headless.</span></div>
+            <div class="cmd-line"><code>/debug bisect …</code><span>Symptom-driven git bisect (<code>/bisect</code>).</span></div>
+            <div class="cmd-line"><code>/debug replay …</code><span>Replay a production trace locally (<code>/replay</code>).</span></div>
+            <div class="cmd-line"><code>/debug whatif …</code><span>Counterfactual / migration analysis (<code>/whatif</code>).</span></div>
+            <div class="cmd-line"><code>/debug hologram …</code><span>Run a process with V8 memory telemetry (<code>/hologram</code>).</span></div>
+            <div class="cmd-line"><code>/debug causal …</code><span>Causal dependency graph (<code>/causal</code>).</span></div>
+            <div class="cmd-line"><code>/debug repair …</code><span>Predictive repair queue (<code>/repair</code>).</span></div>
+            <div class="cmd-line"><code>/debug sheriff …</code><span>Semantic drift fingerprints (<code>/sheriff</code>).</span></div>
           </div>
         </details>
 
         <details class="cmd-cluster">
-          <summary><span><span class="cmd-title">UI-to-Code &amp; Cockpit</span><span class="cmd-desc">Inspect frontend surfaces and supervise Mesh visually when terminal output is not enough.</span></span><span class="cmd-count">visual</span></summary>
+          <summary><span class="cmd-summary-main"><span class="cmd-title">/memory</span><span class="cmd-desc">Capsule + durable repo knowledge.</span></span><span class="cmd-count">namespace</span></summary>
           <div class="cmd-body">
-            <div class="cmd-line"><code>/inspect</code><span>Attach the visual portal for UI-level inspection and intent-based code navigation.</span></div>
-            <div class="cmd-line"><code>/stop-inspect</code><span>Detach the active visual portal and end the browser inspection bridge.</span></div>
-            <div class="cmd-line"><code>/preview</code><span>Capture frontend previews or screenshots directly from the terminal workflow.</span></div>
-            <div class="cmd-line"><code>/dashboard</code><span>Launch the local dashboard with run supervision, graph views, and live event streams.</span></div>
-            <div class="cmd-line"><code>/entangle &lt;path&gt;</code><span>Link another repo so Mesh can reason across frontend/backend or multi-repo boundaries.</span></div>
+            <div class="cmd-line"><code>/memory show</code><span>Session capsule (<code>/capsule</code> migrates here).</span></div>
+            <div class="cmd-line"><code>/memory brain …</code><span>Cross-workspace fix patterns (<code>/brain</code>).</span></div>
+            <div class="cmd-line"><code>/memory company …</code><span>Durable decisions &amp; ownership (<code>/company</code>).</span></div>
+            <div class="cmd-line"><code>/memory learn …</code><span>Engineering memory (<code>/learn</code>).</span></div>
+            <div class="cmd-line"><code>/memory distill</code><span>Refresh project brain from recent changes (<code>/distill</code>).</span></div>
+            <div class="cmd-line"><code>/memory twin …</code><span>Structural codebase model (<code>/twin</code>).</span></div>
           </div>
         </details>
 
         <details class="cmd-cluster">
-          <summary><span><span class="cmd-title">Digital Twin &amp; Memory</span><span class="cmd-desc">Make the codebase explain itself, remember conventions, and forecast impact.</span></span><span class="cmd-count">intelligence</span></summary>
+          <summary><span class="cmd-summary-main"><span class="cmd-title">/config · /tui · /lab</span><span class="cmd-desc">Settings, terminal UI, experimental tools.</span></span><span class="cmd-count">3</span></summary>
           <div class="cmd-body">
-            <div class="cmd-line"><code>/twin</code><span>Build or read a digital twin of routes, package shape, risk zones, and code relationships.</span></div>
-            <div class="cmd-line"><code>/repair</code><span>Prioritize predictive repair opportunities from diagnostics and runtime signals.</span></div>
-            <div class="cmd-line"><code>/company</code><span>Build, query, or record durable company codebase memory: decisions, risks, owners, and patterns.</span></div>
-            <div class="cmd-line"><code>/learn</code><span>Extract durable engineering patterns from accepted work, git history, and team conventions.</span></div>
-            <div class="cmd-line"><code>/intent</code><span>Compile a product request into implementation constraints, files, tests, and rollback checkpoints.</span></div>
-            <div class="cmd-line"><code>/brain</code><span>Query Mesh Brain global fix patterns and inspect telemetry contribution status.</span></div>
-            <div class="cmd-line"><code>/lab</code><span>Run the Autonomous Discovery Lab over causal, repair, and workspace signals.</span></div>
-            <div class="cmd-line"><code>/ghost</code><span>Replay local implementation style learned from previous commits and accepted patches.</span></div>
-            <div class="cmd-line"><code>/resurrect</code><span>Restore saved intent, open questions, and next actions from a previous cognitive checkpoint.</span></div>
-          </div>
-        </details>
-
-        <details class="cmd-cluster">
-          <summary><span><span class="cmd-title">Safety &amp; Governance</span><span class="cmd-desc">Control risk, cost, contracts, and model routing before the agent acts.</span></span><span class="cmd-count">policy</span></summary>
-          <div class="cmd-body">
-            <div class="cmd-line"><code>/approvals</code><span>Configure auto-approval behavior for higher-risk tools and command execution.</span></div>
-            <div class="cmd-line"><code>/steps</code><span>Set the maximum tool-step budget for the active interactive session.</span></div>
-            <div class="cmd-line"><code>/cost</code><span>Estimate session cost from token counters and model pricing metadata.</span></div>
-            <div class="cmd-line"><code>/model</code><span>Select, list, or persist the active model choice from the provider catalog.</span></div>
-            <div class="cmd-line"><code>/sheriff</code><span>Detect semantic drift by checking contract fingerprints after refactors.</span></div>
-            <div class="cmd-line"><code>/tribunal</code><span>Run a three-perspective review across correctness, performance, and resilience.</span></div>
-          </div>
-        </details>
-
-        <details class="cmd-cluster">
-          <summary><span><span class="cmd-title">Setup, Help &amp; Exit</span><span class="cmd-desc">The small controls that keep the interactive shell understandable.</span></span><span class="cmd-count">session</span></summary>
-          <div class="cmd-body">
-            <div class="cmd-line"><code>/help</code><span>Print the available slash commands and usage hints in the terminal.</span></div>
-            <div class="cmd-line"><code>/commands</code><span>Alias for command discovery when you want the registry view.</span></div>
-            <div class="cmd-line"><code>/setup</code><span>Run interactive or scripted setup for providers, theme, cloud sync, and voice defaults.</span></div>
-            <div class="cmd-line"><code>/doctor</code><span>Check local Node/tooling/provider configuration and repair common environment problems.</span></div>
-            <div class="cmd-line"><code>/sync</code><span>Inspect local/cloud cache sync status, latency, and coverage details.</span></div>
-            <div class="cmd-line"><code>/exit</code><span>Gracefully leave the current Mesh CLI session.</span></div>
+            <div class="cmd-line"><code>/config setup</code><span>Settings wizard (<code>/setup</code>).</span></div>
+            <div class="cmd-line"><code>/config voice …</code><span>Speech-to-speech (<code>/voice</code>).</span></div>
+            <div class="cmd-line"><code>/config approvals|steps|daemon|sync|entangle|resume|reset|debug</code><span>Session policy &amp; integrations.</span></div>
+            <div class="cmd-line"><code>/tui color|statusline|copy|export|search|keys|tools</code><span>Theme, statusline, transcript utilities.</span></div>
+            <div class="cmd-line"><code>/lab run|ghost|synthesize|tribunal</code><span>Experimental analysis (<code>MESH_EXPERIMENTAL=1</code>).</span></div>
+            <div class="cmd-line"><code>/mesh gc</code><span>Garbage-collect orphaned <code>.mesh</code> state.</span></div>
+            <div class="cmd-line"><code>/dashboard</code><span>Open the local operations dashboard in the browser.</span></div>
           </div>
         </details>
       </div>
 
       <div class="slash-note">
         <div class="ic">i</div>
-        <p>The 122-feature map still describes the broader product ambition. The live CLI registry is the source of truth for what users can type today; deeper tool calls run behind slash commands when a workflow needs indexing, timelines, runtime capture, semantic search, issue automation, or multi-agent delegation.</p>
+        <p><strong>Legacy names still work.</strong> Typing an old command (e.g. <code>/index</code>, <code>/doctor</code>, <code>/cost</code>) prints a one-line migration hint to the new namespace. Run <code>/help</code> for the full tree. The interactive CLI uses an Ink TUI; headless indexing: <code>mesh index</code>.</p>
       </div>
     </div>
 
-    <hr>
-
     <!-- ─────────── CLI ─────────── -->
+    <div class="docs-section-break" aria-hidden="true"><span>CLI</span></div>
     <h2 class="docs-h2" id="cli-overview">CLI · <em>overview</em>.</h2>
     <p>The terminal CLI is the canonical Mesh experience. Everything else (IDE, MCP, API) wraps the same engine.</p>
 
@@ -785,27 +883,30 @@ mesh › <span class="s">/change fix voided invoices being charged</span>
       <table>
         <thead><tr><th>Command</th><th>Purpose</th></tr></thead>
         <tbody>
-          <tr><td><code>mesh</code></td><td>Open an interactive agent session in the current directory.</td></tr>
-          <tr><td><code>mesh init</code></td><td>Initialize the first-user golden path for a workspace.</td></tr>
-          <tr><td><code>/start</code></td><td>Run doctor, safe setup fixes, index, status, and repo briefing from inside the shell.</td></tr>
-          <tr><td><code>/change &lt;goal&gt;</code></td><td>Make one narrow verified edit with detected checks and a diff summary.</td></tr>
-          <tr><td><code>/company query &lt;question&gt;</code></td><td>Search durable company codebase memory before planning a change.</td></tr>
-          <tr><td><code>/autopilot run &lt;issue&gt;</code></td><td>Plan, patch in a timeline, verify, review, and write a proof bundle.</td></tr>
-          <tr><td><code>/doctor</code></td><td>Verify auth, gateway connectivity, local environment, and optional fixes.</td></tr>
+          <tr><td><code>mesh</code></td><td>Open an interactive Ink TUI session in the current directory.</td></tr>
+          <tr><td><code>mesh init</code></td><td>First-run setup and repo briefing (non-interactive onboarding).</td></tr>
+          <tr><td><code>mesh index</code></td><td>Headless workspace indexing — no LLM, no login prompt.</td></tr>
+          <tr><td><code>/start</code></td><td>Golden path inside the shell: doctor, index, status, briefing.</td></tr>
+          <tr><td><code>/status</code></td><td>Model, index health, tokens, cost &amp; savings in one card.</td></tr>
+          <tr><td><code>/change &lt;goal&gt;</code></td><td>One verified edit with detected checks and a diff summary.</td></tr>
+          <tr><td><code>/memory company query …</code></td><td>Search durable repo memory before planning a change.</td></tr>
+          <tr><td><code>/ship autopilot run …</code></td><td>Issue → timeline patch → verification → proof bundle.</td></tr>
+          <tr><td><code>/debug doctor</code></td><td>Auth, gateway, Node/tooling diagnostics and safe fixes.</td></tr>
+          <tr><td><code>mesh bench</code></td><td>Benchmark Mesh vs raw LLM token efficiency.</td></tr>
           <tr><td><code>mesh support</code></td><td>Collect auth-free bug report diagnostics for support.</td></tr>
         </tbody>
       </table>
     </div>
 
     <h3 class="docs-h3" id="cli-providers">Models &amp; keys</h3>
-    <p>The current CLI defaults to the Mesh LLM gateway with Claude 4.6 Sonnet. Power users can switch models with <code>/model</code>, use NVIDIA-hosted code models through <code>NVIDIA_API_KEY</code>, or point <code>BEDROCK_ENDPOINT</code> at a BYOK endpoint.</p>
+    <p>The CLI defaults to the Mesh LLM gateway with <strong>Gemini 3.5 Flash</strong> (<code>google/gemini-3.5-flash</code>). Sign in once with <code>mesh</code> (Supabase session); no AWS or Bedrock setup. Switch models with <code>/model</code>, route NVIDIA NIM models with <code>NVIDIA_API_KEY</code>, or point <code>MESH_ENDPOINT</code> at a custom HTTPS proxy.</p>
 
     <div class="code">
       <div class="code-head"><span class="lang">bash</span><span>models · current CLI</span><button class="copy-btn" data-copy="mesh
 /model list
-/model qwen3-coder
+/model gemini-flash
 export NVIDIA_API_KEY=nvapi-...">copy</button></div>
-<pre><span class="d"># default through the Mesh gateway</span>
+<pre><span class="d"># default through the Mesh gateway (after mesh login)</span>
 $ <span class="c">mesh</span>
 mesh › <span class="s">/model list</span>
 
@@ -815,47 +916,58 @@ mesh › <span class="s">/model qwen3-coder</span>
 <span class="d"># optional direct NVIDIA route</span>
 <span class="k">export</span> NVIDIA_API_KEY=<span class="s">nvapi-...</span>
 
-<span class="d"># optional BYOK endpoint</span>
-<span class="k">export</span> BEDROCK_ENDPOINT=<span class="s">https://your-bedrock-compatible-endpoint</span>
-<span class="k">export</span> BEDROCK_API_KEY=<span class="s">...</span></pre>
+<span class="d"># optional custom proxy (legacy alias: BEDROCK_ENDPOINT)</span>
+<span class="k">export</span> MESH_ENDPOINT=<span class="s">https://your-llm-proxy.example.com</span></pre>
     </div>
 
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Model</th><th>Catalog id / route</th><th>Notes</th></tr></thead>
+        <thead><tr><th>Model</th><th>Catalog id</th><th>Notes</th></tr></thead>
         <tbody>
-          <tr><td>Claude 4.6 Sonnet</td><td><code>us.anthropic.claude-sonnet-4-6</code></td><td>Default Mesh gateway model.</td></tr>
-          <tr><td>Claude 4.6 Opus</td><td><code>us.anthropic.claude-opus-4-6-v1</code></td><td>Higher-depth planning and review.</td></tr>
-          <tr><td>Qwen 3 Coder 480B</td><td><code>qwen/qwen3-coder-480b-a35b-instruct</code></td><td>NVIDIA code default.</td></tr>
-          <tr><td>Kimi K2.5 / DeepSeek V3.2 / Devstral 2</td><td><code>nvidia</code></td><td>Specialized reasoning and coding fallbacks.</td></tr>
-          <tr><td>Gemini 3.1 Pro / Gemini 3 Flash</td><td><code>google/*</code></td><td>Google route for powerful or fast runs.</td></tr>
-          <tr><td>Grok 4.20</td><td><code>xai/*</code></td><td>Preview reasoning or fast mode through the Google route.</td></tr>
+          <tr><td>Gemini 3.5 Flash</td><td><code>google/gemini-3.5-flash</code></td><td>Default gateway model.</td></tr>
+          <tr><td>Gemini 3.1 Pro Preview</td><td><code>google/gemini-3.1-pro-preview</code></td><td>Higher reasoning preview route.</td></tr>
+          <tr><td>Gemini 2.5 Pro</td><td><code>google/gemini-2.5-pro</code></td><td>Stable high-quality reasoning.</td></tr>
+          <tr><td>Gemini 2.5 Flash-Lite</td><td><code>google/gemini-2.5-flash-lite</code></td><td>Cheapest tier — auto-routed for trivial turns.</td></tr>
+          <tr><td>Qwen 3 Coder</td><td><code>qwen/qwen3-coder-480b-a35b-instruct</code></td><td>NVIDIA NIM code specialist.</td></tr>
+          <tr><td>Kimi K2.6</td><td><code>moonshotai/kimi-k2.6</code></td><td>NVIDIA deep reasoning.</td></tr>
+          <tr><td>DeepSeek V4 Pro</td><td><code>deepseek-ai/deepseek-v4-pro</code></td><td>NVIDIA strong generalist.</td></tr>
+          <tr><td>GLM 5</td><td><code>zai-org/glm-5-maas</code></td><td>Z.ai reasoning route.</td></tr>
+          <tr><td>Grok 4.20 Reasoning</td><td><code>xai/grok-4.20-reasoning</code></td><td>XAI reasoning via Vertex MaaS.</td></tr>
+          <tr><td>Grok 4.20 Non-Reasoning</td><td><code>xai/grok-4.20-non-reasoning</code></td><td>XAI low-latency via Vertex MaaS.</td></tr>
+          <tr><td>Llama 4</td><td><code>meta/llama-4-maverick-17b-128e-instruct</code></td><td>NVIDIA Maverick MoE route.</td></tr>
+          <tr><td>GPT-OSS 120B</td><td><code>openai/gpt-oss-120b</code></td><td>Open-weights NVIDIA route.</td></tr>
         </tbody>
       </table>
     </div>
+    <p>Run <code>/model list</code> in the shell for the full catalog. Legacy Claude/Bedrock model IDs in old settings are migrated to the Gemini default automatically.</p>
 
     <h3 class="docs-h3" id="cli-voice">Voice mode</h3>
-    <p>Speak instead of type. Voice mode runs a local Whisper turbo model — nothing leaves your machine.</p>
+    <p>Speak instead of type from inside the interactive CLI. Voice uses local speech-to-text — audio stays on your machine.</p>
 
     <div class="code">
-      <div class="code-head"><span class="lang">bash</span><span>voice</span><button class="copy-btn" data-copy="mesh voice install && mesh --voice">copy</button></div>
-<pre>$ <span class="c">mesh voice install</span>     <span class="d"># one-time, ~120MB model</span>
-$ <span class="c">mesh --voice</span>            <span class="d"># launch in voice mode</span>
+      <div class="code-head"><span class="lang">bash</span><span>voice</span><button class="copy-btn" data-copy="mesh
+/config voice setup
+/config voice on">copy</button></div>
+<pre>$ <span class="c">mesh</span>
+mesh › <span class="s">/config voice setup</span>   <span class="d"># one-time: local model + mic permissions</span>
+mesh › <span class="s">/config voice on</span>      <span class="d"># enable voice in this session</span>
 
-<span class="g">✓ whisper-turbo loaded</span>
-<span class="d">🎙  press [space] to talk · [esc] to cancel</span></pre>
+<span class="g">✓ voice loop ready</span>
+<span class="d">🎙  press [space] to talk · [esc] to cancel</span>
+mesh › <span class="s">/debug doctor voice fix</span>  <span class="d"># repair FFmpeg / model assets if needed</span></pre>
     </div>
 
     <hr>
 
     <!-- ─────────── IDE ─────────── -->
+    <div class="docs-section-break" aria-hidden="true"><span>IDE</span></div>
     <h2 class="docs-h2" id="ide-launch">IDE · <em>preview status</em>.</h2>
     <p>The Mesh IDE is a desktop-first workbench shell: React/Electron UI, Monaco editor, file explorer, terminal SSE, git status/diff/commit APIs, and an assistant/action contract.</p>
     <p><strong>Status:</strong> the current IDE is not the canonical production agent yet. The assistant bridge to the real Mesh runtime is in progress; use the CLI or MCP server for verified agent work today.</p>
 
     <ol>
       <li>Use Mesh CLI as the source of truth for agent execution.</li>
-      <li>Run <code>mesh</code>, <code>/start</code>, and <code>/index</code> in your repository first.</li>
+      <li>Run <code>mesh</code>, <code>/start</code>, and <code>/debug index</code> (or <code>mesh index</code>) in your repository first.</li>
       <li>Use the IDE preview for workbench exploration, file navigation, terminal, and git surfaces.</li>
       <li>Watch the runtime bridge milestone before relying on IDE chat for production changes.</li>
     </ol>
@@ -865,17 +977,23 @@ $ <span class="c">mesh --voice</span>            <span class="d"># launch in voi
       <p><strong>Runtime bridge in progress.</strong> The planned architecture keeps the IDE as a separate product, but routes assistant turns through the shared Mesh runtime instead of a stub response layer.</p>
     </div>
 
+    <h3 class="docs-h3" id="ide-first-launch">First launch on macOS</h3>
+    <p>The IDE is currently distributed unsigned (no Apple Developer Program yet). After downloading <code>Mesh.dmg</code> and dragging <strong>Mesh IDE.app</strong> into your <code>/Applications</code> folder, macOS may show <em>"Mesh IDE is damaged and can't be opened"</em>. That's macOS Gatekeeper rejecting any binary without Apple-issued notarization.</p>
+    <p>Run this in Terminal once and the warning goes away:</p>
+    <pre><code>xattr -cr "/Applications/Mesh IDE.app"</code></pre>
+    <p>The command removes the <code>com.apple.quarantine</code> attribute Chrome/Safari adds to downloaded files. Notarized builds will land once we register with the Apple Developer Program.</p>
+
     <h3 class="docs-h3" id="ide-shortcuts">Shortcuts</h3>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Action</th><th>Shortcut</th></tr></thead>
         <tbody>
           <tr><td>Open command palette</td><td><kbd>⌘K</kbd> / <kbd>Ctrl K</kbd></td></tr>
-          <tr><td>Toggle Mesh chat panel</td><td><kbd>⌘L</kbd> / <kbd>Ctrl L</kbd></td></tr>
-          <tr><td>Index / re-index workspace</td><td><kbd>⌘⇧I</kbd></td></tr>
-          <tr><td>Quick file open</td><td><kbd>⌘P</kbd></td></tr>
-          <tr><td>Structural search</td><td><kbd>⌘⇧F</kbd></td></tr>
-          <tr><td>Apply suggested patch</td><td><kbd>⌘↵</kbd></td></tr>
+          <tr><td>Quick file open</td><td><kbd>⌘P</kbd> / <kbd>Ctrl P</kbd></td></tr>
+          <tr><td>Toggle sidebar</td><td><kbd>⌘B</kbd> / <kbd>Ctrl B</kbd></td></tr>
+          <tr><td>Toggle terminal panel</td><td><kbd>⌘J</kbd> / <kbd>Ctrl J</kbd></td></tr>
+          <tr><td>Toggle assistant panel</td><td><kbd>⌘/</kbd> / <kbd>Ctrl /</kbd></td></tr>
+          <tr><td>Toggle editor split</td><td><kbd>⌘⌥2</kbd> / <kbd>Ctrl Alt 2</kbd></td></tr>
         </tbody>
       </table>
     </div>
@@ -883,34 +1001,32 @@ $ <span class="c">mesh --voice</span>            <span class="d"># launch in voi
     <hr>
 
     <!-- ─────────── MCP ─────────── -->
+    <div class="docs-section-break" aria-hidden="true"><span>MCP server</span></div>
     <h2 class="docs-h2" id="mcp-install">MCP · <em>install &amp; run</em>.</h2>
-    <p>The Mesh MCP distribution exposes the Mesh engineering agent as a high-performance MCP server. Claude Code, Claude Desktop, Cursor, Windsurf, and VS Code can use it as a structured context, patching, timeline, and runtime-debugging layer.</p>
+    <p><code>@trymesh/mcp</code> is a stdio MCP server for Claude Code, Claude Desktop, Cursor, Windsurf, and VS Code. It exposes profile-based <code>mesh_*</code> tools (<strong>25</strong> built-in tools across profiles; <strong>8</strong> in default <code>core</code>). The full interactive slash-command workflow and <strong>100+</strong> <code>workspace.*</code> tools still live in the terminal CLI.</p>
 
     <div class="code">
-      <div class="code-head"><span class="lang">bash</span><span>mcp · install &amp; doctor</span><button class="copy-btn" data-copy="npx @edgarelmo/mesh-mcp install
-npx @edgarelmo/mesh-mcp doctor">copy</button></div>
-<pre>$ <span class="c">npx @edgarelmo/mesh-mcp install</span>
-$ <span class="c">npx @edgarelmo/mesh-mcp doctor</span>
+      <div class="code-head"><span class="lang">bash</span><span>mcp · stdio server</span><button class="copy-btn" data-copy="npx -y @trymesh/mcp">copy</button></div>
+<pre>$ <span class="c">npx -y @trymesh/mcp</span>
 
-<span class="d">▸ detecting Claude Desktop, Claude Code, Cursor, Windsurf</span>
-<span class="g">✓ MCP config installed</span>
-<span class="g">✓ 112+ Mesh tools available</span>
-  <span class="d">• workspace.ask_codebase</span>
-  <span class="d">• workspace.patch_surgical</span>
-  <span class="d">• workspace.timeline_*</span>
-  <span class="d">• runtime.start</span></pre>
+<span class="d">▸ stdio MCP server · profile: core (8 tools)</span>
+<span class="g">✓ mesh_workspace_status</span>
+<span class="g">✓ mesh_search</span>
+<span class="g">✓ mesh_read_capsule</span>
+<span class="g">✓ mesh_read_targeted</span>
+  <span class="d">… review · terminal · memory · full profiles available</span></pre>
     </div>
-    <p>For local development and freshest features, Mesh MCP automatically bridges to a local <code>@edgarelmo/mesh-agent-cli</code> when found on the desktop.</p>
+    <p>MCP now includes timelines/impact/review/memory tools in non-core profiles. Use <code>mesh</code> in the terminal when you need full interactive orchestration (slash workflows, approvals, long-run state, and session-level control).</p>
 
     <h3 class="docs-h3" id="mcp-claude">Manual Claude / Cursor config</h3>
-    <p>The installer handles common clients automatically. For manual stdio setup, point your MCP client at <code>npx -y @edgarelmo/mesh-mcp</code> and set the workspace path:</p>
+    <p>Add the server manually in your MCP client config. Point stdio at <code>npx -y @trymesh/mcp</code> and set the workspace path:</p>
 
     <div class="code">
       <div class="code-head"><span class="lang">json</span><span>mcp config</span><button class="copy-btn" data-copy='{
   "mcpServers": {
     "mesh": {
       "command": "npx",
-      "args": ["-y", "@edgarelmo/mesh-mcp"],
+      "args": ["-y", "@trymesh/mcp"],
       "env": { "MESH_WORKSPACE_PATH": "/absolute/path/to/your/project" }
     }
   }
@@ -919,7 +1035,7 @@ $ <span class="c">npx @edgarelmo/mesh-mcp doctor</span>
   <span class="s">"mcpServers"</span>: {
     <span class="s">"mesh"</span>: {
       <span class="s">"command"</span>: <span class="s">"npx"</span>,
-      <span class="s">"args"</span>: [<span class="s">"-y"</span>, <span class="s">"@edgarelmo/mesh-mcp"</span>],
+      <span class="s">"args"</span>: [<span class="s">"-y"</span>, <span class="s">"@trymesh/mcp"</span>],
       <span class="s">"env"</span>: {
         <span class="s">"MESH_WORKSPACE_PATH"</span>: <span class="s">"/absolute/path/to/your/project"</span>
       }
@@ -929,18 +1045,20 @@ $ <span class="c">npx @edgarelmo/mesh-mcp doctor</span>
     </div>
     <p>Cursor and Windsurf use the same stdio command. Claude Code users can keep the generated config and let the installer update it.</p>
 
-    <h3 class="docs-h3" id="mcp-tools">Common tools (subset)</h3>
-    <p>Mesh MCP exposes a broad tool surface. The table below lists only the most common entry points.</p>
+    <h3 class="docs-h3" id="mcp-tools">MCP tools (core profile)</h3>
+    <p>These are the default <code>mesh_*</code> tools in the <code>core</code> profile. Additional profiles (<code>review</code>, <code>terminal</code>, <code>memory</code>, <code>full</code>) add risk/test, command, memory, and timeline/impact capabilities. The full <code>workspace.*</code> catalog remains CLI-native.</p>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Tool</th><th>Args</th><th>Returns</th></tr></thead>
+        <thead><tr><th>Tool</th><th>Purpose</th></tr></thead>
         <tbody>
-          <tr><td><code>workspace.ask_codebase</code></td><td><code>{ query, mode }</code></td><td>Semantic answer with source-backed file references.</td></tr>
-          <tr><td><code>workspace.patch_surgical</code></td><td><code>{ path, patch }</code></td><td>Pinpoint file edits without dumping whole files into context.</td></tr>
-          <tr><td><code>workspace.timeline_*</code></td><td><code>{ action, command }</code></td><td>Create, patch, run, compare, and promote isolated timelines.</td></tr>
-          <tr><td><code>runtime.start</code></td><td><code>{ command }</code></td><td>Run commands under runtime observation and capture failure evidence.</td></tr>
-          <tr><td><code>workspace.company_brain</code></td><td><code>{ action, query }</code></td><td>Build or query durable repo memory.</td></tr>
-          <tr><td><code>workspace.issue_autopilot</code></td><td><code>{ action, issue }</code></td><td>Plan issue-to-PR workflows with timelines and proof bundles.</td></tr>
+          <tr><td><code>mesh_workspace_status</code></td><td>Indexing counts and workspace health.</td></tr>
+          <tr><td><code>mesh_search</code></td><td>Intent-to-file search with compact matches.</td></tr>
+          <tr><td><code>mesh_read_capsule</code></td><td>Capsule-oriented file context by tier.</td></tr>
+          <tr><td><code>mesh_read_targeted</code></td><td>Targeted symbol read with context lines.</td></tr>
+          <tr><td><code>mesh_recover_span</code></td><td>Recover a span by handle (verbatim source).</td></tr>
+          <tr><td><code>mesh_symbol_chain</code></td><td>Follow symbol-linked context across files.</td></tr>
+          <tr><td><code>mesh_context_stats</code></td><td>Token budget and capsule cost snapshot.</td></tr>
+          <tr><td><code>mesh_describe_profile</code></td><td>List tools/resources for a profile (<code>review</code>, <code>memory</code>, <code>full</code>, …).</td></tr>
         </tbody>
       </table>
     </div>
@@ -948,116 +1066,221 @@ $ <span class="c">npx @edgarelmo/mesh-mcp doctor</span>
     <hr>
 
     <!-- ─────────── API ─────────── -->
-    <h2 class="docs-h2" id="api-auth">Gateway API · <em>auth</em>.</h2>
-    <p>The Gateway API is a thin HTTPS layer around the same engine. Bearer-token auth. Rate-limited per key.</p>
+    <div class="docs-section-break" aria-hidden="true"><span>Gateway API</span></div>
+    <h2 class="docs-h2" id="api-auth">Gateway API · <em>v1 blueprint (coming soon)</em>.</h2>
+    <p>The hosted HTTPS Gateway API is <strong>coming soon</strong>. The shape below is the intended v1 contract so teams can design integrations early. Today, use the <strong>CLI</strong> as the production path.</p>
 
-    <div class="code">
-      <div class="code-head"><span class="lang">bash</span><span>auth header</span><button class="copy-btn" data-copy='curl https://api.mesh.dev/v1/me \
-  -H "Authorization: Bearer $MESH_KEY"'>copy</button></div>
-<pre>$ <span class="c">curl https://api.mesh.dev/v1/me \</span>
-    <span class="c">-H</span> <span class="s">"Authorization: Bearer $MESH_KEY"</span>
-
-<span class="g">{ "id": "usr_8kX9", "plan": "preview", "rate_limit": 60 }</span></pre>
+    <div class="note">
+      <div class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <p><strong>Availability:</strong> API endpoints are <strong>not live yet</strong>. Expected launch is soon. Until then, run <code>mesh</code> + <code>/start</code> or <code>mesh index</code> locally for indexing/search/recovery workflows.</p>
     </div>
 
-    <h3 class="docs-h3" id="api-capsules">Capsules</h3>
-    <p>Index a repo. Returns a <code>capsule_id</code> you can query against.</p>
+    <h3 class="docs-h3" id="api-capsules">Auth, workspaces, and indexing jobs</h3>
+    <p>Planned auth is Bearer-token based, scoped to one or more workspaces. Indexing is asynchronous and returns a job id so large repositories can build in the background.</p>
 
     <div class="code">
-      <div class="code-head"><span class="lang">bash</span><span>POST /v1/capsules</span><button class="copy-btn" data-copy='curl -X POST https://api.mesh.dev/v1/capsules \
-  -H "Authorization: Bearer $MESH_KEY" \
-  -d "{"repo":"github.com/acme/payments","branch":"main"}"'>copy</button></div><pre>$ <span class="c">curl -X POST https://api.mesh.dev/v1/capsules \</span>
-    <span class="c">-H</span> <span class="s">"Authorization: Bearer $MESH_KEY"</span> \
-    <span class="c">-d</span> <span class="s">'{"repo":"github.com/acme/payments","branch":"main"}'</span>
+      <div class="code-head"><span class="lang">http</span><span>auth + workspace + index job</span><button class="copy-btn" data-copy='POST /v1/workspaces/{workspaceId}/index
+Authorization: Bearer msk_live_xxx
+Content-Type: application/json
 
-<span class="g">{
-  "capsule_id": "cap_8kX9z2a",
-  "files": 3174,
-  "tokens_in": 2400000,
-  "tokens_out": 612000,
-  "ratio": 3.92,
-  "recall": 1.00,
-  "status": "ready"
-}</span></pre>
+{
+  "mode": "incremental",
+  "paths": ["apps/cli/src", "packages/core/src"],
+  "force": false
+}
+
+202 Accepted
+{
+  "jobId": "idx_01JY3Y9R8K2M8X4N0T3A5H7QF1",
+  "workspaceId": "ws_mesh_cli",
+  "status": "queued",
+  "queuedAt": "2026-05-27T12:20:14.112Z"
+}'>copy</button></div>
+<pre><span class="d"># auth header required on all /v1 endpoints</span>
+Authorization: <span class="c">Bearer msk_live_xxx</span>
+
+<span class="d"># create / register workspace (planned)</span>
+<span class="c">POST /v1/workspaces</span>
+{
+  <span class="s">"name"</span>: <span class="s">"mesh-cli"</span>,
+  <span class="s">"repoUrl"</span>: <span class="s">"https://github.com/dreddi-edit/mesh"</span>
+}
+
+<span class="d"># start indexing job (planned)</span>
+<span class="c">POST /v1/workspaces/{workspaceId}/index</span>
+{
+  <span class="s">"mode"</span>: <span class="s">"incremental"</span>, <span class="d"># full | incremental</span>
+  <span class="s">"paths"</span>: [<span class="s">"apps/cli/src"</span>],
+  <span class="s">"force"</span>: <span class="k">false</span>
+}
+
+<span class="d"># poll job</span>
+<span class="c">GET /v1/jobs/{jobId}</span>
+<span class="g">status: queued | running | succeeded | failed | cancelled</span></pre>
     </div>
 
-    <h3 class="docs-h3" id="api-search">Search &amp; recover</h3>
-
-    <div class="code">
-      <div class="code-head"><span class="lang">bash</span><span>GET /v1/search</span><button class="copy-btn" data-copy='curl "https://api.mesh.dev/v1/search?q=stripe.charge&capsule=cap_8kX9z2a" \
-  -H "Authorization: Bearer $MESH_KEY"'>copy</button></div>
-<pre>$ <span class="c">curl</span> <span class="s">"https://api.mesh.dev/v1/search?q=stripe.charge&amp;capsule=cap_8kX9z2a"</span> \
-    <span class="c">-H</span> <span class="s">"Authorization: Bearer $MESH_KEY"</span>
-
-<span class="g">{
-  "matches": [
-    { "path": "src/billing/invoices.ts", "line": 18, "score": 0.94 },
-    { "path": "src/webhooks.ts",         "line": 88, "score": 0.81 }
-  ]
-}</span></pre>
-    </div>
-
-    <p>Then recover the exact span — verbatim, byte-for-byte.</p>
-
-    <div class="code">
-      <div class="code-head"><span class="lang">bash</span><span>GET /v1/recover</span><button class="copy-btn" data-copy='curl "https://api.mesh.dev/v1/recover?capsule=cap_8kX9z2a&path=src/billing/invoices.ts&line=18&context=10" \
-  -H "Authorization: Bearer $MESH_KEY"'>copy</button></div>
-<pre>$ <span class="c">curl</span> <span class="s">"https://api.mesh.dev/v1/recover?capsule=cap_8kX9z2a\
-&amp;path=src/billing/invoices.ts&amp;line=18&amp;context=10"</span> \
-    <span class="c">-H</span> <span class="s">"Authorization: Bearer $MESH_KEY"</span>
-
-<span class="g">{
-  "path": "src/billing/invoices.ts",
-  "start_line": 8, "end_line": 28,
-  "sha": "a3f8b9...",
-  "source": "export async function finalizeInvoice(id) { ... }"
-}</span></pre>
-    </div>
-
-    <h3 class="docs-h3" id="api-errors">Errors</h3>
+    <h3 class="docs-h3">Index job response shape (planned)</h3>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Code</th><th>Meaning</th><th>Action</th></tr></thead>
+        <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
         <tbody>
-          <tr><td><code>401</code></td><td>Missing or invalid bearer token.</td><td>Check <code>$MESH_KEY</code>.</td></tr>
-          <tr><td><code>404</code></td><td>Capsule not found.</td><td>Re-index, capsules expire after 30 days.</td></tr>
-          <tr><td><code>422</code></td><td>Invalid query.</td><td>Inspect <code>error.detail</code> for field-level info.</td></tr>
-          <tr><td><code>429</code></td><td>Rate-limited.</td><td>Backoff. Read <code>Retry-After</code> header.</td></tr>
-          <tr><td><code>503</code></td><td>Indexing in progress.</td><td>Poll <code>GET /v1/capsules/:id</code> until <code>ready</code>.</td></tr>
+          <tr><td><code>jobId</code></td><td>string</td><td>Stable job handle for polling/cancel.</td></tr>
+          <tr><td><code>status</code></td><td>enum</td><td><code>queued</code>, <code>running</code>, <code>succeeded</code>, <code>failed</code>, <code>cancelled</code>.</td></tr>
+          <tr><td><code>progress</code></td><td>object</td><td>Includes files scanned/indexed and percent complete.</td></tr>
+          <tr><td><code>artifact</code></td><td>object|null</td><td>On success: capsule/index snapshot metadata.</td></tr>
+          <tr><td><code>error</code></td><td>object|null</td><td>On failure: normalized API error payload.</td></tr>
         </tbody>
       </table>
     </div>
 
-    <hr>
-
-    <!-- ─────────── Reference ─────────── -->
-    <h2 class="docs-h2" id="config">Configuration.</h2>
-    <p>Mesh reads local settings, user settings, and environment variables. The current CLI centers on <code>BEDROCK_ENDPOINT</code>, <code>BEDROCK_*</code> limits, the model catalog, and optional NVIDIA keys for direct code-model routing.</p>
+    <h3 class="docs-h3" id="api-capsules">Capsules and context reads (planned)</h3>
+    <p>Capsules remain the core context unit. API reads mirror what CLI workflows consume: compact file context, targeted symbol reads, and handle-based recovery.</p>
 
     <div class="code">
-      <div class="code-head"><span class="lang">bash</span><span>environment</span><button class="copy-btn" data-copy='export BEDROCK_ENDPOINT=https://mesh-llm-proxy.example.com
-export BEDROCK_MAX_TOKENS=3000
-export BEDROCK_TEMPERATURE=0
+      <div class="code-head"><span class="lang">http</span><span>capsule and targeted reads</span><button class="copy-btn" data-copy='POST /v1/workspaces/{workspaceId}/read/capsule
+Authorization: Bearer msk_live_xxx
+Content-Type: application/json
+
+{
+  "path": "apps/cli/src/agent-loop.ts",
+  "tier": "summary"
+}
+
+POST /v1/workspaces/{workspaceId}/read/targeted
+{
+  "path": "apps/cli/src/agent-loop.ts",
+  "symbol": "getSlashCommands",
+  "contextLines": 24
+}'>copy</button></div>
+<pre><span class="c">POST /v1/workspaces/{workspaceId}/read/capsule</span>
+{
+  <span class="s">"path"</span>: <span class="s">"apps/cli/src/agent-loop.ts"</span>,
+  <span class="s">"tier"</span>: <span class="s">"summary"</span> <span class="d"># summary | detailed</span>
+}
+
+<span class="c">POST /v1/workspaces/{workspaceId}/read/targeted</span>
+{
+  <span class="s">"path"</span>: <span class="s">"apps/cli/src/agent-loop.ts"</span>,
+  <span class="s">"symbol"</span>: <span class="s">"getSlashCommands"</span>,
+  <span class="s">"contextLines"</span>: <span class="n">24</span>
+}
+
+<span class="d"># handle-based recovery (planned)</span>
+<span class="c">GET /v1/workspaces/{workspaceId}/spans/{spanId}</span></pre>
+    </div>
+    <p>Current CLI behavior is unchanged: local capsule artifacts are stored under <code>~/.mesh/</code>. Hosted API storage/retention policy will be published at launch.</p>
+
+    <h3 class="docs-h3" id="api-search">Search and recovery (planned)</h3>
+    <p>v1 search is intended to support both intent search and symbol-targeted retrieval. Recovery remains handle-first (<code>spanId</code>, <code>symbolId</code>) for deterministic follow-up reads.</p>
+
+    <div class="code">
+      <div class="code-head"><span class="lang">http</span><span>search</span><button class="copy-btn" data-copy='POST /v1/workspaces/{workspaceId}/search
+Authorization: Bearer msk_live_xxx
+Content-Type: application/json
+
+{
+  "query": "where is slash command routing implemented?",
+  "mode": "hybrid",
+  "limit": 10
+}
+
+200 OK
+{
+  "results": [
+    {
+      "path": "apps/cli/src/agent-loop.ts",
+      "score": 0.92,
+      "kind": "symbol",
+      "symbol": "handleSlashCommand",
+      "spanId": "spn_01JY3YXK..."
+    }
+  ]
+}'>copy</button></div>
+<pre><span class="c">POST /v1/workspaces/{workspaceId}/search</span>
+{
+  <span class="s">"query"</span>: <span class="s">"where is slash command routing implemented?"</span>,
+  <span class="s">"mode"</span>: <span class="s">"hybrid"</span>, <span class="d"># lexical | semantic | hybrid</span>
+  <span class="s">"limit"</span>: <span class="n">10</span>
+}
+
+<span class="d"># optional continuity for multi-step workflows</span>
+<span class="s">"cursor"</span>: <span class="s">"srch_..."</span>
+<span class="s">"filters"</span>: { <span class="s">"pathPrefix"</span>: <span class="s">"apps/cli/src"</span> }</pre>
+    </div>
+
+    <h3 class="docs-h3" id="api-errors">Errors, limits, and status model (planned)</h3>
+    <p>Responses are intended to use a normalized error envelope with stable machine-readable codes. Rate limits and quotas will be account-tier based once the hosted API is available.</p>
+
+    <div class="code">
+      <div class="code-head"><span class="lang">json</span><span>error envelope</span><button class="copy-btn" data-copy='{
+  "error": {
+    "code": "WORKSPACE_NOT_INDEXED",
+    "message": "Workspace has no completed index yet.",
+    "requestId": "req_01JY3Z4...",
+    "hint": "Start POST /v1/workspaces/{workspaceId}/index and retry."
+  }
+}'>copy</button></div>
+<pre>{
+  <span class="s">"error"</span>: {
+    <span class="s">"code"</span>: <span class="s">"WORKSPACE_NOT_INDEXED"</span>,
+    <span class="s">"message"</span>: <span class="s">"Workspace has no completed index yet."</span>,
+    <span class="s">"requestId"</span>: <span class="s">"req_01JY3Z4..."</span>,
+    <span class="s">"hint"</span>: <span class="s">"Start POST /v1/workspaces/{workspaceId}/index and retry."</span>
+  }
+}</pre>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>HTTP</th><th>Code</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td>400</td><td><code>INVALID_ARGUMENT</code></td><td>Schema or parameter validation failed.</td></tr>
+          <tr><td>401</td><td><code>UNAUTHENTICATED</code></td><td>Missing/invalid bearer token.</td></tr>
+          <tr><td>403</td><td><code>FORBIDDEN</code></td><td>Token lacks workspace scope.</td></tr>
+          <tr><td>404</td><td><code>NOT_FOUND</code></td><td>Workspace/job/span handle missing.</td></tr>
+          <tr><td>409</td><td><code>INDEX_CONFLICT</code></td><td>Mutating operation conflicts with active index job.</td></tr>
+          <tr><td>429</td><td><code>RATE_LIMITED</code></td><td>Quota or burst limit exceeded.</td></tr>
+          <tr><td>500</td><td><code>INTERNAL</code></td><td>Unexpected backend error.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ─────────── Reference ─────────── -->
+    <div class="docs-section-break" aria-hidden="true"><span>Reference</span></div>
+    <h2 class="docs-h2" id="config">Configuration.</h2>
+    <p>Mesh reads repo-local settings, user settings in <code>~/.config/mesh/settings.json</code>, and environment variables. Gateway routing uses <code>MESH_ENDPOINT</code> and <code>MESH_MODEL_ID</code> (legacy <code>BEDROCK_*</code> names still work as aliases).</p>
+
+    <div class="code">
+      <div class="code-head"><span class="lang">bash</span><span>environment</span><button class="copy-btn" data-copy='export MESH_ENDPOINT=https://mesh-llm.edgar-baumann.workers.dev
+export MESH_MODEL_ID=google/gemini-3.5-flash
+export MESH_MAX_TOKENS=8000
+export MESH_TEMPERATURE=0
+export NVIDIA_API_KEY=nvapi-...
 export MESH_ENABLE_EMBEDDINGS=1
 export MESH_DISABLE_WATCHERS=1'>copy</button></div>
-<pre><span class="d"># optional custom proxy / BYOK endpoint</span>
-<span class="k">export</span> BEDROCK_ENDPOINT=<span class="s">https://mesh-llm-proxy.example.com</span>
-<span class="k">export</span> BEDROCK_API_KEY=<span class="s">...</span>
+<pre><span class="d"># Mesh LLM gateway (default; login via mesh CLI)</span>
+<span class="k">export</span> MESH_ENDPOINT=<span class="s">https://mesh-llm.edgar-baumann.workers.dev</span>
+<span class="k">export</span> MESH_MODEL_ID=<span class="s">google/gemini-3.5-flash</span>
 
-<span class="d"># runtime limits</span>
-<span class="k">export</span> BEDROCK_MAX_TOKENS=<span class="n">3000</span>
-<span class="k">export</span> BEDROCK_TEMPERATURE=<span class="n">0</span>
+<span class="d"># runtime limits (defaults: max_tokens 8000, temperature 0)</span>
+<span class="k">export</span> MESH_MAX_TOKENS=<span class="n">8000</span>
+<span class="k">export</span> MESH_TEMPERATURE=<span class="n">0</span>
+
+<span class="d"># optional direct NVIDIA NIM models</span>
+<span class="k">export</span> NVIDIA_API_KEY=<span class="s">nvapi-...</span>
 
 <span class="d"># opt-in expensive local features</span>
 <span class="k">export</span> MESH_ENABLE_EMBEDDINGS=<span class="n">1</span>
 <span class="k">export</span> MESH_ENABLE_BACKGROUND_RESOLVER=<span class="n">1</span>
 
 <span class="d"># deterministic CI/local runs</span>
-<span class="k">export</span> MESH_DISABLE_WATCHERS=<span class="n">1</span></pre>
+<span class="k">export</span> MESH_DISABLE_WATCHERS=<span class="n">1</span>
+
+<span class="d"># legacy aliases still accepted: BEDROCK_ENDPOINT, BEDROCK_MODEL_ID, …</span></pre>
     </div>
 
     <h3 class="docs-h3" id="telemetry">Telemetry</h3>
-    <p>Mesh ships with telemetry <strong>off</strong>. If you opt in (<code>telemetry.enabled = true</code>), we collect: command invocations, error types, and capsule sizes. Never source code, never queries. Disable any time.</p>
+    <p>Mesh ships with telemetry <strong>off</strong>. On first run you may be asked to opt in; that sets top-level <code>"telemetry": true</code> in <code>~/.config/mesh/settings.json</code>. When enabled, we collect anonymous session metadata (command invocations, error types, capsule sizes) — never source code or prompts. Set <code>"telemetry": false</code> any time, or <code>MESH_TELEMETRY=0</code> in the environment.</p>
 
     <h3 class="docs-h3" id="troubleshoot">Troubleshooting</h3>
     <div class="table-wrap">
@@ -1065,33 +1288,33 @@ export MESH_DISABLE_WATCHERS=1'>copy</button></div>
         <thead><tr><th>Symptom</th><th>Fix</th></tr></thead>
         <tbody>
           <tr><td>First run feels unclear</td><td>Run <code>/start</code>; it executes doctor, indexing, status, and repo briefing.</td></tr>
-          <tr><td>Gateway/model errors</td><td>Run <code>/doctor full</code>, then <code>/model list</code>; set <code>NVIDIA_API_KEY</code> only for direct NVIDIA routing.</td></tr>
+          <tr><td>Gateway/model errors</td><td>Run <code>/debug doctor</code>, re-login if needed, then <code>/model list</code>; set <code>NVIDIA_API_KEY</code> only for direct NVIDIA routing.</td></tr>
           <tr><td>Too many file watchers</td><td>Set <code>MESH_DISABLE_WATCHERS=1</code>; current releases avoid recursive full-repo watchers by default.</td></tr>
-          <tr><td>MCP client can't see Mesh</td><td>Run <code>npx @edgarelmo/mesh-mcp doctor</code> and verify <code>MESH_WORKSPACE_PATH</code>.</td></tr>
-          <tr><td>Voice mode silent</td><td>Run <code>/doctor voice fix</code>. Check FFmpeg/model assets and microphone permissions.</td></tr>
+          <tr><td>MCP client can't see Mesh</td><td>Verify <code>npx -y @trymesh/mcp</code> in client config and set <code>MESH_WORKSPACE_PATH</code> to an absolute repo path.</td></tr>
+          <tr><td>Voice mode silent</td><td>Run <code>/debug doctor voice fix</code>. Check FFmpeg/model assets and microphone permissions.</td></tr>
         </tbody>
       </table>
     </div>
 
     <div class="note danger">
       <div class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
-      <p><strong>Private alpha.</strong> Mesh CLI is in the 0.3.x line. Pin the exact package version used by your team, and treat IDE/API surfaces as preview until their runtime bridge and hosted quotas are production-complete.</p>
+      <p><strong>Private alpha.</strong> Mesh CLI is in the 0.4.x line. Pin exact versions used by your team, and treat IDE/API surfaces as preview until their runtime bridge and hosted quotas are production-complete.</p>
     </div>
 
     <h3 class="docs-h3" id="changelog">Changelog</h3>
     <ul>
-      <li><strong>0.3.20</strong> — Critical stability and auth fixes; local source is ahead of the published npm latest if not yet released.</li>
-      <li><strong>0.3.11</strong> — Username login polish for email-or-username terminal login.</li>
-      <li><strong>0.3.10</strong> — Private alpha readiness: <code>/start</code>, <code>/change</code>, <code>mesh init</code>, release smoke checks, support diagnostics, safer doctor fixes, and watcher hardening.</li>
-      <li><strong>MCP 2.1.1</strong> — Standalone MCP distribution with installer, doctor, 112+ tools, and prompts for debug, implementation, review, codebase ask, synthesize, and setup.</li>
+      <li><strong>CLI 0.4.98</strong> — current release line. Command taxonomy (20 top-level namespaces), Ink TUI, Gemini 3.5 Flash default, embedding index, and verified-change workflow hardening.</li>
+      <li><strong>MCP 2.1.8</strong> — current stdio release. Profile-based <code>mesh_*</code> surfaces (core/review/terminal/memory/full), with core fixed at 8 tools and expanded capabilities in broader profiles.</li>
+      <li><strong>CLI + MCP alignment</strong> — shared runtime concepts, but different interaction models: CLI for full interactive orchestration, MCP for profile-scoped tool access in external clients.</li>
       <li><strong>IDE preview</strong> — React/Electron workbench exists; production assistant runtime bridge is still in progress.</li>
+      <li><strong>Gateway API</strong> — Not shipped; CLI is the supported integration surface.</li>
     </ul>
 
     <hr>
 
     <p style="color:var(--dim);font-size:14px;text-align:center;margin-top:48px">
       Stuck? <a onclick="openModal()">Join the waitlist</a> for direct support during private preview, or open an issue on
-      <a href="https://github.com/dreddi-edit/homebrew-mesh.git" target="_blank" rel="noreferrer">GitHub</a>.
+      <a href="https://github.com/dreddi-edit/mesh" target="_blank" rel="noreferrer">GitHub</a>.
     </p>
   </main>
 
@@ -1099,15 +1322,27 @@ export MESH_DISABLE_WATCHERS=1'>copy</button></div>
 
 <footer>
   <a class="f-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg"><path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text></svg></a>
-  <div class="f-links"><a href="/quickstart">Quickstart</a><a href="/benchmarks">Benchmarks</a><a href="https://github.com/dreddi-edit/homebrew-mesh.git">GitHub</a></div>
-  <div class="f-copy">© 2026 Mesh Intelligence</div>
+  <div class="f-links">
+    <a href="https://github.com/dreddi-edit/mesh">Github</a>
+    <a href="https://www.npmjs.com/package/@trymesh/cli">NPM</a>
+    <a href="/license">License</a>
+    <a href="/contact">Contact</a>
+    <a href="/socials">Socials</a>
+  </div>
+  <div class="f-copy">© 2026 Mesh</div>
 </footer>
 
 <script>
 /* ── modal ── */
 function openModal(){document.getElementById('modalBg').classList.add('open');setTimeout(()=>document.getElementById('wlFirst').focus(),120)}
 function closeModal(e){const m=document.getElementById('modalBg');if(!e||e.target===m||e.currentTarget?.classList?.contains('modal-close'))m.classList.remove('open')}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape')closeModal();
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){
+    e.preventDefault();
+    document.getElementById('meshDocsSearchInput')?.focus();
+  }
+});
 async function submitWaitlist(){
   const e=document.getElementById('wlEmail'),f=document.getElementById('wlFirst'),l=document.getElementById('wlLast');
   const m=document.getElementById('wlMsg'),btn=document.getElementById('wlSubmit');
@@ -1138,6 +1373,8 @@ document.querySelectorAll('.copy-btn').forEach(btn=>{
 /* ── sidebar + TOC active link ── */
 const headings=[...document.querySelectorAll('h2.docs-h2[id], h3.docs-h3[id]')];
 const sideLinks=document.querySelectorAll('.docs-side .side-link');
+const searchInput=document.getElementById('meshDocsSearchInput');
+const searchResults=document.getElementById('docsSearchResults');
 function setActive(){
   const y=window.scrollY+120;
   let cur=headings[0];
@@ -1149,6 +1386,100 @@ function setActive(){
 let raf;
 window.addEventListener('scroll',()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(setActive)},{passive:true});
 setActive();
+
+function textForSection(heading){
+  const parts=[];
+  let node=heading.nextElementSibling;
+  while(node && !node.matches('h2.docs-h2[id], h3.docs-h3[id]')){
+    const text=(node.innerText||'').replace(/\s+/g,' ').trim();
+    if(text)parts.push(text);
+    node=node.nextElementSibling;
+  }
+  return parts.join(' ');
+}
+const docsSearchIndex=headings.map(h=>({
+  id:h.id,
+  title:h.innerText.replace(/\s+/g,' ').trim(),
+  text:textForSection(h)
+}));
+function escapeHtml(value){
+  return value.replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+function scoreSearchResult(item,terms){
+  const title=item.title.toLowerCase();
+  const text=item.text.toLowerCase();
+  return terms.reduce((score,term)=>{
+    if(title.includes(term))score+=8;
+    if(text.includes(term))score+=2;
+    return score;
+  },0);
+}
+function excerptFor(item,terms){
+  const source=item.text||item.title;
+  const lower=source.toLowerCase();
+  let start=0;
+  const hit=terms.map(t=>lower.indexOf(t)).filter(i=>i>=0).sort((a,b)=>a-b)[0];
+  if(hit>40)start=hit-40;
+  const slice=source.slice(start,start+132).trim();
+  const prefix=start>0?'...':'';
+  return prefix+slice+(source.length>start+132?'...':'');
+}
+function highlight(text,terms){
+  let safe=escapeHtml(text);
+  terms.forEach(term=>{
+    const pattern=new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`,'ig');
+    safe=safe.replace(pattern,'<mark>$1</mark>');
+  });
+  return safe;
+}
+function renderSearchResults(){
+  const query=searchInput.value.trim().toLowerCase();
+  const terms=query.split(/\s+/).filter(Boolean);
+  if(!terms.length){
+    searchResults.classList.remove('open');
+    searchResults.innerHTML='';
+    return;
+  }
+  const results=docsSearchIndex
+    .map(item=>({...item,score:scoreSearchResult(item,terms)}))
+    .filter(item=>item.score>0)
+    .sort((a,b)=>b.score-a.score)
+    .slice(0,8);
+  searchResults.classList.add('open');
+  if(!results.length){
+    searchResults.innerHTML='<div class="docs-search-empty">No matching docs sections.</div>';
+    return;
+  }
+  searchResults.innerHTML=results.map(item=>{
+    const title=highlight(item.title,terms);
+    const excerpt=highlight(excerptFor(item,terms),terms);
+    return `<a class="docs-search-result" role="option" href="#${item.id}"><strong>${title}</strong><span>${excerpt}</span></a>`;
+  }).join('');
+}
+searchInput?.addEventListener('input',renderSearchResults);
+searchInput?.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    searchInput.value='';
+    renderSearchResults();
+    searchInput.blur();
+  }
+  if(e.key==='Enter'){
+    const first=searchResults.querySelector('.docs-search-result');
+    if(first){e.preventDefault();first.click();}
+  }
+});
+searchResults?.addEventListener('click',e=>{
+  const link=e.target.closest('.docs-search-result');
+  if(!link)return;
+  searchInput.value='';
+  renderSearchResults();
+  setTimeout(setActive,80);
+});
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.docs-search-wrap'))searchResults?.classList.remove('open');
+});
 </script>
+<script src="/assets/nav-auth.js" defer></script>
+<script src="/assets/mesh-qa-chat.js" defer></script>
 </body>
 </html>
