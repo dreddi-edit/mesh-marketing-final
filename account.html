@@ -1,0 +1,3366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="robots" content="noindex,nofollow" />
+<title>Account · Mesh</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Barlow+Condensed:ital,wght@1,900&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #010306;
+    --ink: #ffffff;
+    --muted: oklch(0.65 0.015 230);
+    --muted-strong: oklch(0.80 0.015 230);
+    --line: oklch(1 0 0 / 0.07);
+    --line-mid: oklch(1 0 0 / 0.14);
+    --line-strong: oklch(0.74 0.14 200 / 0.32);
+    --cyan: #00d4e8;
+    --cyan-bright: #7ceeff;
+    --cyan-glow: oklch(0.74 0.14 200 / 0.45);
+    --cyan-soft: oklch(0.74 0.14 200 / 0.10);
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --green: #22c55e;
+    --violet: oklch(0.70 0.18 290);
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; min-height: 100%; }
+
+  body {
+    background: var(--bg-deep);
+    color: var(--ink);
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 18% 8%, oklch(0.74 0.14 200 / 0.16) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 50% at 88% 92%, oklch(0.74 0.14 200 / 0.10) 0%, transparent 70%),
+      var(--bg-deep);
+    z-index: -1;
+  }
+
+  /* Top bar — sits IN the page flow above the hero so it doesn't
+     overlap content when scrolled. */
+  .topbar {
+    position: sticky;
+    top: 0;
+    padding: 22px 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .brand-lockup {
+    display: inline-flex;
+    text-decoration: none;
+  }
+  .brand-lockup svg { height: 28px; width: auto; display: block; }
+
+  .top-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 13px;
+  }
+  .top-actions a {
+    color: oklch(1 0 0 / 0.38);
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+  .top-actions a:hover {
+    color: var(--white);
+    border-color: oklch(1 0 0 / 0.12);
+  }
+  .top-actions .top-cta,
+  .top-actions .top-ghost {
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+  }
+  .top-actions .top-cta {
+    background: oklch(0.74 0.14 200 / 0.12) !important;
+    border-color: oklch(0.74 0.14 200 / 0.25) !important;
+    color: var(--cyan) !important;
+  }
+  .top-actions .top-ghost {
+    color: oklch(1 0 0 / 0.38);
+  }
+  .top-actions .top-ghost:hover {
+    color: var(--red);
+    border-color: oklch(0.65 0.20 28 / 0.25);
+  }
+  .top-actions .signout {
+    cursor: pointer;
+    background: none;
+    border: 1px solid transparent;
+    color: oklch(1 0 0 / 0.38);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-family: var(--mono);
+    font-size: 13px;
+    transition: all 0.2s;
+  }
+  .top-actions .signout:hover {
+    color: var(--white);
+    border-color: oklch(1 0 0 / 0.12);
+  }
+  .top-actions .signout.top-ghost {
+    border-color: oklch(0.65 0.20 28 / 0.25);
+    color: oklch(1 0 0 / 0.38);
+  }
+  .top-actions .signout.top-ghost:hover {
+    color: var(--red);
+    border-color: oklch(0.65 0.20 28 / 0.45);
+  }
+
+  /* Decorative gutter brackets — much subtler than the CLI page since
+     this view is content-dense and shouldn't fight the data for focus. */
+  .deco-bracket {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    opacity: 0.05;
+    z-index: 0;
+  }
+  .deco-bracket.left { left: -4vw; color: var(--cyan); font-size: clamp(180px, 22vw, 320px); }
+  .deco-bracket.right { right: -4vw; color: var(--cyan-bright); font-size: clamp(180px, 22vw, 320px); }
+  .deco-bracket svg { width: 1em; height: 1em; display: block; }
+  @media (max-width: 1200px) { .deco-bracket { display: none; } }
+
+  /* Main stage */
+  .page {
+    min-height: calc(100vh - 80px);
+    padding: 36px 36px 80px;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+  }
+  .compose {
+    width: 100%;
+    max-width: 920px;
+    display: grid;
+    gap: 56px;
+  }
+
+  /* Hero strip */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 32px;
+  }
+
+  /* Quick actions strip — under the hero */
+  .quick-actions {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 14px;
+  }
+  .qa-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 18px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--ink);
+    cursor: pointer;
+    text-decoration: none;
+    text-align: left;
+    transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+    font-family: inherit;
+  }
+  .qa-card:hover {
+    transform: translateY(-1px);
+    border-color: var(--line-strong);
+    background: rgba(0, 212, 232, 0.04);
+  }
+  .qa-card--primary {
+    border-color: var(--line-strong);
+    background: linear-gradient(135deg, rgba(0, 212, 232, 0.20), rgba(0, 212, 232, 0.04) 60%, rgba(255,255,255,0.02));
+    box-shadow: 0 14px 36px rgba(0, 212, 232, 0.18);
+  }
+  .qa-card--primary:hover {
+    border-color: var(--cyan);
+    box-shadow: 0 18px 48px rgba(0, 212, 232, 0.28);
+  }
+  .qa-card--soon {
+    opacity: 0.55;
+    cursor: not-allowed !important;
+    background: rgba(255, 255, 255, 0.015);
+  }
+  .qa-card--soon:hover {
+    transform: none;
+    border-color: var(--line);
+    background: rgba(255, 255, 255, 0.015);
+    box-shadow: none;
+  }
+  .qa-card--soon .qa-arrow {
+    color: var(--muted);
+  }
+  .first-launch-block {
+    margin-top: 4px;
+    padding: 14px 18px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.018);
+    font-family: inherit;
+  }
+  .first-launch-block summary {
+    cursor: pointer;
+    list-style: none;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .first-launch-block summary::-webkit-details-marker { display: none; }
+  .first-launch-block[open] summary { margin-bottom: 12px; color: var(--ink); }
+  .first-launch-block summary em { color: var(--ink); font-style: normal; font-weight: 600; }
+  .flb-tag {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 10px;
+    padding: 2px 9px;
+    border-radius: 999px;
+    background: rgba(0, 212, 232, 0.14);
+    color: var(--cyan);
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .flb-body p { font-size: 13px; color: var(--muted); margin: 0 0 10px; line-height: 1.55; }
+  .flb-body strong { color: var(--ink); font-weight: 600; }
+  .flb-body code {
+    font-family: 'Geist Mono', monospace;
+    background: rgba(0, 212, 232, 0.08);
+    color: var(--cyan);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 12.5px;
+  }
+  .flb-cmd {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin: 6px 0 12px;
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.32);
+    overflow: hidden;
+  }
+  .flb-cmd code {
+    flex: 1;
+    padding: 11px 14px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 12.5px;
+    color: var(--ink);
+    background: transparent;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .flb-copy {
+    padding: 0 18px;
+    border: none;
+    border-left: 1px solid var(--line-strong);
+    background: var(--cyan);
+    color: #001318;
+    font-weight: 700;
+    font-size: 12.5px;
+    cursor: pointer;
+    font-family: inherit;
+    min-width: 78px;
+  }
+  .flb-copy:hover { background: #7ceeff; }
+  .flb-copy.copied { background: #22c55e; color: #fff; }
+  .flb-note { margin-top: 4px !important; font-size: 12px !important; }
+  .qa-ic {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: rgba(2, 4, 6, 0.7);
+    border: 1px solid var(--line-strong);
+    color: var(--cyan);
+    box-shadow: inset 0 0 16px rgba(0, 212, 232, 0.18);
+  }
+  .qa-tx {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1;
+    min-width: 0;
+  }
+  .qa-tx b {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .qa-tx small {
+    font-family: 'Geist Mono', 'SF Mono', Menlo, monospace;
+    font-size: 10.5px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .qa-arrow {
+    font-family: 'Geist Mono', monospace;
+    font-size: 16px;
+    color: var(--cyan);
+    padding-right: 4px;
+  }
+  @media (max-width: 720px) {
+    .quick-actions { grid-template-columns: 1fr; }
+  }
+  .hero .lhs { display: grid; gap: 8px; }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.32em;
+    color: var(--cyan);
+    text-transform: uppercase;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 12px var(--cyan-glow);
+  }
+  h1 {
+    font-family: 'Barlow Condensed', 'Impact', sans-serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: clamp(72px, 11vw, 128px);
+    line-height: 0.88;
+    letter-spacing: -0.03em;
+    margin: 0;
+    text-transform: uppercase;
+    background: linear-gradient(180deg, var(--ink) 0%, oklch(0.85 0 0) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .meta-strip {
+    text-align: right;
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 10.5px;
+    color: var(--muted);
+    line-height: 1.8;
+    padding-bottom: 14px;
+  }
+  .meta-strip .row { display: block; }
+  .meta-strip .key { color: var(--muted); letter-spacing: 0.16em; text-transform: uppercase; font-size: 9.5px; }
+  .meta-strip .val { color: var(--ink); margin-left: 8px; }
+  .meta-strip .val.cyan { color: var(--cyan); }
+  .meta-strip .val.green { color: var(--green); }
+  .meta-strip .val.amber { color: var(--amber); }
+
+  /* Section header — used for PLAN / USAGE / PROFILE etc. */
+  .section { display: grid; gap: 20px; }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .section-head .tag {
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.32em;
+    color: var(--cyan);
+    text-transform: uppercase;
+  }
+  .section-head h2 {
+    font-family: 'Barlow Condensed', 'Impact', sans-serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: clamp(36px, 4vw, 56px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin: 0;
+    text-transform: uppercase;
+    flex: 1;
+  }
+  .section-head .aside {
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+
+  /* PLAN section layout */
+  .plan-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 36px;
+    align-items: start;
+  }
+  @media (max-width: 720px) { .plan-grid { grid-template-columns: 1fr; } }
+
+  .plan-current {
+    display: grid;
+    gap: 18px;
+  }
+  .plan-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    width: fit-content;
+  }
+  .plan-badge.basic {
+    background: oklch(0.72 0.15 60 / 0.10);
+    color: var(--amber);
+    border: 1px solid oklch(0.72 0.15 60 / 0.35);
+  }
+  .plan-badge.pro {
+    background: var(--cyan-soft);
+    color: var(--cyan);
+    border: 1px solid var(--line-strong);
+  }
+  .plan-badge.ultra {
+    background: oklch(0.70 0.18 290 / 0.10);
+    color: var(--violet);
+    border: 1px solid oklch(0.70 0.18 290 / 0.35);
+  }
+  .plan-badge::before {
+    content: "";
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 8px currentColor;
+  }
+
+  .plan-headline {
+    font-family: 'Barlow Condensed', 'Impact', sans-serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 38px;
+    line-height: 0.95;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+  .plan-headline .gone-through {
+    color: var(--muted);
+    text-decoration: line-through;
+    text-decoration-color: var(--cyan);
+    text-decoration-thickness: 2px;
+  }
+  .plan-desc {
+    color: var(--muted-strong);
+    font-size: 14.5px;
+    line-height: 1.55;
+    margin: 0;
+    max-width: 480px;
+  }
+
+  .plan-features {
+    list-style: none;
+    padding: 0;
+    margin: 6px 0 0;
+    display: grid;
+    gap: 10px;
+  }
+  .plan-features li {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    font-size: 13.5px;
+    color: var(--muted-strong);
+    line-height: 1.55;
+  }
+  .plan-features li .mark {
+    flex-shrink: 0;
+    width: 16px;
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-weight: 700;
+    text-align: center;
+  }
+  .plan-features li.on .mark { color: var(--green); }
+  .plan-features li.off { color: var(--muted); }
+  .plan-features li.off .mark { color: var(--muted); }
+
+  /* Plan upgrade column */
+  .plan-actions {
+    display: grid;
+    gap: 14px;
+    padding-top: 6px;
+  }
+  .plan-upgrade-card {
+    border: 1px dashed var(--line-strong);
+    border-radius: 14px;
+    padding: 22px 22px 20px;
+    background: linear-gradient(180deg, oklch(0.74 0.14 200 / 0.04) 0%, transparent 100%);
+  }
+  .plan-upgrade-card .pu-label {
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    color: var(--cyan);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .plan-upgrade-card .pu-title {
+    font-family: 'Barlow Condensed', 'Impact', sans-serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 30px;
+    line-height: 1;
+    text-transform: uppercase;
+    margin: 0 0 12px;
+    letter-spacing: -0.02em;
+  }
+  .plan-upgrade-card .pu-body {
+    font-size: 13px;
+    color: var(--muted-strong);
+    line-height: 1.55;
+    margin: 0 0 16px;
+  }
+
+  .btn-primary, .btn-ghost {
+    appearance: none;
+    border-radius: 999px;
+    padding: 12px 22px;
+    font-weight: 600;
+    font-size: 13.5px;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    font-family: inherit;
+    display: inline-flex; align-items: center; gap: 10px;
+    text-decoration: none;
+    transition: transform 0.1s, box-shadow 0.18s, border-color 0.15s, color 0.15s, background 0.15s;
+    border: 1px solid transparent;
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: #03070d;
+    border-color: var(--ink);
+  }
+  .btn-primary:hover:not(:disabled) {
+    box-shadow: 0 12px 32px oklch(0.74 0.14 200 / 0.35);
+    transform: translateY(-1px);
+  }
+  .btn-primary svg { transition: transform 0.18s; }
+  .btn-primary:hover svg { transform: translateX(2px); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted-strong);
+    border-color: var(--line-mid);
+  }
+  .btn-ghost:hover { color: var(--cyan); border-color: var(--cyan); }
+
+  /* USAGE — graphic visualization */
+  .usage-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 36px;
+  }
+  @media (max-width: 720px) { .usage-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 460px) { .usage-grid { grid-template-columns: 1fr; } }
+
+  .stat {
+    display: grid;
+    gap: 8px;
+  }
+  .stat-label {
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  .stat-value {
+    font-family: 'Barlow Condensed', 'Impact', sans-serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 56px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .stat-value .unit { font-size: 18px; color: var(--muted-strong); margin-left: 4px; }
+  .stat-note {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .stat-bar {
+    height: 4px;
+    background: var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+  .stat-bar > div {
+    height: 100%;
+    background: linear-gradient(90deg, var(--cyan) 0%, var(--cyan-bright) 100%);
+    border-radius: 4px;
+    transition: width 0.4s;
+  }
+
+  .coming-soon {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: oklch(0.72 0.15 60 / 0.10);
+    color: var(--amber);
+    border: 1px solid oklch(0.72 0.15 60 / 0.30);
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  /* PROFILE — editable inline */
+  .profile-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 18px 28px;
+    align-items: start;
+  }
+  @media (max-width: 600px) { .profile-grid { grid-template-columns: 1fr; gap: 8px 0; } }
+  .profile-grid dt {
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 10.5px;
+    color: var(--muted);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    padding-top: 6px;
+  }
+  .profile-grid dd {
+    margin: 0;
+    font-size: 15.5px;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 6px 0;
+  }
+  .profile-grid dd.editable .edit-btn {
+    background: none;
+    border: 1px dashed var(--line-strong);
+    color: var(--cyan);
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+  .profile-grid dd.editable .edit-btn:hover {
+    background: var(--cyan-soft);
+    color: var(--cyan-bright);
+  }
+  .profile-grid dd input {
+    flex: 1;
+    background: oklch(1 0 0 / 0.04);
+    border: none;
+    border-bottom: 1.5px solid var(--cyan);
+    color: var(--ink);
+    padding: 8px 10px;
+    font-size: 15px;
+    font-family: inherit;
+    outline: none;
+    border-radius: 4px 4px 0 0;
+  }
+  .profile-grid dd input::placeholder { color: oklch(1 0 0 / 0.35); }
+  .profile-grid dd.muted { color: var(--muted-strong); font-family: 'Geist Mono', ui-monospace, monospace; font-size: 13px; }
+
+  /* Loading + signed-out states */
+  .gate {
+    display: grid;
+    place-items: center;
+    min-height: 60vh;
+    text-align: center;
+  }
+  .gate-inner { max-width: 420px; }
+  .gate h2 {
+    font-family: 'Barlow Condensed', 'Impact', sans-serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 56px;
+    line-height: 0.95;
+    margin: 0 0 12px;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+  .gate p { color: var(--muted-strong); margin: 0 0 22px; font-size: 14px; line-height: 1.55; }
+  .gate-spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid oklch(0.74 0.14 200 / 0.2);
+    border-top-color: var(--cyan);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin-bottom: 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Toast for save feedback */
+  .toast {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: oklch(0.18 0.03 230);
+    color: var(--ink);
+    border: 1px solid var(--line-strong);
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+    z-index: 100;
+    display: flex; align-items: center; gap: 9px;
+  }
+  .toast::before {
+    content: "✓";
+    color: var(--green);
+    font-weight: 700;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.err::before { content: "!"; color: var(--red); }
+
+  /* ── Plan tier switcher ──────────────────────────────────────── */
+  .tier-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: 8px;
+  }
+  @media (max-width: 720px) { .tier-row { grid-template-columns: 1fr; } }
+  .tier {
+    display: grid;
+    gap: 10px;
+    padding: 22px 22px 20px;
+    border: 1px solid var(--line-mid);
+    border-radius: 14px;
+    background: oklch(1 0 0 / 0.015);
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+  }
+  .tier.current { border-color: var(--cyan); background: var(--cyan-soft); }
+  .tier.current::after {
+    content: "current";
+    position: absolute;
+    top: 14px; right: 16px;
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.22em;
+    color: var(--cyan);
+    text-transform: uppercase;
+  }
+  .tier .tier-name {
+    font-family: 'Barlow Condensed', 'Impact', sans-serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 30px;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+  .tier .tier-price {
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  .tier .tier-price strong { color: var(--ink); font-weight: 600; }
+  .tier .tier-limits {
+    list-style: none;
+    padding: 0;
+    margin: 6px 0 12px;
+    display: grid;
+    gap: 6px;
+    font-size: 12.5px;
+    color: var(--muted-strong);
+    line-height: 1.5;
+  }
+  .tier .tier-limits li::before { content: "› "; color: var(--cyan); }
+  .tier .tier-action {
+    margin-top: auto;
+    appearance: none;
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--line-mid);
+    border-radius: 999px;
+    padding: 9px 16px;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, color 0.15s;
+  }
+  .tier .tier-action:hover:not(:disabled) {
+    border-color: var(--cyan);
+    background: var(--cyan-soft);
+    color: var(--cyan);
+  }
+  .tier .tier-action:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  /* ── Per-model usage table ───────────────────────────────────── */
+  .usage-table {
+    margin-top: 4px;
+    border-top: 1px solid var(--line);
+  }
+  .usage-row {
+    display: grid;
+    grid-template-columns: 1.6fr 0.7fr 0.9fr 1fr 0.8fr;
+    align-items: center;
+    gap: 18px;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .usage-row.header {
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    padding: 10px 0;
+  }
+  .usage-row .model-name {
+    font-weight: 600;
+    color: var(--ink);
+    font-size: 14px;
+  }
+  .usage-row .model-name .provider-tag {
+    display: inline-block;
+    margin-left: 8px;
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 9.5px;
+    color: var(--muted);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 1px 6px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    vertical-align: 2px;
+  }
+  .usage-row .num {
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--muted-strong);
+  }
+  .usage-row .saved {
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--green);
+  }
+  .usage-row .pct {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .usage-row .pct-bar {
+    flex: 1;
+    height: 3px;
+    background: var(--line);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .usage-row .pct-bar > div {
+    height: 100%;
+    background: linear-gradient(90deg, var(--cyan) 0%, var(--cyan-bright) 100%);
+    border-radius: 3px;
+  }
+  @media (max-width: 720px) {
+    .usage-row { grid-template-columns: 1fr 1fr; gap: 6px 14px; padding: 14px 0; }
+    .usage-row .pct { grid-column: span 2; }
+    .usage-row.header { display: none; }
+    .usage-row .num::before, .usage-row .saved::before {
+      content: attr(data-label) " — ";
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-right: 6px;
+    }
+  }
+
+  /* Demo / preview tag */
+  .demo-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: oklch(0.72 0.15 60 / 0.10);
+    color: var(--amber);
+    border: 1px solid oklch(0.72 0.15 60 / 0.30);
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  /* ── Settings form (default model, prefs) ────────────────────── */
+  .settings-grid {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 24px 32px;
+    align-items: start;
+  }
+  @media (max-width: 600px) { .settings-grid { grid-template-columns: 1fr; gap: 12px 0; } }
+  .settings-grid .setting-label {
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 10.5px;
+    color: var(--muted);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    padding-top: 12px;
+  }
+  .settings-grid .setting-label small {
+    display: block;
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: none;
+    line-height: 1.5;
+  }
+  .settings-grid .setting-control { display: grid; gap: 8px; }
+  .settings-grid select {
+    background: oklch(1 0 0 / 0.04);
+    border: 1px solid var(--line-mid);
+    color: var(--ink);
+    border-radius: 8px;
+    padding: 11px 14px;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    width: 100%;
+    max-width: 380px;
+    transition: border-color 0.15s, background 0.15s;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2300d4e8' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+  .settings-grid select:hover, .settings-grid select:focus { border-color: var(--cyan); }
+  .toggle-row {
+    display: flex; align-items: center; gap: 12px;
+    cursor: pointer;
+    padding: 10px 0;
+    user-select: none;
+  }
+  .toggle-row input[type="checkbox"] { display: none; }
+  .toggle-row .toggle-track {
+    width: 36px; height: 20px;
+    background: var(--line-mid);
+    border-radius: 999px;
+    position: relative;
+    transition: background 0.18s;
+    flex-shrink: 0;
+  }
+  .toggle-row .toggle-track::after {
+    content: "";
+    position: absolute;
+    top: 2px; left: 2px;
+    width: 16px; height: 16px;
+    background: var(--ink);
+    border-radius: 50%;
+    transition: transform 0.18s;
+  }
+  .toggle-row input:checked + .toggle-track { background: var(--cyan); }
+  .toggle-row input:checked + .toggle-track::after { transform: translateX(16px); }
+  .toggle-row .toggle-text { color: var(--ink); font-size: 14px; }
+  .toggle-row .toggle-text small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .theme-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .theme-chip {
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--line-mid);
+    background: transparent;
+    color: var(--muted-strong);
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  .theme-chip.active { border-color: var(--cyan); color: var(--cyan); background: var(--cyan-soft); }
+  .byok-card {
+    margin-top: 28px;
+    padding: 22px;
+    border: 1px solid var(--line-mid);
+    border-radius: 12px;
+    background: oklch(1 0 0 / 0.02);
+    display: grid;
+    gap: 16px;
+  }
+  .byok-card h3 { margin: 0; font-size: 16px; }
+  .byok-steps { display: grid; gap: 14px; }
+  .byok-steps input[type="password"], .byok-steps input[type="text"] {
+    width: 100%; max-width: 420px;
+    background: oklch(1 0 0 / 0.04);
+    border: 1px solid var(--line-mid);
+    color: var(--ink);
+    border-radius: 8px;
+    padding: 11px 14px;
+    font-size: 14px;
+  }
+  .model-pick-grid {
+    display: grid;
+    gap: 8px;
+    max-height: 220px;
+    overflow-y: auto;
+  }
+  .model-pick-row {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px;
+    color: var(--muted-strong);
+  }
+  .byok-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .byok-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .provider-tabs {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    border-bottom: 1px solid var(--line-mid);
+    padding-bottom: 0; margin-bottom: 0;
+  }
+  .provider-tab {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 14px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    cursor: pointer;
+    margin-bottom: -1px;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+  }
+  .provider-tab:hover { color: var(--ink); }
+  .provider-tab.active {
+    color: var(--ink);
+    background: var(--surface);
+    border-color: var(--line-mid);
+    border-bottom-color: var(--surface);
+  }
+  .provider-tab .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--line-mid);
+  }
+  .provider-tab.active .dot { background: var(--cyan); }
+  .provider-tab.has-key .dot { background: var(--green); }
+  .provider-tab.has-key.active .dot { background: var(--green); }
+  .provider-tab .count {
+    font-size: 11px;
+    color: var(--muted);
+    padding: 1px 6px;
+    border-radius: 999px;
+    background: oklch(1 0 0 / 0.05);
+  }
+  .provider-tab.active .count, .provider-tab.has-key .count { color: var(--green); }
+  .provider-panel { display: grid; gap: 16px; padding-top: 18px; }
+  .provider-panel .provider-help {
+    margin: 0; padding: 12px 14px;
+    border: 1px solid var(--line-mid);
+    border-radius: 8px;
+    background: oklch(1 0 0 / 0.02);
+    color: var(--muted-strong);
+    font-size: 12.5px;
+    line-height: 1.6;
+  }
+  .provider-panel .provider-help code { color: var(--cyan); }
+  .provider-panel .field {
+    display: grid; gap: 6px;
+  }
+  .provider-panel .field-label {
+    font-size: 12px; color: var(--muted-strong);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .provider-panel .field-label small { color: var(--muted); font-size: 11px; }
+  .provider-panel input[type="password"],
+  .provider-panel input[type="text"] {
+    width: 100%;
+    background: oklch(1 0 0 / 0.04);
+    border: 1px solid var(--line-mid);
+    color: var(--ink);
+    border-radius: 8px;
+    padding: 11px 14px;
+    font-size: 13px;
+    font-family: 'Geist Mono', ui-monospace, monospace;
+  }
+  .provider-panel .pair-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  }
+  @media (max-width: 700px) { .provider-panel .pair-grid { grid-template-columns: 1fr; } }
+  .provider-models {
+    display: grid; gap: 8px;
+    max-height: 280px; overflow-y: auto;
+    border: 1px solid var(--line-mid);
+    border-radius: 8px;
+    padding: 10px 12px;
+    background: oklch(1 0 0 / 0.015);
+  }
+  .provider-model-row {
+    display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: center;
+    padding: 8px 4px;
+    border-bottom: 1px solid oklch(1 0 0 / 0.04);
+  }
+  .provider-model-row:last-child { border-bottom: none; }
+  .provider-model-row .name { font-size: 13px; color: var(--ink); }
+  .provider-model-row .name small { color: var(--muted); font-size: 11px; display: block; font-family: 'Geist Mono', ui-monospace, monospace; }
+  .provider-model-row .tested-badge {
+    font-size: 10px; padding: 2px 8px; border-radius: 999px;
+    background: oklch(0.85 0.15 145 / 0.15);
+    color: var(--green);
+    border: 1px solid oklch(0.85 0.15 145 / 0.3);
+  }
+  .provider-model-row .untested-badge {
+    font-size: 10px; padding: 2px 8px; border-radius: 999px;
+    background: oklch(1 0 0 / 0.04);
+    color: var(--muted);
+    border: 1px solid var(--line-mid);
+  }
+  .provider-model-row .test-btn {
+    font-size: 12px; padding: 5px 12px; border-radius: 6px;
+    background: transparent; color: var(--cyan);
+    border: 1px solid oklch(0.7 0.15 200 / 0.4);
+    cursor: pointer;
+  }
+  .provider-model-row .test-btn:hover { background: var(--cyan-soft); }
+  .provider-model-row .test-btn:disabled { opacity: 0.5; cursor: wait; }
+  .provider-model-row.testing .name { color: var(--cyan); }
+  .provider-model-row.testing-error { background: oklch(0.7 0.2 25 / 0.05); }
+  .provider-model-row.testing-error .name { color: var(--red); }
+  .provider-model-row .err-msg {
+    grid-column: 1 / -1;
+    font-size: 11px; color: var(--red);
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    padding: 4px 0 0;
+  }
+  .model-list-editor {
+    display: grid; gap: 8px;
+    max-height: 320px; overflow-y: auto;
+    padding: 12px 14px;
+    border: 1px solid var(--line-mid);
+    border-radius: 8px;
+    background: oklch(1 0 0 / 0.02);
+  }
+  .model-list-editor .group-header {
+    font-size: 11px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    padding: 4px 0 2px;
+    border-bottom: 1px solid oklch(1 0 0 / 0.04);
+    margin-bottom: 4px;
+  }
+  .model-list-editor .mle-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 6px 4px; font-size: 13px;
+  }
+  .model-list-editor .mle-row .mle-name { flex: 1; color: var(--ink); }
+  .model-list-editor .mle-row .mle-name small { color: var(--muted); font-size: 11px; margin-left: 8px; font-family: 'Geist Mono', ui-monospace, monospace; }
+  .model-list-editor .mle-row .badge {
+    font-size: 10px; padding: 1px 7px; border-radius: 999px;
+    color: var(--muted); border: 1px solid var(--line-mid);
+  }
+  .model-list-editor .mle-row .badge.proxy { color: var(--cyan); border-color: oklch(0.7 0.15 200 / 0.3); }
+  .model-list-editor .mle-row .badge.byok  { color: var(--green); border-color: oklch(0.85 0.15 145 / 0.3); }
+  .dim-tip { color: var(--muted); font-size: 12px; margin: 0; }
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--line-mid);
+    background: transparent;
+    color: var(--ink);
+    font-size: 13px;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .btn-secondary:hover { border-color: var(--cyan); color: var(--cyan); }
+  .byok-status { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; color: var(--muted); }
+  .byok-status.ok { color: var(--green); }
+  .byok-status.err { color: var(--red); }
+
+  /* ── Connected accounts ──────────────────────────────────────── */
+  .providers {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+  }
+  .provider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border: 1px solid var(--line-mid);
+    border-radius: 12px;
+    background: oklch(1 0 0 / 0.015);
+  }
+  .provider .icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: oklch(1 0 0 / 0.04);
+    display: grid; place-items: center;
+    flex-shrink: 0;
+  }
+  .provider .body { flex: 1; min-width: 0; }
+  .provider .name { font-weight: 600; font-size: 14px; color: var(--ink); }
+  .provider .status {
+    display: flex; align-items: center; gap: 6px;
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 10.5px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .provider.linked .status { color: var(--green); }
+  .provider.linked .status::before {
+    content: ""; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green); box-shadow: 0 0 6px var(--green);
+  }
+  .provider .action {
+    appearance: none;
+    background: none;
+    border: 1px dashed var(--line-strong);
+    color: var(--cyan);
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+  .provider .action:hover { background: var(--cyan-soft); color: var(--cyan-bright); }
+  .provider .action.disconnect { color: var(--red); border-color: oklch(0.65 0.20 28 / 0.32); }
+  .provider .action.disconnect:hover { background: oklch(0.65 0.20 28 / 0.08); }
+
+  /* ── Security row ────────────────────────────────────────────── */
+  .security-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .security-row:last-child { border-bottom: none; }
+  .security-row .sr-body { flex: 1; }
+  .security-row .sr-title { font-weight: 600; font-size: 15px; color: var(--ink); margin: 0 0 4px; }
+  .security-row .sr-desc { font-size: 13px; color: var(--muted); line-height: 1.55; margin: 0; }
+  .security-row .sr-action {
+    flex-shrink: 0;
+    appearance: none;
+    background: none;
+    border: 1px solid var(--line-mid);
+    color: var(--ink);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+    text-decoration: none;
+  }
+  .security-row .sr-action:hover { border-color: var(--cyan); color: var(--cyan); }
+  .security-row .sr-action.danger { border-color: oklch(0.65 0.20 28 / 0.32); color: var(--red); }
+  .security-row .sr-action.danger:hover { background: oklch(0.65 0.20 28 / 0.08); }
+
+  /* Reuse the pill button styling outside security rows (e.g. Identity). */
+  .sr-action {
+    flex-shrink: 0;
+    appearance: none;
+    background: none;
+    border: 1px solid var(--line-mid);
+    color: var(--ink);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+    text-decoration: none;
+  }
+  .sr-action:hover { border-color: var(--cyan); color: var(--cyan); }
+  .sr-action.danger { border-color: oklch(0.65 0.20 28 / 0.32); color: var(--red); }
+  .sr-action.danger:hover { background: oklch(0.65 0.20 28 / 0.08); }
+
+  .identity-note {
+    margin: 8px 0 0;
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .identity-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    background: oklch(0.045 0.032 204);
+    padding: 44px 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    border-top: 1px solid var(--line);
+  }
+  .f-logo { display: inline-flex; align-items: center; text-decoration: none; }
+  .f-links { display: flex; gap: 24px; flex-wrap: wrap; }
+  .f-links a {
+    color: oklch(1 0 0 / 0.22);
+    text-decoration: none;
+    transition: color 0.2s;
+    font-family: inherit;
+    font-size: 13px;
+  }
+  .f-links a:hover { color: oklch(1 0 0 / 0.66); }
+  .f-copy { color: oklch(1 0 0 / 0.18); font-family: var(--mono); font-size: 11px; }
+
+  @media (max-width: 720px) {
+    .topbar { top: 18px; left: 20px; right: 20px; }
+    .page { padding: 90px 20px 60px; }
+    .compose { gap: 48px; }
+    .hero { grid-template-columns: 1fr; }
+    .meta-strip { text-align: left; padding-bottom: 0; }
+    footer { padding: 32px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand-lockup" href="/" aria-label="Mesh">
+    <svg viewBox="0 0 110 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="26" y="20" font-family="Trebuchet MS, Helvetica Neue, sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text>
+    </svg>
+  </a>
+  <nav class="top-actions">
+    <a href="/about">About</a>
+    <a href="/quickstart">Quickstart</a>
+    <a href="/benchmarks">Benchmarks</a>
+    <a href="/docs">Docs</a>
+    <a href="/account" class="top-cta">Account</a>
+    <button class="signout top-ghost" id="signout-btn-secondary" type="button">Log out</button>
+  </nav>
+</div>
+
+<div class="deco-bracket left" aria-hidden="true">
+  <svg viewBox="0 0 100 100"><path d="M65 14 L25 50 L65 86" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</div>
+<div class="deco-bracket right" aria-hidden="true">
+  <svg viewBox="0 0 100 100"><path d="M35 14 L75 50 L35 86" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</div>
+
+<!-- Loading + auth-gate state -->
+<div class="page" id="gate-view">
+  <div class="gate">
+    <div class="gate-inner">
+      <div class="gate-spinner" id="gate-spinner"></div>
+      <h2 id="gate-title">Checking session…</h2>
+      <p id="gate-msg">One sec — verifying your account with Supabase.</p>
+      <a class="btn-primary" id="gate-login-btn" href="/auth/login" style="display:none;">
+        Sign in
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Main authenticated view -->
+<div class="page" id="account-view" style="display:none;">
+  <div class="compose">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="lhs">
+        <span class="eyebrow"><span id="hero-email">signed in</span></span>
+        <h1>Account.</h1>
+      </div>
+      <div class="meta-strip">
+        <span class="row"><span class="key">plan</span><span class="val cyan" id="meta-plan">basic</span></span>
+        <span class="row"><span class="key">member since</span><span class="val" id="meta-since">—</span></span>
+        <span class="row"><span class="key">last sign-in</span><span class="val" id="meta-last">—</span></span>
+      </div>
+    </div>
+
+    <!-- QUICK ACTIONS — primary CTA strip right under the hero -->
+    <section class="quick-actions" aria-label="Quick actions">
+      <a class="qa-card qa-card--primary" href="/download/ide-macos" id="download-ide-mac-link">
+        <span class="qa-ic" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.365 1.43c0 1.14-.493 2.27-1.177 3.08-.744.9-1.99 1.57-2.987 1.57-.12 0-.23-.02-.3-.03-.01-.06-.04-.22-.04-.39 0-1.15.572-2.27 1.206-2.98.804-.94 2.142-1.64 3.248-1.68.03.13.05.28.05.43zm4.565 15.71c-.03.07-.463 1.58-1.518 3.12-.945 1.34-1.94 2.71-3.43 2.71-1.517 0-1.9-.88-3.63-.88-1.698 0-2.302.91-3.67.91-1.377 0-2.332-1.26-3.428-2.8-1.287-1.82-2.323-4.63-2.323-7.28 0-4.28 2.797-6.55 5.552-6.55 1.448 0 2.675.95 3.6.95.865 0 2.222-1.01 3.902-1.01.613 0 2.886.06 4.374 2.19-.13.09-2.383 1.37-2.383 4.19 0 3.26 2.854 4.42 2.955 4.45z"/></svg>
+        </span>
+        <span class="qa-tx">
+          <b>Download Mesh IDE for macOS</b>
+          <small>.dmg · Apple Silicon · full agent runtime bundled</small>
+        </span>
+        <span class="qa-arrow" aria-hidden="true">↓</span>
+      </a>
+      <button class="qa-card qa-card--primary" id="open-web-ide-btn" type="button" title="Open the Mesh IDE in your browser — signed in via your Mesh account.">
+        <span class="qa-ic" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 22 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7 4L3 14L7 24" stroke="#00d4e8" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15 4L19 14L15 24" stroke="#7ceeff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="qa-tx">
+          <b>Open Mesh IDE in browser</b>
+          <small id="open-web-ide-sub">signed in via your Mesh account · no install</small>
+        </span>
+        <span class="qa-arrow" aria-hidden="true">→</span>
+      </button>
+    </section>
+
+    <!-- First-launch instructions: shown directly under the download CTA so users
+         hit the xattr workaround before they get the "Mesh IDE is damaged" alert. -->
+    <details class="first-launch-block" id="first-launch-block">
+      <summary>
+        <span class="flb-tag">First launch?</span>
+        macOS may show <em>"Mesh IDE is damaged"</em> — that's Gatekeeper rejecting unsigned downloads. One-line fix:
+      </summary>
+      <div class="flb-body">
+        <p>Run this in <strong>Terminal</strong>, once. Removes the <code>com.apple.quarantine</code> attribute Chrome/Safari added during download:</p>
+        <div class="flb-cmd">
+          <code id="flb-cmd-text">xattr -cr "/Applications/Mesh IDE.app"</code>
+          <button type="button" id="flb-copy-btn" class="flb-copy">Copy</button>
+        </div>
+        <p class="flb-note">After that, double-click Mesh IDE in <strong>Programme</strong> normally. Notarized builds are coming once we register with the Apple Developer Program.</p>
+      </div>
+    </details>
+
+    <!-- PLAN -->
+    <section class="section">
+      <div class="section-head">
+        <span class="tag">01 — Plan</span>
+        <h2>Your tier</h2>
+        <span class="aside" id="plan-aside">—</span>
+      </div>
+      <div class="plan-grid">
+        <div class="plan-current">
+          <span class="plan-badge" id="plan-badge">basic</span>
+          <h3 class="plan-headline" id="plan-headline">Free, read-only.</h3>
+          <p class="plan-desc" id="plan-desc">—</p>
+          <ul class="plan-features" id="plan-features"></ul>
+        </div>
+        <div class="plan-actions">
+          <div class="plan-upgrade-card" id="upgrade-card">
+            <div class="pu-label">Need a different tier?</div>
+            <h4 class="pu-title">Switch plan →</h4>
+            <p class="pu-body">Pick a tier below. Downgrades to basic apply immediately. Upgrades to pro / ultra email the operator since billing is still being wired up.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tier-row" id="tier-row">
+        <!-- populated by JS -->
+      </div>
+    </section>
+
+    <!-- USAGE -->
+    <section class="section">
+      <div class="section-head">
+        <span class="tag">02 — Usage</span>
+        <h2>This period</h2>
+        <span class="aside"><span class="demo-tag">demo data · live soon</span></span>
+      </div>
+      <div class="usage-grid">
+        <div class="stat">
+          <span class="stat-label">CLI requests</span>
+          <span class="stat-value" id="stat-requests">—<span class="unit">this month</span></span>
+          <div class="stat-bar"><div id="stat-requests-bar" style="width: 0%;"></div></div>
+          <span class="stat-note" id="stat-requests-note">Capped per plan. Live counter ships with the worker's KV bucket.</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Tokens saved</span>
+          <span class="stat-value" id="stat-saved">—<span class="unit">k</span></span>
+          <div class="stat-bar"><div id="stat-saved-bar" style="width: 0%;"></div></div>
+          <span class="stat-note" id="stat-saved-note">Compression vs. raw context. Translates to direct provider cost saved.</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Cost saved</span>
+          <span class="stat-value" id="stat-cost">$—</span>
+          <div class="stat-bar"><div id="stat-cost-bar" style="width: 0%;"></div></div>
+          <span class="stat-note" id="stat-cost-note">Estimated using each provider's published input-token rate.</span>
+        </div>
+      </div>
+
+      <div class="usage-table" id="usage-table">
+        <div class="usage-row header">
+          <div>Model</div>
+          <div>Requests</div>
+          <div>Tokens</div>
+          <div>Share</div>
+          <div style="text-align:right;">Saved</div>
+        </div>
+        <!-- populated by JS -->
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="section">
+      <div class="section-head">
+        <span class="tag">03 — Settings</span>
+        <h2>Preferences</h2>
+        <span class="aside" id="settings-aside">synced to account</span>
+      </div>
+      <div class="settings-grid">
+        <div class="setting-label">
+          Default model
+          <small>Applied on next <code>mesh</code> start. Changes from <code>/setup</code> appear here immediately.</small>
+        </div>
+        <div class="setting-control">
+          <select id="setting-default-model"></select>
+        </div>
+
+        <div class="setting-label">
+          Terminal theme
+          <small>CLI accent color — same as <code>/color</code> and <code>/setup</code>.</small>
+        </div>
+        <div class="setting-control">
+          <div class="theme-chips" id="setting-theme-chips"></div>
+        </div>
+
+        <div class="setting-label">
+          Cloud L2 sync
+          <small>Shared capsule cache across machines.</small>
+        </div>
+        <div class="setting-control">
+          <label class="toggle-row">
+            <input type="checkbox" id="setting-cloud" />
+            <span class="toggle-track"></span>
+            <span class="toggle-text">Enable cloud sync</span>
+          </label>
+        </div>
+
+        <div class="setting-label">
+          Provider routing
+          <small>Mesh proxy ships with the curated catalog. BYOK only exposes models you tested successfully.</small>
+        </div>
+        <div class="setting-control">
+          <select id="setting-google-mode">
+            <option value="proxy">Mesh shared proxy (recommended)</option>
+            <option value="own">My API keys only (BYOK)</option>
+            <option value="hybrid">Mix — proxy models + my tested models</option>
+          </select>
+        </div>
+
+        <div class="setting-label">
+          <code>/model</code> list
+          <small>Visible to <code>/model</code> in the CLI. Proxy models are always present. BYOK models appear after a successful test.</small>
+        </div>
+        <div class="setting-control">
+          <div class="model-list-editor" id="model-list-editor">
+            <p class="dim-tip">Loading available models…</p>
+          </div>
+        </div>
+
+        <div class="setting-label">
+          Telemetry
+          <small>Anonymous CLI usage. Off by default.</small>
+        </div>
+        <div class="setting-control">
+          <label class="toggle-row">
+            <input type="checkbox" id="setting-telemetry" />
+            <span class="toggle-track"></span>
+            <span class="toggle-text">Allow anonymous telemetry</span>
+          </label>
+        </div>
+
+        <div class="setting-label">
+          Voice (<code>/voice</code>)
+          <small>Language, Gemini voice, speech speed.</small>
+        </div>
+        <div class="setting-control">
+          <select id="setting-voice-lang"></select>
+          <select id="setting-voice-name" style="margin-top:8px;"></select>
+          <input type="range" id="setting-voice-speed" min="120" max="420" step="10" style="margin-top:10px; width:100%; max-width:380px;" />
+          <small id="setting-voice-speed-label" style="color:var(--muted); font-size:12px;"></small>
+        </div>
+      </div>
+
+      <div class="byok-card" id="byok-card">
+        <div class="byok-head">
+          <div>
+            <h3>Bring your own key</h3>
+            <p style="margin:6px 0 0; color:var(--muted-strong); font-size:13px; line-height:1.55;">
+              Keys are encrypted server-side (pgcrypto). The CLI loads them at <code>mesh</code> start. Successfully tested models unlock in the <code>/model</code> picker.
+            </p>
+          </div>
+          <p class="byok-status" id="byok-status-summary">—</p>
+        </div>
+
+        <nav class="provider-tabs" id="provider-tabs" role="tablist">
+          <!-- populated by JS -->
+        </nav>
+
+        <div class="provider-panel" id="provider-panel">
+          <!-- single active provider rendered here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- CONNECTED -->
+    <section class="section">
+      <div class="section-head">
+        <span class="tag">04 — Connected accounts</span>
+        <h2>Sign-in methods</h2>
+        <span class="aside" id="connected-aside">link a provider to enable one-click sign-in</span>
+      </div>
+      <div class="providers" id="providers"></div>
+    </section>
+
+    <!-- SECURITY -->
+    <section class="section">
+      <div class="section-head">
+        <span class="tag">05 — Security</span>
+        <h2>Account access</h2>
+        <span class="aside">supabase auth</span>
+      </div>
+      <div>
+        <div class="security-row">
+          <div class="sr-body">
+            <h4 class="sr-title">Reset password</h4>
+            <p class="sr-desc">We email a one-time link to your account address. Works for both password and OAuth accounts (sets a password you can use as a fallback).</p>
+          </div>
+          <button class="sr-action" id="reset-pw-btn" type="button">Send reset email</button>
+        </div>
+        <div class="security-row">
+          <div class="sr-body">
+            <h4 class="sr-title">Sign out everywhere</h4>
+            <p class="sr-desc">Revokes every active Supabase session — including the CLI's stored token. Next <code>mesh</code> run will prompt a fresh login.</p>
+          </div>
+          <button class="sr-action" id="signout-all-btn" type="button">Sign out everywhere</button>
+        </div>
+        <div class="security-row">
+          <div class="sr-body">
+            <h4 class="sr-title">Delete account</h4>
+            <p class="sr-desc">Permanent. Removes your profile, plan, and all stored sessions. We can't recover this.</p>
+          </div>
+          <button class="sr-action danger" id="delete-btn" type="button">Delete account</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- IDENTITY (last) -->
+    <section class="section">
+      <div class="section-head">
+        <span class="tag">06 — Identity</span>
+        <h2>Profile data</h2>
+        <span class="aside" id="profile-aside">stored in supabase</span>
+      </div>
+      <dl class="profile-grid">
+        <dt>Full name</dt>
+        <dd class="editable" id="name-cell">
+          <span id="name-display">—</span>
+          <button class="edit-btn" id="edit-name-btn" type="button">Edit</button>
+        </dd>
+
+        <dt>Email</dt>
+        <dd id="email-cell">—</dd>
+
+        <dt>User ID</dt>
+        <dd class="muted" id="userid-cell">—</dd>
+
+        <dt>Primary provider</dt>
+        <dd class="muted" id="provider-cell">—</dd>
+
+        <dt>Newsletter</dt>
+        <dd>
+          <div class="identity-actions">
+            <button class="sr-action" id="newsletter-toggle-btn" type="button">Loading…</button>
+          </div>
+          <div class="identity-note" id="newsletter-auth-note">—</div>
+          <div class="identity-note" id="newsletter-status-note">—</div>
+        </dd>
+
+        <dt>Session</dt>
+        <dd>
+          <div class="identity-actions">
+            <button class="sr-action" id="identity-logout-btn" type="button">Log out</button>
+          </div>
+        </dd>
+      </dl>
+    </section>
+
+  </div>
+</div>
+
+<footer>
+  <a class="f-logo" href="/"><svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg" aria-label="Mesh">
+      <path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="26" y="20" font-family="Trebuchet MS,Helvetica Neue,sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text>
+    </svg></a>
+  <div class="f-links">
+    <a href="https://github.com/dreddi-edit/mesh">GitHub</a>
+    <a href="https://www.npmjs.com/package/@trymesh/cli">NPM</a>
+    <a href="/license">License</a>
+    <a href="/contact">Contact</a>
+    <a href="/socials">Socials</a>
+  </div>
+  <div class="f-copy">© 2026 Mesh</div>
+</footer>
+
+<div class="toast" id="toast"><span id="toast-msg">Saved</span></div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL = 'https://msmonxiacxhendxehezw.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zbW9ueGlhY3hoZW5keGVoZXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5NDU3NTMsImV4cCI6MjA5MjUyMTc1M30.K-FQFpcOwtJAIAfn5lTzmrox_6cv_8qqXGxi9IgosB8';
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+const $ = (id) => document.getElementById(id);
+
+const PLAN_DESCRIPTORS = {
+  basic: {
+    headline: 'Free, read-only.',
+    desc: 'Your account is live but the CLI handshake is gated behind <strong>pro</strong> or <strong>ultra</strong>. Plenty of access to the marketing site, docs, and signup flow.',
+    features: [
+      { on: true,  text: 'Sign in to the website + docs' },
+      { on: true,  text: 'Browse benchmarks, features, quickstart' },
+      { on: false, text: 'CLI handshake (mesh login)' },
+      { on: false, text: 'Access to the 11-model catalog' },
+      { on: false, text: '60 req/min · 1,000 req/day quota' }
+    ],
+    upgrade: true
+  },
+  pro: {
+    headline: 'Pro — CLI unlocked.',
+    desc: 'Full CLI access with all 11 models, comfortable quotas for solo + small-team work.',
+    features: [
+      { on: true, text: 'CLI handshake (mesh login)' },
+      { on: true, text: 'All 11 catalog models' },
+      { on: true, text: '60 req/min · 1,000 req/day quota' },
+      { on: true, text: 'Browser-based device auth' },
+      { on: false, text: 'Priority queue (ultra-only)' }
+    ],
+    upgrade: false
+  },
+  ultra: {
+    headline: 'Ultra — no ceilings.',
+    desc: '500 req/min, 10k req/day, priority routing on overloaded providers, early access to preview models.',
+    features: [
+      { on: true, text: 'All Pro features' },
+      { on: true, text: '500 req/min · 10,000 req/day quota' },
+      { on: true, text: 'Priority queue on busy upstreams' },
+      { on: true, text: 'Early access to new models' },
+      { on: true, text: 'Direct line for incident response' }
+    ],
+    upgrade: false
+  }
+};
+
+function fmtDate(iso) {
+  if (!iso) return '—';
+  try {
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+  } catch {
+    return iso.slice(0, 10);
+  }
+}
+function fmtRelative(iso) {
+  if (!iso) return '—';
+  const diffMs = Date.now() - new Date(iso).getTime();
+  const mins = Math.round(diffMs / 60000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.round(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.round(hrs / 24);
+  if (days < 7) return `${days}d ago`;
+  return fmtDate(iso);
+}
+
+function showToast(msg, isError = false) {
+  const t = $('toast');
+  $('toast-msg').textContent = msg;
+  t.classList.toggle('err', isError);
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+const ALLOWED_THEMES = ['cyan', 'magenta', 'yellow', 'green', 'blue', 'white'];
+const VOICE_LANGS = [
+  { id: 'auto', label: 'Auto-detect' },
+  { id: 'de', label: 'Deutsch' },
+  { id: 'en', label: 'English' },
+  { id: 'ar', label: 'Arabic' },
+  { id: 'es', label: 'Spanish' },
+  { id: 'fr', label: 'French' },
+  { id: 'it', label: 'Italian' },
+  { id: 'ja', label: 'Japanese' },
+  { id: 'pt', label: 'Portuguese' }
+];
+const GEMINI_VOICES = ['auto', 'Puck', 'Kore', 'Aoede', 'Charon', 'Fenrir', 'Zephyr'];
+
+function defaultCliSettings() {
+  return {
+    modelId: DEFAULT_MODEL_ID,
+    themeColor: 'cyan',
+    enableCloudCache: true,
+    telemetry: false,
+    googleKeyMode: 'proxy',
+    voice: { configured: false, language: 'auto', speed: 260, voice: 'auto', microphone: 'default' }
+  };
+}
+
+function parseCliSettings(profile, user) {
+  const raw = profile?.cli_settings;
+  const meta = user?.user_metadata || {};
+  const base = defaultCliSettings();
+  if (raw && typeof raw === 'object') {
+    const v = raw.voice || {};
+    return {
+      modelId: normalizeDefaultModel(raw.modelId || meta.default_model || meta.defaultModel),
+      themeColor: ALLOWED_THEMES.includes(raw.themeColor) ? raw.themeColor : base.themeColor,
+      enableCloudCache: raw.enableCloudCache !== false,
+      telemetry: raw.telemetry === true,
+      googleKeyMode: raw.googleKeyMode === 'own' ? 'own' : 'proxy',
+      voice: {
+        configured: v.configured === true,
+        language: v.language || 'auto',
+        speed: Number(v.speed) || 260,
+        voice: v.voice || 'auto',
+        microphone: v.microphone || 'default'
+      }
+    };
+  }
+  return {
+    ...base,
+    modelId: normalizeDefaultModel(meta.default_model || meta.defaultModel || meta.modelId)
+  };
+}
+
+let saveCliTimer = null;
+async function persistCliSettings(userId, settings) {
+  const ts = Date.now();
+  const payload = {
+    cli_settings: settings,
+    cli_settings_updated_at: ts
+  };
+  const { error } = await sb.from('profiles').update(payload).eq('user_id', userId);
+  if (error) throw error;
+  const updatedAt = Date.now();
+  await sb.auth.updateUser({
+    data: {
+      default_model: settings.modelId,
+      defaultModel: settings.modelId,
+      default_model_updated_at: updatedAt
+    }
+  }).catch(() => null);
+  return ts;
+}
+
+function schedulePersistCliSettings(userId, getSettings) {
+  if (saveCliTimer) clearTimeout(saveCliTimer);
+  saveCliTimer = setTimeout(async () => {
+    try {
+      await persistCliSettings(userId, getSettings());
+      showToast('Settings saved');
+    } catch (e) {
+      showToast(e?.message || String(e), true);
+    }
+  }, 350);
+}
+
+async function loadProfile(userId) {
+  const { data } = await sb.from('profiles')
+    .select('plan, first_name, last_name, username, cli_settings, cli_settings_updated_at')
+    .eq('user_id', userId)
+    .maybeSingle();
+  return data || {};
+}
+
+/**
+ * Hand the signed-in user off to the browser IDE. We ask the backend to mint
+ * a one-time signed URL bound to the current Supabase session. The backend
+ * verifies the token, stashes it in a short-TTL Firestore doc, and returns a
+ * URL pointing at the hosted IDE with `?session_id=<one-time>`. The IDE then
+ * polls /api/auth/cli/poll exactly like the CLI does and lands signed in.
+ *
+ * If the backend endpoint isn't deployed yet (404), we fall back to the
+ * marketing /ide preview page. Either way the click never fails silently.
+ */
+function wireWebIdeButton(session) {
+  // Web IDE: POST to /api/account/ide-handoff with the Supabase session,
+  // get back a one-time URL pointed at Cloud Run (Theia browser image),
+  // then open it in a new tab. Falls back gracefully if the endpoint
+  // returns an error.
+  const btn = document.getElementById('open-web-ide-btn');
+  const sub = document.getElementById('open-web-ide-sub');
+  if (btn) {
+    btn.addEventListener('click', async () => {
+      if (!session?.access_token) {
+        if (sub) sub.textContent = 'Please sign in first';
+        return;
+      }
+      const originalSub = sub?.textContent;
+      if (sub) sub.textContent = 'opening Mesh IDE…';
+      btn.disabled = true;
+      try {
+        const resp = await fetch('/api/account/ide-handoff', {
+          method: 'POST',
+          headers: {
+            'authorization': `Bearer ${session.access_token}`,
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify({ refresh_token: session.refresh_token || null }),
+        });
+        const body = await resp.json().catch(() => ({}));
+        if (!resp.ok || !body.url) {
+          throw new Error(body.hint || body.error || `HTTP ${resp.status}`);
+        }
+        window.open(body.url, '_blank', 'noopener,noreferrer');
+        if (sub) sub.textContent = 'opened in new tab';
+        setTimeout(() => { if (sub) sub.textContent = originalSub; btn.disabled = false; }, 2500);
+      } catch (err) {
+        console.warn('ide-handoff failed:', err);
+        if (sub) sub.textContent = 'Web IDE not reachable — try desktop above';
+        setTimeout(() => { if (sub) sub.textContent = originalSub; btn.disabled = false; }, 3500);
+      }
+    });
+  }
+
+  // Wire the "Copy" button in the first-launch block so users can paste
+  // the xattr command into Terminal in one step.
+  const copyBtn = document.getElementById('flb-copy-btn');
+  const cmdText = document.getElementById('flb-cmd-text');
+  if (copyBtn && cmdText) {
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(cmdText.textContent.trim());
+        copyBtn.textContent = 'Copied ✓';
+        copyBtn.classList.add('copied');
+        setTimeout(() => { copyBtn.textContent = 'Copy'; copyBtn.classList.remove('copied'); }, 1800);
+      } catch {
+        copyBtn.textContent = 'Press ⌘C';
+      }
+    });
+  }
+}
+
+function renderPlan(plan) {
+  const p = (plan || 'basic').toLowerCase();
+  const d = PLAN_DESCRIPTORS[p] || PLAN_DESCRIPTORS.basic;
+  $('plan-badge').textContent = p;
+  $('plan-badge').className = `plan-badge ${p}`;
+  $('plan-headline').textContent = d.headline;
+  $('plan-desc').innerHTML = d.desc;
+  $('meta-plan').textContent = p;
+  $('plan-aside').textContent = d.upgrade ? 'needs upgrade for CLI' : 'CLI ready';
+
+  const ul = $('plan-features');
+  ul.innerHTML = '';
+  d.features.forEach((f) => {
+    const li = document.createElement('li');
+    li.className = f.on ? 'on' : 'off';
+    li.innerHTML = `<span class="mark">${f.on ? '✓' : '·'}</span><span>${escapeHtml(f.text)}</span>`;
+    ul.appendChild(li);
+  });
+
+  $('upgrade-card').style.display = d.upgrade ? 'block' : 'none';
+}
+
+// User-facing model catalog — keep in sync with apps/cli/src/model-catalog.ts.
+// Duplicated here so the account page doesn't need a bundler.
+const MODEL_CATALOG = [
+  { label: 'Gemini 3.5 Flash',          value: 'google/gemini-3.5-flash',                  provider: 'google',  inputPer1k: 0.000075, outputPer1k: 0.0003 },
+  { label: 'Gemini 3.1 Pro Preview',    value: 'google/gemini-3.1-pro-preview',            provider: 'google',  inputPer1k: 0.0035,   outputPer1k: 0.0105 },
+  { label: 'Gemini 2.5 Pro',            value: 'google/gemini-2.5-pro',                    provider: 'google',  inputPer1k: 0.00125,  outputPer1k: 0.01 },
+  { label: 'Grok 4.20 Reasoning',       value: 'xai/grok-4.20-reasoning',                  provider: 'xai',     inputPer1k: 0.005,    outputPer1k: 0.015 },
+  { label: 'Grok 4.20 Non-Reasoning',   value: 'xai/grok-4.20-non-reasoning',              provider: 'xai',     inputPer1k: 0.002,    outputPer1k: 0.006 },
+  { label: 'GLM 5',                     value: 'zai-org/glm-5-maas',                       provider: 'z.ai',    inputPer1k: 0.0014,   outputPer1k: 0.0044 },
+  { label: 'Kimi K2.6',                 value: 'moonshotai/kimi-k2.6',                     provider: 'nvidia',  inputPer1k: 0,        outputPer1k: 0 },
+  { label: 'DeepSeek V4 Pro',           value: 'deepseek-ai/deepseek-v4-pro',              provider: 'nvidia',  inputPer1k: 0,        outputPer1k: 0 },
+  { label: 'Qwen 3 Coder',              value: 'qwen/qwen3-coder-480b-a35b-instruct',      provider: 'nvidia',  inputPer1k: 0,        outputPer1k: 0 },
+  { label: 'Llama 4',                   value: 'meta/llama-4-maverick-17b-128e-instruct',  provider: 'nvidia',  inputPer1k: 0,        outputPer1k: 0 },
+  { label: 'GPT-OSS 120B',              value: 'openai/gpt-oss-120b',                      provider: 'nvidia',  inputPer1k: 0,        outputPer1k: 0 }
+];
+const DEFAULT_MODEL_ID = 'google/gemini-3.5-flash';
+const PLAN_LIMITS = {
+  basic: { perMin: 10,  perDay: 100,    price: 'Free' },
+  pro:   { perMin: 60,  perDay: 1000,   price: '$20/mo' },
+  ultra: { perMin: 500, perDay: 10000,  price: '$50/mo' }
+};
+
+// Deterministic PRNG seeded by user id, so demo numbers stay stable
+// per-user instead of jittering on every reload.
+function seededRng(seed) {
+  let h = 2166136261;
+  for (let i = 0; i < seed.length; i++) {
+    h ^= seed.charCodeAt(i);
+    h = (h * 16777619) >>> 0;
+  }
+  return () => {
+    h ^= h << 13; h >>>= 0;
+    h ^= h >>> 17;
+    h ^= h << 5; h >>>= 0;
+    return h / 0xffffffff;
+  };
+}
+
+function generateDemoUsage(userId, plan) {
+  const rng = seededRng(userId + ':' + plan);
+  const scale = { basic: 5, pro: 80, ultra: 300 }[plan] || 5;
+  // Each model gets a share of activity; some users skew Google-heavy,
+  // others NVIDIA-heavy. Seed determines the shape.
+  const weights = MODEL_CATALOG.map(() => rng());
+  const wSum = weights.reduce((a, b) => a + b, 0);
+  let totalRequests = 0, totalTokens = 0, totalSaved = 0, totalCostSaved = 0;
+  const rows = MODEL_CATALOG.map((m, i) => {
+    const share = weights[i] / wSum;
+    const requests = Math.floor(share * scale * (15 + rng() * 25));
+    const avgTokens = 600 + Math.floor(rng() * 1400);
+    const tokens = requests * avgTokens;
+    // Mesh's compression saves 28-52% of input tokens (capsule + context shrink).
+    const savedRatio = 0.28 + rng() * 0.24;
+    const saved = Math.floor(tokens * savedRatio);
+    const costSaved = (saved / 1000) * (m.inputPer1k || 0);
+    totalRequests += requests;
+    totalTokens += tokens;
+    totalSaved += saved;
+    totalCostSaved += costSaved;
+    return { model: m, requests, tokens, saved, costSaved, share };
+  }).filter(r => r.requests > 0)
+    .sort((a, b) => b.requests - a.requests);
+  return { rows, totalRequests, totalTokens, totalSaved, totalCostSaved };
+}
+
+function fmtNum(n) {
+  if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+  if (n >= 1000) return (n / 1000).toFixed(1) + 'k';
+  return String(n);
+}
+
+/**
+ * Render usage stats. Tries to load real data from the cli_usage_summary
+ * table (populated by the CLI's per-turn writer). Falls back to a
+ * deterministic seeded demo so the UI never looks broken — but flips the
+ * "demo data" badge to "live" the moment real data arrives.
+ */
+async function renderUsage(userId, plan) {
+  const real = await loadRealUsage();
+  const demoBadge = document.querySelector('.section .demo-tag');
+  if (real) {
+    if (demoBadge) {
+      demoBadge.textContent = 'live · synced ' + relativeTime(real.updated_at);
+      demoBadge.style.color = 'var(--green)';
+    }
+    return renderUsageFromReal(real, plan);
+  }
+  if (demoBadge) {
+    demoBadge.textContent = 'demo data · CLI hasn’t reported yet';
+    demoBadge.style.color = 'var(--muted)';
+  }
+  const u = generateDemoUsage(userId, plan);
+  const dailyCap = PLAN_LIMITS[plan]?.perDay || 100;
+  const monthlyCap = dailyCap * 30;
+
+  $('stat-requests').innerHTML = `${fmtNum(u.totalRequests)}<span class="unit">this month</span>`;
+  $('stat-requests-bar').style.width = `${Math.min(100, (u.totalRequests / monthlyCap) * 100)}%`;
+  $('stat-requests-note').innerHTML = `Capped at <strong>${dailyCap.toLocaleString()}</strong>/day on the <strong>${plan}</strong> plan. Live count ships with the worker's KV bucket.`;
+
+  $('stat-saved').innerHTML = `${fmtNum(u.totalSaved)}<span class="unit">tokens</span>`;
+  $('stat-saved-bar').style.width = `${Math.min(100, (u.totalSaved / Math.max(u.totalTokens, 1)) * 100)}%`;
+  $('stat-saved-note').textContent = `${((u.totalSaved / Math.max(u.totalTokens, 1)) * 100).toFixed(0)}% compression ratio vs. raw context — the rest was sent.`;
+
+  $('stat-cost').textContent = '$' + u.totalCostSaved.toFixed(2);
+  $('stat-cost-bar').style.width = u.totalCostSaved > 0 ? '78%' : '0%';
+  $('stat-cost-note').textContent = `Computed from each provider's published input-token rate.`;
+
+  const table = $('usage-table');
+  // Wipe everything except the header row
+  Array.from(table.querySelectorAll('.usage-row:not(.header)')).forEach((el) => el.remove());
+
+  if (u.rows.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'usage-row';
+    empty.style.color = 'var(--muted)';
+    empty.innerHTML = `<div style="grid-column: span 5; padding: 16px 0;">No requests yet on this plan — once the CLI hits the worker, model-level breakdown shows up here.</div>`;
+    table.appendChild(empty);
+    return;
+  }
+
+  u.rows.forEach((r) => {
+    const row = document.createElement('div');
+    row.className = 'usage-row';
+    row.innerHTML = `
+      <div class="model-name">${escapeHtml(r.model.label)}<span class="provider-tag">${escapeHtml(r.model.provider)}</span></div>
+      <div class="num" data-label="requests">${r.requests.toLocaleString()}</div>
+      <div class="num" data-label="tokens">${fmtNum(r.tokens)}</div>
+      <div class="pct"><span>${(r.share * 100).toFixed(0)}%</span><span class="pct-bar"><div style="width: ${(r.share * 100).toFixed(0)}%;"></div></span></div>
+      <div class="saved" data-label="saved" style="text-align:right;">${fmtNum(r.saved)} · $${r.costSaved.toFixed(2)}</div>
+    `;
+    table.appendChild(row);
+  });
+}
+
+/**
+ * Populate the Default model select with whatever is actually available to
+ * the user right now: proxy models + BYOK-tested models. Filters by the
+ * provider-routing setting (proxy / own / hybrid) so the option list
+ * matches what the CLI will actually see at startup.
+ */
+function populateDefaultModelSelect(sel, cliState) {
+  sel.innerHTML = '';
+  const mode = cliState.googleKeyMode || 'proxy';
+  const proxyOptions = MODEL_CATALOG.map((m) => ({
+    value: m.value,
+    label: `${m.label}  ·  ${m.provider}`,
+    group: 'Mesh proxy'
+  }));
+  const byokOptions = [];
+  if (providerStatusCache?.providers) {
+    PROVIDER_ORDER.forEach((pid) => {
+      const tested = providerStatusCache.providers[pid]?.tested_models || [];
+      tested.forEach((mid) => {
+        const def = PROVIDER_CATALOG[pid].models.find((m) => m.id === mid);
+        byokOptions.push({
+          value: `${pid}:${mid}`,
+          label: `${def?.label || mid}  ·  ${pid} (BYOK)`,
+          group: 'BYOK · tested'
+        });
+      });
+    });
+  }
+
+  let visible = [];
+  if (mode === 'own') visible = byokOptions.length > 0 ? byokOptions : proxyOptions;
+  else if (mode === 'hybrid') visible = [...proxyOptions, ...byokOptions];
+  else visible = proxyOptions;
+
+  // Group by `group`
+  const groups = new Map();
+  visible.forEach((opt) => {
+    if (!groups.has(opt.group)) groups.set(opt.group, []);
+    groups.get(opt.group).push(opt);
+  });
+  groups.forEach((opts, label) => {
+    const og = document.createElement('optgroup');
+    og.label = label;
+    opts.forEach((opt) => {
+      const o = document.createElement('option');
+      o.value = opt.value;
+      o.textContent = opt.label;
+      og.appendChild(o);
+    });
+    sel.appendChild(og);
+  });
+}
+
+async function loadRealUsage() {
+  try {
+    const { data, error } = await sb
+      .from('cli_usage_summary')
+      .select('*')
+      .maybeSingle();
+    if (error || !data) return null;
+    if (Number(data.total_requests) <= 0) return null;
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+function relativeTime(iso) {
+  if (!iso) return '';
+  const t = Date.parse(iso);
+  if (!Number.isFinite(t)) return '';
+  const sec = Math.max(0, Math.floor((Date.now() - t) / 1000));
+  if (sec < 60) return `${sec}s ago`;
+  if (sec < 3600) return `${Math.floor(sec / 60)}m ago`;
+  if (sec < 86400) return `${Math.floor(sec / 3600)}h ago`;
+  return `${Math.floor(sec / 86400)}d ago`;
+}
+
+function renderUsageFromReal(usage, plan) {
+  const dailyCap = PLAN_LIMITS[plan]?.perDay || 100;
+  const monthlyCap = dailyCap * 30;
+  const totalRequests = Number(usage.total_requests || 0);
+  const totalTokens = Number(usage.total_input_tokens || 0) + Number(usage.total_output_tokens || 0);
+  const totalSaved = Number(usage.total_saved_tokens || 0);
+  const totalSavedUsd = Number(usage.total_saved_usd || 0);
+  const totalCostUsd = Number(usage.total_cost_usd || 0);
+
+  $('stat-requests').innerHTML = `${fmtNum(totalRequests)}<span class="unit">this period</span>`;
+  $('stat-requests-bar').style.width = `${Math.min(100, (totalRequests / monthlyCap) * 100)}%`;
+  $('stat-requests-note').innerHTML = `${plan.toUpperCase()} plan · cap <strong>${dailyCap.toLocaleString()}</strong>/day · period started ${relativeTime(usage.period_start)}.`;
+
+  $('stat-saved').innerHTML = `${fmtNum(totalSaved)}<span class="unit">tokens</span>`;
+  const ratio = totalTokens > 0 ? (totalSaved / (totalTokens + totalSaved)) * 100 : 0;
+  $('stat-saved-bar').style.width = `${Math.min(100, ratio)}%`;
+  $('stat-saved-note').textContent = `Mesh's compression saved ~${ratio.toFixed(0)}% over raw context this period. Spent ${fmtNum(totalTokens)} tokens total.`;
+
+  $('stat-cost').textContent = '$' + totalSavedUsd.toFixed(2);
+  $('stat-cost-bar').style.width = totalSavedUsd > 0 ? `${Math.min(100, (totalSavedUsd / Math.max(totalCostUsd + totalSavedUsd, 0.0001)) * 100)}%` : '0%';
+  $('stat-cost-note').textContent = `Total spend: $${totalCostUsd.toFixed(2)} · saved vs. raw: $${totalSavedUsd.toFixed(2)} (per provider input-token rate)`;
+
+  const table = $('usage-table');
+  Array.from(table.querySelectorAll('.usage-row:not(.header)')).forEach((el) => el.remove());
+  const byModel = usage.by_model || {};
+  const entries = Object.entries(byModel).map(([modelId, v]) => ({
+    modelId,
+    requests: Number(v?.requests || 0),
+    tokens: Number(v?.inputTokens || 0) + Number(v?.outputTokens || 0),
+    saved: Number(v?.savedTokens || 0),
+    savedUsd: Number(v?.savedUsd || 0),
+    costUsd: Number(v?.costUsd || 0)
+  }));
+  entries.sort((a, b) => b.requests - a.requests);
+  if (entries.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'usage-row';
+    empty.style.color = 'var(--muted)';
+    empty.innerHTML = `<div style="grid-column: span 5; padding: 16px 0;">No model-level usage logged yet this period.</div>`;
+    table.appendChild(empty);
+    return;
+  }
+  const grandTotal = entries.reduce((s, r) => s + r.requests, 0) || 1;
+  entries.forEach((r) => {
+    const def = MODEL_CATALOG.find((m) => m.value === r.modelId);
+    const row = document.createElement('div');
+    row.className = 'usage-row';
+    const share = r.requests / grandTotal;
+    row.innerHTML = `
+      <div class="model-name">${escapeHtml(def?.label || r.modelId)}<span class="provider-tag">${escapeHtml(def?.provider || 'byok')}</span></div>
+      <div class="num" data-label="requests">${r.requests.toLocaleString()}</div>
+      <div class="num" data-label="tokens">${fmtNum(r.tokens)}</div>
+      <div class="pct"><span>${(share * 100).toFixed(0)}%</span><span class="pct-bar"><div style="width: ${(share * 100).toFixed(0)}%;"></div></span></div>
+      <div class="saved" data-label="saved" style="text-align:right;">${fmtNum(r.saved)} · $${r.savedUsd.toFixed(2)}</div>
+    `;
+    table.appendChild(row);
+  });
+}
+
+function renderTierSwitcher(currentPlan, user, profile) {
+  const tiers = [
+    { key: 'basic', name: 'Basic', limits: ['Read-only access', 'Browse the site + docs', 'No CLI handshake'] },
+    { key: 'pro',   name: 'Pro',   limits: ['CLI handshake', 'All 11 models', '60 req/min · 1,000/day'] },
+    { key: 'ultra', name: 'Ultra', limits: ['Everything in Pro', '500 req/min · 10,000/day', 'Priority routing + early access'] }
+  ];
+  const order = ['basic', 'pro', 'ultra'];
+  const currentIdx = order.indexOf(currentPlan);
+  const row = $('tier-row');
+  row.innerHTML = '';
+  tiers.forEach((t) => {
+    const idx = order.indexOf(t.key);
+    const isCurrent = t.key === currentPlan;
+    const isDowngrade = idx < currentIdx;
+    const card = document.createElement('div');
+    card.className = 'tier' + (isCurrent ? ' current' : '');
+    card.innerHTML = `
+      <div class="tier-name">${t.name}</div>
+      <div class="tier-price"><strong>${PLAN_LIMITS[t.key].price}</strong></div>
+      <ul class="tier-limits">${t.limits.map((l) => `<li>${escapeHtml(l)}</li>`).join('')}</ul>
+      <button class="tier-action" type="button" data-tier="${t.key}" ${isCurrent ? 'disabled' : ''}>
+        ${isCurrent ? 'Current plan' : (isDowngrade ? `Downgrade to ${t.name.toLowerCase()}` : `Upgrade to ${t.name.toLowerCase()}`)}
+      </button>
+    `;
+    row.appendChild(card);
+  });
+
+  row.querySelectorAll('.tier-action').forEach((btn) => {
+    btn.addEventListener('click', () => handlePlanSwitch(btn.dataset.tier, currentPlan, user, profile));
+  });
+}
+
+async function handlePlanSwitch(targetPlan, currentPlan, user, profile) {
+  const order = ['basic', 'pro', 'ultra'];
+  const isUpgrade = order.indexOf(targetPlan) > order.indexOf(currentPlan);
+
+  if (isUpgrade) {
+    // Real billing isn't wired yet — open an email request and stay on
+    // the current plan. The button shows a clear "requested" state.
+    const subject = encodeURIComponent(`Mesh — upgrade request: ${currentPlan} → ${targetPlan}`);
+    const body = encodeURIComponent(`Account: ${user.email}\nUser ID: ${user.id}\nCurrent plan: ${currentPlan}\nRequested plan: ${targetPlan}\n\n(billing is being wired up; meanwhile please flip me manually)`);
+    location.href = `mailto:edgar.baumann@try-mesh.com?subject=${subject}&body=${body}`;
+    showToast(`Upgrade request opened — billing lands soon`);
+    return;
+  }
+
+  if (!confirm(`Downgrade to ${targetPlan}? You'll lose CLI access immediately if dropping to basic.`)) return;
+
+  const { error } = await sb.from('profiles')
+    .update({ plan: targetPlan })
+    .eq('user_id', user.id);
+  if (error) { showToast(error.message, true); return; }
+  profile.plan = targetPlan;
+  renderPlan(targetPlan);
+  renderTierSwitcher(targetPlan, user, profile);
+  renderUsage(user.id, targetPlan);
+  showToast(`Plan switched to ${targetPlan}`);
+}
+
+function normalizeDefaultModel(value) {
+  return MODEL_CATALOG.some((m) => m.value === value) ? value : DEFAULT_MODEL_ID;
+}
+
+function readSettingsFromUi(state) {
+  const themeBtn = document.querySelector('.theme-chip.active');
+  return {
+    modelId: $('setting-default-model').value,
+    themeColor: themeBtn?.dataset.theme || state.themeColor,
+    enableCloudCache: $('setting-cloud').checked,
+    telemetry: $('setting-telemetry').checked,
+    googleKeyMode: ['own', 'hybrid', 'proxy'].includes($('setting-google-mode').value) ? $('setting-google-mode').value : 'proxy',
+    voice: {
+      configured: true,
+      language: $('setting-voice-lang').value,
+      speed: Number($('setting-voice-speed').value) || 260,
+      voice: $('setting-voice-name').value,
+      microphone: state.voice?.microphone || 'default'
+    }
+  };
+}
+
+function renderSettings(user, profile) {
+  let cliState = parseCliSettings(profile, user);
+
+  const sel = $('setting-default-model');
+  populateDefaultModelSelect(sel, cliState);
+  sel.value = cliState.modelId;
+
+  const chips = $('setting-theme-chips');
+  chips.innerHTML = '';
+  ALLOWED_THEMES.forEach((t) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'theme-chip' + (t === cliState.themeColor ? ' active' : '');
+    btn.dataset.theme = t;
+    btn.textContent = t;
+    btn.addEventListener('click', () => {
+      chips.querySelectorAll('.theme-chip').forEach((c) => c.classList.remove('active'));
+      btn.classList.add('active');
+      schedulePersistCliSettings(user.id, () => {
+        cliState = readSettingsFromUi(cliState);
+        return cliState;
+      });
+    });
+    chips.appendChild(btn);
+  });
+
+  $('setting-cloud').checked = cliState.enableCloudCache;
+  $('setting-telemetry').checked = !!cliState.telemetry;
+  $('setting-google-mode').value = cliState.googleKeyMode;
+
+  const langSel = $('setting-voice-lang');
+  langSel.innerHTML = '';
+  VOICE_LANGS.forEach((l) => {
+    const o = document.createElement('option');
+    o.value = l.id;
+    o.textContent = l.label;
+    langSel.appendChild(o);
+  });
+  langSel.value = cliState.voice.language;
+
+  const voiceSel = $('setting-voice-name');
+  voiceSel.innerHTML = '';
+  GEMINI_VOICES.forEach((v) => {
+    const o = document.createElement('option');
+    o.value = v;
+    o.textContent = v;
+    voiceSel.appendChild(o);
+  });
+  voiceSel.value = cliState.voice.voice;
+
+  const speed = $('setting-voice-speed');
+  speed.value = String(cliState.voice.speed);
+  $('setting-voice-speed-label').textContent = `Speech speed: ${cliState.voice.speed}`;
+
+  const onChange = () => schedulePersistCliSettings(user.id, () => {
+    cliState = readSettingsFromUi(cliState);
+    return cliState;
+  });
+  sel.addEventListener('change', onChange);
+  $('setting-cloud').addEventListener('change', onChange);
+  $('setting-telemetry').addEventListener('change', onChange);
+  $('setting-google-mode').addEventListener('change', () => {
+    onChange();
+    // Routing mode determines which models are eligible — re-populate the
+    // default-model dropdown so the user only sees what they can actually run.
+    cliState = readSettingsFromUi(cliState);
+    populateDefaultModelSelect(sel, cliState);
+  });
+  langSel.addEventListener('change', onChange);
+  voiceSel.addEventListener('change', onChange);
+  speed.addEventListener('input', () => {
+    $('setting-voice-speed-label').textContent = `Speech speed: ${speed.value}`;
+    onChange();
+  });
+
+  renderByok(user, cliState, profile);
+}
+
+function googleModelsForByok() {
+  return MODEL_CATALOG.filter((m) => m.provider === 'google');
+}
+
+function geminiApiModelId(meshModelId) {
+  const id = meshModelId.replace(/^google\//, '');
+  return id.includes('/') ? id.split('/').pop() : id;
+}
+
+async function testGoogleByok(apiKey, meshModelId) {
+  const model = geminiApiModelId(meshModelId);
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: 'Reply with exactly: ok' }] }],
+      generationConfig: { maxOutputTokens: 16, temperature: 0 }
+    })
+  });
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const msg = body?.error?.message || `HTTP ${res.status}`;
+    throw new Error(msg);
+  }
+  return body;
+}
+
+/* ===== Multi-provider BYOK (Google · OpenAI · Anthropic · OpenRouter · AWS · Azure) =====
+ *
+ * Model catalogs target end-of-May-2026 — newest stable releases per provider.
+ * Test flows hit each provider's own API directly from the browser. CORS-blocked
+ * providers (Anthropic) fall back to "save-only; verify on next mesh start".
+ * Successful tests unlock that model in the user's /model picker.
+ */
+
+const PROVIDER_CATALOG = {
+  google: {
+    label: 'Google (Gemini)',
+    keyPrefix: 'AIza',
+    keyLabel: 'Google API key',
+    keyHint: 'From aistudio.google.com — starts with AIza',
+    docs: 'https://aistudio.google.com/app/apikey',
+    models: [
+      { id: 'gemini-3.5-flash',          label: 'Gemini 3.5 Flash',          note: 'fast · newest' },
+      { id: 'gemini-3.1-pro-preview',    label: 'Gemini 3.1 Pro Preview',    note: 'top reasoning · preview' },
+      { id: 'gemini-2.5-pro',            label: 'Gemini 2.5 Pro',            note: 'stable reasoning' },
+      { id: 'gemini-2.5-flash',          label: 'Gemini 2.5 Flash',          note: 'stable fast' }
+    ]
+  },
+  openai: {
+    label: 'OpenAI',
+    keyPrefix: 'sk-',
+    keyLabel: 'OpenAI API key',
+    keyHint: 'From platform.openai.com — starts with sk-',
+    docs: 'https://platform.openai.com/api-keys',
+    models: [
+      { id: 'gpt-5',           label: 'GPT-5',           note: 'flagship · newest' },
+      { id: 'gpt-5-mini',      label: 'GPT-5 mini',      note: 'fast tier' },
+      { id: 'gpt-5-nano',      label: 'GPT-5 nano',      note: 'low-latency' },
+      { id: 'o3',              label: 'o3',              note: 'reasoning' },
+      { id: 'o4-mini',         label: 'o4 mini',         note: 'reasoning · fast' },
+      { id: 'gpt-4.5-turbo',   label: 'GPT-4.5 Turbo',   note: 'legacy stable' }
+    ]
+  },
+  anthropic: {
+    label: 'Anthropic (Claude)',
+    keyPrefix: 'sk-ant-',
+    keyLabel: 'Anthropic API key',
+    keyHint: 'From console.anthropic.com — starts with sk-ant-',
+    docs: 'https://console.anthropic.com/settings/keys',
+    corsBlocked: true,
+    models: [
+      { id: 'claude-opus-4-7-20260301',    label: 'Claude Opus 4.7',    note: 'top tier · newest' },
+      { id: 'claude-sonnet-4-6-20260128',  label: 'Claude Sonnet 4.6',  note: 'balanced' },
+      { id: 'claude-haiku-4-5-20251001',   label: 'Claude Haiku 4.5',   note: 'fast / cheap' }
+    ]
+  },
+  openrouter: {
+    label: 'OpenRouter',
+    keyPrefix: 'sk-or-',
+    keyLabel: 'OpenRouter API key',
+    keyHint: 'From openrouter.ai/keys — starts with sk-or-',
+    docs: 'https://openrouter.ai/keys',
+    models: [
+      { id: 'anthropic/claude-opus-4.7',         label: 'Claude Opus 4.7',      note: 'via OpenRouter' },
+      { id: 'openai/gpt-5',                       label: 'GPT-5',                note: 'via OpenRouter' },
+      { id: 'google/gemini-3.5-flash',           label: 'Gemini 3.5 Flash',     note: 'via OpenRouter' },
+      { id: 'meta-llama/llama-4-405b-instruct',  label: 'Llama 4 405B',         note: 'open weights' },
+      { id: 'mistralai/mistral-large-2',         label: 'Mistral Large 2',      note: 'eu hosted' }
+    ]
+  },
+  aws: {
+    label: 'AWS Bedrock',
+    keyPrefix: '',
+    keyLabel: 'AWS access key ID',
+    keyHint: 'Access key ID + secret key with bedrock:InvokeModel permission',
+    docs: 'https://console.aws.amazon.com/iam',
+    corsBlocked: true,
+    needsPair: true,
+    needsRegion: true,
+    models: [
+      { id: 'anthropic.claude-opus-4-7-v1:0',         label: 'Claude Opus 4.7',    note: 'via Bedrock' },
+      { id: 'anthropic.claude-sonnet-4-6-v1:0',       label: 'Claude Sonnet 4.6',  note: 'via Bedrock' },
+      { id: 'meta.llama4-405b-instruct-v1:0',         label: 'Llama 4 405B',       note: 'via Bedrock' },
+      { id: 'amazon.nova-pro-v2:0',                    label: 'Amazon Nova Pro',    note: 'amazon native' },
+      { id: 'amazon.nova-lite-v2:0',                   label: 'Amazon Nova Lite',   note: 'fast' }
+    ]
+  },
+  azure: {
+    label: 'Azure OpenAI',
+    keyPrefix: '',
+    keyLabel: 'Azure OpenAI API key',
+    keyHint: 'From the Keys & Endpoint section of your Azure OpenAI resource',
+    docs: 'https://portal.azure.com',
+    needsEndpoint: true,
+    models: [
+      { id: 'gpt-5',           label: 'GPT-5',           note: 'requires deployment named gpt-5' },
+      { id: 'gpt-4.5-turbo',   label: 'GPT-4.5 Turbo',   note: 'legacy' },
+      { id: 'o3',              label: 'o3 reasoning',    note: 'requires o3 deployment' },
+      { id: 'o4-mini',         label: 'o4 mini',         note: 'requires o4-mini deployment' }
+    ]
+  }
+};
+
+const PROVIDER_ORDER = ['google', 'openai', 'anthropic', 'openrouter', 'aws', 'azure'];
+
+/** In-memory status loaded from mesh_get_provider_status. Refreshed on save/test. */
+let providerStatusCache = null;
+let activeProviderTab = 'google';
+const inFlightTests = new Map(); // `${provider}:${modelId}` → Promise
+
+async function loadProviderStatus() {
+  try {
+    const { data, error } = await sb.rpc('mesh_get_provider_status');
+    if (error) throw error;
+    return data || { providers: {}, activated: [], custom_model_list: [] };
+  } catch (err) {
+    console.warn('provider-status fetch failed:', err?.message || err);
+    return { providers: {}, activated: [], custom_model_list: [] };
+  }
+}
+
+function providerHasKey(status, providerId) {
+  return !!status?.providers?.[providerId]?.has_key;
+}
+
+function providerTestedModels(status, providerId) {
+  return status?.providers?.[providerId]?.tested_models || [];
+}
+
+async function renderByok(user, cliState, profile) {
+  providerStatusCache = await loadProviderStatus();
+
+  // Tabs
+  const tabsEl = $('provider-tabs');
+  tabsEl.innerHTML = '';
+  PROVIDER_ORDER.forEach((id) => {
+    const cat = PROVIDER_CATALOG[id];
+    const hasKey = providerHasKey(providerStatusCache, id);
+    const testedCount = providerTestedModels(providerStatusCache, id).length;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = `provider-tab ${id === activeProviderTab ? 'active' : ''} ${hasKey ? 'has-key' : ''}`;
+    btn.dataset.provider = id;
+    btn.innerHTML = `
+      <span class="dot"></span>
+      <span>${escapeHtml(cat.label)}</span>
+      ${testedCount > 0 ? `<span class="count">${testedCount}</span>` : ''}
+    `;
+    btn.onclick = () => {
+      activeProviderTab = id;
+      renderByok(user, cliState, profile);
+    };
+    tabsEl.appendChild(btn);
+  });
+
+  // Summary
+  const totalTested = PROVIDER_ORDER.reduce((sum, id) => sum + providerTestedModels(providerStatusCache, id).length, 0);
+  const activatedCount = PROVIDER_ORDER.filter((id) => providerHasKey(providerStatusCache, id)).length;
+  $('byok-status-summary').innerHTML = activatedCount > 0
+    ? `${activatedCount} provider${activatedCount === 1 ? '' : 's'} connected · ${totalTested} model${totalTested === 1 ? '' : 's'} tested`
+    : 'No providers connected yet';
+  $('byok-status-summary').className = 'byok-status' + (activatedCount > 0 ? ' ok' : '');
+
+  // Active provider panel
+  renderProviderPanel(activeProviderTab, user, cliState, profile);
+
+  // Reflect on the routing dropdown
+  if (cliState.googleKeyMode === 'own') $('setting-google-mode').value = 'own';
+  else if (cliState.googleKeyMode === 'hybrid') $('setting-google-mode').value = 'hybrid';
+  else $('setting-google-mode').value = 'proxy';
+
+  // Render the /model list editor below the routing select
+  renderModelListEditor(cliState, profile);
+}
+
+function renderProviderPanel(providerId, user, cliState, profile) {
+  const panel = $('provider-panel');
+  panel.innerHTML = '';
+  const cat = PROVIDER_CATALOG[providerId];
+  const status = providerStatusCache?.providers?.[providerId] || {};
+  const tested = new Set((status.tested_models || []).map(String));
+
+  // Help + docs
+  const help = document.createElement('p');
+  help.className = 'provider-help';
+  help.innerHTML = `
+    <strong>${escapeHtml(cat.label)}</strong> · ${escapeHtml(cat.keyHint)} · <a href="${cat.docs}" target="_blank" rel="noopener" style="color: var(--cyan);">get key →</a>
+    ${cat.corsBlocked ? '<br><span style="color: var(--muted);">Browser tests for this provider are not supported (no CORS). Save the key here, then run <code>mesh test &lt;model&gt;</code> on the CLI.</span>' : ''}
+  `;
+  panel.appendChild(help);
+
+  // Key input(s)
+  if (cat.needsPair) {
+    panel.appendChild(buildField('access-key', 'Access key ID', '', 'text'));
+    panel.appendChild(buildField('secret-key', 'Secret access key', '', 'password'));
+    panel.appendChild(buildField('region', 'AWS region (e.g. us-east-1)', status.region || 'us-east-1', 'text'));
+  } else {
+    panel.appendChild(buildField('key', cat.keyLabel, '', 'password'));
+    if (cat.needsEndpoint) {
+      panel.appendChild(buildField('endpoint', 'Endpoint URL', status.endpoint || '', 'text'));
+    }
+  }
+
+  // Save key button
+  const saveRow = document.createElement('div');
+  saveRow.className = 'byok-actions';
+  saveRow.innerHTML = `
+    <button type="button" class="btn-secondary" id="prov-save">${status.has_key ? 'Replace key' : 'Save key'}</button>
+    ${status.has_key ? `<button type="button" class="btn-secondary" id="prov-delete">Remove key</button>` : ''}
+    <span class="byok-status" id="prov-save-status"></span>
+  `;
+  panel.appendChild(saveRow);
+
+  // Model list
+  if (status.has_key || cat.corsBlocked) {
+    const modelsHead = document.createElement('div');
+    modelsHead.className = 'field-label';
+    modelsHead.style.marginTop = '8px';
+    modelsHead.innerHTML = `<span>Available models</span><small>Test → unlocks in /model list</small>`;
+    panel.appendChild(modelsHead);
+
+    const modelGrid = document.createElement('div');
+    modelGrid.className = 'provider-models';
+    cat.models.forEach((m) => {
+      const row = document.createElement('div');
+      row.className = 'provider-model-row';
+      row.dataset.modelId = m.id;
+      const isTested = tested.has(m.id);
+      row.innerHTML = `
+        <div class="name">${escapeHtml(m.label)} <small>${escapeHtml(m.id)} · ${escapeHtml(m.note || '')}</small></div>
+        <span class="${isTested ? 'tested-badge' : 'untested-badge'}">${isTested ? '✓ tested' : 'not tested'}</span>
+        <button type="button" class="test-btn" ${cat.corsBlocked ? 'disabled title="Browser test unavailable for this provider — verify via mesh CLI"' : ''}>${isTested ? 'Retest' : 'Test'}</button>
+      `;
+      const testBtn = row.querySelector('.test-btn');
+      if (!cat.corsBlocked) {
+        testBtn.onclick = () => runProviderModelTest(providerId, m, row, user, cliState, profile);
+      }
+      modelGrid.appendChild(row);
+    });
+    panel.appendChild(modelGrid);
+  }
+
+  // Wire save/delete handlers
+  $('prov-save').onclick = () => saveProviderKey(providerId, user, cliState, profile);
+  if (status.has_key) {
+    $('prov-delete').onclick = () => deleteProviderKey(providerId, user, cliState, profile);
+  }
+}
+
+function buildField(name, labelText, defaultValue, type) {
+  const wrap = document.createElement('div');
+  wrap.className = 'field';
+  // For non-secret fields (region, endpoint) pre-fill the value so the user
+  // can see what's currently stored. Secrets (password fields) always start
+  // empty — the user re-enters the key if they want to update it.
+  const valueAttr = type === 'password' ? '' : (defaultValue ? ` value="${escapeHtml(defaultValue)}"` : '');
+  wrap.innerHTML = `
+    <span class="field-label"><span>${escapeHtml(labelText)}</span></span>
+    <input type="${type}" data-field="${name}" autocomplete="off"${valueAttr} placeholder="${escapeHtml(defaultValue || '')}" />
+  `;
+  return wrap;
+}
+
+function readProviderInputs(providerId) {
+  const panel = $('provider-panel');
+  const cat = PROVIDER_CATALOG[providerId];
+  const get = (n) => panel.querySelector(`input[data-field="${n}"]`)?.value?.trim() || '';
+  if (cat.needsPair) {
+    return {
+      accessKey: get('access-key'),
+      secretKey: get('secret-key'),
+      region: get('region') || 'us-east-1'
+    };
+  }
+  return {
+    key: get('key'),
+    endpoint: get('endpoint')
+  };
+}
+
+async function saveProviderKey(providerId, user, cliState, profile) {
+  const cat = PROVIDER_CATALOG[providerId];
+  const vals = readProviderInputs(providerId);
+  const status = $('prov-save-status');
+  status.textContent = '';
+  status.className = 'byok-status';
+  let extra = {};
+  let primaryKey = '';
+  if (cat.needsPair) {
+    if (!vals.accessKey || !vals.secretKey) {
+      showToast('Both access + secret key required', true);
+      return;
+    }
+    // For AWS, store both keys. We pack secretKey into extra; the access key
+    // is the "primary" key shown as the connection identifier.
+    primaryKey = vals.accessKey;
+    extra = { secret_key_enc: '__ENCRYPT__', region: vals.region }; // placeholder; encryption done via separate RPC call below
+  } else {
+    if (!vals.key) {
+      showToast(`${cat.keyLabel} required`, true);
+      return;
+    }
+    primaryKey = vals.key;
+    if (cat.needsEndpoint && vals.endpoint) extra.endpoint = vals.endpoint;
+  }
+
+  $('prov-save').disabled = true;
+  try {
+    const { error } = await sb.rpc('mesh_save_provider_key', {
+      p_provider: providerId,
+      p_key: primaryKey,
+      p_model_id: null,
+      p_marked_tested: false,
+      p_extra: extra
+    });
+    if (error) throw error;
+    // AWS — store secret key as a second provider-specific encrypted blob.
+    if (cat.needsPair) {
+      const { error: e2 } = await sb.rpc('mesh_save_provider_key', {
+        p_provider: providerId + '_secret',
+        p_key: vals.secretKey,
+        p_model_id: null,
+        p_marked_tested: false,
+        p_extra: {}
+      });
+      if (e2) throw e2;
+    }
+    status.textContent = 'saved (encrypted) · active on next mesh start';
+    status.className = 'byok-status ok';
+    showToast(`${cat.label} key saved`);
+    providerStatusCache = await loadProviderStatus();
+    renderProviderPanel(providerId, user, cliState, profile);
+    renderModelListEditor(cliState, profile);
+  } catch (e) {
+    status.textContent = e?.message || String(e);
+    status.className = 'byok-status err';
+  } finally {
+    $('prov-save').disabled = false;
+  }
+}
+
+async function deleteProviderKey(providerId, user, cliState, profile) {
+  if (!confirm(`Remove the ${PROVIDER_CATALOG[providerId].label} key? Models from this provider will disappear from /model.`)) return;
+  try {
+    const { error } = await sb.rpc('mesh_delete_provider_key', { p_provider: providerId });
+    if (error) throw error;
+    if (PROVIDER_CATALOG[providerId].needsPair) {
+      await sb.rpc('mesh_delete_provider_key', { p_provider: providerId + '_secret' });
+    }
+    showToast(`${PROVIDER_CATALOG[providerId].label} disconnected`);
+    providerStatusCache = await loadProviderStatus();
+    renderProviderPanel(providerId, user, cliState, profile);
+    renderModelListEditor(cliState, profile);
+  } catch (e) {
+    showToast(e?.message || String(e), true);
+  }
+}
+
+async function runProviderModelTest(providerId, modelDef, rowEl, user, cliState, profile) {
+  const cat = PROVIDER_CATALOG[providerId];
+  if (cat.corsBlocked) return;
+  const key = $('provider-panel').querySelector('input[data-field="key"]')?.value?.trim();
+  if (!key) {
+    showToast('Enter and save your key first, then test', true);
+    return;
+  }
+  const testBtn = rowEl.querySelector('.test-btn');
+  testBtn.disabled = true;
+  testBtn.textContent = 'Testing…';
+  rowEl.classList.add('testing');
+  rowEl.classList.remove('testing-error');
+  // Drop any earlier error msg row
+  const prevErr = rowEl.querySelector('.err-msg');
+  if (prevErr) prevErr.remove();
+  const inflightKey = `${providerId}:${modelDef.id}`;
+  if (inFlightTests.has(inflightKey)) return;
+  const testPromise = (async () => {
+    try {
+      const extras = readProviderInputs(providerId);
+      await PROVIDER_TESTERS[providerId](key, modelDef.id, extras);
+      // Persist the success
+      const { error } = await sb.rpc('mesh_save_provider_key', {
+        p_provider: providerId,
+        p_key: null, // don't re-save key
+        p_model_id: modelDef.id,
+        p_marked_tested: true,
+        p_extra: {}
+      });
+      if (error) throw error;
+      providerStatusCache = await loadProviderStatus();
+      showToast(`${modelDef.label} verified`);
+      renderProviderPanel(providerId, user, cliState, profile);
+      renderModelListEditor(cliState, profile);
+    } catch (e) {
+      rowEl.classList.remove('testing');
+      rowEl.classList.add('testing-error');
+      testBtn.disabled = false;
+      testBtn.textContent = 'Retry';
+      const errDiv = document.createElement('div');
+      errDiv.className = 'err-msg';
+      errDiv.textContent = e?.message || String(e);
+      rowEl.appendChild(errDiv);
+    } finally {
+      inFlightTests.delete(inflightKey);
+    }
+  })();
+  inFlightTests.set(inflightKey, testPromise);
+  await testPromise;
+}
+
+/** Provider testers — each calls the provider's API directly from the browser.
+ *  Anthropic and AWS need server-side proxying; their corsBlocked flag prevents
+ *  the test from being attempted in the first place. */
+const PROVIDER_TESTERS = {
+  google: async (key, modelId) => {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(modelId)}:generateContent?key=${encodeURIComponent(key)}`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: 'Reply with exactly: ok' }] }],
+        generationConfig: { maxOutputTokens: 8, temperature: 0 }
+      })
+    });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(body?.error?.message || `HTTP ${res.status}`);
+  },
+  openai: async (key, modelId) => {
+    const res = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        authorization: `Bearer ${key}`
+      },
+      body: JSON.stringify({
+        model: modelId,
+        messages: [{ role: 'user', content: 'Reply with: ok' }],
+        max_completion_tokens: 8,
+        temperature: 0
+      })
+    });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(body?.error?.message || `HTTP ${res.status}`);
+  },
+  anthropic: async () => {
+    throw new Error('CORS-blocked. Verify via `mesh test` on the CLI after saving the key.');
+  },
+  openrouter: async (key, modelId) => {
+    const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        authorization: `Bearer ${key}`,
+        'HTTP-Referer': 'https://try-mesh.com',
+        'X-Title': 'Mesh'
+      },
+      body: JSON.stringify({
+        model: modelId,
+        messages: [{ role: 'user', content: 'Reply with: ok' }],
+        max_tokens: 8,
+        temperature: 0
+      })
+    });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(body?.error?.message || `HTTP ${res.status}`);
+  },
+  aws: async () => {
+    throw new Error('AWS requires SigV4 — verify via `mesh test` after saving credentials.');
+  },
+  azure: async (key, modelId, extras) => {
+    const endpoint = (extras?.endpoint || '').replace(/\/+$/, '');
+    if (!endpoint) throw new Error('Endpoint URL required for Azure');
+    const url = `${endpoint}/openai/deployments/${encodeURIComponent(modelId)}/chat/completions?api-version=2024-10-21`;
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'api-key': key },
+      body: JSON.stringify({
+        messages: [{ role: 'user', content: 'Reply with: ok' }],
+        max_completion_tokens: 8,
+        temperature: 0
+      })
+    });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(body?.error?.message || `HTTP ${res.status}`);
+  }
+};
+
+/* ============== /model list editor ==============
+ * Shows the user's effective model list: proxy models (always available) +
+ * any model they've tested via BYOK. Tick boxes write back to user_secrets.custom_model_list.
+ */
+function renderModelListEditor(cliState, profile) {
+  // Refresh the default-model dropdown too — BYOK additions may have changed.
+  const sel = $('setting-default-model');
+  if (sel) {
+    const prevValue = sel.value;
+    populateDefaultModelSelect(sel, cliState);
+    if ([...sel.options].some((o) => o.value === prevValue)) sel.value = prevValue;
+    else if (cliState?.modelId) sel.value = cliState.modelId;
+  }
+
+  const wrap = $('model-list-editor');
+  wrap.innerHTML = '';
+
+  const proxyModels = MODEL_CATALOG.map((m) => ({
+    id: m.value,
+    label: m.label,
+    provider: m.provider,
+    badge: 'proxy'
+  }));
+  const byokModels = [];
+  if (providerStatusCache?.providers) {
+    PROVIDER_ORDER.forEach((pid) => {
+      const tested = providerStatusCache.providers[pid]?.tested_models || [];
+      tested.forEach((mid) => {
+        const def = PROVIDER_CATALOG[pid].models.find((m) => m.id === mid);
+        byokModels.push({
+          id: `${pid}:${mid}`,
+          label: def?.label || mid,
+          provider: pid,
+          badge: 'byok',
+          underlyingId: mid
+        });
+      });
+    });
+  }
+
+  const enabled = new Set(providerStatusCache?.custom_model_list || []);
+  // If no custom list yet, default to: ALL proxy + ALL tested BYOK
+  if (enabled.size === 0) {
+    proxyModels.forEach((m) => enabled.add(m.id));
+    byokModels.forEach((m) => enabled.add(m.id));
+  }
+
+  const proxyHead = document.createElement('div');
+  proxyHead.className = 'group-header';
+  proxyHead.textContent = 'Mesh proxy · always available';
+  wrap.appendChild(proxyHead);
+  proxyModels.forEach((m) => wrap.appendChild(modelListRow(m, enabled, true)));
+
+  if (byokModels.length > 0) {
+    const byokHead = document.createElement('div');
+    byokHead.className = 'group-header';
+    byokHead.style.marginTop = '12px';
+    byokHead.textContent = 'BYOK · tested models';
+    wrap.appendChild(byokHead);
+    byokModels.forEach((m) => wrap.appendChild(modelListRow(m, enabled, false)));
+  } else {
+    const tip = document.createElement('p');
+    tip.className = 'dim-tip';
+    tip.style.marginTop = '10px';
+    tip.textContent = 'BYOK models will appear here after you test them above.';
+    wrap.appendChild(tip);
+  }
+}
+
+function modelListRow(m, enabledSet, isProxy) {
+  const row = document.createElement('label');
+  row.className = 'mle-row';
+  const checked = enabledSet.has(m.id);
+  row.innerHTML = `
+    <input type="checkbox" data-mid="${escapeHtml(m.id)}" ${checked ? 'checked' : ''} ${isProxy ? '' : ''} />
+    <span class="mle-name">${escapeHtml(m.label)} <small>${escapeHtml(m.id)}</small></span>
+    <span class="badge ${m.badge}">${m.badge}</span>
+  `;
+  row.querySelector('input').addEventListener('change', async (ev) => {
+    if (ev.target.checked) enabledSet.add(m.id); else enabledSet.delete(m.id);
+    try {
+      const { error } = await sb.rpc('mesh_save_custom_model_list', { p_list: Array.from(enabledSet) });
+      if (error) throw error;
+    } catch (e) {
+      showToast('Failed to save model list: ' + (e?.message || String(e)), true);
+      ev.target.checked = !ev.target.checked;
+      if (ev.target.checked) enabledSet.add(m.id); else enabledSet.delete(m.id);
+    }
+  });
+  return row;
+}
+
+const PROVIDER_META = {
+  email:  { name: 'Email + password', icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>' },
+  google: { name: 'Google',           icon: '<svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.83z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>' },
+  github: { name: 'GitHub',           icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.4-1.34-1.77-1.34-1.77-1.08-.74.08-.73.08-.73 1.2.09 1.83 1.24 1.83 1.24 1.08 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18a4.65 4.65 0 0 1 1.24 3.22c0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 12 .3z"/></svg>' }
+};
+
+function identityAccountLabel(identity, user) {
+  const data = identity?.identity_data || {};
+  const provider = identity?.provider;
+  if (provider === 'github') {
+    return data.user_name || data.preferred_username || data.name || data.email || user.email || '—';
+  }
+  if (provider === 'google') {
+    return data.email || user.email || '—';
+  }
+  if (provider === 'email') {
+    return user.email || data.email || '—';
+  }
+  return data.email || data.name || user.email || '—';
+}
+
+function primaryProviderDisplay(user) {
+  const identities = user.identities || [];
+  const primary = user.app_metadata?.provider || identities[0]?.provider || 'email';
+  const identity = identities.find((i) => i.provider === primary) || identities[0] || null;
+  const account = identityAccountLabel(identity, user);
+  const providerName = PROVIDER_META[primary]?.name || primary;
+  return `${providerName} (${account})`;
+}
+
+async function getNewsletterStatus(user) {
+  const token = (await sb.auth.getSession())?.data?.session?.access_token;
+  if (!token) return false;
+  const res = await fetch('/api/account/newsletter', {
+    method: 'GET',
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  if (!res.ok) return user.user_metadata?.newsletter_subscribed === true;
+  const data = await res.json().catch(() => ({}));
+  return data.subscribed === true;
+}
+
+async function setNewsletterStatus(subscribed) {
+  const token = (await sb.auth.getSession())?.data?.session?.access_token;
+  if (!token) throw new Error('Session missing');
+  const res = await fetch('/api/account/newsletter', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ subscribed })
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'Failed to update newsletter setting');
+  return data.subscribed === true;
+}
+
+function wireIdentityActions(user) {
+  const btn = $('newsletter-toggle-btn');
+  const authNote = $('newsletter-auth-note');
+  const statusNote = $('newsletter-status-note');
+  if (!btn) return;
+  if (authNote) authNote.textContent = `Signed in as ${user?.email || '—'}`;
+  if (statusNote) statusNote.textContent = 'Newsletter status…';
+
+  const syncLabel = (isSubscribed) => {
+    btn.textContent = isSubscribed ? 'Unsubscribe newsletter' : 'Subscribe newsletter';
+  };
+  btn.disabled = true;
+  getNewsletterStatus(user)
+    .then((isSubscribed) => {
+      syncLabel(isSubscribed);
+      btn.dataset.subscribed = isSubscribed ? '1' : '0';
+      if (statusNote) statusNote.textContent = isSubscribed ? 'Newsletter: subscribed' : 'Newsletter: not subscribed';
+      btn.disabled = false;
+    })
+    .catch(() => {
+      // If the API isn't reachable, don't guess the subscription state.
+      syncLabel(false);
+      btn.dataset.subscribed = '0';
+      if (statusNote) statusNote.textContent = 'Newsletter: status unavailable';
+      btn.disabled = true;
+    });
+
+  btn.addEventListener('click', async () => {
+    const current = btn.dataset.subscribed === '1';
+    btn.disabled = true;
+    btn.textContent = current ? 'Unsubscribing…' : 'Subscribing…';
+    try {
+      const next = await setNewsletterStatus(!current);
+      btn.dataset.subscribed = next ? '1' : '0';
+      syncLabel(next);
+      if (statusNote) statusNote.textContent = next ? 'Newsletter: subscribed' : 'Newsletter: not subscribed';
+      showToast(next ? 'Newsletter subscribed' : 'Newsletter unsubscribed');
+    } catch (e) {
+      syncLabel(current);
+      if (statusNote) statusNote.textContent = 'Newsletter: update failed';
+      showToast(e.message || String(e), true);
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  $('identity-logout-btn')?.addEventListener('click', async () => {
+    await sb.auth.signOut();
+    location.href = '/auth/login';
+  });
+}
+
+function renderProviders(user) {
+  const identities = user.identities || [];
+  const linkedProviders = new Set(identities.map((i) => i.provider));
+  const allProviders = ['email', 'google', 'github'];
+  const box = $('providers');
+  box.innerHTML = '';
+  allProviders.forEach((p) => {
+    const meta = PROVIDER_META[p];
+    const identity = identities.find((i) => i.provider === p) || null;
+    const accountLabel = identity ? identityAccountLabel(identity, user) : 'not linked';
+    const isLinked = linkedProviders.has(p);
+    const canDisconnect = isLinked && identities.length > 1 && p !== 'email';
+    const card = document.createElement('div');
+    card.className = 'provider' + (isLinked ? ' linked' : '');
+    card.innerHTML = `
+      <div class="icon">${meta.icon}</div>
+      <div class="body">
+        <div class="name">${meta.name}</div>
+        <div class="status">${isLinked ? `linked · ${escapeHtml(accountLabel)}` : 'not linked'}</div>
+      </div>
+      ${p === 'email'
+        ? ''
+        : (isLinked
+            ? (canDisconnect ? `<button class="action disconnect" data-prov="${p}" data-act="unlink">Disconnect</button>` : '')
+            : `<button class="action" data-prov="${p}" data-act="link">Connect</button>`)
+      }
+    `;
+    box.appendChild(card);
+  });
+
+  box.querySelectorAll('button.action').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const p = btn.dataset.prov;
+      const act = btn.dataset.act;
+      btn.disabled = true;
+      try {
+        if (act === 'link') {
+          const { error } = await sb.auth.linkIdentity({ provider: p });
+          if (error) {
+            // Fallback when project-level manual_linking is disabled in
+            // Supabase: trigger an OAuth signin to the same provider with
+            // redirect back to /account. Supabase auto-merges the identity
+            // when the OAuth email matches the existing account email.
+            const isManualLinkingDisabled = /manual\s+linking\s+is\s+disabled/i.test(error.message || '');
+            if (isManualLinkingDisabled) {
+              const redirectTo = `${window.location.origin}/account?linked=${encodeURIComponent(p)}`;
+              const { error: oerr } = await sb.auth.signInWithOAuth({ provider: p, options: { redirectTo } });
+              if (oerr) throw oerr;
+              return; // OAuth redirect happens
+            }
+            throw error;
+          }
+          // OAuth redirect happens — page reloads on return
+        } else {
+          const identity = (user.identities || []).find((i) => i.provider === p);
+          if (!identity) throw new Error('Identity not found');
+          const { error } = await sb.auth.unlinkIdentity(identity);
+          if (error) throw error;
+          showToast(`${PROVIDER_META[p].name} disconnected`);
+          // Refresh state
+          const { data: { user: u } } = await sb.auth.getUser();
+          if (u) renderProviders(u);
+        }
+      } catch (e) {
+        showToast(e.message || String(e), true);
+        btn.disabled = false;
+      }
+    });
+  });
+}
+
+function wireSecurity(user) {
+  $('reset-pw-btn').addEventListener('click', async () => {
+    const btn = $('reset-pw-btn');
+    btn.disabled = true; btn.textContent = 'Sending…';
+    const { error } = await sb.auth.resetPasswordForEmail(user.email, {
+      redirectTo: `${location.origin}/auth/login`
+    });
+    btn.disabled = false; btn.textContent = 'Send reset email';
+    if (error) { showToast(error.message, true); return; }
+    showToast(`Reset link sent to ${user.email}`);
+  });
+
+  $('signout-all-btn').addEventListener('click', async () => {
+    if (!confirm('Sign out of every device including the CLI?')) return;
+    const { error } = await sb.auth.signOut({ scope: 'global' });
+    if (error) { showToast(error.message, true); return; }
+    location.href = '/auth/login';
+  });
+
+  $('delete-btn').addEventListener('click', () => {
+    // Real account deletion requires service-role admin call — open
+    // a request for now since we don't expose that endpoint to users.
+    const subject = encodeURIComponent(`Mesh — account deletion request`);
+    const body = encodeURIComponent(`Account: ${user.email}\nUser ID: ${user.id}\n\nPlease delete my Mesh account. I understand this is permanent.`);
+    location.href = `mailto:edgar.baumann@try-mesh.com?subject=${subject}&body=${body}`;
+  });
+}
+
+async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session?.user) {
+    $('gate-spinner').style.display = 'none';
+    $('gate-title').textContent = 'Not signed in';
+    $('gate-msg').textContent = 'You need to be signed in to manage your Mesh account.';
+    $('gate-login-btn').style.display = 'inline-flex';
+    return;
+  }
+
+  const user = session.user;
+  const profile = await loadProfile(user.id);
+  const plan = (profile.plan || 'basic').toLowerCase();
+
+  // Hero
+  $('hero-email').textContent = user.email;
+  $('meta-since').textContent = fmtDate(user.created_at);
+  $('meta-last').textContent = fmtRelative(user.last_sign_in_at || user.created_at);
+
+  // Web IDE handoff: the browser IDE will be hosted at https://ide.try-mesh.com
+  // once Cloud Run is set up; for now we route through /api/account/ide-handoff
+  // which mints a one-time token bound to the current Supabase session and
+  // 302s to the IDE URL. If the endpoint isn't deployed yet, fall back to /ide.
+  wireWebIdeButton(session);
+
+  // Plan + switcher
+  renderPlan(plan);
+  renderTierSwitcher(plan, user, profile);
+
+  // Usage (with per-model demo breakdown)
+  renderUsage(user.id, plan);
+
+  // Settings (synced with CLI via profiles.cli_settings)
+  renderSettings(user, profile);
+
+  // Connected accounts (OAuth providers)
+  renderProviders(user);
+
+  // Security actions
+  wireSecurity(user);
+
+  // Identity
+  const full = [profile.first_name, profile.last_name].filter(Boolean).join(' ') || user.user_metadata?.name || '—';
+  $('name-display').textContent = full;
+  $('email-cell').textContent = user.email;
+  $('userid-cell').textContent = user.id;
+  $('provider-cell').textContent = primaryProviderDisplay(user);
+
+  $('gate-view').style.display = 'none';
+  $('account-view').style.display = 'flex';
+
+  wireEditName(user, profile);
+  wireIdentityActions(user);
+  wireSignOut();
+}
+
+function wireEditName(user, profile) {
+  $('edit-name-btn').addEventListener('click', () => {
+    const cell = $('name-cell');
+    const first = profile.first_name || '';
+    const last = profile.last_name || '';
+    cell.innerHTML = `
+      <input type="text" id="first-edit" placeholder="First" value="${escapeHtml(first)}" autocomplete="given-name" />
+      <input type="text" id="last-edit" placeholder="Last" value="${escapeHtml(last)}" autocomplete="family-name" />
+      <button class="edit-btn" id="save-name-btn" type="button">Save</button>
+    `;
+    $('first-edit').focus();
+    $('save-name-btn').addEventListener('click', async () => {
+      const f = $('first-edit').value.trim();
+      const l = $('last-edit').value.trim();
+      if (!f || !l) { showToast('Both first and last name are required.', true); return; }
+      const { error } = await sb.from('profiles')
+        .update({ first_name: f, last_name: l })
+        .eq('user_id', user.id);
+      if (error) { showToast(error.message, true); return; }
+      profile.first_name = f;
+      profile.last_name = l;
+      cell.innerHTML = `<span id="name-display">${escapeHtml(f + ' ' + l)}</span><button class="edit-btn" id="edit-name-btn" type="button">Edit</button>`;
+      wireEditName(user, profile);
+      showToast('Name updated');
+    });
+  });
+}
+
+function wireSignOut() {
+  const doSignOut = async () => {
+    await sb.auth.signOut();
+    location.href = '/auth/login';
+  };
+  $('signout-btn-secondary')?.addEventListener('click', doSignOut);
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+init().catch((e) => {
+  $('gate-spinner').style.display = 'none';
+  $('gate-title').textContent = 'Couldn\'t load account';
+  $('gate-msg').textContent = e?.message || String(e);
+});
+</script>
+</body>
+</html>

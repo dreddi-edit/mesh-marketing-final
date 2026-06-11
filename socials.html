@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Socials - Mesh</title>
+  <meta name="description" content="Follow Mesh on TikTok, X, and YouTube. Apply as a Mesh Brand Ambassador.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://try-mesh.com/socials">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,800;1,900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --cyan: oklch(0.74 0.14 200);
+      --cyan-soft: oklch(0.74 0.14 200 / 0.12);
+      --bg: oklch(0.078 0.038 200);
+      --bg-deep: oklch(0.046 0.034 204);
+      --panel: oklch(0.046 0.034 204);
+      --ink: oklch(0.98 0.004 195);
+      --muted: oklch(0.72 0.026 198 / 0.58);
+      --line: oklch(1 0 0 / 0.08);
+      --line-strong: oklch(0.74 0.14 200 / 0.28);
+      --mono: 'Geist Mono', monospace;
+      --display: 'Barlow Condensed', sans-serif;
+      --sans: 'DM Sans', system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .site-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 56px;
+      background: oklch(0.078 0.038 200 / 0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-logo { display: inline-flex; align-items: center; }
+    .nav-right { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    .nav-right a {
+      font-size: 13px;
+      color: oklch(1 0 0 / 0.42);
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .nav-right a:hover { color: var(--ink); border-color: oklch(1 0 0 / 0.12); }
+    .nav-cta { color: var(--cyan) !important; border-color: var(--line-strong) !important; }
+    .nav-waitlist {
+      background: var(--cyan-soft) !important;
+      border-color: var(--line-strong) !important;
+      color: var(--cyan) !important;
+    }
+
+    main {
+      flex: 1;
+      width: min(1160px, calc(100% - 64px));
+      margin: 0 auto;
+      padding: 118px 0 64px;
+    }
+    .page-head h1{
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 900;
+      font-size: clamp(40px, 6vw, 66px);
+      line-height: 0.92;
+      letter-spacing: -0.03em;
+      margin-bottom: 10px;
+    }
+    .page-head p{
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.65;
+      max-width: 700px;
+      margin-bottom: 26px;
+    }
+
+    .social-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .social-card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: oklch(1 0 0 / 0.02);
+      min-height: 280px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color .2s;
+    }
+    .social-card:hover { border-color: oklch(1 0 0 / 0.22); }
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .card-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: oklch(1 0 0 / 0.62);
+    }
+    .card-link {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: oklch(1 0 0 / 0.55);
+    }
+    .preview {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      min-height: 140px;
+      background: oklch(0.046 0.034 204 / 0.6);
+      padding: 12px;
+      display: grid;
+      align-content: start;
+      gap: 8px;
+    }
+    .preview .line {
+      height: 8px;
+      border-radius: 999px;
+      background: oklch(1 0 0 / 0.12);
+    }
+    .preview .line.short { width: 62%; }
+    .preview .line.mid { width: 78%; }
+    .preview .line.long { width: 92%; }
+    .preview .thumb {
+      margin-top: 10px;
+      height: 62px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: linear-gradient(135deg, oklch(0.74 0.14 200 / 0.15), transparent 65%);
+    }
+    .card-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .card-foot p { color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .open-btn {
+      border: 1px solid var(--line-strong);
+      background: var(--cyan-soft);
+      color: var(--cyan);
+      min-height: 36px;
+      padding: 0 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: var(--sans);
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .open-btn:hover { transform: translateY(-1px); border-color: var(--cyan); }
+    button.open-btn { font-family: var(--sans); font-weight: 600; }
+
+    /* Ambassador apply modal */
+    .modal-bg {
+      position: fixed; inset: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.78);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s;
+      backdrop-filter: blur(8px);
+      padding: 20px;
+    }
+    .modal-bg.open { opacity: 1; pointer-events: auto; }
+    .modal {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 520px;
+      max-height: min(88vh, 640px);
+      overflow: hidden;
+      padding: 0;
+      border: 1px solid oklch(1 0 0 / 0.1);
+      border-radius: 16px;
+      background: var(--panel);
+      box-shadow: 0 40px 120px rgba(0,0,0,0.6);
+    }
+    .modal-inner {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      flex: 1;
+      padding: 32px 36px 0;
+    }
+    .modal-scroll {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding-right: 2px;
+      margin-right: -2px;
+    }
+    .modal-foot {
+      flex-shrink: 0;
+      padding: 16px 36px 24px;
+      border-top: 1px solid var(--line);
+      background: var(--panel);
+    }
+    .modal h3 {
+      margin-bottom: 6px;
+      font-family: var(--display);
+      font-size: 42px;
+      font-style: italic;
+      font-weight: 900;
+      line-height: 0.95;
+      color: var(--ink);
+    }
+    .modal .modal-lead {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+      margin-bottom: 18px;
+    }
+    .modal-steps {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .modal-step-dot {
+      flex: 1;
+      height: 3px;
+      border-radius: 999px;
+      background: oklch(1 0 0 / 0.1);
+      transition: background 0.2s;
+    }
+    .modal-step-dot.active { background: var(--cyan); }
+    .modal-step-dot.done { background: oklch(0.74 0.14 200 / 0.45); }
+    .modal-step-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 14px;
+    }
+    .modal-panel { display: none; }
+    .modal-panel.active { display: block; }
+    .modal label {
+      display: block;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: oklch(1 0 0 / 0.45);
+      margin-bottom: 6px;
+    }
+    .modal label .opt { color: oklch(1 0 0 / 0.28); font-weight: 400; text-transform: none; letter-spacing: 0; }
+    .modal input,
+    .modal select,
+    .modal textarea {
+      width: 100%;
+      padding: 12px 13px;
+      border-radius: 10px;
+      border: 1px solid oklch(1 0 0 / 0.1);
+      background: oklch(1 0 0 / 0.04);
+      color: #fff;
+      font-size: 14px;
+      font-family: var(--sans);
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      margin-bottom: 12px;
+    }
+    .modal textarea { min-height: 72px; max-height: 120px; resize: none; line-height: 1.5; }
+    .field-hint { color: oklch(1 0 0 / 0.32); font-weight: 400; text-transform: none; letter-spacing: 0; }
+    .field-count {
+      margin: -6px 0 12px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: oklch(1 0 0 / 0.38);
+      text-align: right;
+    }
+    .field-count.ok { color: var(--cyan); }
+    .field-count.warn { color: oklch(0.78 0.16 55); }
+    .modal select { cursor: pointer; }
+    .modal input::placeholder,
+    .modal textarea::placeholder { color: oklch(1 0 0 / 0.32); }
+    .modal input:focus,
+    .modal select:focus,
+    .modal textarea:focus {
+      border-color: var(--cyan);
+      background: oklch(1 0 0 / 0.06);
+    }
+    .modal-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .modal-row > div { min-width: 0; }
+    .modal-row input,
+    .modal-row select { margin-bottom: 0; }
+    .modal-row-wrap { margin-bottom: 12px; }
+    .modal-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 4px 0 16px;
+      cursor: pointer;
+    }
+    .modal-check input {
+      width: auto;
+      margin: 3px 0 0;
+      accent-color: var(--cyan);
+    }
+    .modal-check span {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .modal-btn {
+      flex: 1;
+      padding: 13px 16px;
+      border: none;
+      border-radius: 10px;
+      background: var(--cyan);
+      color: #001318;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: var(--sans);
+      letter-spacing: 0.01em;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    .modal-btn:hover { transform: translateY(-1px); }
+    .modal-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .modal-btn-ghost {
+      flex: 0 0 auto;
+      padding: 13px 18px;
+      border: 1px solid oklch(1 0 0 / 0.12);
+      border-radius: 10px;
+      background: transparent;
+      color: oklch(1 0 0 / 0.55);
+      font-size: 14px;
+      font-family: var(--sans);
+      cursor: pointer;
+    }
+    .modal-btn-ghost:hover { color: var(--ink); border-color: oklch(1 0 0 / 0.22); }
+    .modal-msg {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--cyan);
+      text-align: center;
+      min-height: 18px;
+    }
+    .modal-msg.err { color: oklch(0.72 0.18 25); }
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 3;
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border: 1px solid oklch(1 0 0 / 0.1);
+      background: oklch(0.078 0.038 200 / 0.92);
+      border-radius: 10px;
+      color: oklch(1 0 0 / 0.7);
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 1;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .modal-close:hover {
+      background: oklch(1 0 0 / 0.08);
+      color: #fff;
+      border-color: oklch(1 0 0 / 0.2);
+    }
+    .modal-head { padding-right: 44px; }
+    .modal-success { text-align: center; padding: 12px 0 8px; }
+    .modal-success p { color: var(--muted); font-size: 15px; line-height: 1.6; margin-top: 12px; }
+
+    .social-card--ambassador .card-top { margin-bottom: 12px; }
+    .ambassador-symbol {
+      min-height: 176px;
+      width: calc(100% + 36px);
+      margin: 0 -18px;
+      border: none;
+      border-radius: 0;
+      padding: 0 20px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(ellipse 70% 80% at 15% 50%, oklch(0.74 0.14 200 / 0.14), transparent 55%),
+        radial-gradient(ellipse 55% 70% at 92% 40%, oklch(0.75 0.12 145 / 0.10), transparent 50%),
+        oklch(0.052 0.036 204);
+    }
+    .amb-brand-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: nowrap;
+    }
+    .amb-logo {
+      width: 30px;
+      height: 30px;
+      flex-shrink: 0;
+      align-self: center;
+      margin-bottom: 3px;
+    }
+    .amb-mesh {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 800;
+      font-size: 32px;
+      line-height: 1;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+    }
+    .amb-x {
+      font-family: var(--sans);
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1;
+      color: oklch(0.74 0.14 200 / 0.55);
+      margin: 0 2px;
+    }
+    .amb-you {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 900;
+      font-size: 38px;
+      line-height: 1;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+      transform: translateY(1px);
+    }
+
+    footer{
+      background: oklch(0.045 0.032 204);
+      border-top: 1px solid var(--line);
+      padding: 44px 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: auto;
+    }
+    .f-links{display:flex;gap:24px;flex-wrap:wrap}
+    .f-links a{color: oklch(1 0 0 / 0.26); font-size:13px}
+    .f-links a:hover{color: oklch(1 0 0 / 0.66)}
+    .f-copy{color: oklch(1 0 0 / 0.18); font-family: var(--mono); font-size: 11px;}
+    .f-logo{display:inline-flex;align-items:center;text-decoration:none}
+    .f-logo svg{height:22px;width:auto;display:block}
+
+    @media (max-width: 880px){
+      .social-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width:720px){
+      .site-nav{padding:16px 20px}
+      main{width:calc(100% - 32px);padding-top:100px}
+      footer{padding:32px 24px}
+      .modal-inner { padding: 26px 22px 0; }
+      .modal-foot { padding: 14px 22px 20px; }
+      .modal-head { padding-right: 40px; }
+      .modal-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="modal-bg" id="ambModalBg" onclick="closeAmbassadorModal(event)">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="ambTitle" onclick="event.stopPropagation()">
+      <button type="button" class="modal-close" onclick="closeAmbassadorModal()" aria-label="Close">×</button>
+      <div class="modal-inner">
+        <div class="modal-head">
+          <h3 id="ambTitle">Brand<br>Ambassador</h3>
+          <p class="modal-lead" id="ambLead">Three short steps — contact, socials, and why you want to represent Mesh.</p>
+          <div class="modal-steps" id="ambSteps" aria-hidden="true">
+            <div class="modal-step-dot active" data-step="1"></div>
+            <div class="modal-step-dot" data-step="2"></div>
+            <div class="modal-step-dot" data-step="3"></div>
+          </div>
+        </div>
+
+        <div class="modal-scroll">
+      <form id="ambForm" onsubmit="return false;" novalidate>
+        <div class="modal-panel active" data-panel="1">
+          <div class="modal-step-label">Step 1 · Contact</div>
+          <div class="modal-row modal-row-wrap">
+            <div>
+              <label for="ambFirst">First name</label>
+              <input type="text" id="ambFirst" name="firstName" autocomplete="given-name" required>
+            </div>
+            <div>
+              <label for="ambLast">Last name</label>
+              <input type="text" id="ambLast" name="lastName" autocomplete="family-name" required>
+            </div>
+          </div>
+          <label for="ambEmail">Email</label>
+          <input type="email" id="ambEmail" name="email" autocomplete="email" placeholder="you@email.com" required>
+          <label for="ambPhone">Phone <span class="opt">(with country code)</span></label>
+          <input type="tel" id="ambPhone" name="phone" autocomplete="tel" placeholder="+49 170 …" required>
+          <label for="ambLocation">City / country <span class="opt">(optional)</span></label>
+          <input type="text" id="ambLocation" name="location" autocomplete="address-level2" placeholder="Berlin, Germany">
+        </div>
+
+        <div class="modal-panel" data-panel="2">
+          <div class="modal-step-label">Step 2 · Social profiles</div>
+          <p class="modal-lead" style="margin-top:-8px;margin-bottom:14px;font-size:13px">Add the channels where you create content. At least one link is required.</p>
+          <label for="ambTiktok">TikTok</label>
+          <input type="text" id="ambTiktok" name="tiktok" placeholder="https://tiktok.com/@… or @handle" inputmode="url">
+          <label for="ambX">X (Twitter)</label>
+          <input type="text" id="ambX" name="x" placeholder="https://x.com/… or @handle" inputmode="url">
+          <label for="ambYoutube">YouTube</label>
+          <input type="text" id="ambYoutube" name="youtube" placeholder="https://youtube.com/@…" inputmode="url">
+          <label for="ambInstagram">Instagram <span class="opt">(optional)</span></label>
+          <input type="text" id="ambInstagram" name="instagram" placeholder="https://instagram.com/…" inputmode="url">
+          <label for="ambLinkedin">LinkedIn <span class="opt">(optional)</span></label>
+          <input type="text" id="ambLinkedin" name="linkedin" placeholder="https://linkedin.com/in/…" inputmode="url">
+          <label for="ambOther">Other link <span class="opt">(optional)</span></label>
+          <input type="text" id="ambOther" name="otherSocial" placeholder="Website, newsletter, etc." inputmode="url">
+        </div>
+
+        <div class="modal-panel" data-panel="3">
+          <div class="modal-step-label">Step 3 · About you</div>
+          <label for="ambAudience">Approx. audience size</label>
+          <select id="ambAudience" name="audienceSize">
+            <option value="">Select range</option>
+            <option value="Under 1k">Under 1k</option>
+            <option value="1k – 10k">1k – 10k</option>
+            <option value="10k – 50k">10k – 50k</option>
+            <option value="50k – 100k">50k – 100k</option>
+            <option value="100k+">100k+</option>
+          </select>
+          <label for="ambFocus">Content focus <span class="opt">(optional)</span></label>
+          <input type="text" id="ambFocus" name="contentFocus" placeholder="e.g. dev tools, AI, terminal workflows">
+          <label for="ambWhy">Why do you want to represent Mesh? <span class="field-hint">(min. 20 characters)</span></label>
+          <textarea id="ambWhy" name="whyMesh" maxlength="2000" placeholder="What resonates with you about Mesh, and how would you talk about it?" aria-describedby="ambWhyCount"></textarea>
+          <p class="field-count" id="ambWhyCount"><span id="ambWhyNum">0</span> / 20 characters minimum</p>
+          <label for="ambPitch">Collaboration ideas <span class="opt">(optional)</span></label>
+          <textarea id="ambPitch" name="pitch" placeholder="Videos, posts, events, community — what do you have in mind?"></textarea>
+          <label class="modal-check">
+            <input type="checkbox" id="ambConsent" name="consent" required>
+            <span>I agree that Mesh may contact me about this application and store my details for review.</span>
+          </label>
+        </div>
+      </form>
+        </div>
+      </div>
+
+      <div class="modal-foot" id="ambFormBody">
+        <div class="modal-actions" id="ambActions">
+          <button type="button" class="modal-btn-ghost" id="ambBack" style="display:none" onclick="ambassadorStep(-1)">Back</button>
+          <button type="button" class="modal-btn" id="ambNext" onclick="ambassadorStep(1)">Continue →</button>
+        </div>
+        <p id="ambMsg" class="modal-msg" role="status"></p>
+      </div>
+
+      <div class="modal-success" id="ambSuccess" hidden style="padding:32px 36px 28px">
+        <div class="modal-step-label" style="color:var(--ink)">Application sent</div>
+        <p id="ambSuccessText">Thanks — we will review your profile and reply by email.</p>
+        <button type="button" class="modal-btn" style="margin-top:20px;max-width:200px;width:100%" onclick="closeAmbassadorModal()">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="site-nav">
+    <a class="nav-logo" href="/" aria-label="Mesh home">
+      <svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="26" y="20" font-family="DM Sans, system-ui, sans-serif" font-weight="800" font-size="17" fill="#ffffff">Mesh.</text>
+      </svg>
+    </a>
+    <div class="nav-right">
+      <a href="/about">About</a>
+      <a href="/quickstart">Quickstart</a>
+      <a href="/benchmarks">Benchmarks</a>
+      <a href="/docs">Docs</a>
+      <a href="/auth/login" class="nav-cta">Sign in</a>
+      <a href="/?openWaitlist=1" class="nav-waitlist">Waitlist</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="page-head">
+      <h1>Socials</h1>
+      <p>Four channels, one brand voice. Use these links for the official Mesh profiles and ambassador application.</p>
+    </section>
+
+    <section class="social-grid" aria-label="Mesh social channels">
+      <article class="social-card">
+        <div>
+          <div class="card-top">
+            <span class="card-label">TikTok</span>
+            <span class="card-link">@trymesh</span>
+          </div>
+          <div class="preview">
+            <div class="line long"></div>
+            <div class="line mid"></div>
+            <div class="line short"></div>
+            <div class="thumb"></div>
+          </div>
+        </div>
+        <div class="card-foot">
+          <p>Short product demos and workflow clips.</p>
+          <a class="open-btn" href="https://www.tiktok.com/@trymesh" target="_blank" rel="noreferrer noopener">Open</a>
+        </div>
+      </article>
+
+      <article class="social-card">
+        <div>
+          <div class="card-top">
+            <span class="card-label">X</span>
+            <span class="card-link">@trymesh</span>
+          </div>
+          <div class="preview">
+            <div class="line long"></div>
+            <div class="line short"></div>
+            <div class="line mid"></div>
+            <div class="thumb"></div>
+          </div>
+        </div>
+        <div class="card-foot">
+          <p>Release notes and technical updates.</p>
+          <a class="open-btn" href="https://x.com/trymesh" target="_blank" rel="noreferrer noopener">Open</a>
+        </div>
+      </article>
+
+      <article class="social-card">
+        <div>
+          <div class="card-top">
+            <span class="card-label">YouTube</span>
+            <span class="card-link">@trymesh</span>
+          </div>
+          <div class="preview">
+            <div class="line mid"></div>
+            <div class="line long"></div>
+            <div class="line short"></div>
+            <div class="thumb"></div>
+          </div>
+        </div>
+        <div class="card-foot">
+          <p>Long-form walkthroughs and deep dives.</p>
+          <a class="open-btn" href="https://www.youtube.com/@trymesh" target="_blank" rel="noreferrer noopener">Open</a>
+        </div>
+      </article>
+
+      <article class="social-card social-card--ambassador">
+        <div>
+          <div class="card-top">
+            <span class="card-label">Brand Ambassador</span>
+            <button type="button" class="card-link" style="background:none;border:none;cursor:pointer;font:inherit;padding:0" onclick="openAmbassadorModal()">Apply now</button>
+          </div>
+          <div class="ambassador-symbol" role="img" aria-label="Mesh x You">
+            <div class="amb-brand-row">
+              <svg class="amb-logo" viewBox="0 0 22 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span class="amb-mesh">Mesh</span>
+              <span class="amb-x" aria-hidden="true">×</span>
+              <span class="amb-you">YOU</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-foot">
+          <p>Represent Mesh publicly and collaborate with us.</p>
+          <button type="button" class="open-btn" onclick="openAmbassadorModal()">Apply</button>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <a class="f-logo" href="/">
+      <svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="26" y="20" font-family="DM Sans, system-ui, sans-serif" font-weight="800" font-size="17" fill="#ffffff">Mesh.</text>
+      </svg>
+    </a>
+    <div class="f-links">
+      <a href="https://github.com/dreddi-edit/mesh">Github</a>
+      <a href="https://www.npmjs.com/package/@trymesh/cli">NPM</a>
+      <a href="/license">License</a>
+      <a href="/contact">Contact</a>
+      <a href="/socials">Socials</a>
+    </div>
+    <div class="f-copy">© 2026 Mesh</div>
+  </footer>
+
+  <script>
+    let ambStep = 1;
+    const AMB_STEPS = 3;
+    const AMB_WHY_MIN = 20;
+
+    function updateWhyCount() {
+      const n = document.getElementById('ambWhy').value.trim().length;
+      const el = document.getElementById('ambWhyCount');
+      const num = document.getElementById('ambWhyNum');
+      if (!el || !num) return;
+      num.textContent = String(n);
+      el.classList.remove('ok', 'warn');
+      if (n >= AMB_WHY_MIN) el.classList.add('ok');
+      else el.classList.add('warn');
+    }
+
+    document.getElementById('ambWhy')?.addEventListener('input', updateWhyCount);
+
+    function openAmbassadorModal() {
+      ambStep = 1;
+      document.getElementById('ambForm').reset();
+      updateWhyCount();
+      document.querySelector('.modal-inner').hidden = false;
+      document.getElementById('ambFormBody').hidden = false;
+      document.getElementById('ambSuccess').hidden = true;
+      document.getElementById('ambMsg').textContent = '';
+      document.getElementById('ambMsg').className = 'modal-msg';
+      document.getElementById('ambNext').disabled = false;
+      document.getElementById('ambNext').textContent = 'Continue →';
+      updateAmbassadorUI();
+      document.getElementById('ambModalBg').classList.add('open');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => document.getElementById('ambFirst').focus(), 120);
+    }
+
+    function closeAmbassadorModal(e) {
+      const bg = document.getElementById('ambModalBg');
+      if (e && e.target !== bg && !e.currentTarget?.classList?.contains('modal-close')) return;
+      bg.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function setAmbMsg(text, isError) {
+      const el = document.getElementById('ambMsg');
+      el.textContent = text;
+      el.className = isError ? 'modal-msg err' : 'modal-msg';
+    }
+
+    function updateAmbassadorUI() {
+      document.querySelectorAll('.modal-panel').forEach((p) => {
+        p.classList.toggle('active', Number(p.dataset.panel) === ambStep);
+      });
+      document.querySelectorAll('.modal-step-dot').forEach((d) => {
+        const n = Number(d.dataset.step);
+        d.classList.toggle('active', n === ambStep);
+        d.classList.toggle('done', n < ambStep);
+      });
+      document.getElementById('ambBack').style.display = ambStep > 1 ? '' : 'none';
+      document.getElementById('ambNext').textContent = ambStep === AMB_STEPS ? 'Submit application' : 'Continue →';
+    }
+
+    function validateAmbassadorStep(step) {
+      if (step === 1) {
+        const first = document.getElementById('ambFirst').value.trim();
+        const last = document.getElementById('ambLast').value.trim();
+        const email = document.getElementById('ambEmail').value.trim();
+        const phone = document.getElementById('ambPhone').value.trim();
+        if (!first || !last) {
+          setAmbMsg('Please enter your first and last name.', true);
+          return false;
+        }
+        if (!/^\S+@\S+\.\S+$/.test(email)) {
+          setAmbMsg('Please enter a valid email address.', true);
+          return false;
+        }
+        if (!phone) {
+          setAmbMsg('Please enter a phone number.', true);
+          return false;
+        }
+      }
+      if (step === 2) {
+        const links = ['ambTiktok', 'ambX', 'ambYoutube', 'ambInstagram', 'ambLinkedin', 'ambOther']
+          .map((id) => document.getElementById(id).value.trim())
+          .filter(Boolean);
+        if (!links.length) {
+          setAmbMsg('Add at least one social profile link.', true);
+          return false;
+        }
+      }
+      if (step === 3) {
+        const why = document.getElementById('ambWhy').value.trim();
+        updateWhyCount();
+        if (why.length < AMB_WHY_MIN) {
+          setAmbMsg(`Please write at least ${AMB_WHY_MIN} characters (${why.length}/${AMB_WHY_MIN} so far).`, true);
+          document.getElementById('ambWhy').focus();
+          return false;
+        }
+        if (!document.getElementById('ambConsent').checked) {
+          setAmbMsg('Please confirm the consent checkbox.', true);
+          return false;
+        }
+      }
+      setAmbMsg('');
+      return true;
+    }
+
+    function ambassadorPayload() {
+      return {
+        firstName: document.getElementById('ambFirst').value.trim(),
+        lastName: document.getElementById('ambLast').value.trim(),
+        email: document.getElementById('ambEmail').value.trim(),
+        phone: document.getElementById('ambPhone').value.trim(),
+        location: document.getElementById('ambLocation').value.trim(),
+        tiktok: document.getElementById('ambTiktok').value.trim(),
+        x: document.getElementById('ambX').value.trim(),
+        youtube: document.getElementById('ambYoutube').value.trim(),
+        instagram: document.getElementById('ambInstagram').value.trim(),
+        linkedin: document.getElementById('ambLinkedin').value.trim(),
+        otherSocial: document.getElementById('ambOther').value.trim(),
+        audienceSize: document.getElementById('ambAudience').value,
+        contentFocus: document.getElementById('ambFocus').value.trim(),
+        whyMesh: document.getElementById('ambWhy').value.trim(),
+        pitch: document.getElementById('ambPitch').value.trim(),
+        consent: document.getElementById('ambConsent').checked
+      };
+    }
+
+    async function submitAmbassador() {
+      const btn = document.getElementById('ambNext');
+      btn.disabled = true;
+      setAmbMsg('Sending…');
+      try {
+        const res = await fetch('/api/ambassador-apply', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(ambassadorPayload())
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok) {
+          setAmbMsg(data.message || 'Something went wrong. Please try again.', true);
+          btn.disabled = false;
+          return;
+        }
+        document.querySelector('.modal-inner').hidden = true;
+        document.getElementById('ambFormBody').hidden = true;
+        document.getElementById('ambSuccess').hidden = false;
+        document.getElementById('ambSuccessText').textContent = data.message || 'Thanks — we will review your profile and reply by email.';
+      } catch {
+        setAmbMsg('Network error. Check your connection and try again.', true);
+        btn.disabled = false;
+      }
+    }
+
+    function ambassadorStep(delta) {
+      if (delta > 0 && !validateAmbassadorStep(ambStep)) return;
+      if (delta > 0 && ambStep === AMB_STEPS) {
+        submitAmbassador();
+        return;
+      }
+      ambStep = Math.min(AMB_STEPS, Math.max(1, ambStep + delta));
+      updateAmbassadorUI();
+      if (delta > 0) {
+        const panel = document.querySelector('.modal-panel.active');
+        const first = panel?.querySelector('input, select, textarea');
+        if (first) setTimeout(() => first.focus(), 80);
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && document.getElementById('ambModalBg').classList.contains('open')) {
+        closeAmbassadorModal();
+      }
+    });
+
+    const params = new URLSearchParams(location.search);
+    if (params.get('apply') === '1' || params.get('openAmbassador') === '1') {
+      openAmbassadorModal();
+    }
+  </script>
+<script src="/assets/nav-auth.js" defer></script>
+</body>
+</html>
+

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - Mesh</title>
+  <meta name="description" content="Get in touch with the Mesh team.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://try-mesh.com/contact">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,800;1,900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cyan: oklch(0.74 0.14 200);
+      --cyan-soft: oklch(0.74 0.14 200 / 0.12);
+      --bg: oklch(0.078 0.038 200);
+      --bg-deep: oklch(0.046 0.034 204);
+      --ink: oklch(0.98 0.004 195);
+      --muted: oklch(0.55 0.05 200);
+      --line: oklch(1 0 0 / 0.08);
+      --line-strong: oklch(0.74 0.14 200 / 0.28);
+      --mono: 'Geist Mono', monospace;
+      --display: 'Barlow Condensed', sans-serif;
+      --sans: 'DM Sans', system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { min-height: 100%; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .site-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 56px;
+    }
+    .nav-logo { display: inline-flex; align-items: center; }
+    .nav-right { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    .nav-right a {
+      font-size: 13px;
+      color: oklch(1 0 0 / 0.42);
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }
+    .nav-right a:hover { color: var(--ink); border-color: oklch(1 0 0 / 0.12); }
+    .nav-cta { color: var(--cyan) !important; border-color: var(--line-strong) !important; }
+    .nav-waitlist {
+      background: var(--cyan-soft) !important;
+      border-color: var(--line-strong) !important;
+      color: var(--cyan) !important;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 24px 48px;
+      position: relative;
+      z-index: 1;
+    }
+    .box {
+      width: 100%;
+      max-width: 440px;
+      text-align: left;
+    }
+    .box h1 {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 900;
+      font-size: clamp(40px, 6vw, 64px);
+      line-height: 0.92;
+      letter-spacing: -0.03em;
+      margin-bottom: 28px;
+      text-align: center;
+    }
+
+    .contact-form label {
+      display: block;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: oklch(1 0 0 / 0.42);
+      margin-bottom: 6px;
+    }
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 12px 13px;
+      border-radius: 10px;
+      border: 1px solid oklch(1 0 0 / 0.1);
+      background: oklch(1 0 0 / 0.04);
+      color: #fff;
+      font-size: 14px;
+      font-family: var(--sans);
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      margin-bottom: 16px;
+    }
+    .contact-form textarea {
+      min-height: 140px;
+      max-height: 280px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder { color: oklch(1 0 0 / 0.32); }
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: var(--cyan);
+      background: oklch(1 0 0 / 0.06);
+    }
+
+    .send-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 48px;
+      padding: 0 28px;
+      border-radius: 10px;
+      border: 0;
+      background: var(--cyan);
+      color: var(--bg-deep);
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.15s;
+    }
+    .send-btn:hover:not(:disabled) { transform: translateY(-2px); opacity: 0.92; }
+    .send-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .form-status {
+      margin-top: 14px;
+      font-size: 13px;
+      line-height: 1.5;
+      min-height: 1.25em;
+    }
+    .form-status.ok { color: var(--cyan); }
+    .form-status.err { color: oklch(0.72 0.14 25); }
+
+    footer {
+      background: oklch(0.045 0.032 204);
+      border-top: 1px solid var(--line);
+      padding: 44px 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .f-links { display: flex; gap: 24px; flex-wrap: wrap; }
+    .f-links a { color: oklch(1 0 0 / 0.26); font-size: 13px; }
+    .f-links a:hover { color: oklch(1 0 0 / 0.66); }
+    .f-copy { color: oklch(1 0 0 / 0.18); font-family: var(--mono); font-size: 11px; }
+    .f-logo { display: inline-flex; }
+    .f-logo svg { height: 22px; width: auto; display: block; }
+
+    @media (max-width: 720px) {
+      .site-nav { padding: 16px 20px; }
+      footer { padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="site-nav">
+    <a class="nav-logo" href="/" aria-label="Mesh home">
+      <svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="26" y="20" font-family="DM Sans, system-ui, sans-serif" font-weight="800" font-size="17" fill="#ffffff">Mesh.</text>
+      </svg>
+    </a>
+    <div class="nav-right">
+      <a href="/about">About</a>
+      <a href="/quickstart">Quickstart</a>
+      <a href="/benchmarks">Benchmarks</a>
+      <a href="/docs">Docs</a>
+      <a href="/auth/login" class="nav-cta">Sign in</a>
+      <a href="/?openWaitlist=1" class="nav-waitlist">Waitlist</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="box">
+      <h1>Contact</h1>
+      <form id="contactForm" class="contact-form" novalidate>
+        <label for="contactEmail">Your email</label>
+        <input
+          type="email"
+          id="contactEmail"
+          name="email"
+          autocomplete="email"
+          placeholder="you@company.com"
+          required
+        >
+
+        <label for="contactSubject">Subject</label>
+        <input
+          type="text"
+          id="contactSubject"
+          name="subject"
+          maxlength="200"
+          placeholder="What is this about?"
+          required
+        >
+
+        <label for="contactMessage">Message</label>
+        <textarea
+          id="contactMessage"
+          name="message"
+          maxlength="5000"
+          placeholder="Your message…"
+          required
+        ></textarea>
+
+        <button type="submit" class="send-btn" id="contactSend">Send</button>
+        <p class="form-status" id="contactStatus" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <a class="f-logo" href="/" aria-label="Mesh home">
+      <svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="26" y="20" font-family="DM Sans, system-ui, sans-serif" font-weight="800" font-size="17" fill="#ffffff">Mesh.</text>
+      </svg>
+    </a>
+    <div class="f-links">
+      <a href="https://github.com/dreddi-edit/mesh">Github</a>
+      <a href="https://www.npmjs.com/package/@trymesh/cli">NPM</a>
+      <a href="/license">License</a>
+      <a href="/contact">Contact</a>
+      <a href="/socials">Socials</a>
+    </div>
+    <div class="f-copy">© 2026 Mesh</div>
+  </footer>
+
+  <script>
+    (function () {
+      const form = document.getElementById('contactForm');
+      const btn = document.getElementById('contactSend');
+      const status = document.getElementById('contactStatus');
+      if (!form || !btn || !status) return;
+
+      function setStatus(text, kind) {
+        status.textContent = text;
+        status.className = 'form-status' + (kind ? ' ' + kind : '');
+      }
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const email = document.getElementById('contactEmail').value.trim();
+        const subject = document.getElementById('contactSubject').value.trim();
+        const message = document.getElementById('contactMessage').value.trim();
+
+        if (!email || !subject || message.length < 10) {
+          setStatus('Please fill in all fields (message at least 10 characters).', 'err');
+          return;
+        }
+
+        btn.disabled = true;
+        setStatus('Sending…', '');
+
+        try {
+          const res = await fetch('/api/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, subject, message })
+          });
+          const data = await res.json().catch(function () { return {}; });
+          if (!res.ok || !data.ok) {
+            setStatus(data.message || 'Something went wrong. Please try again.', 'err');
+            btn.disabled = false;
+            return;
+          }
+          setStatus(data.message || 'Message sent.', 'ok');
+          form.reset();
+        } catch {
+          setStatus('Network error. Please try again.', 'err');
+        } finally {
+          btn.disabled = false;
+        }
+      });
+    })();
+  </script>
+<script src="/assets/nav-auth.js" defer></script>
+</body>
+</html>

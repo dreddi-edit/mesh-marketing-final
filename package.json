@@ -2,10 +2,16 @@
   "name": "mesh-marketing",
   "version": "1.0.0",
   "description": "Mesh Marketing Website",
+  "scripts": {
+    "smoke:docs-search": "node scripts/vertex-docs-search-smoke.mjs",
+    "migrate:waitlist:dry": "node scripts/migrate-waitlist-blob-to-firestore.mjs",
+    "migrate:waitlist:apply": "node scripts/migrate-waitlist-blob-to-firestore.mjs --apply"
+  },
   "dependencies": {
-    "@vercel/blob": "^2.3.3",
-    "resend": "^4.1.2",
-    "@google-cloud/firestore": "^7.10.0"
+    "@google-cloud/firestore": "^7.10.0",
+    "@google-cloud/storage": "^7.19.0",
+    "@supabase/supabase-js": "^2.105.4",
+    "resend": "^4.1.2"
   },
   "engines": {
     "node": ">=18.x"

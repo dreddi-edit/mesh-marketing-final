@@ -9,28 +9,47 @@
       "permanent": true
     },
     { "source": "/index.html", "destination": "/", "permanent": true },
-    { "source": "/features.html", "destination": "/features", "permanent": true },
+    { "source": "/admin.html", "destination": "/admin", "permanent": true },
+    { "source": "/features.html", "destination": "/about", "permanent": true },
+    { "source": "/features", "destination": "/about", "permanent": true },
     { "source": "/quickstart.html", "destination": "/quickstart", "permanent": true },
     { "source": "/benchmarks.html", "destination": "/benchmarks", "permanent": true },
     { "source": "/docs.html", "destination": "/docs", "permanent": true },
-    { "source": "/animation", "destination": "/mesh-animation", "permanent": true },
-    { "source": "/download/ide-macos", "destination": "/api/download-ide", "permanent": false }
+    { "source": "/about.html", "destination": "/about", "permanent": true },
+    { "source": "/ai-coding-tools.html", "destination": "/ai-coding-tools", "permanent": true },
+    { "source": "/mcp-tools-for-developers.html", "destination": "/mcp-tools-for-developers", "permanent": true },
+    { "source": "/ai-code-context.html", "destination": "/ai-code-context", "permanent": true },
+    { "source": "/mesh-vs-cursor.html", "destination": "/mesh-vs-cursor", "permanent": true },
+    { "source": "/mesh-vs-copilot.html", "destination": "/mesh-vs-copilot", "permanent": true },
+    { "source": "/best-ai-coding-tools-for-teams.html", "destination": "/best-ai-coding-tools-for-teams", "permanent": true },
+    { "source": "/ide.html", "destination": "/ide", "permanent": true },
+    { "source": "/license.html", "destination": "/license", "permanent": true },
+    { "source": "/contact.html", "destination": "/contact", "permanent": true },
+    { "source": "/socials.html", "destination": "/socials", "permanent": true },
+    { "source": "/settings-security.html", "destination": "/account", "permanent": true },
+    { "source": "/newsletter.html", "destination": "/contact", "permanent": true },
+    { "source": "/__beta_login", "destination": "/auth/login", "permanent": true },
+    { "source": "/id", "destination": "/", "permanent": true },
+    { "source": "/i.id", "destination": "/", "permanent": true },
+    { "source": "/webhook", "destination": "/contact", "permanent": true },
+    { "source": "/download/ide-macos", "destination": "/api/download-ide?os=macos", "permanent": false },
+    { "source": "/download/ide-windows", "destination": "/api/download-ide?os=windows", "permanent": false }
   ],
   "rewrites": [
-    { "source": "/api/:path*", "destination": "/api/:path*" },
-    { "source": "/mesh-animation", "destination": "/mesh-animation.html" }
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/account", "destination": "/account.html" },
+    { "source": "/auth/cli", "destination": "/auth/cli.html" },
+    { "source": "/auth/login", "destination": "/auth/login.html" },
+    { "source": "/auth/signup", "destination": "/auth/signup.html" },
+    { "source": "/auth/welcome", "destination": "/auth/welcome.html" },
+    { "source": "/api/admin/status", "destination": "/api/admin/metrics?action=status" },
+    { "source": "/api/:path*", "destination": "/api/:path*" }
   ],
   "headers": [
     {
       "source": "/assets/:path*",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
-    },
-    {
-      "source": "/mesh-animation",
-      "headers": [
-        { "key": "X-Frame-Options", "value": "SAMEORIGIN" }
       ]
     }
   ]

@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
-import { put } from '@vercel/blob';
+import { FieldValue, Timestamp } from '@google-cloud/firestore';
 import { Resend } from 'resend';
+import { getFirestoreClient } from './_firestore.js';
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
@@ -13,10 +14,24 @@ function buildConfirmationEmail(email, firstName, lastName) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <!-- Force the email to ignore the recipient's system color scheme. Without these
+       Gmail/Apple Mail auto-inverts our dark theme in light-mode and breaks the
+       design entirely. We keep the dark look for everyone. -->
+  <meta name="color-scheme" content="dark only">
+  <meta name="supported-color-schemes" content="dark only">
   <title>Mesh Access Confirmed</title>
   <style>
+    :root { color-scheme: dark only; }
+
     @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,900&family=DM+Sans:wght@400;500&family=Geist+Mono:wght@400;600&display=swap');
-    
+
+    /* Belt + suspenders against client dark-mode inversion. Gmail respects
+       data-ogsc attributes; iOS Mail honours media query. */
+    @media (prefers-color-scheme: light) {
+      :root, body, .email-wrapper { background-color: #020406 !important; color: #ffffff !important; }
+    }
+    [data-ogsc] body, [data-ogsb] body { background-color: #020406 !important; color: #ffffff !important; }
+
     body {
       margin: 0; padding: 0; background-color: #020406;
       font-family: 'DM Sans', -apple-system, sans-serif;
@@ -222,17 +237,28 @@ export default async function handler(req, res) {
       ip: req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || null
     };
 
-    const day = now.toISOString().slice(0, 10);
-    const digest = crypto.createHash('sha256').update(entry.id).digest('hex').slice(0, 12);
-    const path = `waitlist/${day}/${digest}.json`;
-
-    await put(path, JSON.stringify(entry, null, 2), {
-      access: 'private',
-      addRandomSuffix: false,
-      contentType: 'application/json'
-    });
+    const db = getFirestoreClient();
+    const ref = db.collection('waitlist').doc(email);
+    const existing = await ref.get();
+    const existingData = existing.exists ? existing.data() : null;
+    const createdAt = existingData?.createdAt ?? Timestamp.fromDate(now);
+    const createdAtIso = existingData?.createdAtIso ?? now.toISOString();
+    await ref.set(
+      {
+        ...entry,
+        id: existingData?.id || crypto.randomUUID(),
+        createdAt,
+        createdAtIso,
+        updatedAt: FieldValue.serverTimestamp(),
+        suppressed: existingData?.suppressed === true,
+        removedAt: existingData?.removedAt ?? null,
+        removedBy: existingData?.removedBy ?? null
+      },
+      { merge: true }
+    );
 
     let confirmationEmailSent = false;
+    let addedToAudience = false;
     if (resend) {
       const emailContent = buildConfirmationEmail(email, firstName, lastName);
       try {
@@ -246,13 +272,38 @@ export default async function handler(req, res) {
       } catch (emailError) {
         console.error('[waitlist] confirmation email failed', emailError);
       }
+
+      // Mirror the signup into a Resend audience so the admin dashboard and
+      // future broadcasts see the same set. We pick the first audience
+      // returned by `audiences.list()` (or the one whose id is pinned via
+      // RESEND_AUDIENCE_ID env). Idempotent: contacts.create no-ops if email
+      // already exists.
+      try {
+        let audienceId = process.env.RESEND_AUDIENCE_ID || null;
+        if (!audienceId) {
+          const list = await resend.audiences.list();
+          audienceId = list?.data?.data?.[0]?.id || null;
+        }
+        if (audienceId) {
+          await resend.contacts.create({
+            email,
+            firstName: firstName || undefined,
+            lastName: lastName || undefined,
+            audienceId
+          });
+          addedToAudience = true;
+        }
+      } catch (audienceError) {
+        console.error('[waitlist] resend audience sync failed', audienceError);
+      }
     }
 
     const greeting = firstName ? firstName : email;
     return res.status(200).json({
       ok: true,
       message: `Thanks, ${greeting}. You're on the waitlist.`,
-      confirmationEmailSent
+      confirmationEmailSent,
+      addedToAudience
     });
   } catch (error) {
     console.error('[waitlist] save failed', error);

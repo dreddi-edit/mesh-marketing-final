@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="robots" content="noindex,nofollow" />
+<title>Welcome to Mesh</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<style>
+  :root{--bg:#020406;--panel:#060c12;--ink:#fff;--muted:rgba(255,255,255,0.42);--line:rgba(255,255,255,0.08);--line-strong:rgba(0,212,232,0.32);--cyan:#00d4e8;--cyan-soft:rgba(0,212,232,0.12);--amber:#f59e0b;--green:#22c55e;color-scheme:dark}
+  *{box-sizing:border-box} html,body{margin:0;padding:0;height:100%}
+  body{background:radial-gradient(circle at 10% 10%, rgba(0,212,232,0.06) 0%, transparent 40%),radial-gradient(circle at 90% 80%, rgba(0,212,232,0.04) 0%, transparent 40%),var(--bg); color:var(--ink); font-family:'DM Sans',-apple-system,system-ui,sans-serif; display:grid; place-items:center; min-height:100vh; padding:24px}
+  .card{width:100%; max-width:560px; background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:40px}
+  .brand{font-family:'Geist Mono',ui-monospace,monospace; font-size:11px; letter-spacing:0.3em; color:var(--cyan); text-transform:uppercase; margin-bottom:6px}
+  h1{font-family:'Barlow Condensed','Impact',sans-serif; font-style:italic; font-weight:900; font-size:52px; line-height:0.95; letter-spacing:-0.02em; margin:0 0 14px; text-transform:uppercase}
+  .sub{color:var(--muted); font-size:14px; line-height:1.55; margin-bottom:22px}
+  .stat-row{display:grid; grid-template-columns:auto 1fr; gap:8px 16px; padding:18px 20px; border:1px solid var(--line); border-radius:12px; margin-bottom:18px}
+  .stat-row .k{font-family:'Geist Mono',monospace; font-size:11px; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase}
+  .stat-row .v{font-size:14px; color:var(--ink); font-weight:600}
+  .plan-pill{display:inline-flex; align-items:center; gap:8px; background:var(--cyan-soft); color:var(--cyan); border:1px solid var(--line-strong); padding:3px 10px; border-radius:999px; font-family:'Geist Mono',monospace; font-size:11px; text-transform:uppercase}
+  .plan-pill.locked{background:rgba(245,158,11,0.12); color:var(--amber); border-color:rgba(245,158,11,0.32)}
+  .btn-row{display:grid; gap:10px; margin-top:18px}
+  a.btn{display:block; text-align:center; padding:12px 16px; border-radius:10px; text-decoration:none; font-weight:600; font-size:14px}
+  a.btn-primary{background:var(--ink); color:var(--bg)}
+  a.btn-ghost{background:transparent; color:var(--cyan); border:1px solid var(--line-strong)}
+  .footer{margin-top:22px; border-top:1px solid var(--line); padding-top:16px; font-size:11px; color:var(--muted); text-align:center; font-family:'Geist Mono',monospace; letter-spacing:0.05em}
+  .footer a{color:var(--cyan); text-decoration:none}
+</style>
+</head>
+<body>
+  <div class="card" id="profile-card">
+    <div class="brand">Mesh · Account ready</div>
+    <h1 id="card-title">You're In</h1>
+    <p class="sub" id="sub-text">Account created. Here's where you stand and what's available right now.</p>
+
+    <div id="need-name-block" style="display:none;">
+      <p class="sub" style="margin-bottom:18px;">Before we go further: confirm your name so it shows up correctly on your account.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <label for="cp-first" style="display:block;font-size:12px;color:var(--muted);margin-bottom:6px;">First name</label>
+          <input type="text" id="cp-first" autocomplete="given-name" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;" />
+        </div>
+        <div>
+          <label for="cp-last" style="display:block;font-size:12px;color:var(--muted);margin-bottom:6px;">Last name</label>
+          <input type="text" id="cp-last" autocomplete="family-name" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;" />
+        </div>
+      </div>
+      <div class="btn-row" style="margin-top:14px;">
+        <button id="save-name-btn" type="button" style="width:100%;background:var(--ink);color:var(--bg);border:none;border-radius:10px;padding:12px 16px;font-weight:700;font-size:14px;cursor:pointer;">Save and continue</button>
+      </div>
+      <div id="name-err" style="margin-top:12px;color:#ef4444;font-size:13px;display:none;"></div>
+    </div>
+
+    <div id="reset-block" style="display:none;">
+      <p class="sub" style="margin-bottom:18px;">You used a password-reset link. Set a new password below to continue.</p>
+      <div style="display:grid;gap:12px;">
+        <div>
+          <label for="np-password" style="display:block;font-size:12px;color:var(--muted);margin-bottom:6px;">New password</label>
+          <input type="password" id="np-password" autocomplete="new-password" minlength="8" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;" />
+        </div>
+        <div>
+          <label for="np-confirm" style="display:block;font-size:12px;color:var(--muted);margin-bottom:6px;">Confirm password</label>
+          <input type="password" id="np-confirm" autocomplete="new-password" minlength="8" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;" />
+        </div>
+      </div>
+      <div class="btn-row" style="margin-top:14px;">
+        <button id="reset-save-btn" type="button" style="width:100%;background:var(--ink);color:var(--bg);border:none;border-radius:10px;padding:12px 16px;font-weight:700;font-size:14px;cursor:pointer;">Save new password</button>
+      </div>
+      <div id="reset-err" style="margin-top:12px;color:#ef4444;font-size:13px;display:none;"></div>
+    </div>
+
+    <div id="ready-block" style="display:none;">
+      <div class="stat-row">
+        <div class="k">Signed in as</div><div class="v" id="email-val">—</div>
+        <div class="k">Name</div><div class="v" id="name-val">—</div>
+        <div class="k">Plan</div><div class="v"><span class="plan-pill" id="plan-pill">…</span></div>
+        <div class="k">CLI access</div><div class="v" id="cli-access">—</div>
+      </div>
+
+      <div class="btn-row">
+        <a class="btn btn-primary" href="/quickstart">Get the CLI quickstart</a>
+        <a class="btn btn-ghost" href="/docs">Read the docs</a>
+      </div>
+    </div>
+
+    <div class="footer">
+      Need an upgrade? <a href="mailto:edgar.baumann@try-mesh.com">edgar.baumann@try-mesh.com</a>
+    </div>
+  </div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+const SUPABASE_URL='https://msmonxiacxhendxehezw.supabase.co';
+const SUPABASE_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zbW9ueGlhY3hoZW5keGVoZXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5NDU3NTMsImV4cCI6MjA5MjUyMTc1M30.K-FQFpcOwtJAIAfn5lTzmrox_6cv_8qqXGxi9IgosB8';
+const sb=createClient(SUPABASE_URL,SUPABASE_ANON);
+
+const $ = (id) => document.getElementById(id);
+
+async function loadProfile(userId) {
+  const { data: profile } = await sb
+    .from('profiles')
+    .select('plan, first_name, last_name')
+    .eq('user_id', userId)
+    .maybeSingle();
+  return profile;
+}
+
+async function tryBackfillFromLocalStorage(userId) {
+  const stash = localStorage.getItem('mesh_pending_signup_names');
+  if (!stash) return false;
+  try {
+    const { first, last } = JSON.parse(stash);
+    if (!first || !last) return false;
+    const { error } = await sb
+      .from('profiles')
+      .update({ first_name: first, last_name: last })
+      .eq('user_id', userId);
+    if (!error) {
+      localStorage.removeItem('mesh_pending_signup_names');
+      return true;
+    }
+  } catch { /* malformed stash — ignore */ }
+  return false;
+}
+
+function showReady(session, profile) {
+  $('email-val').textContent = session.user.email;
+  $('name-val').textContent = `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || '—';
+
+  const plan = (profile?.plan || 'basic').toLowerCase();
+  const pill = $('plan-pill');
+  pill.textContent = plan;
+  if (plan === 'basic') pill.classList.add('locked');
+  if (plan === 'basic') {
+    $('cli-access').innerHTML = '<span style="color:var(--amber)">locked — upgrade required</span>';
+  } else {
+    $('cli-access').innerHTML = '<span style="color:var(--green)">enabled</span>';
+  }
+  $('ready-block').style.display = 'block';
+  $('need-name-block').style.display = 'none';
+}
+
+function showNeedName() {
+  $('need-name-block').style.display = 'block';
+  $('ready-block').style.display = 'none';
+  $('card-title').textContent = 'One more thing';
+  $('sub-text').textContent = 'Tell us your name so the account is complete.';
+}
+
+function showReset() {
+  $('reset-block').style.display = 'block';
+  $('ready-block').style.display = 'none';
+  $('need-name-block').style.display = 'none';
+  $('card-title').textContent = 'Reset password';
+  $('sub-text').textContent = 'Choose a new password to sign in with.';
+  $('reset-save-btn').addEventListener('click', async () => {
+    const pw = $('np-password').value;
+    const confirm = $('np-confirm').value;
+    if (!pw || pw.length < 8) {
+      $('reset-err').textContent = 'Password must be at least 8 characters.';
+      $('reset-err').style.display = 'block';
+      return;
+    }
+    if (pw !== confirm) {
+      $('reset-err').textContent = 'Passwords do not match.';
+      $('reset-err').style.display = 'block';
+      return;
+    }
+    const btn = $('reset-save-btn');
+    btn.disabled = true; btn.textContent = 'Saving…';
+    try {
+      const { error } = await sb.auth.updateUser({ password: pw });
+      if (error) throw new Error(error.message);
+      location.href = '/account';
+    } catch (err) {
+      $('reset-err').textContent = err.message || String(err);
+      $('reset-err').style.display = 'block';
+      btn.disabled = false; btn.textContent = 'Save new password';
+    }
+  });
+}
+
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) {
+    location.href = '/auth/login';
+    return;
+  }
+
+  // Password-reset link from `resetPasswordForEmail`. Show the new-password
+  // form regardless of whether the profile is complete — once the password
+  // is set, the user lands on /account.
+  const params = new URLSearchParams(location.search);
+  if (params.get('reset') === '1') {
+    showReset();
+    return;
+  }
+
+  let profile = await loadProfile(session.user.id);
+
+  // If the trigger filled in names from raw_user_meta_data (Google/GitHub
+  // with given_name/family_name or "name"), we're done. Otherwise check
+  // localStorage stash from the signup page, then prompt as last resort.
+  if (!profile?.first_name || !profile?.last_name) {
+    const backfilled = await tryBackfillFromLocalStorage(session.user.id);
+    if (backfilled) profile = await loadProfile(session.user.id);
+  }
+
+  if (!profile?.first_name || !profile?.last_name) {
+    showNeedName();
+    $('save-name-btn').addEventListener('click', async () => {
+      const first = $('cp-first').value.trim();
+      const last = $('cp-last').value.trim();
+      if (!first || !last) {
+        $('name-err').textContent = 'Both first and last name are required.';
+        $('name-err').style.display = 'block';
+        return;
+      }
+      const btn = $('save-name-btn');
+      btn.disabled = true; btn.textContent = 'Saving…';
+      const { error } = await sb
+        .from('profiles')
+        .update({ first_name: first, last_name: last })
+        .eq('user_id', session.user.id);
+      if (error) {
+        $('name-err').textContent = error.message;
+        $('name-err').style.display = 'block';
+        btn.disabled = false; btn.textContent = 'Save and continue';
+        return;
+      }
+      profile = await loadProfile(session.user.id);
+      showReady(session, profile);
+    });
+    return;
+  }
+
+  showReady(session, profile);
+})();
+</script>
+</body>
+</html>

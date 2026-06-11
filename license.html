@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mesh License — Free CLI, Proprietary Source</title>
+  <meta name="description" content="Mesh CLI is free to install and use. Our source code is proprietary — you may not copy or redistribute it.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://try-mesh.com/license">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,800;1,900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cyan: oklch(0.74 0.14 200);
+      --cyan-soft: oklch(0.74 0.14 200 / 0.08);
+      --bg: oklch(0.078 0.038 200);
+      --ink: oklch(0.98 0.004 195);
+      --muted: oklch(0.72 0.026 198 / 0.62);
+      --line: oklch(1 0 0 / 0.08);
+      --line-strong: oklch(0.74 0.14 200 / 0.28);
+      --mono: 'Geist Mono', monospace;
+      --display: 'Barlow Condensed', sans-serif;
+      --sans: 'DM Sans', system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .site-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 56px;
+    }
+    .nav-logo { display: inline-flex; align-items: center; }
+    .nav-right { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    .nav-right a {
+      font-size: 13px;
+      color: oklch(1 0 0 / 0.42);
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }
+    .nav-right a:hover { color: var(--ink); border-color: oklch(1 0 0 / 0.12); }
+    .nav-cta { color: var(--cyan) !important; border-color: var(--line-strong) !important; }
+    .nav-waitlist {
+      background: var(--cyan-soft) !important;
+      border-color: var(--line-strong) !important;
+      color: var(--cyan) !important;
+    }
+
+    .page-shell {
+      width: min(920px, calc(100% - 64px));
+      margin: 0 auto;
+      padding: 120px 0 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 900;
+      font-size: clamp(42px, 6.2vw, 72px);
+      line-height: 0.92;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+    .hero-lead { font-size: 18px; line-height: 1.6; color: var(--ink); max-width: 720px; margin-bottom: 10px; }
+    .hero-sub { font-size: 15px; color: var(--muted); line-height: 1.6; max-width: 680px; margin-bottom: 26px; }
+
+    .license-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .license-col {
+      border-radius: 12px;
+      padding: 22px 22px 20px;
+      border: 1px solid var(--line);
+    }
+    .license-col { background: oklch(1 0 0 / 0.02); }
+    .license-col h2 {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .license-col h2 { color: var(--cyan); }
+    .license-col ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .license-col li {
+      position: relative;
+      padding-left: 20px;
+      margin-bottom: 12px;
+      font-size: 14px;
+      line-height: 1.55;
+      color: oklch(1 0 0 / 0.78);
+    }
+    .license-col li:last-child { margin-bottom: 0; }
+    .license-col li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+    .license-col li::before { background: oklch(1 0 0 / 0.35); }
+
+    .scope-box {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 22px 24px;
+      background: oklch(1 0 0 / 0.02);
+      margin-bottom: 20px;
+    }
+    .scope-box h2 {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: oklch(1 0 0 / 0.62);
+      margin-bottom: 10px;
+    }
+    .scope-box p {
+      font-size: 16px;
+      line-height: 1.65;
+      color: oklch(1 0 0 / 0.82);
+    }
+    .scope-box p + p { margin-top: 10px; color: var(--muted); font-size: 14px; }
+
+    .contact-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 18px 22px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: oklch(1 0 0 / 0.03);
+    }
+    .contact-row p { color: var(--muted); font-size: 14px; }
+    .contact-row a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      padding: 0 16px;
+      border-radius: 8px;
+      background: oklch(1 0 0 / 0.04);
+      border: 1px solid var(--line-strong);
+      color: oklch(1 0 0 / 0.82);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .legal-note {
+      margin-top: 28px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: oklch(1 0 0 / 0.32);
+      letter-spacing: 0.03em;
+    }
+
+    footer {
+      background: oklch(0.045 0.032 204);
+      border-top: 1px solid var(--line);
+      padding: 44px 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .f-links { display: flex; gap: 24px; flex-wrap: wrap; }
+    .f-links a { color: oklch(1 0 0 / 0.26); font-size: 13px; }
+    .f-links a:hover { color: oklch(1 0 0 / 0.66); }
+    .f-copy { color: oklch(1 0 0 / 0.18); font-family: var(--mono); font-size: 11px; }
+    .f-logo { display: inline-flex; }
+    .f-logo svg { height: 22px; width: auto; display: block; }
+
+    @media (max-width: 720px) {
+      .site-nav { padding: 16px 20px; }
+      .page-shell { width: calc(100% - 32px); padding-top: 100px; }
+      .license-grid { grid-template-columns: 1fr; }
+      footer { padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="site-nav">
+    <a class="nav-logo" href="/" aria-label="Mesh home">
+      <svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="26" y="20" font-family="DM Sans, system-ui, sans-serif" font-weight="800" font-size="17" fill="#ffffff">Mesh.</text>
+      </svg>
+    </a>
+    <div class="nav-right">
+      <a href="/about">About</a>
+      <a href="/quickstart">Quickstart</a>
+      <a href="/benchmarks">Benchmarks</a>
+      <a href="/docs">Docs</a>
+      <a href="/auth/login" class="nav-cta">Sign in</a>
+      <a href="/?openWaitlist=1" class="nav-waitlist">Waitlist</a>
+    </div>
+  </nav>
+
+  <main class="page-shell hero">
+    <h1>License</h1>
+    <p class="hero-lead">Install and run <strong>@trymesh/cli</strong> at no cost. Our source code stays proprietary — you may not copy or redistribute it.</p>
+    <p class="hero-sub">This page is a plain-language summary for developers. For enterprise or custom terms, contact us.</p>
+
+    <div class="license-grid">
+      <section class="license-col license-col--allow" aria-labelledby="allow-heading">
+        <h2 id="allow-heading">You may</h2>
+        <ul>
+          <li>Install and use the Mesh CLI for personal or commercial work.</li>
+          <li>Index your repositories and use Mesh with your own LLM keys.</li>
+          <li>Link to Mesh, npm, and our docs from your own materials.</li>
+        </ul>
+      </section>
+      <section class="license-col license-col--deny" aria-labelledby="deny-heading">
+        <h2 id="deny-heading">You may not</h2>
+        <ul>
+          <li>Copy, fork, or redistribute our source code or proprietary components.</li>
+          <li>Remove copyright notices and pass our work off as yours.</li>
+          <li>Reverse-engineer or clone Mesh to ship a competing product.</li>
+        </ul>
+      </section>
+    </div>
+
+    <section class="scope-box">
+      <h2>What this covers</h2>
+      <p>The published <strong>npm package</strong> (<code style="font-family:var(--mono);font-size:0.92em">@trymesh/cli</code>) is the product you run. The repository and internal implementation remain our intellectual property unless we grant a separate written license.</p>
+      <p>Hosted services, team features, and enterprise deployments may have additional terms when they ship.</p>
+    </section>
+
+    <div class="contact-row">
+      <p>Enterprise, private deploy, or custom licensing?</p>
+      <a href="/contact">Contact the team</a>
+    </div>
+
+    <p class="legal-note">Summary only — not legal advice. A formal license file may be added when the repository is public.</p>
+  </main>
+
+  <footer>
+    <a class="f-logo" href="/" aria-label="Mesh home">
+      <svg viewBox="0 0 110 28" height="28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="26" y="20" font-family="DM Sans, system-ui, sans-serif" font-weight="800" font-size="17" fill="#ffffff">Mesh.</text>
+      </svg>
+    </a>
+    <div class="f-links">
+      <a href="https://github.com/dreddi-edit/mesh">Github</a>
+      <a href="https://www.npmjs.com/package/@trymesh/cli">NPM</a>
+      <a href="/license">License</a>
+      <a href="/contact">Contact</a>
+      <a href="/socials">Socials</a>
+    </div>
+    <div class="f-copy">© 2026 Mesh</div>
+  </footer>
+<script src="/assets/nav-auth.js" defer></script>
+</body>
+</html>

@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /account
+Disallow: /auth/
+Disallow: /api/
 
 Sitemap: https://try-mesh.com/sitemap.xml
