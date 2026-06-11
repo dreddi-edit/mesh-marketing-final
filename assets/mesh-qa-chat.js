@@ -359,7 +359,7 @@
     dismissVoiceTip();
     voiceConnecting = true;
     micBtn.disabled = true;
-    voiceHint.textContent = '● Connecting…';
+    voiceHint.textContent = '● Allow microphone when prompted…';
     voiceHint.style.display = 'block';
 
     try {

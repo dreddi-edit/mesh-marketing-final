@@ -95,7 +95,9 @@
         'wss://us-central1-aiplatform.googleapis.com/ws/google.cloud.aiplatform.v1beta1.LlmBidiService/BidiGenerateContent';
       const modelUri = `projects/${cfg.projectId}/locations/us-central1/publishers/google/models/${cfg.model}`;
 
+      this.hooks.onStatus?.('Allow microphone…');
       await this.startMic();
+      this.hooks.onStatus?.('Connecting…');
 
       await new Promise((resolve, reject) => {
         let settled = false;
@@ -140,7 +142,8 @@
         this.ws.onclose = (ev) => {
           this.connected = false;
           if (!settled) {
-            settle(reject, new Error(`Voice disconnected (${ev.code})`));
+            const reason = ev.reason ? `: ${ev.reason}` : '';
+            settle(reject, new Error(`Voice disconnected (${ev.code}${reason})`));
             return;
           }
           this.streaming = false;
@@ -148,7 +151,14 @@
           this.hooks.onDisconnected?.();
         };
         this.ws.onmessage = (ev) => {
-          this.onMessage(JSON.parse(ev.data)).catch((e) => {
+          let data;
+          try {
+            data = JSON.parse(ev.data);
+          } catch {
+            if (!settled) settle(reject, new Error('Invalid voice response'));
+            return;
+          }
+          this.onMessage(data).catch((e) => {
             if (!settled) settle(reject, e);
           });
         };
@@ -159,9 +169,22 @@
 
     async startMic() {
       if (this.streaming) return;
-      this.captureStream = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: true, noiseSuppression: true },
-      });
+      if (!navigator.mediaDevices?.getUserMedia) {
+        throw new Error('Microphone not supported in this browser');
+      }
+      try {
+        this.captureStream = await navigator.mediaDevices.getUserMedia({
+          audio: { echoCancellation: true, noiseSuppression: true },
+        });
+      } catch (e) {
+        if (e?.name === 'NotAllowedError') {
+          throw new Error('Microphone blocked — allow access in browser settings and try again');
+        }
+        if (e?.name === 'NotFoundError') {
+          throw new Error('No microphone found on this device');
+        }
+        throw new Error('Could not access microphone');
+      }
       this.captureCtx = new AudioContext({ sampleRate: 16000 });
       await this.captureCtx.audioWorklet.addModule(workletUrl(CAPTURE_WORKLET));
       this.captureNode = new AudioWorkletNode(this.captureCtx, 'audio-capture-processor');
@@ -170,7 +193,7 @@
         const b64 = pcm16ToBase64(e.data.data);
         this.ws?.send(
           JSON.stringify({
-            realtime_input: { media_chunks: [{ mime_type: 'audio/pcm', data: b64 }] },
+            realtime_input: { media_chunks: [{ mime_type: 'audio/pcm;rate=16000', data: b64 }] },
           }),
         );
       };
