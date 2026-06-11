@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="robots" content="noindex,nofollow" />
+<title>Sign in to Mesh CLI</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Barlow+Condensed:ital,wght@1,900&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #03070d;
+    --bg-deep: #010306;
+    --ink: #ffffff;
+    --muted: oklch(0.65 0.015 230);
+    --muted-strong: oklch(0.80 0.015 230);
+    --line: oklch(1 0 0 / 0.07);
+    --line-mid: oklch(1 0 0 / 0.14);
+    --line-strong: oklch(0.74 0.14 200 / 0.32);
+    --cyan: #00d4e8;
+    --cyan-bright: #7ceeff;
+    --cyan-glow: oklch(0.74 0.14 200 / 0.45);
+    --cyan-soft: oklch(0.74 0.14 200 / 0.10);
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --green: #22c55e;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; min-height: 100%; }
+
+  body {
+    background: var(--bg-deep);
+    color: var(--ink);
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+  }
+
+  /* Soft cyan ambient — no boxes, no grid */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 18% 8%, oklch(0.74 0.14 200 / 0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 50% at 88% 92%, oklch(0.74 0.14 200 / 0.10) 0%, transparent 70%),
+      var(--bg-deep);
+    z-index: -1;
+  }
+
+  /* Top-left brand lockup, fixed position */
+  .brand-lockup {
+    position: fixed;
+    top: 28px; left: 36px;
+    display: inline-flex;
+    text-decoration: none;
+    z-index: 10;
+  }
+  .brand-lockup svg { height: 28px; width: auto; display: block; }
+
+  /* Bottom-left footnote removed (0.4.x — feedback: too much chrome).
+     Same goes for corner-hint. We keep only the brand mark + form. */
+
+  /* Hero giant decorative brackets — overflow into the gutters.
+     0.4.x: bumped from opacity:0.18 (looked grey) to the same cyan as
+     the brand lockup top-left. Now reads as Mesh marks at full chroma
+     with a soft glow so they don't compete with the form. */
+  .deco-bracket {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    opacity: 0.55;
+    z-index: 0;
+    filter: drop-shadow(0 0 28px oklch(0.74 0.14 200 / 0.45));
+  }
+  .deco-bracket.left {
+    left: -1.5vw;
+    color: var(--cyan);
+    font-size: clamp(280px, 38vw, 520px);
+  }
+  .deco-bracket.right {
+    right: -1vw;
+    color: var(--cyan-bright);
+    font-size: clamp(280px, 38vw, 520px);
+  }
+  .deco-bracket svg { width: 1em; height: 1em; display: block; }
+  /* Brand bracket geometry: the chevron is narrow (apex out by ~25% of
+     height) and lives near the centre of the 100-unit viewBox. Earlier
+     paths went from x=25 to x=65 inside a 100 viewBox — that read like
+     a keyboard `<` glyph, way too angular. The compact paths below
+     mirror the lockup proportions (M7 7 L3.5 14 L7 21 — 3.5/14 ≈ 25%
+     apex stretch). */
+  @media (max-width: 980px) {
+    .deco-bracket { display: none; }
+  }
+
+  /* Main stage */
+  .page {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 100px 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* 0.4.x: composer widened back to its original ~720px envelope so the
+     SIGN IN. lockup reads at full hero width. Only the form column
+     itself is constrained to 440px below — that gives the heading
+     dominance without dropping inputs to silly widths. */
+  .compose {
+    width: 100%;
+    max-width: 720px;
+    display: grid;
+    gap: 28px;
+  }
+  .form-grid { max-width: 440px; }
+  .actions { max-width: 440px; }
+
+  /* Hero strip */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 24px;
+  }
+  .hero .lhs { display: grid; gap: 6px; }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.32em;
+    color: var(--cyan);
+    text-transform: uppercase;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 12px var(--cyan-glow);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+  h1 {
+    font-family: 'Barlow Condensed', 'Impact', sans-serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: clamp(72px, 11vw, 132px);
+    line-height: 0.88;
+    letter-spacing: -0.03em;
+    margin: 0;
+    text-transform: uppercase;
+    background: linear-gradient(180deg, var(--ink) 0%, oklch(0.85 0 0) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Right side of hero: command-line session printout */
+  .session-strip {
+    text-align: right;
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 10.5px;
+    color: var(--muted);
+    line-height: 1.6;
+    padding-bottom: 12px;
+  }
+  .session-strip .row { display: block; }
+  .session-strip .key { color: var(--muted); letter-spacing: 0.16em; text-transform: uppercase; font-size: 9.5px; }
+  .session-strip .val { color: var(--cyan); margin-left: 8px; letter-spacing: 0.04em; }
+  .session-strip .val.live { color: var(--green); }
+  .session-strip .val.live::before {
+    content: "● ";
+    color: var(--green);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+
+  .sub {
+    color: var(--muted-strong);
+    font-size: 14px;
+    line-height: 1.55;
+    max-width: 480px;
+    margin: 0;
+  }
+  .sub code {
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--cyan-bright);
+    padding: 1px 5px;
+    border-bottom: 1px dashed var(--line-strong);
+  }
+
+  /* Form area — underline-style inputs with a soft tint so the click
+     target is obvious. Caret-style `›` marker appears on focus. */
+  .form-grid {
+    display: grid;
+    gap: 24px;
+    margin-top: 4px;
+  }
+  .field {
+    display: grid;
+    gap: 9px;
+  }
+  label {
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 10.5px;
+    color: var(--cyan);
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+  .input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .input-wrap::before {
+    content: "›";
+    position: absolute;
+    left: 4px;
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    color: var(--cyan);
+    font-size: 18px;
+    line-height: 1;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 0.18s, transform 0.18s;
+    pointer-events: none;
+  }
+  .input-wrap:focus-within::before {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  /* 0.4.x: input selector widened to also cover text-mode inputs.
+     Earlier the identifier was type=email and matched naturally; we
+     switched it to type=text so users could enter usernames too, but
+     the old [type=email],[type=password] selector then skipped it
+     and the browser default rendered ~200px-wide inputs. */
+  input[type="email"], input[type="password"], input[type="text"] {
+    width: 100%;
+    background: oklch(1 0 0 / 0.03);
+    border: none;
+    border-bottom: 1.5px solid var(--line-mid);
+    color: var(--ink);
+    padding: 13px 14px;
+    font-size: 16px;
+    font-family: inherit;
+    outline: none;
+    border-radius: 4px 4px 0 0;
+    transition: border-color 0.18s, background 0.18s, padding-left 0.2s;
+  }
+  input[type="email"]:hover, input[type="password"]:hover, input[type="text"]:hover {
+    background: oklch(1 0 0 / 0.05);
+    border-bottom-color: oklch(1 0 0 / 0.28);
+  }
+  input[type="email"]:focus, input[type="password"]:focus, input[type="text"]:focus {
+    background: oklch(0.74 0.14 200 / 0.07);
+    border-bottom-color: var(--cyan);
+    padding-left: 22px;
+  }
+  input::placeholder { color: oklch(1 0 0 / 0.40); }
+
+  /* Action row: primary button left, magic link right */
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    appearance: none;
+    background: var(--ink);
+    color: var(--bg);
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    padding: 12px 22px 12px 24px;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    font-family: inherit;
+    display: inline-flex; align-items: center; gap: 10px;
+    transition: transform 0.1s, box-shadow 0.18s;
+  }
+  .btn-primary:hover:not(:disabled) {
+    box-shadow: 0 12px 32px oklch(0.74 0.14 200 / 0.35);
+    transform: translateY(-1px);
+  }
+  .btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
+  .btn-primary svg { transition: transform 0.18s; }
+  .btn-primary:hover:not(:disabled) svg { transform: translateX(2px); }
+
+  .magic-link {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .magic-link a {
+    color: var(--cyan);
+    text-decoration: none;
+    border-bottom: 1px dashed oklch(0.74 0.14 200 / 0.42);
+    padding-bottom: 1px;
+    cursor: pointer;
+  }
+  .magic-link a:hover { color: var(--cyan-bright); border-bottom-color: var(--cyan-bright); }
+
+  /* 0.4.x: oauth providers re-promoted to proper card buttons. The text-
+     only "or google / github" line read as secondary noise; now they
+     sit as two equal cyan-glow tiles, each big enough to feel like a
+     primary option in their own right. */
+  .oauth-line {
+    margin-top: 20px;
+    display: grid;
+    gap: 12px;
+    grid-template-columns: 1fr 1fr;
+    max-width: 440px;
+  }
+  .oauth-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--ink);
+    text-decoration: none;
+    cursor: pointer;
+    padding: 16px 18px;
+    border: 1px solid var(--line-mid);
+    background: oklch(1 0 0 / 0.025);
+    border-radius: 12px;
+    transition: border-color 0.18s, background 0.18s, transform 0.1s, box-shadow 0.2s;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    position: relative;
+    overflow: hidden;
+  }
+  .oauth-pill::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, oklch(0.74 0.14 200 / 0.0) 0%, oklch(0.74 0.14 200 / 0.0) 60%, oklch(0.74 0.14 200 / 0.18) 100%);
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+  }
+  .oauth-pill:hover {
+    border-color: var(--cyan);
+    background: oklch(0.74 0.14 200 / 0.06);
+    color: var(--cyan-bright);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px oklch(0.74 0.14 200 / 0.22);
+  }
+  .oauth-pill:hover::after { opacity: 1; }
+  .oauth-pill svg { width: 20px; height: 20px; flex-shrink: 0; }
+  .oauth-divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 20px;
+    max-width: 440px;
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 10.5px;
+    color: var(--muted);
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+  }
+  .oauth-divider::before, .oauth-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  /* 0.4.x: "new here?" card. Replaces the flat divider with a tinted
+     card that calls out account creation as a distinct intent (not just
+     a trailing footnote). */
+  .switch {
+    margin-top: 40px;
+    padding: 20px 22px;
+    background: oklch(1 0 0 / 0.025);
+    border: 1px solid var(--line-mid);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--muted-strong);
+    max-width: 440px;
+    flex-wrap: wrap;
+    position: relative;
+  }
+  .switch::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+    padding: 1px;
+    background: linear-gradient(120deg, oklch(0.74 0.14 200 / 0.32), oklch(0.74 0.14 200 / 0) 50%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    pointer-events: none;
+  }
+  .switch .label {
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+  .switch a {
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.15s;
+  }
+  .switch a::after { content: "→"; transition: transform 0.18s; }
+  .switch a:hover { color: var(--cyan-bright); }
+  .switch a:hover::after { transform: translateX(3px); }
+
+  /* Alerts */
+  .alert {
+    margin-top: 18px;
+    padding: 12px 0;
+    font-size: 13px;
+    line-height: 1.5;
+    display: flex; align-items: flex-start; gap: 12px;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    font-family: 'Geist Mono', ui-monospace, monospace;
+  }
+  .err { color: var(--red); border-color: oklch(0.65 0.20 28 / 0.32); }
+  .err::before { content: "ERR"; font-weight: 700; letter-spacing: 0.08em; font-size: 10.5px; padding-top: 2px; }
+  .info { color: var(--amber); border-color: oklch(0.72 0.15 60 / 0.32); }
+  .info::before { content: "INFO"; font-weight: 700; letter-spacing: 0.08em; font-size: 10.5px; padding-top: 2px; }
+
+  /* Success state */
+  .success-stage { display: grid; gap: 22px; }
+  .success-stage .hero h1.success-title {
+    font-size: clamp(64px, 10vw, 116px);
+  }
+  .success-stage .hero h1.success-title::after {
+    content: ".";
+    color: var(--green);
+    text-shadow: 0 0 24px oklch(0.70 0.18 145 / 0.6);
+  }
+  .success-email {
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    color: var(--cyan);
+    font-size: 14px;
+    word-break: break-all;
+  }
+  .success-msg {
+    color: var(--muted-strong);
+    font-size: 14px;
+    line-height: 1.55;
+    max-width: 480px;
+  }
+  .return-row {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .return-row .kbd-hint {
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+  .return-row .kbd-hint kbd {
+    display: inline-block;
+    padding: 2px 7px;
+    background: oklch(1 0 0 / 0.06);
+    border: 1px solid var(--line-mid);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 11px;
+    color: var(--muted-strong);
+    margin: 0 2px;
+  }
+
+  @media (max-width: 640px) {
+    .brand-lockup { top: 20px; left: 20px; }
+    .footnote { left: 20px; right: 20px; text-align: center; max-width: none; }
+    .corner-hint { display: none; }
+    .page { padding: 90px 20px 70px; }
+    .hero { grid-template-columns: 1fr; }
+    .session-strip { text-align: left; padding-bottom: 0; }
+  }
+</style>
+</head>
+<body>
+
+<a class="brand-lockup" href="/" aria-label="Mesh">
+  <svg viewBox="0 0 110 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M7 7L3.5 14L7 21" stroke="#00d4e8" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M15 7L18.5 14L15 21" stroke="#7ceeff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="26" y="20" font-family="Trebuchet MS, Helvetica Neue, sans-serif" font-weight="700" font-size="17" fill="#ffffff">Mesh.</text>
+  </svg>
+</a>
+
+<!-- Giant decorative brackets — geometry matches the brand lockup
+     (apex stretch ~25% of height) so they read as Mesh marks, not
+     keyboard `<` `>` glyphs. Previous path was 40%-wide and looked too
+     angular. -->
+<div class="deco-bracket left" aria-hidden="true">
+  <svg viewBox="0 0 100 100"><path d="M55 16 L37 50 L55 84" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</div>
+<div class="deco-bracket right" aria-hidden="true">
+  <svg viewBox="0 0 100 100"><path d="M45 16 L63 50 L45 84" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</div>
+
+<div class="page">
+  <div class="compose">
+
+    <!-- FORM VIEW -->
+    <div id="form-view">
+      <div class="hero">
+        <div class="lhs">
+          <span class="eyebrow">Authorize CLI</span>
+          <h1>Sign in.</h1>
+        </div>
+        <div class="session-strip" id="session-strip" style="visibility: hidden;">
+          <span class="row"><span class="key">cmd</span><span class="val">$ mesh login</span></span>
+          <span class="row"><span class="key">session</span><span class="val" id="session-fragment"></span></span>
+          <span class="row"><span class="key">status</span><span class="val live">terminal polling</span></span>
+        </div>
+      </div>
+
+      <p class="sub">Connect your local <code>mesh</code> CLI to your Mesh account. This handshake is one-shot and bound to the device that opened it.</p>
+
+      <div id="missing-session" class="alert err" style="display: none;">
+        <span>Missing <code>session_id</code> in URL. Open this page from <code>mesh login</code> in your terminal, not directly.</span>
+      </div>
+
+      <div id="login-form" style="display: none;">
+        <div class="form-grid">
+          <div class="field">
+            <label for="identifier">Email or username</label>
+            <div class="input-wrap">
+              <input type="text" id="identifier" autocomplete="username" placeholder="you@example.com  ·  or just  johndoe" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <div class="input-wrap">
+              <input type="password" id="password" autocomplete="current-password" placeholder="••••••••" />
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="signin-btn" type="button" class="btn-primary">
+            Authorize
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+          <span class="magic-link">
+            or get a <a id="magic-btn" href="#" onclick="event.preventDefault()">magic link by email</a>
+          </span>
+        </div>
+
+        <div class="oauth-divider"><span>or continue with</span></div>
+
+        <div class="oauth-line">
+          <button id="google-btn" type="button" class="oauth-pill">
+            <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.83z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            Continue with Google
+          </button>
+          <button id="github-btn" type="button" class="oauth-pill">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.4-1.34-1.77-1.34-1.77-1.08-.74.08-.73.08-.73 1.2.09 1.83 1.24 1.83 1.24 1.08 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18a4.65 4.65 0 0 1 1.24 3.22c0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 12 .3z"/></svg>
+            Continue with GitHub
+          </button>
+        </div>
+
+        <div id="msg-err" class="alert err" style="display: none;"><span></span></div>
+        <div id="msg-info" class="alert info" style="display: none;"><span></span></div>
+
+        <div class="switch">
+          <span class="label">New here?</span>
+          <a id="signup-link" href="/auth/signup">Create an account</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUCCESS VIEW -->
+    <div id="success-view" class="success-stage" style="display: none;">
+      <div class="hero">
+        <div class="lhs">
+          <span class="eyebrow" style="color: var(--green);">Authorized</span>
+          <h1 class="success-title">You're in</h1>
+        </div>
+        <div class="session-strip">
+          <span class="row"><span class="key">session</span><span class="val">claimed</span></span>
+          <span class="row"><span class="key">device</span><span class="val live">linked</span></span>
+        </div>
+      </div>
+      <p class="success-msg">Signed in as <span class="success-email" id="success-email">—</span>. Your terminal already has the session — the CLI's poll loop just picked it up.</p>
+      <div class="return-row">
+        <button id="back-to-terminal-btn" type="button" class="btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          Back to terminal
+        </button>
+        <span class="kbd-hint" id="return-hint">or switch back with <kbd>⌘</kbd><kbd>Tab</kbd></span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- footnote / corner-hint removed per design feedback — too much chrome.
+     A hidden placeholder kept here so the success flow's reference to
+     #corner-hint doesn't NPE. -->
+<div id="corner-hint" hidden></div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL = 'https://msmonxiacxhendxehezw.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zbW9ueGlhY3hoZW5keGVoZXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5NDU3NTMsImV4cCI6MjA5MjUyMTc1M30.K-FQFpcOwtJAIAfn5lTzmrox_6cv_8qqXGxi9IgosB8';
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+const params = new URLSearchParams(window.location.search);
+const sessionId = params.get('session_id') || '';
+const sessionIdValid = /^[a-f0-9]{32}$/.test(sessionId);
+
+const $ = (id) => document.getElementById(id);
+
+if (!sessionIdValid) {
+  $('missing-session').style.display = 'flex';
+} else {
+  $('login-form').style.display = 'block';
+  $('session-strip').style.visibility = 'visible';
+  $('session-fragment').textContent = sessionId.slice(0, 8) + '…' + sessionId.slice(-6);
+}
+
+function setAlertText(el, msg) {
+  const span = el.querySelector('span') || el;
+  span.textContent = msg;
+}
+function showError(msg) {
+  setAlertText($('msg-err'), msg);
+  $('msg-err').style.display = 'flex';
+  $('msg-info').style.display = 'none';
+}
+function showInfo(msg) {
+  setAlertText($('msg-info'), msg);
+  $('msg-info').style.display = 'flex';
+  $('msg-err').style.display = 'none';
+}
+
+function showSuccess(email) {
+  $('success-email').textContent = email || 'your account';
+  $('form-view').style.display = 'none';
+  $('success-view').style.display = 'grid';
+  $('corner-hint').textContent = 'authorization complete — terminal has the session';
+  $('back-to-terminal-btn').addEventListener('click', attemptCloseTab);
+  setTimeout(attemptCloseTab, 2500);
+}
+
+function attemptCloseTab() {
+  const before = Date.now();
+  try { window.close(); } catch { /* ignore */ }
+  setTimeout(() => {
+    if (Date.now() - before > 150) {
+      const hint = $('return-hint');
+      hint.style.color = 'var(--cyan)';
+      hint.style.fontWeight = '600';
+    }
+  }, 200);
+}
+
+let completionInFlight = null;
+let completionDone = false;
+async function completeWithSession(session) {
+  if (completionDone) return { ok: true, alreadyDone: true };
+  if (completionInFlight) return completionInFlight;
+  completionInFlight = (async () => {
+    const res = await fetch('/api/auth/cli/complete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        session_id: sessionId,
+        access_token: session.access_token,
+        refresh_token: session.refresh_token,
+        expires_in: session.expires_in,
+        expires_at: session.expires_at,
+        email: session.user?.email,
+        user_id: session.user?.id
+      })
+    });
+    if (res.status === 403) {
+      const body = await res.json().catch(() => ({}));
+      const err = new Error(body.message || 'Your plan does not include CLI access.');
+      err.code = body.error || 'plan_required';
+      err.plan = body.plan || 'basic';
+      throw err;
+    }
+    if (!res.ok) {
+      const detail = await res.text().catch(() => '');
+      throw new Error(`server rejected session: ${res.status} ${detail}`);
+    }
+    const json = await res.json();
+    completionDone = true;
+    return json;
+  })();
+  try { return await completionInFlight; }
+  finally { completionInFlight = null; }
+}
+
+const isEmail = (v) => v.includes('@');
+
+// Username sign-in runs entirely server-side: the browser never learns
+// the account's email, and the endpoint returns one uniform 401 for both
+// "no such user" and "wrong password", so nothing can be enumerated.
+// Email sign-in stays client-side — the user typed their own address.
+$('signin-btn')?.addEventListener('click', async () => {
+  const rawId = $('identifier').value.trim();
+  const password = $('password').value;
+  if (!rawId || !password) {
+    showError('Enter your email (or username) and password to continue.');
+    return;
+  }
+  const btn = $('signin-btn');
+  btn.disabled = true;
+  btn.textContent = 'Signing in…';
+  try {
+    let session;
+    let email;
+    if (isEmail(rawId)) {
+      const { data, error } = await sb.auth.signInWithPassword({ email: rawId.toLowerCase(), password });
+      if (error || !data?.session) throw new Error('Invalid email or password.');
+      session = data.session;
+      email = data.user?.email;
+    } else {
+      const res = await fetch('/api/auth/cli/start?action=login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: rawId, password }),
+      });
+      if (res.status === 429) throw new Error('Too many attempts. Try again in a minute.');
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.session) throw new Error(data.error || 'Invalid username/email or password.');
+      session = data.session;
+      email = data.session.user?.email;
+    }
+    await completeWithSession(session);
+    showSuccess(email);
+  } catch (e) {
+    if (e.code === 'plan_required') {
+      showInfo(`${e.message}`);
+      btn.textContent = 'Upgrade required';
+    } else {
+      showError(e.message || String(e));
+      btn.disabled = false;
+      btn.innerHTML = 'Authorize <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>';
+    }
+  }
+});
+
+let magicInFlight = false;
+$('magic-btn')?.addEventListener('click', async () => {
+  if (magicInFlight) return;
+  const rawId = $('identifier').value.trim();
+  if (!rawId) {
+    showError('Enter your email (or username) first, then click the magic link.');
+    return;
+  }
+  magicInFlight = true;
+  $('magic-btn').style.opacity = '0.5';
+  try {
+    if (isEmail(rawId)) {
+      const email = rawId.toLowerCase();
+      const redirect = `${window.location.origin}/auth/cli?session_id=${encodeURIComponent(sessionId)}`;
+      const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: redirect } });
+      if (error) throw new Error(error.message);
+      showInfo(`Magic link sent to ${email}. Click it in your inbox — you'll come back here and authorization completes automatically.`);
+    } else {
+      // Username path: the server sends the link and never tells us the
+      // email or whether the account exists, so the message stays generic.
+      const res = await fetch('/api/auth/cli/start?action=magic', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: rawId, session_id: sessionId }),
+      });
+      if (res.status === 429) throw new Error('Too many attempts. Try again in a minute.');
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || `Request failed (${res.status}).`);
+      }
+      showInfo(`If an account with that username exists, a magic link is on its way to its inbox. Click it to finish authorization here.`);
+    }
+  } catch (e) {
+    showError(e.message || String(e));
+  } finally {
+    magicInFlight = false;
+    $('magic-btn').style.opacity = '';
+  }
+});
+
+async function startOAuth(provider) {
+  try {
+    const redirectTo = `${window.location.origin}/auth/cli?session_id=${encodeURIComponent(sessionId)}`;
+    const { error } = await sb.auth.signInWithOAuth({ provider, options: { redirectTo } });
+    if (error) throw new Error(error.message);
+  } catch (e) {
+    showError(e.message || String(e));
+  }
+}
+$('google-btn')?.addEventListener('click', () => startOAuth('google'));
+$('github-btn')?.addEventListener('click', () => startOAuth('github'));
+
+if (sessionIdValid) {
+  const signupLink = $('signup-link');
+  if (signupLink) signupLink.href = `/auth/signup?session_id=${encodeURIComponent(sessionId)}`;
+}
+
+// If the user arrived back here from a magic-link / OAuth redirect, the
+// URL hash carries the access tokens. Supabase parses it asynchronously
+// and then fires SIGNED_IN — but in the meantime the form briefly
+// flashes onscreen. Detect the hash up front and surface a "completing
+// sign-in…" message so the user doesn't think they need to retype.
+if (sessionIdValid && /access_token=|refresh_token=/.test(window.location.hash)) {
+  showInfo('Completing sign-in from your magic link…');
+}
+
+sb.auth.onAuthStateChange(async (event, session) => {
+  if (event === 'SIGNED_IN' && session && sessionIdValid) {
+    try {
+      await completeWithSession(session);
+      showSuccess(session.user?.email);
+    } catch (e) {
+      if (e.code === 'plan_required') {
+        showInfo(`${e.message}`);
+      } else {
+        showError(`Sign-in worked but the handoff failed: ${e.message}`);
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
