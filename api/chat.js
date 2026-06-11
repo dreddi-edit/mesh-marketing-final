@@ -15,7 +15,7 @@ const COLLECTION = process.env.DISCOVERY_COLLECTION || 'default_collection';
 const ENGINE_ID = process.env.DISCOVERY_ENGINE_ID || 'mesh-docs-search';
 const CHAT_MODEL = process.env.CHAT_MODEL || 'gemini-2.5-flash';
 const DAILY_LIMIT = Number(process.env.CHAT_DAILY_LIMIT || 40);
-const CACHE_VERSION = process.env.CHAT_CACHE_VERSION || '6';
+const CACHE_VERSION = process.env.CHAT_CACHE_VERSION || '7';
 const MAX_SENTENCES = 4;
 const MAX_BODY_CHARS = 520;
 const MIN_BODY_CHARS = 48;
@@ -28,8 +28,13 @@ Rules:
 - Finish every sentence — never stop mid-thought.
 - No bullet lists, no headings, no command catalogs unless the user asked about one specific command.
 - Match the user's language (German question → German answer).
-- End with a <<options>> block: exactly 2 lines, format label|full follow-up question.
-- Follow-ups must be specific to what you just answered — never repeat the same question or generic "how to install" if install was already covered.`;
+- End with a <<options>> block on its own lines:
+<<options>>
+Short label|Full follow-up question?
+Another label|Another question?
+<</options>>
+- Never say the excerpts lack information — summarize what IS there or point to /docs.
+- Follow-ups must be specific to what you just answered — never repeat the same question.`;
 
 const OPTIONS_RE = /<<options>>([\s\S]*?)<\/options>>/i;
 const CACHE_TTL_MS = Number(process.env.CHAT_CACHE_TTL_DAYS || 30) * 24 * 60 * 60 * 1000;
@@ -212,10 +217,17 @@ function fallbackAnswer(results, query) {
   return completeSentences(bit.replace(/<[^>]+>/g, ''));
 }
 
+function stripOptionsMarkup(text) {
+  const raw = String(text || '');
+  if (OPTIONS_RE.test(raw)) return raw.replace(OPTIONS_RE, '').trim();
+  if (raw.includes('<<options>>')) return raw.split('<<options>>')[0].trim();
+  return raw.trim();
+}
+
 function parseOptionsBlock(text) {
-  const match = text.match(OPTIONS_RE);
+  const match = String(text || '').match(OPTIONS_RE);
   const raw = match ? match[1] : '';
-  const body = text.replace(OPTIONS_RE, '').trim();
+  const body = stripOptionsMarkup(text);
   const options = raw
     .split('\n')
     .map((line) => line.trim())
@@ -283,14 +295,29 @@ function defaultOptions(query, body = '') {
   return opts.slice(0, 2);
 }
 
-function formatAnswer(text, query, { fallbackContext = '' } = {}) {
+function isWeakAnswer(body) {
+  const b = String(body || '').toLowerCase();
+  return (
+    b.length < MIN_BODY_CHARS
+    || /do not contain|does not contain|nicht enthalten|keine information|not in the (provided )?doc/i.test(b)
+    || /provided (document )?excerpts/i.test(b)
+  );
+}
+
+function formatAnswer(text, query, { fallbackContext = '', results = [] } = {}) {
   const { body, options } = parseOptionsBlock(text);
   let safeBody = sanitizeBody(body);
-  if (!safeBody || safeBody.length < MIN_BODY_CHARS || !/[.!?]$/.test(safeBody)) {
+  if (isWeakAnswer(safeBody)) {
     const fromContext = sanitizeBody(fallbackContext);
-    if (fromContext.length >= MIN_BODY_CHARS) safeBody = fromContext;
+    if (!isWeakAnswer(fromContext) && fromContext.length >= MIN_BODY_CHARS) {
+      safeBody = fromContext;
+    } else {
+      safeBody = sanitizeBody(fallbackAnswer(results, query));
+    }
   }
-  if (!safeBody) safeBody = /[äöüß]|(\b(wie|was)\b)/i.test(query) ? 'Details stehen in /docs.' : 'See /docs for details.';
+  if (!safeBody || isWeakAnswer(safeBody)) {
+    safeBody = /[äöüß]|(\b(wie|was)\b)/i.test(query) ? 'Details stehen in /docs.' : 'See /docs for details.';
+  }
   const safeOptions = options.length ? options.slice(0, 2) : defaultOptions(query, safeBody);
   const optionsBlock = safeOptions.map((o) => `${o.label}|${o.query}`).join('\n');
   return {
@@ -454,7 +481,10 @@ export default async function handler(req, res) {
       answer = fallbackAnswer(payload.results || [], query);
     }
 
-    const shaped = formatAnswer(answer, query, { fallbackContext: summaryText || context });
+    const shaped = formatAnswer(answer, query, {
+      fallbackContext: summaryText || context,
+      results: payload.results || [],
+    });
     sendSse(res, 'answer', { text: shaped.body });
     sendSse(res, 'options', { items: shaped.options });
 
