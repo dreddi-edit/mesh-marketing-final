@@ -1,9 +1,12 @@
 /**
- * Gemini Live speech-to-speech client (Vertex via WebSocket proxy).
+ * Gemini Live speech-to-speech (Vertex via WebSocket proxy).
+ * Uses manual activity markers — required for reliable turn detection.
  */
 (() => {
   const TARGET_RATE = 16000;
   const PLAYBACK_RATE = 24000;
+  const SILENCE_MS = 1400;
+  const SPEECH_THRESHOLD = 0.012;
 
   const CAPTURE_WORKLET = `
     class AudioCaptureProcessor extends AudioWorkletProcessor {
@@ -30,7 +33,7 @@
           out[i] = s0 + frac * (s1 - s0);
         }
         this.buf.splice(0, consumed);
-        this.port.postMessage({ type: 'audio', data: out }, [out.buffer]);
+        this.port.postMessage({ type: 'audio', data: out });
         return true;
       }
     }
@@ -43,10 +46,7 @@
         super();
         this.queue = new Int16Array(0);
         this.port.onmessage = (e) => {
-          if (e.data === 'interrupt') {
-            this.queue = new Int16Array(0);
-            return;
-          }
+          if (e.data === 'interrupt') { this.queue = new Int16Array(0); return; }
           const incoming = new Int16Array(e.data);
           const merged = new Int16Array(this.queue.length + incoming.length);
           merged.set(this.queue);
@@ -57,17 +57,10 @@
       process(_, outputs) {
         const out = outputs[0][0];
         for (let i = 0; i < out.length; i++) {
-          if (i < this.queue.length) {
-            out[i] = this.queue[i] / 32768;
-          } else {
-            out[i] = 0;
-          }
+          out[i] = i < this.queue.length ? this.queue[i] / 32768 : 0;
         }
-        if (this.queue.length > out.length) {
-          this.queue = this.queue.slice(out.length);
-        } else {
-          this.queue = new Int16Array(0);
-        }
+        if (this.queue.length > out.length) this.queue = this.queue.slice(out.length);
+        else this.queue = new Int16Array(0);
         return true;
       }
     }
@@ -86,9 +79,8 @@
     }
     const bytes = new Uint8Array(pcm.buffer);
     let bin = '';
-    const step = 0x8000;
-    for (let i = 0; i < bytes.length; i += step) {
-      bin += String.fromCharCode.apply(null, bytes.subarray(i, i + step));
+    for (let i = 0; i < bytes.length; i += 0x8000) {
+      bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
     }
     return btoa(bin);
   }
@@ -100,12 +92,21 @@
     return new Int16Array(bytes.buffer);
   }
 
+  function peakLevel(float32) {
+    let p = 0;
+    for (let i = 0; i < float32.length; i++) p = Math.max(p, Math.abs(float32[i]));
+    return p;
+  }
+
   class MeshVoiceLive {
     constructor(hooks) {
       this.hooks = hooks;
       this.config = null;
       this.ws = null;
       this.ready = false;
+      this.inActivity = false;
+      this.heardSpeech = false;
+      this.silenceSince = 0;
       this.captureCtx = null;
       this.captureNode = null;
       this.captureStream = null;
@@ -114,6 +115,7 @@
       this.userLine = '';
       this.botLine = '';
       this._connectResolve = null;
+      this._endingTurn = false;
     }
 
     async loadConfig() {
@@ -122,6 +124,29 @@
       if (!data.enabled || !data.proxyUrl) throw new Error('VOICE_UNAVAILABLE');
       this.config = data;
       return data;
+    }
+
+    sendJson(obj) {
+      if (!this.ws || this.ws.readyState !== WebSocket.OPEN) return;
+      this.ws.send(JSON.stringify(obj));
+    }
+
+    beginActivity() {
+      if (this.inActivity) return;
+      this.inActivity = true;
+      this.heardSpeech = false;
+      this.silenceSince = 0;
+      this.sendJson({ realtime_input: { activity_start: {} } });
+      this.hooks.onStatus?.('Listening — speak now');
+    }
+
+    endActivity() {
+      if (!this.inActivity || this._endingTurn) return;
+      this._endingTurn = true;
+      this.inActivity = false;
+      this.sendJson({ realtime_input: { activity_end: {} } });
+      this.hooks.onStatus?.('Thinking…');
+      setTimeout(() => { this._endingTurn = false; }, 500);
     }
 
     async connect() {
@@ -133,6 +158,7 @@
 
       this.hooks.onStatus?.('Allow microphone…');
       await this.startMic();
+      this.hooks.onStatus?.('Connecting…');
 
       await new Promise((resolve, reject) => {
         let settled = false;
@@ -143,32 +169,29 @@
           this._connectResolve = null;
           fn(value);
         };
-
         const timeout = setTimeout(() => settle(reject, new Error('Voice connection timed out')), 20000);
         this._connectResolve = () => settle(resolve);
 
         this.ws = new WebSocket(cfg.proxyUrl);
         this.ws.onopen = () => {
-          this.ws.send(JSON.stringify({ service_url: serviceUrl }));
-          this.ws.send(
-            JSON.stringify({
-              setup: {
-                model: modelUri,
-                generation_config: {
-                  response_modalities: ['AUDIO'],
-                  speech_config: {
-                    voice_config: { prebuilt_voice_config: { voice_name: cfg.voice || 'Puck' } },
-                  },
-                },
-                system_instruction: { parts: [{ text: cfg.systemInstruction }] },
-                input_audio_transcription: {},
-                output_audio_transcription: {},
-                realtime_input_config: {
-                  automatic_activity_detection: { disabled: false },
+          this.sendJson({ service_url: serviceUrl });
+          this.sendJson({
+            setup: {
+              model: modelUri,
+              generation_config: {
+                response_modalities: ['AUDIO'],
+                speech_config: {
+                  voice_config: { prebuilt_voice_config: { voice_name: cfg.voice || 'Puck' } },
                 },
               },
-            }),
-          );
+              system_instruction: { parts: [{ text: cfg.systemInstruction }] },
+              input_audio_transcription: {},
+              output_audio_transcription: {},
+              realtime_input_config: {
+                automatic_activity_detection: { disabled: true },
+              },
+            },
+          });
         };
         this.ws.onerror = () => settle(reject, new Error('WebSocket connection failed'));
         this.ws.onclose = (ev) => {
@@ -183,31 +206,41 @@
         };
         this.ws.onmessage = (ev) => {
           let data;
-          try {
-            data = JSON.parse(ev.data);
-          } catch {
+          try { data = JSON.parse(ev.data); } catch {
             if (!settled) settle(reject, new Error('Invalid voice response'));
             return;
           }
-          this.onMessage(data).catch((e) => {
-            if (!settled) settle(reject, e);
-          });
+          this.onMessage(data).catch((e) => { if (!settled) settle(reject, e); });
         };
       });
 
-      this.hooks.onStatus?.('Listening — speak now');
+      this.beginActivity();
     }
 
-    sendAudio(float32) {
-      if (!this.ready || !this.ws || this.ws.readyState !== WebSocket.OPEN) return;
-      const b64 = pcm16ToBase64(float32);
-      this.ws.send(
-        JSON.stringify({
+    onAudioChunk(float32) {
+      if (!this.ready) return;
+      const level = peakLevel(float32);
+      const now = Date.now();
+
+      if (this.inActivity) {
+        this.sendJson({
           realtime_input: {
-            audio: { mime_type: 'audio/pcm;rate=16000', data: b64 },
+            audio: { mime_type: 'audio/pcm;rate=16000', data: pcm16ToBase64(float32) },
           },
-        }),
-      );
+        });
+
+        if (level > SPEECH_THRESHOLD) {
+          this.heardSpeech = true;
+          this.silenceSince = 0;
+          this.hooks.onStatus?.('Hearing you…');
+        } else if (this.heardSpeech) {
+          if (!this.silenceSince) this.silenceSince = now;
+          else if (now - this.silenceSince >= SILENCE_MS) this.endActivity();
+        }
+      } else if (!this._endingTurn && !this.botLine) {
+        // Between turns — auto-start next utterance when user speaks again
+        if (level > SPEECH_THRESHOLD) this.beginActivity();
+      }
     }
 
     async startMic() {
@@ -216,12 +249,7 @@
       }
       try {
         this.captureStream = await navigator.mediaDevices.getUserMedia({
-          audio: {
-            channelCount: 1,
-            echoCancellation: true,
-            noiseSuppression: true,
-            autoGainControl: true,
-          },
+          audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true, autoGainControl: true },
         });
       } catch (e) {
         if (e?.name === 'NotAllowedError') {
@@ -236,9 +264,14 @@
       await this.captureCtx.audioWorklet.addModule(workletUrl(CAPTURE_WORKLET));
       this.captureNode = new AudioWorkletNode(this.captureCtx, 'audio-capture-processor');
       this.captureNode.port.onmessage = (e) => {
-        if (e.data?.type === 'audio') this.sendAudio(e.data.data);
+        if (e.data?.type === 'audio') this.onAudioChunk(e.data.data);
       };
-      this.captureCtx.createMediaStreamSource(this.captureStream).connect(this.captureNode);
+      const src = this.captureCtx.createMediaStreamSource(this.captureStream);
+      const mute = this.captureCtx.createGain();
+      mute.gain.value = 0;
+      src.connect(this.captureNode);
+      this.captureNode.connect(mute);
+      mute.connect(this.captureCtx.destination);
     }
 
     async ensurePlayer() {
@@ -251,27 +284,24 @@
     }
 
     handleTranscription(kind, t) {
-      const sc = { text: t.text, finished: t.finished };
       if (kind === 'input') {
-        if (sc.text) {
-          this.userLine = sc.text;
+        if (t.text) {
+          this.userLine = t.text;
           this.hooks.onUserPartial?.(this.userLine);
         }
-        if (sc.finished && this.userLine) {
+        if (t.finished && this.userLine) {
           this.hooks.onUserFinal?.(this.userLine);
           this.userLine = '';
-          this.hooks.onStatus?.('Thinking…');
         }
       } else {
-        if (sc.text) {
-          this.botLine += sc.text;
+        if (t.text) {
+          this.botLine += t.text;
           this.hooks.onBotPartial?.(this.botLine);
           this.hooks.onStatus?.('Speaking…');
         }
-        if (sc.finished && this.botLine) {
+        if (t.finished && this.botLine) {
           this.hooks.onBotFinal?.(this.botLine);
           this.botLine = '';
-          this.hooks.onStatus?.('Listening — speak now');
         }
       }
     }
@@ -284,13 +314,12 @@
         const mime = inline.mimeType || inline.mime_type || '';
         if (!mime.startsWith('audio/pcm')) continue;
         const pcm = base64ToInt16(inline.data);
-        this.playNode.port.postMessage(pcm.buffer, [pcm.buffer]);
+        this.playNode.port.postMessage(pcm.buffer);
       }
     }
 
     async onMessage(data) {
       if (data.error) throw new Error(data.error.message || 'Voice error');
-
       if (data.setupComplete) {
         this.ready = true;
         this._connectResolve?.();
@@ -299,9 +328,7 @@
 
       const sc = data.serverContent || data.server_content;
       if (sc) {
-        if (sc.interrupted && this.playNode) {
-          this.playNode.port.postMessage('interrupt');
-        }
+        if (sc.interrupted && this.playNode) this.playNode.port.postMessage('interrupt');
         if (sc.inputTranscription || sc.input_transcription) {
           this.handleTranscription('input', sc.inputTranscription || sc.input_transcription);
         }
@@ -309,15 +336,15 @@
           this.handleTranscription('output', sc.outputTranscription || sc.output_transcription);
         }
         const turn = sc.modelTurn || sc.model_turn;
-        if (turn?.parts?.length) {
-          await this.playPcmParts(turn.parts);
-        }
+        if (turn?.parts?.length) await this.playPcmParts(turn.parts);
         if (sc.turnComplete || sc.turn_complete) {
           if (this.botLine) {
             this.hooks.onBotFinal?.(this.botLine);
             this.botLine = '';
           }
-          this.hooks.onStatus?.('Listening — speak now');
+          this.heardSpeech = false;
+          this.silenceSince = 0;
+          this.hooks.onStatus?.('Speak again or tap mic to stop');
         }
         return;
       }
@@ -330,12 +357,19 @@
       }
     }
 
+    /** User tapped mic while active — finish current utterance. */
+    finishTurn() {
+      if (this.inActivity) this.endActivity();
+    }
+
     disconnect(userInitiated = true) {
+      if (this.inActivity) {
+        try { this.sendJson({ realtime_input: { activity_end: {} } }); } catch { /* ignore */ }
+      }
       this.ready = false;
+      this.inActivity = false;
       this._connectResolve = null;
-      try {
-        this.ws?.close();
-      } catch { /* ignore */ }
+      try { this.ws?.close(); } catch { /* ignore */ }
       this.ws = null;
       this.captureNode?.disconnect();
       this.captureNode = null;

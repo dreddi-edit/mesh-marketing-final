@@ -215,7 +215,7 @@
         You can also <strong>talk to Mesh</strong> — tap the mic and speak.
       </div>
       <form id="mesh-qa-form">
-        <button id="mesh-qa-mic" type="button" aria-label="Talk to Mesh" title="Talk to Mesh">${MIC_ICON}</button>
+        <button id="mesh-qa-mic" type="button" aria-label="Talk to Mesh" title="Tap to talk — tap again when done">${MIC_ICON}</button>
         <input id="mesh-qa-input" type="text" placeholder="Ask anything…" maxlength="500" autocomplete="off" />
         <button id="mesh-qa-send" type="submit">Send</button>
       </form>
@@ -286,10 +286,19 @@
     }
   }
 
+  function setVoiceStatus(text) {
+    if (text) {
+      voiceHint.textContent = `● ${text}`;
+      voiceHint.style.display = 'block';
+    } else {
+      voiceHint.textContent = '';
+    }
+  }
+
   function setVoiceOn(on) {
     root.dataset.voice = on ? 'on' : 'off';
     micBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
-    voiceHint.textContent = on ? '● Live voice — tap mic to stop' : '';
+    if (!on) setVoiceStatus('');
   }
 
   function appendBubble(text, role, { live = false } = {}) {
@@ -334,7 +343,7 @@
     if (window.MeshVoiceLive) return;
     await new Promise((resolve, reject) => {
       const s = document.createElement('script');
-      s.src = '/assets/mesh-qa-voice-live.js';
+      s.src = '/assets/mesh-qa-voice-live.js?v=6';
       s.onload = resolve;
       s.onerror = reject;
       document.head.appendChild(s);
@@ -352,20 +361,21 @@
   }
 
   async function startVoice() {
-    if (root.dataset.voice === 'on' || voiceConnecting) {
-      if (root.dataset.voice === 'on') hangUpVoice();
+    if (root.dataset.voice === 'on') {
+      if (voice?.inActivity) voice.finishTurn();
+      else hangUpVoice();
       return;
     }
+    if (voiceConnecting) return;
     dismissVoiceTip();
     voiceConnecting = true;
     micBtn.disabled = true;
-    voiceHint.textContent = '● Allow microphone when prompted…';
-    voiceHint.style.display = 'block';
+    setVoiceStatus('Allow microphone when prompted…');
 
     try {
       await loadVoiceScript();
       voice = new window.MeshVoiceLive({
-        onStatus: (t) => { if (voiceHint) voiceHint.textContent = `● ${t}`; },
+        onStatus: (t) => setVoiceStatus(t),
         onUserPartial: (t) => {
           if (!voiceUserEl) voiceUserEl = appendBubble(t, 'user', { live: true });
           else voiceUserEl.textContent = t;

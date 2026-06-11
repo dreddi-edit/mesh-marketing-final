@@ -75,7 +75,7 @@
 (function meshQaChatLoader() {
   if (window.__meshQaChatLoaded) return;
   var s = document.createElement('script');
-  s.src = '/assets/mesh-qa-chat.js';
+  s.src = '/assets/mesh-qa-chat.js?v=6';
   s.defer = true;
   document.head.appendChild(s);
 })();
